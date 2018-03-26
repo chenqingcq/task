@@ -19,6 +19,7 @@ Dialog.install = function(Vue) {
     document.body.appendChild(instance.$el);
     Vue.set(instance, "placeholder", options.placeholder);
     Vue.set(instance, "type", options.type || "");
+    Vue.set(instance, "show", true);
     Vue.set(instance, "operate", options.operate || void 0);
   };
   Vue.prototype.$dialogClose = () => {

@@ -46,54 +46,5 @@ export default {
     display: flex;
     align-items: center;
   }
-  .panel {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 100%;
-    width: 100%;
-    .back-container {
-      height: 100%;
-      display: flex;
-      align-items: center;
-      img {
-        display: block;
-        width: 9.6px;
-        height: 17.5px;
-        vertical-align: middle;
-        margin-top: 4px;
-      }
-      .back {
-        display: inline-block;
-        margin-left: 4.4px;
-        font-size: 16px;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        vertical-align: middle;
-      }
-    }
-    .title {
-      font-size: 18px;
-    }
-    .more {
-      width: 21px;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      margin-right: 14px;
-      span {
-        display: inline-block;
-        width: 5px;
-        height: 5px;
-        border-radius: 50%;
-        background: #fff;
-        &:nth-child(2),
-        &:nth-child(3) {
-          margin-left: 3px;
-        }
-      }
-    }
-  }
 }
 </style>

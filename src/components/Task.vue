@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">111</div>
+  <div class="wrapper">首页</div>
 </template>
 <style lang='less' scoped>
 .wrapper {

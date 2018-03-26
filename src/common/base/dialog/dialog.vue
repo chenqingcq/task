@@ -2,8 +2,8 @@
   <transition name="fade"  v-if="show">
     <div class="container" >
       <div class="panel" >
-        <img class="close" src="../../../assets/img/icon-close.png"/>
-        <input type="text" :placeholder="placeholder">
+        <img class="close"   @touchstart='close' src="../../../assets/img/icon-close.png"/>
+        <input type="text" ref='input'  v-model="text" :placeholder="placeholder">
         <div class="btn"  @touchstart='operate'>{{type}}</div>
       </div>
     </div>
@@ -16,10 +16,15 @@ export default {
       type: "",
       placeholder: "",
       operate: "",
-      show: true
+      show: true,
+      text: ""
     };
   },
-  computed: {},
+  methods: {
+    close() {
+      this.show = false;
+    }
+  },
   watch: {
     operate(newVal, oldVal) {
       console.log(this.operate);
