@@ -6,6 +6,9 @@ import router from './router'
 import 'lib-flexible/flexible.js'
 import store from './store'
 
+import Dialog from '../src/common/base/dialog'
+Vue.use(Dialog)
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

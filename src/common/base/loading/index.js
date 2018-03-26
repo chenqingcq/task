@@ -14,7 +14,7 @@ Loading.install = function(Vue) {
     instance.show = true;
     instance.title = options.title || "正在载入...";
   };
-  Vue.prototype.$close = () => {
+  Vue.prototype.$loadingClose = () => {
     if (instance) {
       document.body.removeChild(instance.$el);
     }
