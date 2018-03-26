@@ -66,7 +66,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        include: [/src/, "/node_modules/mint-ui/lib/", "/assets/css/reset.css"],
+        include: [/src/, "/node_modules/mint-ui/lib/",],
         use: [{
             loader: "style-loader"
           },
