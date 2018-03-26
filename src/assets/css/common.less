@@ -1,0 +1,867 @@
+@import "./variables";
+
+/*
+ * #### 公共样式
+ */
+body {
+  text-align: center;
+}
+
+/*
+ * ####
+ */
+// 最外层Div容器的设置
+#app {
+  margin: auto;
+  .pxToRem(width, 750);
+  -webkit-overflow-scrolling: touch;
+}
+
+// 内容主体
+.b_main {
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  transition: filter .5s;
+  text-align: left;
+
+  &.b_bottom_0 {
+    bottom: 0;
+  }
+  &.b_bottom_20 {
+    bottom: 20/@rate;
+  }
+  &.b_padding-top_20 {
+    padding-top: 20/@rate;
+  }
+  &.b_padding-bottom_100 {
+    padding-bottom: 120/@rate;
+  }
+  &.b_padding-top_260 {
+    padding-top: 260/@rate;
+  }
+  &.b_bottom_100 {
+    bottom: 120/@rate;
+  }
+  &.b_bottom_200 {
+    bottom: 200/@rate;
+  }
+}
+
+// 显示遮罩层时的虚化模糊
+.b_filter {
+  filter: blur(5px);
+  -webkit-filter: blur(5px);
+  -ms-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+}
+
+.b_none-filter {
+  filter: blur(0)
+}
+
+/*
+ * 全屏fixed样式
+ */
+.b_modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+}
+
+.b_modal1 {
+  position: fixed;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+}
+
+// 全屏内容
+.b_all {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.b_top {
+  position: absolute;
+  width: 100%;
+  top: 0%;
+}
+
+.b_center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  min-height: 400/@rate;
+  background: #fff;
+  box-shadow: 0 0 2px #ccc;
+}
+
+.b_bottom {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+}
+
+.b_center-iframe {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translate(0, -50%);
+  width: 100%;
+  height: 600/@rate;
+  > p {
+    color: #fff;
+    position: absolute;
+    top: 60%;
+    left: 0;
+    width: 100%;
+    z-index: -1;
+  }
+}
+
+.b_center-video {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+//*二维码相关* modal
+.b_middle_center_modal {
+  .b_close {
+    position: absolute;
+    display: inline-block;
+    right: 40/@rate;
+    top: 30/@rate;
+    padding: 15/@rate;
+
+    &:after, &:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 20/@rate;
+      font-weight: 600;
+      width: 48/@rate;
+      height: 2/@rate;
+      background-color: currentColor;
+      -webkit-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+    }
+    &:after {
+      -webkit-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+  }
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 630/@rate;
+  height: 630/@rate;
+  min-height: 400/@rate;
+  background: #f8f8f8;
+  box-shadow: 0 0 2px #ccc;
+  border-radius: 10/@rate;
+  h3 {
+    margin-top: 60/@rate;
+    .px2px(font-size, 36);
+    font-weight: 600;
+    text-align: center;
+    color: @primary;
+  }
+  .img-box {
+    margin-top: 30/@rate;
+    text-align: center;
+    height: auto;
+    img {
+      width: 300/@rate;
+      height: 300/@rate;
+    }
+  }
+  p {
+    margin-top: 20/@rate;
+    text-align: center;
+    .px2px(font-size, 28);
+    color: #808080;
+    font-weight: 400;
+  }
+}
+
+/*
+ * #### 清除浮动
+ */
+.clearfix, pull-c {
+  &:after {
+    clear: both;
+    content: '.';
+    display: block;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+  }
+}
+
+/*
+ * #### fixed 布局
+   1、用于遮罩层，loading，confirm，弹出的页面等
+ */
+
+/*
+ * 宽度样式
+ */
+/*
+ * 宽度样式
+ */
+.b_w-100 {
+  width: 100%;
+}
+
+.b_w-95 {
+  width: 95%;
+}
+
+.b_w-90 {
+  width: 90%;
+}
+
+.b_w-85 {
+  width: 85%;
+}
+
+.b_w-80 {
+  width: 80%;
+}
+
+.b_w-75 {
+  width: 75%;
+}
+
+.b_w-70 {
+  width: 70%;
+}
+
+.b_w-65 {
+  width: 65%;
+}
+
+.b_w-60 {
+  width: 60%;
+}
+
+.b_w-55 {
+  width: 55%;
+}
+
+.b_w-50 {
+  width: 50%;
+}
+
+.b_w-45 {
+  width: 45%;
+}
+
+.b_w-40 {
+  width: 40%;
+}
+
+.b_w-35 {
+  width: 35%;
+}
+
+.b_w-33 {
+  width: 33.333%;
+}
+
+.b_w-30 {
+  width: 30%;
+}
+
+.b_w-25 {
+  width: 25%;
+}
+
+.b_w-20 {
+  width: 20%;
+}
+
+.b_w-15 {
+  width: 15%;
+}
+
+.b_w-10 {
+  width: 10%;
+}
+
+.b_w-5 {
+  width: 5%;
+}
+
+/*
+ * #### 字体大小
+ */
+.b_FS-160 {
+  .px2px(font-size, 160);
+}
+.b_FS-120 {
+  .px2px(font-size, 120);
+}
+
+.b_FS-80 {
+  .px2px(font-size, 80);
+}
+
+.b_FS-70 {
+  .px2px(font-size, 70);
+}
+
+.b_FS-60 {
+  .px2px(font-size, 60);
+}
+
+.b_FS-54 {
+  .px2px(font-size, 54);
+}
+
+.b_FS-50 {
+  .px2px(font-size, 50);
+}
+
+.b_FS-48 {
+  .px2px(font-size, 48);
+}
+
+.b_FS-46 {
+  .px2px(font-size, 46);
+}
+
+.b_FS-44 {
+  .px2px(font-size, 44);
+}
+
+.b_FS-42 {
+  .px2px(font-size, 42);
+}
+
+.b_FS-40 {
+  .px2px(font-size, 40);
+}
+
+.b_FS-38 {
+  .px2px(font-size, 38);
+}
+
+.b_FS-36 {
+  .px2px(font-size, 36);
+}
+
+.b_FS-34 {
+  .px2px(font-size, 34);
+}
+
+.b_FS-32 {
+  .px2px(font-size, 32);
+}
+
+.b_FS-30 {
+  .px2px(font-size, 30);
+}
+
+.b_FS-28 {
+  .px2px(font-size, 28);
+}
+
+.b_FS-26 {
+  .px2px(font-size, 26);
+}
+
+.b_FS-24 {
+  .px2px(font-size, 24);
+}
+
+.b_FS-22 {
+  .px2px(font-size, 22);
+}
+
+.b_FS-20 {
+  .px2px(font-size, 20);
+}
+
+.b_FS-0 {
+  font-size: 0;
+}
+
+.pull-right {
+  float: right;
+}
+
+.pull-left {
+  float: left;
+}
+
+/*
+ * #### 按钮相关样式
+ */
+// 按钮外框
+.b_button-warp {
+  text-align: center;
+  padding: 15/@rate;
+}
+
+// 全屏按钮
+.b_big-button {
+  margin: auto;
+  width: 690/@rate;
+  padding: 20/@rate 2/@rate;
+  border-radius: 10/@rate;
+}
+
+// 一屏双按钮
+.b_button {
+  text-align: center;
+  display: inline-block;
+  width: 330/@rate;
+  padding: 15/@rate 2/@rate;
+  border-radius: 10/@rate;
+
+  &.b_left {
+    float: left;
+  }
+  &.b_right {
+    float: right;
+  }
+  &.b_center {
+    margin: auto;
+  }
+  &.b_border {
+    border-style: solid;
+    border-width: 1px;
+  }
+}
+
+// 提交按钮
+.b_small-buttom {
+  text-align: center;
+  display: inline-block;
+  width: 140/@rate;
+  padding: 10/@rate 2/@rate;
+  border-radius: 10/@rate;
+  &.b_border {
+    border-style: solid;
+    border-width: 1px;
+  }
+}
+
+// 活动按钮
+.b_small-special {
+  text-align: center;
+  display: inline-block;
+  width: 120/@rate;
+  font-size: 24/@rate;
+  //.px2px('font-size',24) ;
+  padding: 11/@rate 0;
+  border-radius: 10/@rate;
+  &.b_border {
+    border-style: solid;
+    border-width: 1/@rate;
+  }
+  &.b_border-color {
+    border-color: #3385FF;
+  }
+  &.b_bg {
+    background-color: #F0F6FE;
+  }
+}
+
+// 互动按钮 反色
+.b_small-button-reverse {
+  text-align: center;
+  display: inline-block;
+  padding: 10/@rate 30/@rate;
+  color: #FFFFFF;
+  //font-size: 14px;
+  //margin-right: 3%;
+  border-radius: 3px;
+  background-color: #0e90e0 !important;
+}
+
+.b_defalut-button {
+  text-align: center;
+  display: inline-block;
+  padding: 10/@rate 30/@rate;
+  border-radius: 3px;
+  &.b_border {
+    border-style: solid;
+    border-width: 1/@rate;
+  }
+  &.marginRight-24 {
+    margin-right: 20/@rate;
+  }
+  &.marginTop-24 {
+    margin-top: 24/@rate;
+  }
+}
+
+// 邀请码下方按钮
+.b_medium-button {
+  margin: auto;
+  width: 450/@rate;
+  padding: 20/@rate 2/@rate;
+  border-radius: 10/@rate;
+}
+
+// 文案类
+.b_text-center {
+  text-align: center;
+}
+
+// 固定在页面底部 单按钮
+.b-fixed-bottom-btn {
+  width: 100vw;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  color: #fff;
+  font-size: 32/@rate;
+  font-family: PingFangSC-Regular;
+  background-color: #448AFF;
+  padding: 32/@rate 0;
+  text-align: center;
+}
+
+/*
+ * 边框样式
+ */
+.b_BD {
+  border-style: solid;
+  border-width: 1/@rate;
+
+  &.b_BD-top {
+    border-left-width: 0;
+    border-bottom-width: 0;
+    border-right-width: 0;
+  }
+  &.b_BD-lft {
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-right-width: 0;
+  }
+  &.b_BD-bottom {
+    border-top-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+  }
+  &.b_BD-TB {
+    border-left-width: 0;
+    border-right-width: 0;
+  }
+  &.b_BD-right {
+    border-top-width: 0;
+    border-left-width: 0;
+    border-bottom-width: 0;
+  }
+  &.b_BD-noRight {
+    border-right: none;
+  }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 2) {
+  .b_BD {
+    border-top-width: 0.5/@rate;
+  }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 3) {
+  .b_BD {
+    border-top-width: 0.333333/@rate;
+  }
+}
+
+/*
+ * ul li 左右分布样式
+ */
+.b_ul {
+  width: 100%;
+
+  li {
+    display: inline-block;
+    list-style: none;
+    vertical-align: top;
+
+  }
+  &.b_ul-middle li {
+    // 居中
+    vertical-align: middle;
+  }
+  .left {
+    text-align: left;
+  }
+  .center {
+    text-align: center;
+  }
+  .right {
+    text-align: right;
+  }
+}
+
+/*
+ * 基础内容块样式
+   当前div 100% 展开，内容padding 30px
+ */
+.b_block {
+  padding: @basePadding;
+
+  &.b_block-left {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+  }
+  //TODO 我添加的
+  &.b_block-right {
+    padding-top: 0;
+    padding-left: 0;
+    padding-bottom: 0;
+  }
+  &.b_block-LR {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  &.b_block-TB {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  &.b_block-TB-25 {
+    padding-top: 25/@rate;
+    padding-bottom: 25/@rate;
+  }
+  &.b_block-TB-36 {
+    padding-top: 36/@rate;
+    padding-bottom: 36/@rate;
+  }
+  &.b_block-TB-20 {
+    padding-top: 20/@rate;
+    padding-bottom: 20/@rate;
+  }
+  //TODO 我添加的结束
+  &.b_block-TB-10 {
+    padding-top: 10/@rate;
+    padding-bottom: 10/@rate;
+  }
+  &.b_block_LBR {
+    padding-top: 0;
+  }
+  &.b_block_LTR {
+    padding-bottom: 0;
+  }
+  &.b_block-TRB {
+    padding-left: 0;
+  }
+}
+
+//TODO 写在外面防止嵌套死.更加灵活.需要就调用
+.b-T-30 {
+  padding-top: 30/@rate;
+}
+
+.b-T-25 {
+  padding-top: 25/@rate;
+}
+
+.b-T-20 {
+  padding-top: 20/@rate;
+}
+
+.b-T-15 {
+  padding-top: 15/@rate;
+}
+
+.b-B-20 {
+  padding-bottom: 20/@rate;
+}
+
+.b-B-30 {
+  padding-bottom: 30/@rate;
+}
+
+.b-LR-20 {
+  padding-left: 20/@rate;
+  padding-right: 20/@rate;
+}
+
+
+/*多行小点点*/
+/*左右空隙*/
+.rp, .lrp {
+  padding-right: 30/@rate;
+}
+
+.lp, .lrp {
+  padding-left: 30/@rate;
+}
+
+.lrm {
+  margin-left: 30/@rate;
+  margin-right: 30/@rate;
+}
+
+.b_line-1,
+.b_line-2, .b_line-3, .b_line-4, .b_line-5, .b_line-6 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+.b_line-1 {
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+}
+
+.b_line-2 {
+  -webkit-line-clamp: 2;
+}
+
+.b_line-3 {
+  -webkit-line-clamp: 3;
+
+}
+
+.b_line-4 {
+  -webkit-line-clamp: 4;
+
+}
+
+.b_line-5 {
+  -webkit-line-clamp: 5;
+
+}
+
+.b_line-6 {
+  -webkit-line-clamp: 6;
+}
+
+.b_line-7 {
+  -webkit-line-clamp: 7;
+}
+
+.b_line-8 {
+  -webkit-line-clamp: 8;
+}
+
+.b_line-9 {
+  -webkit-line-clamp: 9;
+}
+
+.b_line-10 {
+  -webkit-line-clamp: 10;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.p {
+  color: #333;
+  font-size: 30/@rate;
+  line-height: 1.5;
+}
+
+// 个性化设置文案提示
+.b_tips {
+  background: #f5f5f5;
+  color: #a2a2a2;
+}
+
+//ios switch css
+.yyn_switch {
+  width: 52px;
+  position: relative;
+  height: 33px;
+  overflow: hidden;
+  display: inline-block;
+  border: 1px solid #e1e1e1;
+  border-radius: 30px;
+  transition: background-color 0.1s, border 0.1s;
+}
+
+.yyn_switch input {
+  width: 52px;
+  opacity: 0;
+  position: absolute;
+  top: -7px;
+  display: inline-block;
+}
+
+.yyn_switch_main {
+  width: 100%;
+  height: 30px;
+  display: inline-block;
+}
+
+.yyn_turnRight {
+  -webkit-transition: transform cubic-bezier(0.4, 0.4, 0.25, 1.35) 0.28s;
+  transform: translate(19.44px);
+}
+
+.yyn_turnLeft {
+  -webkit-transition: transform cubic-bezier(0.4, 0.4, 0.25, 1.35) 0.28s;
+  transform: translate(0px);
+}
+
+.yyn_switch_btn {
+  height: 30px;
+  position: absolute;
+  z-index: 99;
+  top: 0;
+  background: #fff;
+  width: 30px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+}
+
+/**
+ * P 标签强制换行
+ */
+.pre-wrap-auto {
+  word-break: break-word; /*支持IE，chrome，FF不支持*/
+  word-wrap: break-word; /*支持IE，chrome，FF*/
+  white-space: pre-wrap; /*保留自动换行*/
+}
+
+.b_font-PFR {
+  font-family: 'PingFangSC-Regular';
+}
+.b_font-PFM {
+  font-family: 'PingFangSC-Medium';
+}
+
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+// 去掉 select 苹果手机 默认样式
+select{
+  appearance:none;
+  -moz-appearance:none;
+  -webkit-appearance:none;
+}
