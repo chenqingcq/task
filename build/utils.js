@@ -18,6 +18,7 @@ exports.cssLoaders = function (options) {
   const cssLoader = {
     loader: 'css-loader',
     options: {
+      importLoaders: 1,
       sourceMap: options.sourceMap
     }
   }

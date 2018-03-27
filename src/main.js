@@ -6,8 +6,7 @@ import router from './router'
 import 'lib-flexible/flexible.js'
 import store from './store'
 
-import Dialog from '../src/common/base/dialog'
-Vue.use(Dialog)
+import '../src/common/base/dialog'
 
 Vue.config.productionTip = false
 
