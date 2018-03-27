@@ -51,7 +51,6 @@
     },
     watch: {
       '$route'(to, from){
-        debugger
         this.isShowBottomSign  = to.meta.isShowBottomSign ? true : false
       }
     }
