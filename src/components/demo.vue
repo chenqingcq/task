@@ -3,6 +3,10 @@
 </style>
 <template>
     <div>
+      <div class="b-LR-10 b-T-10">
+        <v-switch ></v-switch>
+      </div>
+
       <div class="btn-warp">
         <div class="btn-full-warn b-MT-10 ">
           .btn-full-warn
@@ -36,7 +40,7 @@
         </div>
       </div>
       <div class="b-LR-10 b-MT-10">
-        <div class="panel c_white">
+        <div class="panel c-1 c_white-bg">
           asdfasfdas
           adsfasdfasf
           fasdf
@@ -48,7 +52,7 @@
         <!--</div>-->
       <!--</div>-->
       <div class="b-LR-10">
-         <div class="panel b-MT-10 ">
+         <div class="panel b-MT-10 c_white-bg">
            <div class="b-LR-10 b-T-5 between">
              <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4">审批留言</span></p>
              <div class=" b_FS-14">
@@ -70,6 +74,9 @@
       <div class="b_status complete">已完成</div>
       <div class="b_status pending">进行中</div>
       <div class="b_status out-date">已超时</div>
+
+
+
     </div>
 </template>
 <script>

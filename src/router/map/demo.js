@@ -11,7 +11,9 @@ export default [
     name: 'demo',
     component: Demo,
     meta: {
-      title : '测试页面'
+      title : '测试页面' ,
+      // 是否显示 底部栏 会展 logo
+      isShowBottomSign : true
     }
   }
 ]

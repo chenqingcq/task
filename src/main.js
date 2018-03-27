@@ -6,7 +6,11 @@ import router from './router'
 import 'lib-flexible/flexible.js'
 import store from './store'
 
+// 项目组件
 import '../src/common/base/dialog'
+import AppCom from '../src/common/index.js'
+
+Vue.use(AppCom)
 
 Vue.config.productionTip = false
 
