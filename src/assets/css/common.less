@@ -60,19 +60,22 @@
  */
 
 .b_FS-18{
-  font-size: 18px;
+  font-size: 36px;
+}
+.b_FS-16{
+  font-size: 32px;
 }
 .b_FS-14{
-  font-size: 14px;
+  font-size: 28px;
 }
 .b_FS-12{
-  font-size: 12px;
+  font-size: 24px;
 }
 .b_FS-10{
-  font-size: 10px;
+  font-size: 20px;
 }
 .b_FS-6{
-  font-size: 6px;
+  font-size: 12px;
 }
 .b_FS-0 {
   font-size: 0;
@@ -277,34 +280,210 @@
 }
 
 //TODO 写在外面防止嵌套死.更加灵活.需要就调用
-.b-T-30 {
-  padding-top: 30px;
-}
 
-.b-T-25 {
-  padding-top: 25px;
+// 边距大小
+.b-MT-10{
+  margin-top: 20px;
 }
-
-.b-T-20 {
+.b-T-5{
+  padding-top: 10px;
+}
+.b-T-10{
   padding-top: 20px;
 }
-
-.b-T-15 {
-  padding-top: 15px;
+.b-L-4{
+  padding-left: 8px;
 }
-
-.b-B-20 {
-  padding-bottom: 20px;
+.b-LR-8 {
+  padding-left: 16px;
+  padding-right: 16px;
 }
-
-.b-B-30 {
-  padding-bottom: 30px;
-}
-
-.b-LR-20 {
+.b-LR-10{
   padding-left: 20px;
   padding-right: 20px;
 }
+.b-TB-4{
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.b-TB-7{
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+.b-TB-11{
+  padding-top: 22px;
+  padding-bottom: 22px;
+}
+.b_block{
+  .b-LR-10 ;
+}
+.b-LRT-10{
+  .b-T-10 ;
+  .b-LR-10;
+}
+/*
+* 按钮样式
+*/
+.c_white{
+  color: #fff;
+}
+@success : linear-gradient(-180deg, #86C0F8 0%, #4E8CEE 100%);
+@warn : linear-gradient(-180deg, #FDA69A 0%, #FA6D61 100%);
+@info : linear-gradient(-180deg, #E9E9E9 0%, #CACACA 100%);
+@primary : linear-gradient(0deg, #0093FF 0%, #1DE0FD 100%);
+
+.btn-warp {
+  line-height: 1.5;
+  text-align: center;
+  .b-LR-10 ;
+  &.b-LR-8{
+    .b-LR-8 ;
+  }
+}
+.btn{
+  .c_white ;
+  font-family: PingFangSC-Regular;
+  text-align: center;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.38);
+  border-radius: 4px;
+}
+.btn-full{
+  .b-TB-11 ;
+  .b_FS-16;
+  .btn ;
+}
+.btn-small{
+  .b_FS-14 ;
+  .c_white ;
+  text-align: center;
+  margin: auto;
+  border-radius: 100px;
+  box-shadow: 0 2px 4px 0 rgba(23,209,254,0.46);
+}
+
+.btn-normal{
+  .b-TB-11 ;
+  .b_FS-16;
+  .btn ;
+  display: inline-block;
+  width : 174*2px;
+  &.b_left {
+    float: left;
+  }
+  &.b_right {
+    float: right;
+  }
+  &.b_center {
+    margin: auto;
+  }
+}
+.btn-full-success{
+  .btn-full;
+  background-image: @success;
+}
+.btn-normal-success {
+  .btn-normal ;
+  background-image: @success;
+}
+.btn-full-warn{
+  .btn-full;
+  background-image: @warn;
+}
+.btn-normal-warn{
+  .btn-normal ;
+  background-image: @warn;
+}
+.btn-normal-info{
+  .btn-normal ;
+  background-image: @info;
+}
+
+.btn-small-success{
+  .b-TB-7 ;
+  .btn-small ;
+  width: 183*2px;
+  background-image: @success;
+}
+.btn-small-primary{
+  .b-TB-4 ;
+  .btn-small ;
+  width: 124*2px;
+  background-image: @primary;
+}
+// status 状态
+@complete : linear-gradient(-180deg, #C1FE7F 0%, #74C126 100%);
+@pending : linear-gradient(-180deg, #FEEA7F 0%, #FBCC52 100%);
+@outDate : linear-gradient(-180deg, #FEC37F 0%, #EC584B 100%);
+
+.b_status{
+  .b_FS-10 ;
+  .b_font-PFR ;
+  .c_white ;
+  border-radius: 200px;
+  width: 55*2px;
+  height : 16*2px ;
+  line-height: 1.5 ;
+  text-align: center;
+  &.complete{
+    background-image: @complete;
+  }
+  &.pending{
+    background-image: @pending;
+  }
+  &.out-date{
+    background-image: @outDate;
+  }
+}
+
+// 面板样式
+@dotSuccess :linear-gradient(0deg, #0093FF 0%, #1DE0FD 100%);
+@dotWarn :  linear-gradient(-180deg, #FD8C8C 0%, #FB2424 100%);
+@dotInfo : #F4F4F4;
+.panel{
+
+  box-shadow: 0 2px 10px 0 rgba(177,177,177,0.60), inset 0 -2px 4px 0 rgba(135,135,135,0.50);
+  min-height: 60px;
+  border-radius: 0 34px 0 0 ;
+  position: relative;
+  .middle{
+    display: flex;
+    align-items: center;
+  }
+  .between{
+    display: flex;justify-content:space-between;align-content: center;
+  }
+}
+.dot{
+  height: 12px;
+  width : 12px;
+  border-radius: 100px;
+  display: inline-block;
+  &.success{
+    background-image: @dotSuccess;
+  }
+  &.warn{
+    background-image: @dotWarn;
+    box-shadow: inset 2px 2px 10px 0 rgba(170,170,170,0.50);
+  }
+  &.info{
+    background: @dotInfo;
+    box-shadow: inset 2px 2px 10px 0 rgba(170,170,170,0.50);
+  }
+}
+//.panel-dot{
+//  .panel;
+//  &:before{
+//    content: '';
+//    position: absolute;
+//    left: 20px;
+//    top: 24px;
+//    height: 12px;
+//    width : 12px;
+//    border-radius: 100px;
+//    background-image: @dotSuccess;
+//  }
+//}
+
 
 
 .b_line-1,
