@@ -13,7 +13,7 @@ export default function getInstance(options) {
       return {
         btnName: options.btnName || '添加',
         type: options.type,
-        placeholder: options.type || '',
+        placeholder: options.placeholder || '',
         show: true,
         operate: options.operate || null
       }

@@ -6,7 +6,7 @@
         <input class="b_FS-16" type="text" ref='input' v-model="text" :placeholder="placeholder" maxlength="20">
         <div class="bar"></div>
         <div @touchstart='close'>
-          <div class="btn b_FS-16" @touchstart='operate(text)'>{{type}}</div>
+          <div class="btn b_FS-16" @touchstart='operate(text)'>{{btnName}}</div>
         </div>
       </div>
     </div>
@@ -30,13 +30,12 @@
 <style lang='less' scoped>
   .container {
     position: fixed;
-    z-index: 9;
+    z-index: 9999;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    opacity: 0.44;
-    background: #000;
+    background: rgba(99, 99, 99,.8);
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
