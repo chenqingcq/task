@@ -11,7 +11,7 @@ Loading.install = function (Vue) {
     instance.$mount(document.createElement("div"));
     document.body.appendChild(instance.$el);
     instance.show = true;
-    instance.title = options.title || "正在载入...";
+    instance.title = options.title || "正在加载";
   };
   Vue.prototype.$loadingClose = () => {
     if (instance) {
