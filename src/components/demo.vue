@@ -4,9 +4,11 @@
 <template>
     <div>
       <div class="b-LR-10 b-T-10">
-        <v-switch ></v-switch>
+        <v-switch :status="isOpen" @getStatus="statusChange" ></v-switch>
       </div>
-
+      <div class="b-LR-10 b-T-10">
+        <v-calendar  ></v-calendar>
+      </div>
       <div class="btn-warp">
         <div class="btn-full-warn b-MT-10 ">
           .btn-full-warn
@@ -83,11 +85,17 @@
     export default{
         data(){
             return{
-
+              isOpen : false
             }
         },
         components:{
 
-        }
+        },
+        methods:{
+          statusChange(status){
+            this.isOpen = status
+            console.log(status, this.isOpen)
+          }
+        },
     }
 </script>

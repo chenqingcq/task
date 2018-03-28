@@ -16,8 +16,8 @@
 </style>
 <template>
     <div class="b-TB-10 container" >
-      <img src="../../../assets/img/image-logo.png" alt="">
-      <span class="text" >会管家-展会应用商店</span>
+      <img @click="skipToStore" src="../../../assets/img/image-logo.png" alt="">
+      <span @click="skipToStore" class="text" >会管家-展会应用商店</span>
     </div>
 </template>
 <script>
@@ -30,6 +30,11 @@
         },
         components:{
 
+        },
+        methods:{
+          skipToStore(){
+            console.log('add store url')
+          }
         }
     }
 </script>

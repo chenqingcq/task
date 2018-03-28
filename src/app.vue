@@ -2,7 +2,7 @@
   <div id="app" :style = '[appContainerCss]' >
     <router-view class="wrapper" :style="padding"/>
     <!--底部 会展 logo - 会管家-展会应用商店-->
-    <v-bottom-sign></v-bottom-sign>
+    <v-bottom-sign v-if="isShowBottomSign"></v-bottom-sign>
   </div>
 </template>
 
@@ -51,7 +51,11 @@
     },
     watch: {
       '$route'(to, from){
+        var title = document.getElementsByTagName('title')[0]
+        if(to.meta && to.meta.title) title.innerHTML = to.meta.title
+
         this.isShowBottomSign  = to.meta.isShowBottomSign ? true : false
+
       }
     }
   };
