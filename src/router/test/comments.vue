@@ -22,7 +22,7 @@
                 <div class="role b_FS-12 "  @touchstart='info'>{{item.name}}({{item.role}})</div>
                 <div class="time-panel" @touchstart='notice'><span>{{item.date}}</span><span>{{item.time}}</span></div>
               </div>
-              <div class="comments-item">{{item.comments}}</div>
+              <div class="comments-item" @touchstart='load'>{{item.comments}}</div>
             </div>
             <i class="footbar"></i>
           </li>
@@ -80,6 +80,12 @@
       }
     },
     methods: {
+      load(){
+        this.$loading();
+        setTimeout(()=>{
+          this.$loadingClose()
+        },3000)
+      },
       notice() {
         let self = this;
         this.$dialog.notice({
