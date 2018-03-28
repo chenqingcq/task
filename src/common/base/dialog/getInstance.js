@@ -13,9 +13,9 @@ export default function getInstance(options) {
       return {
         btnName: options.btnName || '添加',
         type: options.type,
-        placeholder: options.placeholder || '',
+        placeholder: options.placeholder || '请输入内容',
         show: true,
-        operate: options.operate || null
+        operate: options.operate || function () {}
       }
     }
   });
