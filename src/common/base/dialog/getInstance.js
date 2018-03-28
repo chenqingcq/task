@@ -10,11 +10,11 @@ export default function getInstance(options) {
   }
   if (options.type === 'notice') {
     let notice = {
-      state: "",
-      title: "",
-      task: "",
-      charge: '',
-      partIn: []
+      state: "",//字体图标
+      title: "",//任务描述
+      task: "",//任务名称
+      charge: '',//负责人
+      partIn: []//参与人
     };
     notice = Object.assign({}, notice, options);
     delete notice.type
@@ -37,7 +37,7 @@ export default function getInstance(options) {
           type: options.type,
           placeholder: options.placeholder || '请输入内容',
           show: true,
-          operate: options.operate || function (text) {
+          operate: options.operate || function (text) {//回调函数
             console.log(text)
           }
         }

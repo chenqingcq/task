@@ -10,17 +10,17 @@
       <scroll class="comments-container" :height='height' v-if="items.length>1">
         <ul class="comment-panel">
           <li v-for="(item,index) in items" :key="index" class="lisItem">
-            <div class="left" @touchstart='notice'>
+            <div class="left" >
               <!--测试-->
               <div class="icon">
                 <img :src="item.imgUrl" alt="icon" class='iconImg'>
               </div>
             </div>
-            <div class="right" @touchstart='info'>
+            <div class="right">
               <!--测试-->
               <div class="head">
-                <div class="role b_FS-12 ">{{item.name}}({{item.role}})</div>
-                <div class="time-panel"><span>{{item.date}}</span><span>{{item.time}}</span></div>
+                <div class="role b_FS-12 "  @touchstart='info'>{{item.name}}({{item.role}})</div>
+                <div class="time-panel" @touchstart='notice'><span>{{item.date}}</span><span>{{item.time}}</span></div>
               </div>
               <div class="comments-item">{{item.comments}}</div>
             </div>
@@ -83,7 +83,7 @@
       notice() {
         let self = this;
         this.$dialog.notice({
-          state: "warn",
+          state: "pass",
           title: "任务已通过",
           task: "展台基础工作",
           charge: '李四',
