@@ -1,15 +1,23 @@
 <template>
-  <div ref="wrapper" class="wrapper">
+  <div ref="wrapper" class="wrapper_" :style='styleObj'>
     <slot></slot>
   </div>
 </template>
 
-<script >
+<script>
   import BScroll from 'better-scroll'
 
 
   export default {
     props: {
+      height: {
+        type: [String, Number],
+        default: ""
+      },
+      width: {
+        type: [String, Number, Function],
+        default: "100%"
+      },
       probeType: {
         type: Number,
         default: 1
@@ -37,6 +45,13 @@
       refreshDelay: {
         type: Number,
         default: 20
+      }
+    },
+    computed: {
+      styleObj() {
+        return {
+          height: this.height
+        }
       }
     },
     mounted() {
@@ -99,10 +114,11 @@
       }
     }
   }
+
 </script>
 
-<style scoped lang="less" >
-.wrapper{
+<style scoped lang="less">
+.wrapper_{
   width: 100%;
   height: 100%;
 }

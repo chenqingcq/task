@@ -1,13 +1,12 @@
 import LoadingComponent from "./loading.vue";
 const Loading = {};
-Loading.install = function(Vue) {
+Loading.install = function (Vue) {
   const LoadingConstructor = Vue.extend(LoadingComponent);
   const instance = new LoadingConstructor();
 
   Vue.prototype.$loading = options => {
-      console.log(Object.prototype.toString.call(options).slice(8, -1).toLowerCase())
     if (Object.prototype.toString.call(options).slice(8, -1).toLowerCase() !== "object") {
-        options = {};
+      options = {};
     }
     instance.$mount(document.createElement("div"));
     document.body.appendChild(instance.$el);
