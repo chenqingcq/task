@@ -13,7 +13,7 @@
     data() {
       return {
         title: "私人订制",
-        imgUrl: require("./assets/img/icon-left slip03.png"),
+        imgUrl: require("./assets/img/icon-left-slip03.png"),
         hint: "返回",
         height: 44 ,
         // 是否显示底部 logo 介绍
