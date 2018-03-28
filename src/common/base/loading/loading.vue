@@ -3,7 +3,7 @@
     <div class="container" v-show="show">
       <div class="panel" >
           <img :src="loadingImg" alt="loading"> 
-          <span>{{title}}</span>       
+          <span class="b_FS-12">{{title}}</span>       
       </div>
     </div>
   </transition>
