@@ -7,8 +7,8 @@
           评论<img class="comments-icon" :src='commentImgUrl' />
         </div>
       </div>
-      <scroll class="comments-container" :height='height' v-if="items.length>1">
-        <ul class="comment-panel">
+      <scroll class="comments-container" :height='height' >
+        <ul class="comment-panel" v-if="items.length>1">
           <li v-for="(item,index) in items" :key="index" class="lisItem">
             <div class="left" >
               <!--测试-->
@@ -81,9 +81,9 @@
     },
     methods: {
       load(){
-        this.$loading();
+        this.$loading();//loading
         setTimeout(()=>{
-          this.$loadingClose()
+          this.$loadingClose()//关闭loading
         },3000)
       },
       notice() {
