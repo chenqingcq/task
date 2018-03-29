@@ -33,7 +33,7 @@ export default function getInstance(options) {
     dialog = new DialogConstructor({
       data() {
         return {
-          btnName: options.btnName || '添加',
+          btnName: options.btnName || 'add',
           type: options.type,
           placeholder: options.placeholder || '请输入内容',
           show: true,

@@ -98,7 +98,9 @@
       },
       info() {
         let self = this;
-        this.$dialog.info()
+        this.$dialog.info({
+          btnName:"delete"
+        })
       },
     }
   }

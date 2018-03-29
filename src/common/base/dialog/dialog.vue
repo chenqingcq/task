@@ -4,10 +4,15 @@
       <template v-if="type==='info'">
         <div class="panel-info">
           <img class="close" @touchstart='close' src="../../../assets/img/icon-close.png" />
-          <input class="b_FS-16" type="text" ref='input' v-model="text" :placeholder="placeholder" maxlength="20">
+          <input id="userIpt" class="b_FS-16" type="text" ref='input' v-model="text" :placeholder="placeholder" maxlength="20">
+          <label for="userIpt" v-show="btnName=='add'">
+            <img class="icon-edit" v-show="btnName=='delete'" src="@/assets/img/icon-edit01.png" />            
+         </label>
           <div class="bar"></div>
           <div @touchstart='close'>
-            <div class="btn b_FS-16" @touchstart='operate(text)'>{{btnName}}</div>
+            <div class="btn b_FS-16" @touchstart='operate(text)'><img v-show="btnName=='delete'" src="@/assets/img/icon-delete.png" />
+              <div>{{btn}}</div>
+            </div>
           </div>
         </div>
       </template>
@@ -36,7 +41,8 @@
       return {
         text: '',
         show: false,
-        parts: ''
+        parts: '',
+        btn: ""
       }
     },
     computed: {
@@ -61,15 +67,28 @@
       initPartIn() {
         console.log(this.notice.partIn);
         this.parts = this.notice.partIn.join("丶")
+      },
+      judgeBtn() {
+        this.btn = this.btnName === 'add' ? '添加' : this.btnName === 'delete' ? '删除' : ''
       }
     },
     mounted() {
-      this.type === 'notice' ? this.initPartIn() : ''
+      this.type === 'notice' ? this.initPartIn() : '';
+      this.type === 'info' ? this.judgeBtn() : ''
     }
   };
 
 </script>
 <style lang='less' scoped>
+  img.icon-edit {
+    display: inline-block;
+    width: 22*2px !important;
+    height: 22*2px !important;
+    position: absolute;
+    bottom: 76*2px;
+    right: 71*2px;
+  }
+
   .container {
     position: fixed;
     z-index: 9999;
@@ -99,6 +118,7 @@
         right: 8px*2;
         top: 8px*2;
       }
+
       .top {
         width: 100%;
         height: 190*2px;
@@ -200,6 +220,15 @@
         justify-content: center;
         color: #ffffff;
         font-size: 16px*2;
+        img {
+          display: inline-block;
+          width: 16*2px;
+          margin-right: 4*2px;
+        }
+        div {
+          height: 100%;
+          line-height: 44px*2
+        }
       }
     }
   }
