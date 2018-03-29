@@ -7,7 +7,7 @@
         <v-switch :status="isOpen" @getStatus="statusChange" ></v-switch>
       </div>
       <div class="b-LR-10 b-T-10">
-        <v-calendar  ></v-calendar>
+        <v-calendar :status="isOpen" @getStatus="statusChange" ></v-calendar>
       </div>
       <div class="btn-warp">
         <div class="btn-full-warn b-MT-10 ">

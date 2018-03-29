@@ -70,13 +70,13 @@
 </style>
 <template>
   <div class="switch">
-    <div class="switch_main" @click="changeStatus" :class="{ 'turnFail' : selectStatus, 'turnSuccess': !selectStatus}">
+    <div class="switch_main" @click="changeStatus" :class="{ 'turnFail' : isMonth, 'turnSuccess': !isMonth}">
       <div class="week-days-content">
         <span class="b_d-inline-block text-center b_FS-10 c_white">月</span><span class="  text-center b_FS-10 c_white">周</span>
       </div>
 
       <div class="switch_btn" @transitionend="changeEnd"
-           :class="{ 'turnLeft' : !selectStatus, 'turnRight': selectStatus}"></div>
+           :class="{ 'turnLeft' : !isMonth, 'turnRight': isMonth}"></div>
     </div>
   </div>
 </template>
@@ -91,13 +91,13 @@
     data () {
       return {
         isTransitionEnd: true,
-        selectStatus: this.status
+        isMonth: this.status
       }
     },
     watch: {
       status (val) {
         if (this.isTransitionEnd) {
-          this.selectStatus = val//新增result的watch，监听变更并同步到myResult上
+          this.isMonth = val//新增result的watch，监听变更并同步到myResult上
         }
       }
     },
@@ -108,8 +108,8 @@
       changeStatus (event) {
         if (this.isTransitionEnd) {
           this.isTransitionEnd = false
-          this.selectStatus = !this.selectStatus
-          this.$emit('getStatus', this.selectStatus)
+          this.isMonth = !this.isMonth
+          this.$emit('getStatus', this.isMonth)
         }
       }
     }

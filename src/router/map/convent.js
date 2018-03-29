@@ -14,7 +14,7 @@ const section = resolve => require(['@/views/section/section'], resolve) // é¡¹ç
 
 export default [
   {
-    path: '/coventEntry',
+    path: '/conventEntry',
     name: 'convententry',
     component: Entry,
     meta: {
