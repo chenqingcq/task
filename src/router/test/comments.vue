@@ -7,20 +7,22 @@
           评论<img class="comments-icon" :src='commentImgUrl' />
         </div>
       </div>
-      <scroll class="comments-container" :height='height'>
-        <ul class="comment-panel">
+      <scroll class="comments-container" :height='height' >
+        <ul class="comment-panel" v-if="items.length>1">
           <li v-for="(item,index) in items" :key="index" class="lisItem">
-            <div class="left">
+            <div class="left" >
+              <!--测试-->
               <div class="icon">
-                <!--<img :src="item.imgUrl" alt="icon" class='iconImg'>-->
+                <img :src="item.imgUrl" alt="icon" class='iconImg'>
               </div>
             </div>
             <div class="right">
+              <!--测试-->
               <div class="head">
-                <div class="role b_FS-12 ">{{item.name}}({{item.role}})</div>
-                <div class="time-panel"><span>{{item.date}}</span><span>{{item.time}}</span></div>
+                <div class="role b_FS-12 "  @touchstart='info'>{{item.name}}({{item.role}})</div>
+                <div class="time-panel" @touchstart='notice'><span>{{item.date}}</span><span>{{item.time}}</span></div>
               </div>
-              <div class="comments-item">{{item.comments}}</div>
+              <div class="comments-item" @touchstart='load'>{{item.comments}}</div>
             </div>
             <i class="footbar"></i>
           </li>
@@ -41,21 +43,21 @@
             date: 'x年x月x日',
             time: '2018.10.25',
             comments: '会管家app',
-            imgUrl: require('@/assets/logo.png')
+            imgUrl: require('@/assets/img/icon-nominee.png')
           }, {
             name: '李四',
             role: '执行者',
             date: 'x年x月x日',
             time: '2018.10.25',
             comments: '会管家app',
-            imgUrl: require('@/assets/logo.png')
+            imgUrl: require('@/assets/img/icon-nominee.png')
           }, {
             name: '王五',
             role: '观察者',
             date: 'x年x月x日',
             time: '2018.10.25',
             comments: '会管家app',
-            imgUrl: require('@/assets/logo.png')
+            imgUrl: require('@/assets/img/icon-nominee.png')
           },
           {
             name: '小六',
@@ -63,7 +65,7 @@
             date: 'x年x月x日',
             time: '2018.10.25',
             comments: '会管家app',
-            imgUrl: require('@/assets/logo.png')
+            imgUrl: require('@/assets/img/icon-nominee.png')
           }
         ],
         height: 140 * 2 + "px"
@@ -78,9 +80,26 @@
       }
     },
     methods: {
-      dialog() {
+      load(){
+        this.$loading();//loading
+        setTimeout(()=>{
+          this.$loadingClose()//关闭loading
+        },3000)
+      },
+      notice() {
+        let self = this;
+        this.$dialog.notice({
+          state: "pass",
+          title: "任务已通过",
+          task: "展台基础工作",
+          charge: '李四',
+          partIn: ['王五', '李六']
+        })
+      },
+      info() {
+        let self = this;
         this.$dialog.info()
-      }
+      },
     }
   }
 

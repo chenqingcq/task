@@ -8,9 +8,11 @@ import store from './store'
 
 // 项目组件
 import '../src/common/base/dialog'
+import Load from '@/common/base/loading'
 import AppCom from '../src/common/index.js'
 
-Vue.use(AppCom)
+Vue.use(AppCom);
+Vue.use(Load)
 
 Vue.config.productionTip = false
 

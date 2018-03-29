@@ -2,8 +2,8 @@
   <transition name="fade" >
     <div class="container" v-show="show">
       <div class="panel" >
-          <img src="../../assets/img/loading.gif" alt="loading"> 
-          <span>{{title}}</span>       
+          <img :src="loadingImg" alt="loading"> 
+          <span class="b_FS-12">{{title}}</span>       
       </div>
     </div>
   </transition>
@@ -15,6 +15,11 @@ export default {
       show: false,
       title: ""
     };
+  },
+  computed:{
+    loadingImg(){
+      return require('@/assets/img/loading.gif')
+    }
   }
 };
 </script>
@@ -32,10 +37,10 @@ export default {
   justify-content: center;
   align-items: center;
   .panel {
-    width: 100px;
-    height: 100px;
+    width: 100px*2;
+    height: 100px*2;
     background-color: rgba(55, 55, 55, 1);
-    border-radius: 10px;
+    border-radius: 10px*2;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -51,7 +56,7 @@ export default {
       position: absolute;
       color: #fff;
       text-align: center;
-      bottom: 5px;
+      bottom: 5px*2;
     }
   }
 }

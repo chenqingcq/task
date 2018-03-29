@@ -1,14 +1,32 @@
 <template>
   <transition name="fade" v-if="show">
     <div class="container">
-      <div class="panel">
-        <img class="close" @touchstart='close' src="../../../assets/img/icon-close.png" />
-        <input class="b_FS-16" type="text" ref='input' v-model="text" :placeholder="placeholder" maxlength="20">
-        <div class="bar"></div>
-        <div @touchstart='close'>
-          <div class="btn b_FS-16" @touchstart='operate(text)'>{{btnName}}</div>
+      <template v-if="type==='info'">
+        <div class="panel-info">
+          <img class="close" @touchstart='close' src="../../../assets/img/icon-close.png" />
+          <input class="b_FS-16" type="text" ref='input' v-model="text" :placeholder="placeholder" maxlength="20">
+          <div class="bar"></div>
+          <div @touchstart='close'>
+            <div class="btn b_FS-16" @touchstart='operate(text)'>{{btnName}}</div>
+          </div>
         </div>
-      </div>
+      </template>
+      <template v-if="type==='notice'">
+        <div class="panel-notice">
+          <img class="close" @touchstart='close' src="../../../assets/img/icon-close.png" />
+          <div class="top">
+            <div class="noticeIcon">
+              <img class="noticeImg" :src="imgUrl" />
+            </div>
+            <p class="title b_FS-18">{{notice.title}}</p>
+            <p class="task b_FS-14">{{notice.task}}</p>
+          </div>
+          <div class="bottom  b_FS-12">
+            <div class="charge"><span class="role">负责人:</span>{{notice.charge}}</div>
+            <div class="partIn"><span class="role">参与人:</span>{{parts}}</div>
+          </div>
+        </div>
+      </template>
     </div>
   </transition>
 </template>
@@ -17,14 +35,37 @@
     data() {
       return {
         text: '',
-        show:false
+        show: false,
+        parts: ''
       }
     },
+    computed: {
+      imgUrl() { //根据state判断那种图标,三种:pass,fail,warn
+        if (this.notice.state === 'pass') {
+          return require('@/assets/img/image-pass.png')
+        };
+        if (this.notice.state === 'fail') {
+          return require('@/assets/img/image-not through.png')
+        };
+        if (this.notice.state === 'warn') {
+          return require('@/assets/img/image-notice.png')
+        };
+      }
+    },
+
     methods: {
       close() {
+        console.log(22322)
         this.show = false;
+      },
+      initPartIn() {
+        console.log(this.notice.partIn);
+        this.parts = this.notice.partIn.join("丶")
       }
     },
+    mounted() {
+      this.type === 'notice' ? this.initPartIn() : ''
+    }
   };
 
 </script>
@@ -36,12 +77,79 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background: rgba(99, 99, 99,.8);
+    background: rgba(99, 99, 99, .8);
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    .panel {
+    .panel-notice {
+      min-width: 252*2px;
+      min-height: 275*2px;
+      background-color: #fff;
+      border-radius: 18px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      img.close {
+        display: block;
+        position: absolute;
+        z-index: 9999;
+        width: 15px*2;
+        height: 15px*2;
+        right: 8px*2;
+        top: 8px*2;
+      }
+      .top {
+        width: 100%;
+        height: 190*2px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        p.title {
+          position: absolute;
+          bottom: 30px*2;
+          color: #5ADE52;
+        }
+        p.task {
+          position: absolute;
+          bottom: 10px*2;
+          color: #666;
+        }
+        .noticeIcon {
+          /*height: 171px*2;*/
+          position: absolute;
+          top: 0;
+          img.noticeImg {
+            margin-top: 27*2px;
+            display: inline-block;
+            width: 145px*2;
+          }
+        }
+      }
+      ;
+      .bottom {
+        color: #999;
+        width: 171*2px;
+        min-height: 83*2px;
+        border-top: 2px solid #F4F4F4;
+        position: absolute;
+        bottom: 0;
+        .role {
+          margin-right: 10*2px;
+        }
+        .charge {
+          min-height: 17*2px;
+          margin-top: 9*2px;
+        }
+        .partIn {
+          margin-top: 2px;
+          min-height: 17*2px;
+        }
+      }
+    }
+    .panel-info {
       width: 290px*2;
       height: 133px*2;
       background-color: #fff;
@@ -49,7 +157,7 @@
       position: relative;
       display: flex;
       justify-content: center;
-      img {
+      img.close {
         display: block;
         position: absolute;
         width: 15px*2;
