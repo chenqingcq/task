@@ -1,6 +1,6 @@
 <template>
   <div id="app" :style = '[appContainerCss]' >
-    <router-view class="wrapper" :style="padding"/>
+    <router-view class="wrapper" />
     <!--底部 会展 logo - 会管家-展会应用商店-->
     <v-bottom-sign v-if="isShowBottomSign"></v-bottom-sign>
   </div>
@@ -12,10 +12,6 @@
     name: "App",
     data() {
       return {
-        title: "私人订制",
-        imgUrl: require("./assets/img/icon-left-slip03.png"),
-        hint: "返回",
-        height: 44 ,
         // 是否显示底部 logo 介绍
         isShowBottomSign: false ,
         // app.vue 外层盒子样式
@@ -24,30 +20,6 @@
         }
 
       };
-    },
-    components: {
-
-    },
-    computed: {
-      padding() {
-        return {
-
-        };
-      }
-    },
-    methods: {
-      test() {
-        this.$dialog({
-          type: "添加",
-          operate() {
-            console.log("delete");
-          },
-          placeholder:'添加新成员'
-        });
-      },
-      back() {
-        this.$router.go(-1);
-      }
     },
     watch: {
       '$route'(to, from){
