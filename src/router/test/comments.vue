@@ -99,7 +99,7 @@
       info() {
         let self = this;
         this.$dialog.info({
-          btnName:"delete"
+          btnName:"add"
         })
       },
     }
