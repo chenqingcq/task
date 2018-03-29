@@ -55,7 +55,7 @@
         if(to.meta && to.meta.title) title.innerHTML = to.meta.title
 
         this.isShowBottomSign  = to.meta.isShowBottomSign ? true : false
-
+        this.appContainerCss.backgroundColor = to.meta.isWhiteBg ? '#fff' : '#f4f4f4'
       }
     }
   };

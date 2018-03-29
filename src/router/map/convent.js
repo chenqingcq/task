@@ -39,7 +39,8 @@ export default [
     component: msgTips,
     meta: {
       // 是否显示 底部栏 会展 logo
-      isShowBottomSign : false
+      isShowBottomSign : false,
+      isWhiteBg: true
     }
   },{
     path: '/section',
