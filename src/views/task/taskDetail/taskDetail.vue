@@ -4,6 +4,7 @@
     .panel {
       height: 345*2px;
       padding: 10*2px;
+      position: relative;
       .task-slide-top {
         height: 57*2px;
         display: flex;
@@ -29,11 +30,19 @@
         }
       }
       .task-progress {
+        position: absolute;
+        bottom: 0;
         width: 100%;
         height: 50*2px;
         display: flex;
-        width:100%;
+        width: 100%;
         justify-content: center;
+        p{
+            width:100%;
+        }
+        .task-desc{
+            width: 100%
+        }
       }
     }
   }
