@@ -80,7 +80,9 @@
   }
 
   .selectEndTime,.selectStartTime {
-    margin-right: 52px !important
+    margin-right: 52px !important;
+    display: flex !important;
+    align-items: center !important;
   }
 </style>
 <template>
@@ -112,16 +114,12 @@
           <div class="task-setting">开始时间<img class="time-logo" src="@/assets/img/icon-right-slide04.png"/></div>
         </label>
 
-        <v-datetime v-model="item2" format="YYYY.MM.DD"
+        <v-datetime class="userInput selectStartTime " v-model="item2" format="YYYY.MM.DD"
 
                     @on-change="startDate_change"
                     placeholder="开始时间" >
-            开始时间
+            <!-- 开始时间 -->
         </v-datetime>
-
-        <input class="userInput selectStartTime " @focus='selectStartTime' type="text" id="item2" v-model="item2" maxlength="20"
-          placeholder="开始时间" />
-
 
       </li>
       <li class="task-item time-logo-container">
@@ -131,8 +129,14 @@
           </div>
           <div class="task-setting">结束时间 <img class="time-logo" src="@/assets/img/icon-right-slide04.png"/></div>
         </label>
-        <input class="userInput selectEndTime" @focus='selectEndTime' type="text" id="item3" v-model="item3" maxlength="20" placeholder="结束时间"
-        />
+        <v-datetime class="userInput selectEndTime " v-model="item3" format="YYYY.MM.DD"
+
+                    @on-change="endDate_change"
+                    placeholder="結束时间" >
+            <!-- 开始时间 -->
+        </v-datetime>
+        <!-- <input class="userInput selectEndTime" @focus='selectEndTime' type="text" id="item3" v-model="item3" maxlength="20" placeholder="结束时间"
+        /> -->
       </li>
       <li class="task-item">
         <label class="task-desc" for="item4">
