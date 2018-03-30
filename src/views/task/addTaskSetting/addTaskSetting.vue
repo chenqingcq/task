@@ -111,8 +111,18 @@
           </div>
           <div class="task-setting">开始时间<img class="time-logo" src="@/assets/img/icon-right-slide04.png"/></div>
         </label>
+
+        <v-datetime v-model="item2" format="YYYY.MM.DD"
+
+                    @on-change="startDate_change"
+                    placeholder="开始时间" >
+            开始时间
+        </v-datetime>
+
         <input class="userInput selectStartTime " @focus='selectStartTime' type="text" id="item2" v-model="item2" maxlength="20"
           placeholder="开始时间" />
+
+
       </li>
       <li class="task-item time-logo-container">
         <label class="task-desc" for="item3">
@@ -218,6 +228,12 @@
       },
       selectEndTime() {
         console.log(2)
+      },
+      startDate_change(val){
+        console.log('startDate: ' + val)
+      },
+      endDate_change(val){
+        console.log('endDate: ' + val)
       }
     }
   }

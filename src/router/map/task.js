@@ -51,7 +51,8 @@ export default [
     meta: {
       title : '上传历史' ,
       // 是否显示 底部栏 会展 logo
-      isShowBottomSign : false
+      isShowBottomSign : false,
+      isWhiteBg: true
     }
   }
 ]

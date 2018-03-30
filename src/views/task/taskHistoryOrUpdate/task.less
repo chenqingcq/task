@@ -1,0 +1,128 @@
+.task{
+
+  position:relative;
+  .header{
+    height: 12px;
+    width: 100%;
+    background: #0BAFFE;
+  }
+  .bottom-bg{
+    display: block;
+    width: 100%;
+  }
+  position:relative ;
+  .left{
+    position: absolute;
+    width: 93*2px;
+    left: 0 ;
+    top: 132px ;
+    z-index : 1 ;
+  }
+
+  .task-main{
+    min-height: 982px;
+    position: relative;
+    z-index : 2 ;
+    margin-top: 48px;
+    .timer-shaft {
+      /*display: inline-block;*/
+      width: 164px;
+    }
+
+    .panel-conf{
+      display: inline-block;
+      width: 552px;
+      min-height: 122px;
+      .text{
+        margin-left: 20px;
+        margin-top: 14px;
+        width: 490px;
+        line-height:40px;
+        font-size: 28px;
+      }
+      .imgs-wrap{
+        margin-left: 28px ;
+        margin-top: 14px;
+        margin-bottom: 34px;
+        &.edit{
+          margin-bottom: 18px;
+          margin-top: 0;
+        }
+        img{
+          width: 116px;
+          height: 114px;
+          margin-right: 10px;
+        }
+      }
+      &.edit{
+        height: 300px;
+        position:relative ;
+        .input:-webkit-input-placeholder{
+          color:#999;
+        }
+        .input{
+          width: 238*2px;
+          height:   70px;
+          font-size: 24px;
+          color:#666;
+          line-height: 34px;
+          margin-left: 24px;
+          margin-top: 28px;
+        }
+        .placeholder-icon{
+          width: 30px;
+          position: absolute;
+          left : 190px;
+          top: 24px;
+        }
+      }
+    }
+    .start-section{
+      margin-top: 34px;
+    }
+    .end-section{
+
+    }
+    .doing-section{
+
+    }
+  }
+
+
+}
+/*信号灯*/
+.light{
+  width: 8.6*2px;
+  height: 8.6*2px;
+  border-radius: 100%;
+  border-width: 6.4px ;
+  border-style : solid ;
+  box-sizing : content-box;
+  border-color: rgba(255,255,255,0.8);
+  margin:  4*2px auto;
+  &.start{
+    background: #80EA69;
+    /*border-color: (r:0.50 g:0.92 b:0.41 a:1.00);*/
+  }
+  &.doing{
+    background: #09ACFE;
+  }
+  &.pass{
+    background: #fff;
+    border-color: #09ACFE ;
+    opacity: 0.28;
+  }
+  &.end{
+    background: #EA7B69;
+  }
+}
+.link-dot{
+  width: 7*2px;
+  height: 7*2px;
+  background: #E7EBEF;
+  margin: 10px auto;
+  /*margin-bottom: 5*2px;*/
+  border-radius: 100% ;;
+  box-sizing : content-box;
+}
+
