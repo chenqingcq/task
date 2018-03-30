@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :style = '[appContainerCss]' >
+  <div  :style = '[appContainerCss]'  >
     <router-view class="wrapper" />
     <!--底部 会展 logo - 会管家-展会应用商店-->
     <v-bottom-sign v-if="isShowBottomSign"></v-bottom-sign>
@@ -16,7 +16,8 @@
         isShowBottomSign: false ,
         // app.vue 外层盒子样式
         appContainerCss:{
-          backgroundColor : '#f4f4f4'
+          backgroundColor : '#f4f4f4',
+          minHeight: '100%'
         }
 
       };
@@ -37,6 +38,9 @@
   @import "./assets/css/theme/theme.less";
   @import "./assets/css/normalize.less";
   @import "./assets/css/common.less";
+  #app{
+    min-height: 100%!important;
+  }
   .wrapper{
     min-height: 629*2px;
   }
