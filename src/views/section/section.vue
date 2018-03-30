@@ -36,12 +36,12 @@
           margin-left: 20px;
           margin-top: 14px;
           width: 490px;
-          height: 88px ;
           line-height:40px;
           font-size: 28px;
         }
         &.edit{
            height: 192px;
+           position:relative ;
             .input{
               width: 238*2px;
               height:   88px;
@@ -50,6 +50,12 @@
               line-height: 40px;
               margin-left: 20px;
               margin-top: 18px;
+            }
+            .placeholder-icon{
+              width: 30px;
+              position: absolute;
+              left : 190px;
+              top: 24px;
             }
         }
       }
@@ -137,7 +143,8 @@
             <!--<div class="light start"></div>-->
           </div>
           <div class="panel panel-conf edit">
-            <textarea class="input" name="" placeholder="这里填写节点" id="" cols="30" ></textarea>
+            <textarea class="input" v-model="newSectionVal" name="" placeholder="这里填写节点" id="" cols="30" ></textarea>
+            <img v-if="newSectionVal.length ==0" class="placeholder-icon" src="../../assets/img/icon-edit02.png" alt="">
             <div class="btn-small-primary b-MT-5">提交</div>
           </div>
         </div>
@@ -148,15 +155,11 @@
         </div>
         <div class="complete-section b_d-flex b_flex-center">
           <div class="timer-shaft">
-            <div class="link-dot b-MT-0"></div>
-            <div class="link-dot"></div>
 
             <div class="c_white-bg c_7 b_FS-18 b_font-PFR text-center">
               01/16
             </div>
-            <div class="link-dot"></div>
-            <div class="link-dot b-MB-0"></div>
-            <!--<div class="light start"></div>-->
+
           </div>
           <div class="panel panel-conf">
             <div class="text c_6">
@@ -166,6 +169,8 @@
         </div>
         <div class="timer-shaft">
           <div class="link-dot b-MT-0"></div>
+          <div class="link-dot"></div>
+          <div class="link-dot"></div>
           <div class="link-dot"></div>
           <div class="link-dot b-MB-0"></div>
         </div>
@@ -189,17 +194,12 @@
         </div>
           <div class="complete-section b_d-flex b_flex-center">
             <div class="timer-shaft">
-              <!--<div class="link-dot b-MT-0"></div>-->
-              <!--<div class="link-dot"></div>-->
 
               <div class="c_white-bg c_7 b_FS-18 b_font-PFR text-center">
                 01/16
               </div>
               <div class="light pass"></div>
-              <!--<div class="link-dot"></div>-->
-              <!--<div class="link-dot b-MB-0"></div>-->
 
-              <!--<div class="light start"></div>-->
             </div>
             <div class="panel panel-conf">
             </div>
@@ -216,17 +216,12 @@
 
         <div class="complete-section b_d-flex b_flex-center">
           <div class="timer-shaft">
-            <!--<div class="link-dot b-MT-0"></div>-->
-            <!--<div class="link-dot"></div>-->
 
             <div class="c_white-bg c_7 b_FS-18 b_font-PFR text-center">
               01/16
             </div>
             <div class="light pass"></div>
-            <!--<div class="link-dot"></div>-->
-            <!--<div class="link-dot b-MB-0"></div>-->
 
-            <!--<div class="light start"></div>-->
           </div>
           <div class="panel panel-conf">
           </div>
@@ -253,6 +248,7 @@
         data(){
             return{
               mode: 'edit', // look
+              newSectionVal : '' ,
               todayDate: ''
             }
         },

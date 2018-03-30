@@ -4,7 +4,7 @@
 /*
 * 项目 相关
 * */
-const Entry = resolve => require(['@/views/conventEntry/conventEntry'], resolve) // 项目-首页- 入口
+const Entry = resolve => require(['@/views/conventEntry/conventEntry.vue'], resolve) // 项目-首页- 入口
 
 const help = resolve => require(['@/views/help/help'], resolve) // 项目- 使用帮助
 
@@ -13,6 +13,10 @@ const msgTips = resolve => require(['@/views/msgTips/msgTips'], resolve) // 项�
 const section = resolve => require(['@/views/section/section'], resolve) // 项目- 节点查看或者添加
 
 export default [
+  {
+    path: '/',
+    redirect: '/conventEntry'
+  },
   {
     path: '/conventEntry',
     name: 'convententry',
