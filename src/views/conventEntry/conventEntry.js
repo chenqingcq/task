@@ -14,15 +14,30 @@ export default {
       // 提前完成
       aheadLogo: require('@/assets/img/image-medal.png'),
 
+      projectList : []
     }
   },
   components:{
     slideBar
   },
   methods:{
+    // 周／月
     statusChange(status){
 
       this.isMonthMode = status
+    },
+    addTask(){
+      if( this.projectList.length == 0 ){
+        this.$dialog.info({
+          placeholder : '请填写项目名称',
+
+
+
+        })
+      }
+      else{
+
+      }
     }
   }
 }

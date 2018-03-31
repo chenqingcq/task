@@ -218,7 +218,7 @@
           <img class="menu" @click="isShowSlideBar = true" src="../../assets/img/icon-menu.png" alt="">
           <span class="project-name c_white b_FS-18 text-center">展会项目一</span>
           <img class="share" src="../../assets/img/icon-share.png" alt="">
-          <img class="add" src="../../assets/img/icon-add.png" alt="">
+          <img class="add" @click="addTask" src="../../assets/img/icon-add.png" alt="">
         </div>
         <div class="calendar-wrapper">
           <v-calendar @statusChange="statusChange" ></v-calendar>
