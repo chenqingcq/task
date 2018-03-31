@@ -195,7 +195,6 @@
         color: #999999;
         position: absolute;
         bottom: 79px*2;
-        width: 96px*2;
       }
       .bar {
         position: absolute;
