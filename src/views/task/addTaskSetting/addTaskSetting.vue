@@ -104,16 +104,25 @@
       font-size: 16px*2;
       color: #333333;
       position: relative;
+      border-bottom: 2px solid rgba(151, 151, 151, 0.21);
       img.editpng {
         display: inline-block;
         height: 26*2px;
         margin-right: 13*2px;
       }
-      img.editmore {
+      div.editmore {
         display: inline-block;
-        height: 12*2px;
         position: absolute;
         right: 14*2px;
+        width: 40px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        img.editmore {
+          display: inline-block;
+          height: 12*2px;
+        }
       }
     }
   }
@@ -152,6 +161,34 @@
     color: #FFFFFF;
     text-align: center;
     line-height: 44*2px;
+  }
+
+  .select {
+    width: 16*2px;
+    height: 16*2px;
+    border-radius: 50%;
+    border: 1*2px solid #DBDBDB;
+    margin-left: 37*2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      display: inline-block;
+      width: 15*2px;
+      height: 15*2px;
+    }
+  }
+
+  .is-active {
+    background: #BAD4FF;
+    border: 1*2px solid #4E8CEE !important;
+  }
+
+  .name {
+    margin-left: 4*2px;
+    font-family: PingFangSC-Regular;
+    font-size: 16px*2;
+    color: #333333;
   }
 
 </style>
@@ -267,11 +304,24 @@
       </li>
     </ul>
     <!--项目发起人可见项目节点-->
-    <ul class="editDeadTime" v-if="role == 'taskCreater'">
-      <li>
+    <ul class="editDeadTime">
+      <li v-if="role == 'taskCreater'">
         <img class="editpng" src="@/assets/img/icon-edit.png" />
         <div class="editProgress">编辑项目节点</div>
         <img class="editmore" src="@/assets/img/icon-right-slide03.png">
+      </li>
+      <li v-if="role == 'taskManager'" @touchstart='inviteOthers'>
+        <img class="editpng" src="@/assets/img/icon-invitation.png" />
+        <div class="editProgress">邀约他人可见</div>
+        <div class="editmore">
+          <img class="editmore" src="@/assets/img/icon-right-slide03.png" ref='arrow'>
+        </div>
+      </li>
+      <li v-show="showMembers" v-for="(item,index) in members" :key="index">
+        <div @touchstart='selected(index,item.isAllowed)' class="select">
+          <img src="@/assets/img/sign-selected.png" v-show="item.isAllowed" />
+        </div>
+        <div class="name">{{item.name}}</div>
       </li>
     </ul>
     <div class="confirm">确定</div>
@@ -292,13 +342,24 @@
         allowCreate: true,
         isPublic: false,
         allowedLook: true,
-        role: ''
+        role: '',
+        showMembers: false,
+        members: []
       }
     },
     computed: {
 
     },
     methods: {
+      selected(index, isAllowed) {
+        this.members[index].isAllowed = !isAllowed;
+        console.log(this.members)
+      },
+      inviteOthers() { //邀约他人可见
+        this.showMembers = !this.showMembers;
+        this.showMembers ? this.$refs.arrow.style.transform = 'rotate(90deg)' : this.$refs.arrow.style.transform =
+          'rotate(0)'
+      },
       allowCreateChange(status) {
         this.allowCreate = status;
         console.log(status, this.allowCreate)
@@ -325,7 +386,16 @@
       }
     },
     created() {
-      this.role = 'taskCreater'; //如果是项目发起人可见
+      this.role = 'taskManager'; //如果是项目发起人可见
+      this.members = [{
+          isAllowed: false,
+          name: '李四'
+        },
+        {
+          isAllowed: false,
+          name: '张三'
+        }
+      ]
     }
   }
 

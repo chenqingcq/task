@@ -7,9 +7,10 @@
           评论<img class="comments-icon" :src='commentImgUrl' />
         </div>
       </div>
-      <scroll class="comments-container" :height='height'>
-        <ul class="comment-panel" v-if="items.length>1">
-          <li v-for="(item,index) in items" :key="index" class="lisItem">
+      <div class="comments-container_" v-if="members.length<=0">暂无留言</div>
+      <scroll class="comments-container" :height='height' v-if="members.length>1">
+        <ul class="comment-panel">
+          <li v-for="(item,index) in members" :key="index" class="lisItem">
             <div class="left">
               <!--测试-->
               <div class="icon">
@@ -71,6 +72,14 @@
         height: 140 * 2 + "px"
       }
     },
+    props: {
+      members: {
+        type: Array,
+        default () {
+          return []
+        }
+      }
+    },
     components: {
       scroll
     },
@@ -98,6 +107,13 @@
       /*height: 12px*2;*/
       margin-left: 4px;
     }
+  }
+
+  .comments-container_ {
+    height: 50px*2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .comments-container {

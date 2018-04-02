@@ -2,7 +2,7 @@
   .task-detail-slide {
     padding: 4*2px 10*2px 0 10*2px;
     .panel {
-      height: 345*2px;
+      height: 340*2px;
       padding: 10*2px;
       position: relative;
       .task-slide {
@@ -135,139 +135,16 @@
     }
   }
 
-</style>
-<template>
-  <div class="task-detail-container">
-    <div class="task-detail-slide">
-      <div class="panel c-1 c_white-bg">
-        <div class="task-slide-top">
-          <div class="user-icon"></div>
-          <div class="right">
-            <div class="show-task-detail">
-              <div class="task-name">任务名名称</div>
-              <div class="task-detail">任务详情</div>
-              <div class="progress">
-                <div class="b_status pending">进行中</div>
-              </div>
-            </div>
-            <div class="task-focus">
-              <div class="focus-star">
-                <img src="@/assets/img/icon-set up.png" />
-              </div>
-              <div class="focus-star">
-                <img class="focus-star" src="@/assets/img/icon-collection-highlight.png" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <!--轮播图-->
-        <div class="task-slide">
-          <div class="arrow">
-            <div class="left-arrow" @touchstart='minusIndex'>
-              <img src="@/assets/img/icon-right-slide03.png" />
-            </div>
-            <div class="right-arrow" @touchstart='addIndex '>
-              <img src="@/assets/img/icon-right-slide03.png" />
-            </div>
-          </div>
-          <slide :loop='loop' :autoPlay='autoPlay' :height='height' :width='width' @slideChange='changeIndex'>
-            <div class="slider-item" v-for="(item,index) in items" :key="index">
-              <img :src="item.imgUrl">
-            </div>
-          </slide>
-        </div>
-        <div class="task-progress">
-          <span class="task-desc">展台基础已布置完毕</span>
-          <div class="detail-btn">
-            查看上传历史
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--查看当前节点-->
-    <div class="b-LR-10">
-      <div class="panel b-MT-10 c_white-bg">
-        <div class="b-LR-10 b-T-5 between">
-          <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 b_FS-14 c_6 ">当前节点</span></p>
-          <div class="more b_FS-10  c_7">
-            更多项目节点>
-          </div>
-        </div>
-        <div class="current-progress">
-          <div class="left">01/30</div>
-          <div class="right">
-            布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="project-party"></div>
-    <comments></comments>
-    <div class="judge-btn">
-      <div class="pass">关闭任务</div>
-      <div class="failed"> 验收通过</div>
-    </div>
-  </div>
-</template>
-<script>
-  import comments from '@/views/comments/comments';
-  import Slide from '@/common/base/slide/slide.vue';
-  export default {
-    data() {
-      return {
-        loop: true,
-        currentIndex: 0,
-        autoPlay: false,
-        height: 382,
-        width: 608,
-        items: [{
-            imgUrl: 'http://img.htmleaf.com/1712/201712211424.jpg'
-          }, {
-            imgUrl: 'http://pic.sc.chinaz.com/files/pic/webjs1/201705/jiaoben5070.jpg'
-          },
-          {
-            imgUrl: 'http://img.htmleaf.com/1801/2018011440.jpg'
-          },
-          {
-            imgUrl: 'http://img.htmleaf.com/1801/201801061437.jpg'
-          },
-          {
-            imgUrl: 'http://img.htmleaf.com/1712/201712211424.jpg'
-          },
-          {
-            imgUrl: 'http://pic.sc.chinaz.com/files/pic/webjs1/201705/jiaoben5070.jpg'
-          }
-
-        ]
-      }
-    },
-    components: {
-      comments,
-      Slide
-    },
-    methods: {
-      changeIndex(index) {
-        console.log(index)
-      },
-      addIndex() {
-        this.currentIndex = ++this.currentIndex;
-      },
-      minusIndex() {
-        this.currentIndex = --this.currentIndex;
-      }
-    },
-    watch: {
-      currentIndex(newVal) {
-        console.log(newVal)
-      }
-    }
-  }
-
-</script>
-<style lang="less" scoped>
   .more {
-    min-height: 14*2px;
-    line-height: 14*2px;
+   height: 12*2px;
+   display: flex;
+   align-items: center;
+   font-size: 10*2px;
+    img{
+      display:inline-block;
+      height:8px*2;  
+      margin-left:4*2px;
+    }
   }
 
   .slider-item {
@@ -287,7 +164,7 @@
     width: 100%;
     /*background: red;*/
     padding: 0 10*2px;
-    margin-top: 12*2px;
+    margin-top: 8*2px;
     display: flex;
     .pass {
       font-family: PingFangSC-Regular;
@@ -345,5 +222,166 @@
       -webkit-box-orient: vertical;
     }
   }
-
 </style>
+<template>
+  <div class="task-detail-container">
+    <div class="task-detail-slide">
+      <div class="panel c-1 c_white-bg">
+        <div class="task-slide-top">
+          <div class="user-icon"></div>
+          <div class="right">
+            <div class="show-task-detail">
+              <div class="task-name">任务名名称</div>
+              <div class="task-detail">任务详情</div>
+              <div class="progress">
+                <div class="b_status pending">进行中</div>
+              </div>
+            </div>
+            <div class="task-focus">
+              <div class="focus-star">
+                <img src="@/assets/img/icon-set up.png" />
+              </div>
+              <div class="focus-star">
+                <img class="focus-star" src="@/assets/img/icon-collection-highlight.png" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--轮播图-->
+        <div class="task-slide">
+          <div class="arrow">
+            <div class="left-arrow" @touchstart='minusIndex'>
+              <img src="@/assets/img/icon-right-slide03.png" />
+            </div>
+            <div class="right-arrow" @touchstart='addIndex '>
+              <img src="@/assets/img/icon-right-slide03.png" />
+            </div>
+          </div>
+          <slide :loop='loop' :autoPlay='autoPlay' :height='height' :width='width' @slideChange='changeIndex'>
+            <div class="slider-item" v-for="(item,index) in items" :key="index">
+              <img :src="item.imgUrl">
+            </div>
+          </slide>
+        </div>
+        <div class="task-progress">
+          <span class="task-desc">展台基础已布置完毕</span>
+          <div class="detail-btn">
+            查看上传历史
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--查看当前节点-->
+    <div class="b-LR-10">
+      <div class="panel b-MT-10 c_white-bg">
+        <div class="b-LR-10 b-T-5 between">
+          <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 b_FS-14 c_6 ">当前节点</span></p>
+          <div @touchstart='taskHistoryOrUpdate' class="more b_FS-10  c_7">
+            更多项目节点<img src="@/assets/img/icon-right-slide03.png"/>
+          </div>
+        </div>
+        <div class="current-progress">
+          <div class="left">01/30</div>
+          <div class="right">
+            布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="project-party"></div>
+    <comments :members='members'></comments>
+    <div class="judge-btn">
+      <div class="pass">关闭任务</div>
+      <div class="failed"> 验收通过</div>
+    </div>
+  </div>
+</template>
+<script>
+  import comments from '@/views/comments/comments';
+  import Slide from '@/common/base/slide/slide.vue';
+  export default {
+    data() {
+      return {
+        loop: true,
+        currentIndex: 0,
+        autoPlay: false,
+        height: 382,
+        width: 608,
+        members: [{ //审批留言
+            name: '张三',
+            role: '发布者',
+            date: 'x年x月x日',
+            time: '2018.10.25',
+            comments: '会管家app',
+            imgUrl: require('@/assets/img/icon-nominee.png')
+          }, {
+            name: '李四',
+            role: '执行者',
+            date: 'x年x月x日',
+            time: '2018.10.25',
+            comments: '会管家app',
+            imgUrl: require('@/assets/img/icon-nominee.png')
+          }, {
+            name: '王五',
+            role: '观察者',
+            date: 'x年x月x日',
+            time: '2018.10.25',
+            comments: '会管家app',
+            imgUrl: require('@/assets/img/icon-nominee.png')
+          },
+          {
+            name: '小六',
+            role: '观察者',
+            date: 'x年x月x日',
+            time: '2018.10.25',
+            comments: '会管家app',
+            imgUrl: require('@/assets/img/icon-nominee.png')
+          }
+        ],
+        items: [{ //轮播图
+            imgUrl: 'http://img.htmleaf.com/1712/201712211424.jpg'
+          }, {
+            imgUrl: 'http://pic.sc.chinaz.com/files/pic/webjs1/201705/jiaoben5070.jpg'
+          },
+          {
+            imgUrl: 'http://img.htmleaf.com/1801/2018011440.jpg'
+          },
+          {
+            imgUrl: 'http://img.htmleaf.com/1801/201801061437.jpg'
+          },
+          {
+            imgUrl: 'http://img.htmleaf.com/1712/201712211424.jpg'
+          },
+          {
+            imgUrl: 'http://pic.sc.chinaz.com/files/pic/webjs1/201705/jiaoben5070.jpg'
+          }
+
+        ]
+      }
+    },
+    components: {
+      comments,
+      Slide
+    },
+    methods: {
+      taskHistoryOrUpdate(){
+        this.$router.push('taskHistoryOrUpdate')
+      },
+      changeIndex(index) {
+        console.log(index)
+      },
+      addIndex() {
+        this.currentIndex = ++this.currentIndex;
+      },
+      minusIndex() {
+        this.currentIndex = --this.currentIndex;
+      }
+    },
+    watch: {
+      currentIndex(newVal) {
+        console.log(newVal)
+      }
+    }
+  }
+
+</script>
