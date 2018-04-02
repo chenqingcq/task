@@ -1,4 +1,4 @@
-i<template>
+<template>
   <div class="b-LR-10 comment-container">
     <div class="panel b-MT-10 " style="background:#fff">
       <div class="b-LR-10 b-T-5 between">
@@ -7,10 +7,10 @@ i<template>
           评论<img class="comments-icon" :src='commentImgUrl' />
         </div>
       </div>
-      <scroll class="comments-container" :height='height' >
+      <scroll class="comments-container" :height='height'>
         <ul class="comment-panel" v-if="items.length>1">
           <li v-for="(item,index) in items" :key="index" class="lisItem">
-            <div class="left" >
+            <div class="left">
               <!--测试-->
               <div class="icon">
                 <img :src="item.imgUrl" alt="icon" class='iconImg'>
@@ -19,10 +19,10 @@ i<template>
             <div class="right">
               <!--测试-->
               <div class="head">
-                <div class="role b_FS-12 " >{{item.name}}({{item.role}})</div>
-                <div class="time-panel" ><span>{{item.date}}</span><span>{{item.time}}</span></div>
+                <div class="role b_FS-12 ">{{item.name}}({{item.role}})</div>
+                <div class="time-panel"><span>{{item.date}}</span><span>{{item.time}}</span></div>
               </div>
-              <div class="comments-item" >{{item.comments}}</div>
+              <div class="comments-item">{{item.comments}}</div>
             </div>
             <i class="footbar"></i>
           </li>
@@ -80,21 +80,22 @@ i<template>
       }
     },
     methods: {
-      
+
     }
   }
 
 </script>
 <style lang="less" scoped>
-
-
   .commenthint {
     display: flex;
     align-items: center;
+    ont-family: PingFangSC-Medium;
+    font-size: 10*2px;
+    color: #999999;
     .comments-icon {
       display: inline-block;
       width: 12*2px;
-      height: 12px*2;
+      /*height: 12px*2;*/
       margin-left: 4px;
     }
   }
@@ -158,6 +159,7 @@ i<template>
             font-size: 16px;
             min-width: 94*2px;
             display: inline-block;
+            font-family: PingFangSC-Regular;
             span {
               margin-left: 5px;
             }

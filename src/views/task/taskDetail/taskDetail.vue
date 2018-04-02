@@ -34,12 +34,17 @@
               font-size: 14*2px;
               color: #666666;
               margin-top: 2*2px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+
             }
             .task-detail {
               margin-top: 2*2px;
               font-size: 12px*2;
               color: #666666;
               letter-spacing: 0;
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
             .progress {
               margin-top: 2*2px;
@@ -179,11 +184,29 @@
         </div>
       </div>
     </div>
-    <div class="detail-progress">
-
+    <!--查看当前节点-->
+    <div class="b-LR-10">
+      <div class="panel b-MT-10 c_white-bg">
+        <div class="b-LR-10 b-T-5 between">
+          <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 b_FS-14 c_6 ">当前节点</span></p>
+          <div class="more b_FS-10  c_7">
+            更多项目节点>
+          </div>
+        </div>
+        <div class="current-progress">
+          <div class="left">01/30</div>
+          <div class="right">
+            布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处
+          </div>
+        </div>
+      </div>
     </div>
     <div class="project-party"></div>
     <comments></comments>
+    <div class="judge-btn">
+      <div class="pass">关闭任务</div>
+      <div class="failed"> 验收通过</div>
+    </div>
   </div>
 </template>
 <script>
@@ -242,6 +265,11 @@
 
 </script>
 <style lang="less" scoped>
+  .more {
+    min-height: 14*2px;
+    line-height: 14*2px;
+  }
+
   .slider-item {
     width: 608px;
     height: 382px;
@@ -251,6 +279,70 @@
       height: 100%;
       width: 100%;
       box-shadow: 0 5px rgb(135, 135, 135);
+    }
+  }
+
+  .judge-btn {
+    height: 34*2px;
+    width: 100%;
+    /*background: red;*/
+    padding: 0 10*2px;
+    margin-top: 12*2px;
+    display: flex;
+    .pass {
+      font-family: PingFangSC-Regular;
+      font-size: 16px*2;
+      color: #FFFFFF;
+      height: 100%;
+      background-image: linear-gradient(-180deg, #F1BAAF 0%, #EA6E5D 100%);
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.38);
+      border-radius: 2px;
+      width: 172*2px;
+      /*line-height:172*2px;*/
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 11*2px;
+    }
+    .failed {
+      font-family: PingFangSC-Regular;
+      font-size: 16px*2;
+      color: #FFFFFF;
+      height: 100%;
+      width: 172*2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-image: linear-gradient(-180deg, #86C0F8 0%, #4E8CEE 100%);
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.38);
+      border-radius: 2px;
+    }
+  }
+
+  .current-progress {
+    padding: 4*2px 10*2px 0 10*2px;
+    font-family: PingFangSC-Medium;
+    display: flex;
+    color: #525252;
+    justify-content: space-between;
+    padding-bottom: 12*2px;
+    .left {
+      font-size: 22*2px;
+      color: #525252;
+      height: 34*2px;
+      margin-left: 12*2px;
+      margin-right: 30*2px
+    }
+    .right {
+      font-size: 12px*2;
+      width: 233*2px;
+      height: 26*2px;
+      text-overflow: -o-ellipsis-lastline;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
     }
   }
 
