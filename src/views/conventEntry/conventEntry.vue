@@ -100,6 +100,20 @@
           span:last-child{
             margin-right: 8*2px;
           }
+          p{
+            position:relative ;
+            .week-in-chinese{
+              font-family: PingFangSC;
+              margin: 0;
+              left: -1px;
+              text-align: center;
+              top:19px;
+              position: absolute;
+              width:8*2px;
+              background-color: transparent ;
+              z-index: 3;
+            }
+          }
           p.off{
             margin-top: 2*2px;
             display: inline-block;
@@ -249,10 +263,26 @@
                 <span></span><span></span><span></span><span></span><span></span><span></span>
               </div>
               <div class="white-wrap b_FS-0">
-                <p class="off"></p>
-                <p class="off"></p>
-                <p class="off"></p>
-                <p class="off"></p>
+                <p class="off">
+                  <span class="week-in-chinese b_FS-6 c_7">
+                    一
+                  </span>
+                </p>
+                <p class="off">
+                  <span class="week-in-chinese b_FS-6 c_7">
+                    二
+                  </span>
+                </p>
+                <p class="off">
+                  <span class="week-in-chinese b_FS-6 c_7">
+                    三
+                  </span>
+                </p>
+                <p class="off">
+                  <span class="week-in-chinese b_FS-6 c_7">
+                    一
+                  </span>
+                </p>
                 <p class="on outDate"></p>
                 <p class="on outDate">
                   <label class="status-text b_FS-8 text-center c_white b_font-PFR">超时</label>

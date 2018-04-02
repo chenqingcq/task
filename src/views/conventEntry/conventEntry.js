@@ -14,7 +14,7 @@ export default {
       // 提前完成
       aheadLogo: require('@/assets/img/image-medal.png'),
 
-      projectList : []
+      projectList : ['11112']
     }
   },
   components:{
@@ -30,13 +30,14 @@ export default {
       if( this.projectList.length == 0 ){
         this.$dialog.info({
           placeholder : '请填写项目名称',
-
-
-
         })
       }
       else{
-
+        //this.$loading()
+        //setTimeout(()=>{
+        //  this.$loadingClose()
+        //},1000)
+        this.$router.push('/addTaskSetting')
       }
     }
   }
