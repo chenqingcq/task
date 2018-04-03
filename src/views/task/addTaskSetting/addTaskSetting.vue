@@ -269,7 +269,7 @@
           </div>
           <div class="task-setting">结束时间 <img class="time-logo" src="@/assets/img/icon-right-slide03.png"/></div>
         </label>
-        <v-datetime class="userInput selectEndTime " v-model="item3" format="YYYY.MM.DD" @on-change="endDate_change" placeholder="結束时间">
+        <v-datetime class="userInput selectEndTime " v-model="endTime" format="YYYY.MM.DD" @on-change="endDate_change" placeholder="結束时间">
           <!-- 开始时间 -->
         </v-datetime>
         <!-- <input class="userInput selectEndTime" @focus='selectEndTime' type="text" id="item3" v-model="item3" maxlength="20" placeholder="结束时间"
@@ -282,7 +282,7 @@
           </div>
           <div class="task-setting">验收标准</div>
         </label>
-        <input class="userInput" type="text" id="item4" v-model="item4" maxlength="20" placeholder="添加验收标准" />
+        <input class="userInput" type="text" id="item4" v-model="standard" maxlength="20" placeholder="添加验收标准" />
       </li>
       <li class="task-item">
         <label class="task-desc" for="item5">
@@ -356,7 +356,7 @@
         <div class="name">{{item.name}}</div>
       </li>
     </ul>
-    <div @touchstart = 'confirm' class="confirm">确定</div>
+    <div @touchstart='confirm' class="confirm">确定</div>
   </div>
 </template>
 <script>
@@ -364,6 +364,7 @@
     mapMutations,
     mapGetters
   } from 'vuex';
+
   export default {
     data() {
       return {
@@ -372,9 +373,8 @@
         taskname: '',
         taskdesc: '',
         startTime: '',
-        item3: '',
-        item4: '',
-        item5: '',
+        endTime: '',
+        standard: '',
         allowCreate: true,
         isPublic: false,
         allowedLook: true,
@@ -384,19 +384,37 @@
       }
     },
     computed: {
-      ...mapGetters(['taskExecutor']),
-      executor(){
+      ...mapGetters(['taskExecutor', 'getTaskSetting']),
+      executor() {
         return this.taskExecutor.nickname
       }
     },
-    watch:{
-      taskExecutor(newVal,oldVal){
-        console.log(newVal,oldVal)
+    watch: {
+      taskExecutor(newVal, oldVal) {
+        console.log(newVal, oldVal)
       }
     },
     methods: {
-      confirm(){
-        console.log(this.taskExecutor)
+      ...mapMutations({
+        'SET_TASK': "SET_TASK"
+      }),
+      confirm() {
+        console.log(this.taskExecutor);
+        // 点击确认之前先做验证
+        this.SET_TASK({
+          taskTheme: this.taskTheme,
+          taskName: this.taskname,
+          taskDesc: this.taskdesc,
+          startTime: this.startTime,
+          endTime: this.endTime,
+          standard: this.standard,
+          taskExecutor: this.executor,
+          allowedCreate:this.allowCreate,
+          ispublic:this.isPublic,
+          membersCanSee:this.showMembers,
+          othersCanSee:this.members
+        });
+        console.log(this.getTaskSetting)
       },
       appointerManager() {
         this.$router.push('appointMessager')

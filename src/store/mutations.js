@@ -31,6 +31,32 @@ const matutaions = {
     state.taskExecutor.progress = progress;
     state.taskExecutor.comments = comments;
     state.taskExecutor.updated = updated;
+  },
+  [types.SET_TASK](state, val) {
+    let {
+      taskTheme,
+      taskName,
+      taskDesc,
+      startTime,
+      endTime,
+      standard,
+      taskExecutor,
+      allowedCreate,
+      ispublic,
+      membersCanSee,
+      othersCanSee
+    } = val;
+    state.taskSetting.taskTheme = taskTheme;
+    state.taskSetting.taskName = taskName;
+    state.taskSetting.taskDesc = taskDesc;
+    state.taskSetting.startTime = startTime;
+    state.taskSetting.endTime = endTime;
+    state.taskSetting.standard = standard;
+    state.taskSetting.taskExecutor = taskExecutor;
+    state.taskSetting.allowedCreate = allowedCreate;
+    state.taskSetting.ispublic = ispublic;
+    state.taskSetting.membersCanSee = membersCanSee;
+    state.taskSetting.othersCanSee = othersCanSee;
   }
 }
 

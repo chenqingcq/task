@@ -15,7 +15,21 @@ const state = {
     progress: 0,
     userId: '',
     userIcon: ""
+  },
+  taskSetting:{
+    taskTheme:'',
+    taskName:'',
+    taskDesc:'',
+    startTime:'',
+    endTime:'',
+    standard:'',
+    taskExecutor:"",
+    allowedCreate:true,
+    ispublic:false,
+    membersCanSee:true,
+    othersCanSee:[]
   }
+
 }
 
 export default state
