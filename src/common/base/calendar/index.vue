@@ -13,29 +13,34 @@
         ></calendar-switch>
         <div class="calendar b_d-inline-block b_FS-0">
 
-          <img class="left-row" src="../../../assets/img/icon-left-slip.png" alt="">
+          <img class="left-row" @click ='prevMonthArea' src="../../../assets/img/icon-left-slip.png" alt="">
           <div v-if="isMonth" class="month-main">
-            <template v-for="(range,key) in activeDates">
-              <div  class="month-range-wrapper b_d-inline-block text-center">
-                <span class="b_FS-12 date-range b_d-inline-block c_6">{{ range }}</span>
-                <div class="active-bar date-status">
-                </div>
+            <template v-for="(range,index) in activeMonthDates">
+              <div v-if="index >= calendarIndex"   @click="monthChangeArea(index)"  class="month-range-wrapper b_d-inline-block text-center">
+                <span class="b_FS-12 date-range b_d-inline-block c_6">{{ range.areaStr }}</span>
+                <transition name='fade'>
+                  <div v-if="activeMonthIndex == index" class="active-bar date-status">
+                  </div>
+                </transition>
+
               </div>
 
             </template>
           </div>
           <template v-if="!isMonth" v-for="(weekday,key) in activeWeekDays">
             <div class="b_d-inline-block text-center week-wrapper" :class="[ key == activeWeekDays.length-1 && 'last' ]">
-              <p class="b_FS-12 weekday" :class="[weekday.week == 6 ||weekday.week == 7  ? 'c_12': 'c_6' ]" >{{ weekday.date }}</p>
-              <p class="weekday b_FS-6" :class="[weekday.week == 6 ||weekday.week == 7  ? 'c_12': 'c_6' ]" >{{ weeks[weekday.week-1] }}</p>
+              <p class="b_FS-12 weekday" :class="[weekday.week == 6 ||weekday.week == 0  ? 'c_12': 'c_6' ]" >{{ weekday.dayStr }}</p>
+              <p class="weekday b_FS-6" :class="[weekday.week == 6 ||weekday.week == 0  ? 'c_12': 'c_6' ]" >{{ weeks[weekday.week] }}</p>
               <div class="active-bar week-status">
               </div>
             </div>
 
           </template>
-          <img class="right-row" src="../../../assets/img/icon-right-slide.png" alt="">
+          <img class="right-row" @click="nextMonthArea" src="../../../assets/img/icon-right-slide.png" alt="">
         </div>
-
+        <!--<div>-->
+          <!--{{ splitMonthDays }}-->
+        <!--</div>-->
       </div>
 
     </div>
@@ -48,7 +53,7 @@
           weeks: {
             type: Array,
             default: function () {
-              return ['MON','TUE','WED','THU','FRI','SAT','SUN']
+              return ['SUN','MON','TUE','WED','THU','FRI','SAT']
 //              return ['日', '一', '二', '三', '四', '五', '六']
             }
           },
@@ -63,7 +68,7 @@
             return{
               isMonth : true ,
               activeDates:['1-7','8-14','15-21','22-28','29-31'], // ,'29-31'
-              activeWeekDays : [{
+              _activeWeekDays : [{
                 date: 1,
                 week: 1
               },{
@@ -90,9 +95,6 @@
               currentYear : '' ,
               currentMonth : '' ,
               currentDay : '' ,
-
-
-
               /* 7天时间间隔 用于计算 */
               timeDistance : 7 * 24 * 3600 * 1000 ,
               activeMonthDates : [],
@@ -100,7 +102,45 @@
               calendarIndex : -1 ,
             }
         },
+        computed:{
 
+          activeWeekDays(){
+            if( this.activeMonthIndex ==-1 ){
+              return []
+            }
+            var dateObj = this.activeMonthDates[this.activeMonthIndex]
+            console.log('computed weeks', dateObj)
+            var flxibleTime = dateObj.startTmp ,
+             start = dateObj.startTmp,
+             weekdays = []
+
+            console.log(dateObj)
+            for(let i = 0 ; i< 7 ;i++ ){
+
+              let _weekday = new Date(flxibleTime)
+              if( i == 0){
+                console.log( _weekday )
+              }
+              console.log()
+              let area = {
+                dayStr : _weekday.getDate() ,
+                week : _weekday.getDay() ,
+                date : _weekday
+              }
+              flxibleTime += 24*60*60*1000
+              weekdays.push(area)
+            }
+            console.log('weekdays',weekdays)
+            return weekdays
+          },
+          splitMonthDays(){
+              var arr = this.activeMonthDates
+              var totalArray =  arr.slice(this.calendarIndex , this.calendarIndex + 4 )
+              var res = this._splitAsingleMonthArea(totalArray)
+            console.log( '>>>>>>>>>>>>totalArray', res)
+              return res
+          }
+        },
         components:{
           calendarSwitch
         },
@@ -108,6 +148,45 @@
           this.initData()
         },
         methods:{
+          _splitAsingleMonthArea( arr ){
+            if( this.activeMonthIndex ==-1 ){
+              return []
+            }
+            const oneDayTmp = 24 * 60 *60000
+            let monthFullDays = []
+            let j = 0
+            while(j < 4){
+
+
+              var dateObj = arr[j]
+              console.log('computed weeks', dateObj)
+              var flxibleTime = dateObj.startTmp ,
+
+                fullWeekdays = []
+
+              console.log(dateObj)
+              for(let i = 0 ; i< 7 ;i++ ){
+
+                let _weekday = new Date(flxibleTime)
+                if( i == 0){
+                  console.log( _weekday )
+                }
+                console.log()
+                let area = {
+                  dayStr : _weekday.getDate() ,
+                  week : _weekday.getDay() ,
+                  date : _weekday
+                }
+                flxibleTime += oneDayTmp
+                fullWeekdays.push(area) // 7天周 一天一个索引
+              }
+
+              monthFullDays.push(fullWeekdays) // 一周一个索引
+              j++
+            }
+//            28 天
+            return monthFullDays
+          },
           /*
           * 周／月 switch 切换时的回调
           * */
@@ -127,6 +206,7 @@
             let firstDateOfMonth = new Date(this.currentYear, this.currentMonth, 1);
             this.renderMonthDates( firstDateOfMonth).done(()=>{
               this.calendarIndex = 0
+              this.emitData()
             })
 
           },
@@ -160,26 +240,39 @@
               // 从 那个下标 显示 日历
 
               console.log( this.activeMonthDates )
-              return {
-                done : function(cb){
-                  cb && cb()
-                }
-              }
+
             }
             else{
               // 结束
-              let  _endAreaDate =  new Date( +startAreaDate + this.timeDistance)
+              let   area
+              if(flag == 'prev'){
+
+                // 会比计算前的 开始时间 少一天
+                let _startAreaDate = new Date( +startAreaDate - this.timeDistance )
+                console.log(_startAreaDate,174  )
+                let _endAreaDate = new Date(+startAreaDate - 86400000)
+                area = {
+                  startTmp: +_startAreaDate ,
+                  endTmp: +startAreaDate  ,
+                  startWeekDay: _startAreaDate.getDay() ,
+                  areaStr: _startAreaDate.getDate() + '-' + _endAreaDate.getDate(),
+                }
+              }
+              else{
+                console.log(10111)
+                let _endAreaDate = new Date( +startAreaDate + this.timeDistance - 86400000 )
+                area = {
+                  startTmp: +startAreaDate ,
+                    endTmp: +_endAreaDate  ,
+                  startWeekDay: startAreaDate.getDay() ,
+                  areaStr: startAreaDate.getDate() + '-' + _endAreaDate.getDate(),
+                }
+              }
 //              if( this.currentTime > startAreaDate && this.currentTime <= _endAreaDate ){
 //                this.activeMonthIndex = i
 //                console.log(i)
 //              }
               // 分区对象
-              let area = {
-                startTmp: +startAreaDate ,
-                endTmp: +_endAreaDate - 86400000  ,
-                startWeekDay: startAreaDate.getDay() ,
-                areaStr: startAreaDate.getDate() + '-' + (_endAreaDate.getDate()-1 ),
-              }
               if( flag == 'prev' ){
                 // 在数组开头添加
                 this.activeMonthDates.unshift(area)
@@ -187,22 +280,67 @@
                 // 在数组结尾添加
                 this.activeMonthDates.push(area)
               }
+
+            }
+            return {
+              done : function(cb){
+                cb && cb()
+              }
             }
           },
           // 跳转到上一个 月区间
           prevMonthArea(){
             if( this.calendarIndex > 0 ){
               this.calendarIndex -= 1
+              if( this.activeMonthIndex > 0){
+                this.activeMonthIndex -=1
+              }
+              this.emitData()
               return
             }
+            // console.log(this.activeMonthDates[this.calendarIndex])
             let startDate = new Date(this.activeMonthDates[this.calendarIndex].startTmp)
+            this.renderMonthDates( startDate ,'prev').done(()=>{
+              if( this.calendarIndex == 0 ){
 
-            this.renderMonthDates( startDate ,'prev')
+              }else{
+                this.calendarIndex -= 1
+                if( this.activeMonthIndex > 0){
+                  this.activeMonthIndex -=1
+                }
+
+              }
+              this.emitData()
+            })
           },
-          // 跳转到下一个 月区间
-          initMonthArea(){
-
+          nextMonthArea(){
+            console.log('next')
+            if( ( this.calendarIndex + 4 ) < this.activeMonthDates.length ){
+              this.calendarIndex += 1
+              this.activeMonthIndex += 1
+              this.emitData()
+              return
+            }
+            let startDate = new Date(this.activeMonthDates[this.calendarIndex + 3].endTmp + 86400000)
+            this.renderMonthDates( startDate ,'next').done(()=>{
+              this.calendarIndex += 1
+              this.activeMonthIndex += 1
+            })
+            this.emitData()
+          },
+          monthChangeArea(index){
+            this.activeMonthIndex = index
+            this.emitData()
+          },
+          emitData(){
+            console.log('emitData')
+            const months =  this.splitMonthDays
+            this.$emit('getDateData',{
+                activeWeekDays: this.activeWeekDays ,
+                months
+            })
           }
+
         }
     }
 </script>

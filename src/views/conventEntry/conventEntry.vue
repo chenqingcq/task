@@ -77,7 +77,8 @@
         background: #F4F4F4;
 
         .white-wrap{
-          /*width: 63*2px;*/
+          white-space: nowrap;
+          width: 126px;
           height: 13*2px;
           float: left ;
           border: 2px solid #FFFFFF;
@@ -114,16 +115,40 @@
               z-index: 3;
             }
           }
+          .grid-box{
+            position: absolute ;
+            .grid{
+              background: none;
+              display: inline-block;
+              box-sizing: border-box;
+              margin: 0;
+              margin-top: 2*2px;
+              display: inline-block;
+              height:9*2px;
+              width:18px;
+              &.pending{
+                border-right:2px solid #CEF3FF;
+              }
+              &.outDate{
+                border-right:2px solid #FFDDCA;
+              }
+
+            }
+            >span:last-child{
+                border-right: none!important;
+            }
+          }
           p.off{
             margin-top: 2*2px;
             display: inline-block;
             height:9*2px;
-            width:8*2px;
-            border-right:2px solid #CEF3FF;
+            width:9*2px;
+            /*border-right:2px solid #CEF3FF;*/
           }
           p.on{
             width : 9*2px;
             height: 8*2px;
+            margin-top: 2*2px;
             margin-bottom: 2px;
             display: inline-block;
             position:relative ;
@@ -235,147 +260,167 @@
           <img class="add" @click="addTask" src="../../assets/img/icon-add.png" alt="">
         </div>
         <div class="calendar-wrapper">
-          <v-calendar @statusChange="statusChange" ></v-calendar>
+          <v-calendar @getDateData = 'getDateData' @statusChange="statusChange" ></v-calendar>
         </div>
       </div><!--头部日历导航栏 end-->
       <!--任务列表-->
       <div class="task-list-wrapper b-LR-10">
-        <div class="panel">
-          <div class="b-LR-10 b-T-5">
-            <span class="left-dot dot info"></span>
-            <p class="left-photo">
-              <img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">
-            </p>
-            <div class="right-content" >
-              <div class="line1">
-                <p class="b_FS-14 c_6 b_font-PFM middle">名字<img :src="completeLogo" /></p>
 
-                <p class="status c_7 b_FS-10">提前一天</p>
-              </div>
-              <div class="b_FS-12 b_font-PFR c_6">
-                展台搭建新方案
+        <template v-for="(list,index) in projectList" >
+          <div  class="panel">
+            <div class="b-LR-10 b-T-5">
+              <span class="left-dot dot info"></span>
+              <p class="left-photo">
+                <img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">
+              </p>
+              <div class="right-content" >
+                <div class="line1">
+                  <p class="b_FS-14 c_6 b_font-PFM middle">名字<img :src="completeLogo" /></p>
+
+                  <p class="status c_7 b_FS-10">提前一天</p>
+                </div>
+                <div class="b_FS-12 b_font-PFR c_6">
+                  展台搭建新方案
+                </div>
               </div>
 
-            </div>
-            <!--汽车表示进度-->
-            <div class="month-process b_FS-0">
-              <div class="white-wrap b_FS-0">
-                <span></span><span></span><span></span><span></span><span></span><span></span>
+              <!--汽车表示进度-->
+              <div v-if="isMonthMode" class="month-process b_FS-0" >
+                <template v-for="(weeks, key) in monthDates">
+                  <div class="white-wrap b_FS-0">
+                    <!--珊格-->
+                    <div class="grid-box"  >
+                      <span class="grid"
+                            v-for="(val) in 7"
+                            :class="[list.status == 'outDate'?'outDate':'pending']"
+                      ></span>
+                    </div>
+                    <template v-for="(dayItem,dayIndex) in weeks">
+                      <!-- 0 纯空格 最普通 ，空白格 （不在活动时间内） -->
+                      <p class="off" v-if="(list.startTime > dayItem.date || list.endTime < dayItem.date ) && !computedIsSameDay(list.startTime ,dayItem.date ) && !computedIsSameDay(list.endTime ,dayItem.date )">
+                        <span class="week-in-chinese b_FS-6 c_7" :class="[dayItem.week == 6 ||dayItem.week == 0  ? 'c_12': 'c_6' ]">
+                          {{ weekStrArr[dayItem.week] }}
+                        </span>
+                      </p>
+
+
+                      <!--开始～结束之间的这段时间-->
+                      <p class="on"
+                         v-if="(list.startTime < dayItem.date || computedIsSameDay(list.startTime ,dayItem.date )   )&& list.endTime > dayItem.date && !computedIsSameDay(list.endTime ,dayItem.date )"
+                         :class="[ list.status == 'outDate' && 'outDate', list.status == 'completed' && 'complete', list.status == 'aheadCompleted' ? ( list.completeDate > dayItem.date   ? 'complete' : 'pending'):'', list.status == 'pending' ? ( computedDate(todayTime) >= computedDate(dayItem.date)?'complete' :'pending') :'' ]"
+                      >
+                        <template v-if="list.status == 'aheadCompleted' && computedIsSameDay(list.completeDate,dayItem.date) ">
+                          <label class="status-text b_FS-8 text-center c_white">100%</label>
+                          <img class="status-bg" src="../../assets/img/sign-remind03.png" alt="">
+                        </template>
+                        <template  v-if="list.status == 'pending' && computedIsSameDay(todayTime, dayItem.date)">
+                          <label class="status-text b_FS-8 text-center c_white">60%</label>
+                          <img class="status-bg" src="../../assets/img/sign-remind03.png" alt="">
+                        </template>
+                        <span class="week-in-chinese b_FS-6 c_7" :class="[dayItem.week == 6 ||dayItem.week == 0  ? 'c_12': 'c_6' ]">
+                          {{ weekStrArr[dayItem.week] }}
+                        </span>
+                      </p>
+
+                      <!--<p class="off" v-else>-->
+                        <!--<span class="week-in-chinese b_FS-6 c_7" :class="[dayItem.week == 6 ||dayItem.week == 0  ? 'c_12': 'c_6' ]">-->
+                          <!--{{ weekStrArr[dayItem.week] }}-->
+                        <!--</span>-->
+                      <!--</p>-->
+
+                      <p class="on"
+                         v-if="computedIsSameDay(list.endTime ,dayItem.date )"
+                        :class="[list.status == 'outDate' && 'outDate', list.status == 'completed' && 'complete',list.status == 'pending' && 'pending']"
+                      >
+                        <span class="week-in-chinese b_FS-6 c_7" :class="[dayItem.week == 6 ||dayItem.week == 0  ? 'c_12': 'c_6' ]">
+                          {{ weekStrArr[dayItem.week] }}
+                        </span>
+                        <template v-if="list.status == 'outDate'">
+                          <label class="status-text b_FS-8 text-center c_white b_font-PFR">超时</label>
+                          <img class="status-bg" src="../../assets/img/sign-remind04.png" alt="">
+                        </template>
+                        <template v-if="list.status == 'completed'">
+                          <label class="status-text b_FS-8 text-center c_white">100%</label>
+                          <img class="status-bg" src="../../assets/img/sign-remind03.png" alt="">
+                        </template>
+                      </p>
+                    </template>
+                  </div>
+                </template>
               </div>
-              <div class="white-wrap b_FS-0">
-                <p class="off">
-                  <span class="week-in-chinese b_FS-6 c_7">
-                    一
-                  </span>
-                </p>
-                <p class="off">
-                  <span class="week-in-chinese b_FS-6 c_7">
-                    二
-                  </span>
-                </p>
-                <p class="off">
-                  <span class="week-in-chinese b_FS-6 c_7">
-                    三
-                  </span>
-                </p>
-                <p class="off">
-                  <span class="week-in-chinese b_FS-6 c_7">
-                    一
-                  </span>
-                </p>
-                <p class="on outDate"></p>
-                <p class="on outDate">
-                  <label class="status-text b_FS-8 text-center c_white b_font-PFR">超时</label>
-                  <img class="status-bg" src="../../assets/img/sign-remind04.png" alt="">
-                </p>
-                <p class="on off"></p>
-              </div>
-              <div class="white-wrap">
-                <p class="off"></p>
-                <p class="off"></p>
-                <p class="off"></p>
-                <p class="on complete"></p>
-                <p class="on complete">
-                  <label class="status-text b_FS-8 text-center c_white">100%</label>
-                  <img class="status-bg" src="../../assets/img/sign-remind03.png" alt="">
-                </p>
-                <p class="on off"></p>
-                <p class="on off"></p>
-              </div>
-              <div class="white-wrap">
-                <p class="off"></p>
-                <p class="off"></p>
-                <p class="off"></p>
-                <p class="on complete"></p>
-                <p class="on complete">
-                  <label class="status-text b_FS-8 text-center c_white">60%</label>
-                  <img class="status-bg" src="../../assets/img/sign-remind03.png" alt="">
-                </p>
-                <p class="on pending"></p>
-                <p class="on off"></p>
+              <!--汽车表示进度-->
+              <div v-else class="week-process" >
+                <template v-for="(week,key) in weekdays" >
+
+                  <div class="white-wrap" >
+                    <!-- 0 纯空格 最普通 ，空白格 （不在活动时间内） -->
+                    <p class="on" v-if="(list.startTime > week.date || list.endTime < week.date ) && !computedIsSameDay(list.startTime ,week.date ) && !computedIsSameDay(list.endTime ,week.date )">
+
+                    </p>
+                    <!-- 1 起点 在任务开始 4种情况 -->
+                    <p  v-if = "computedDate(list.startTime) === computedDate(week.date)" class="on "
+                        :class="[list.status == 'aheadCompleted' && 'complete' ,list.status == 'outDate' ? 'outDate' : 'complete']" >
+
+                      <!-- 待确定 第一天就提前完成-->
+                      <!--<template v-if="list.status == 'aheadCompleted'">-->
+                      <!--<label class="status-text b_FS-6 text-center c_white b_font-PFR">60%</label>-->
+                      <!--<img class="status-bg" src="../../assets/img/sign-remind01.png" alt="">-->
+                      <!--<img class="end-sign-logo" src="../../assets/img/image-car.png"/>-->
+                      <!--</template>-->
+                      <template v-if="list.status == 'outDate'">
+
+                      </template>
+                      <!--旗子-->
+                      <img class="begin-sign-logo" src="../../assets/img/image-starting point.png"/>
+                    </p>
+                    <!-- 2 未到完成时间 未达到结束时间 4种情况-->
+                    <p class="on"
+                       v-if="(list.startTime < week.date && list.endTime > week.date ) && !computedIsSameDay(list.startTime ,week.date ) && !computedIsSameDay(list.endTime ,week.date )"
+
+                       :class="[ list.status == 'outDate' && 'outDate', list.status == 'completed' && 'complete',                      list.status == 'aheadCompleted' ? ( list.completeDate > week.date  && !computedIsSameDay(list.completeDate,week.date) ? 'complete' : 'pending'):'', list.status == 'pending' ? ( computedDate(todayTime) >= computedDate(week.date)?'complete' :'pending') :'' ]"
+                    >
+
+                      <!-- 提前完成-->
+                      <template v-if="list.status == 'aheadCompleted' && computedIsSameDay(list.completeDate,week.date) ">
+                        <label class="status-text b_FS-6 text-center c_white b_font-PFR">100%</label>
+                        <img class="status-bg" src="../../assets/img/sign-remind01.png" alt="">
+                        <img class="end-sign-logo" src="../../assets/img/image-car.png"/>
+                      </template>
+                      <template v-if="list.status == 'pending' && computedIsSameDay(todayTime, week.date)" >
+                        <label class="status-text b_FS-6 text-center c_white b_font-PFR">{{ list.process + '%' }}</label>
+                        <img class="status-bg" src="../../assets/img/sign-remind01.png" alt="">
+                      </template>
+                    </p>
+                    <!-- 3 到达结束时间 5种显示 -->
+                    <p class="on"
+                       v-if="computedIsSameDay(list.endTime ,week.date )"
+                       :class="[list.status == 'outDate' && 'outDate', list.status == 'completed' && 'complete']"
+                    >
+
+                      <template v-if="list.status == 'outDate'">
+                        <label class="status-text b_FS-6 text-center c_white b_font-PFR">超时</label>
+                        <img class="status-bg" src="../../assets/img/sign-remind.png" alt="">
+                        <img class="end-sign-logo" src="../../assets/img/image-car03.png"/>
+                      </template>
+                      <template v-if="list.status == 'completed'" >
+                        <label class="status-text b_FS-6 text-center c_white b_font-PFR">100%</label>
+                        <img class="status-bg" src="../../assets/img/sign-remind01.png" alt="">
+                        <img class="end-sign-logo" src="../../assets/img/image-car02.png"/>
+                      </template>
+                    </p>
+
+                  </div>
+                </template>
               </div>
             </div>
           </div>
-        </div>
+        </template>
 
-        <div class="panel c_white-bg b-MT-10">
-          <div class="b-LR-10 b-T-5">
-            <span class="left-dot dot success"></span>
-            <p class="left-photo">
-              <img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">
-            </p>
-            <div class="right-content">
-              <div class="line1">
-                <p class="b_FS-14 c_6 b_font-PFM middle">名字<img :src="aheadLogo" /></p>
 
-                <p class="status c_7 b_FS-10">提前一天</p>
-              </div>
-              <div class="b_FS-12 b_font-PFR c_6">
-                展台搭建新方案
-              </div>
 
-            </div>
-            <!--汽车表示进度-->
 
-            <div class="week-process">
-              <div class="white-wrap">
-                <p class="on"></p>
-              </div>
-              <div class="white-wrap">
-                <p class="on complete">
-                  <img class="begin-sign-logo" src="../../assets/img/image-starting point.png"/>
-                </p>
-              </div>
-              <div class="white-wrap">
-                <p class="on complete"></p>
-              </div>
-              <div class="white-wrap">
-                <p class="on complete"></p>
-              </div>
-              <div class="white-wrap">
-                <p class="on complete">
 
-                  <!--<label class="status-text b_FS-6 text-center c_white b_font-PFR">60%</label>-->
-                  <!--<img class="status-bg" src="../../assets/img/sign-remind01.png" alt="">-->
-                  <!--<img class="status-bg" src="../../assets/img/sign-remind.png" alt="">-->
-                  <!--提前完成-->
-                  <!--<img class="end-sign-logo" src="../../assets/img/image-car.png"/>-->
-                  <!--完成-->
-                  <!--<img class="end-sign-logo" src="../../assets/img/image-car02.png"/>-->
-                  <!--超时-->
-                  <label class="status-text b_FS-6 text-center c_white b_font-PFR">超时</label>
-                  <img class="status-bg" src="../../assets/img/sign-remind.png" alt="">
-                  <img class="end-sign-logo" src="../../assets/img/image-car03.png"/>
-                </p>
-              </div>
-              <div class="white-wrap">
-                <p class="on pending"></p>
-              </div>
-              <div class="white-wrap">
-              </div>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
 </template>
