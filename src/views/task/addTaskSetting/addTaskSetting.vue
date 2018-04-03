@@ -229,7 +229,7 @@
           </div>
           <div class="task-setting">任务主题</div>
         </label>
-        <input class="userInput" type="text" id="item-1" v-model=" taskTheme" maxlength="20" placeholder="添加任务主题" />
+        <input class="userInput" type="text" id="item-1" v-model.trim=" taskTheme" maxlength="20" placeholder="添加任务主题" />
       </li>
       <li class="task-item">
         <label class="task-desc" for="item0">
@@ -238,7 +238,7 @@
           </div>
           <div class="task-setting"> 任务名称</div>
         </label>
-        <input class="userInput" type="text" id="item0" v-model="taskname" maxlength="20" placeholder="添加任务名称" />
+        <input class="userInput" type="text" id="item0" v-model.trim="taskname" maxlength="20" placeholder="添加任务名称" />
       </li>
       <li class="task-item">
         <label class="task-desc" for="item1">
@@ -247,7 +247,7 @@
           </div>
           <div class="task-setting"> 任务描述</div>
         </label>
-        <input class="userInput" type="text" id="item1" v-model="taskdesc" maxlength="20" placeholder="添加任务描述" />
+        <input class="userInput" type="text" id="item1" v-model.trim="taskdesc" maxlength="20" placeholder="添加任务描述" />
       </li>
       <li class="task-item time-logo-container">
         <label class="task-desc" for="item2">
@@ -282,7 +282,7 @@
           </div>
           <div class="task-setting">验收标准</div>
         </label>
-        <input class="userInput" type="text" id="item4" v-model="standard" maxlength="20" placeholder="添加验收标准" />
+        <input class="userInput" type="text" id="item4" v-model.trim="standard" maxlength="20" placeholder="添加验收标准" />
       </li>
       <li class="task-item">
         <label class="task-desc" for="item5">
@@ -368,7 +368,6 @@
   export default {
     data() {
       return {
-        text: '...',
         taskTheme: '',
         taskname: '',
         taskdesc: '',
@@ -399,7 +398,6 @@
         'SET_TASK': "SET_TASK"
       }),
       confirm() {
-        console.log(this.taskExecutor);
         // 点击确认之前先做验证
         this.SET_TASK({
           taskTheme: this.taskTheme,
@@ -409,12 +407,26 @@
           endTime: this.endTime,
           standard: this.standard,
           taskExecutor: this.executor,
-          allowedCreate:this.allowCreate,
-          ispublic:this.isPublic,
-          membersCanSee:this.showMembers,
-          othersCanSee:this.members
+          allowedCreate: this.allowCreate,
+          ispublic: this.isPublic,
+          membersCanSee: this.showMembers,
+          othersCanSee: this.members
         });
-        console.log(this.getTaskSetting)
+        console.log(this.$data);
+        this.validate()
+        // console.log(this.getTaskSetting)
+      },
+      validate() {
+        let k;
+        for (k in this.$data) {
+          if (typeof this.$data[k] == 'string' && this.$data[k].length === 0) {
+            console.log(k, this.$data[k]);
+            this.$dialog.message({
+
+            })
+            return
+          }
+        }
       },
       appointerManager() {
         this.$router.push('appointMessager')

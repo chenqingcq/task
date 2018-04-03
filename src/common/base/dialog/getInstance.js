@@ -10,11 +10,11 @@ export default function getInstance(options) {
   }
   if (options.type === 'notice') {
     let notice = {
-      state: "",//字体图标
-      title: "",//任务描述
-      task: "",//任务名称
-      charge: '',//负责人
-      partIn: []//参与人
+      state: "", //字体图标
+      title: "", //任务描述
+      task: "", //任务名称
+      charge: '', //负责人
+      partIn: [] //参与人
     };
     notice = Object.assign({}, notice, options);
     delete notice.type
@@ -37,13 +37,34 @@ export default function getInstance(options) {
           type: options.type,
           placeholder: options.placeholder || '请输入内容',
           show: true,
-          operate: options.operate || function (text) {//回调函数
+          operate: options.operate || function (text) { //回调函数
             console.log(text)
           }
         }
       }
     })
+  };
+  if (dialog && options.type === 'message') {
+    console.log('///')
+    vue.set(dialog, 'type', options.type);
+    vue.set(dialog, 'message', options.message);
+    vue.set(dialog, 'icon', options.icon);
+    vue.set(dialog, 'show', true);
+    return;
   }
+  if (options.type === 'message') {
+    dialog = new DialogConstructor({
+      data() {
+        return {
+          type: options.type, //确认图标类型
+          message: options.message || "", //定义信息
+          icon: options.icon,
+          show: true,
+        }
+      }
+    })
+  };
+
   const instance = dialog.$mount();
   document.body.appendChild(instance.$el);
 }

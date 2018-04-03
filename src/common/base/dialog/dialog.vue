@@ -1,6 +1,6 @@
 <template>
   <transition name="fade" v-if="show">
-    <div class="container">
+    <div class="container" v-if="type !=='message'">
       <template v-if="type==='info'">
         <div class="panel-info">
           <img class="close" @touchstart='close' src="../../../assets/img/icon-close.png" />
@@ -33,6 +33,16 @@
         </div>
       </template>
     </div>
+    <template v-if="type === 'message'">
+      <div class="messageBox">
+        <div class="box">
+          <div class="icon">
+            <img :src="_icon" />
+          </div>
+          <div class="message">warn</div>
+        </div>
+      </div>
+    </template>
   </transition>
 </template>
 <script>
@@ -42,10 +52,13 @@
         text: '',
         show: false,
         parts: '',
-        btn: ""
+        btn: "",
       }
     },
     computed: {
+      _icon() {
+        return ''
+      },
       imgUrl() { //根据state判断那种图标,三种:pass,fail,warn
         if (this.notice.state === 'pass') {
           return require('@/assets/img/image-pass.png')
@@ -79,6 +92,40 @@
 
 </script>
 <style lang='less' scoped>
+  .messageBox {
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(99, 99, 99, .8);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    .box {
+      width: 192*2px;
+      height: 59*2px;
+      background: #FFFFFF;
+      box-shadow: 0 1px 5px 0 rgba(177, 177, 177, 0.60), inset 0 -1px 2px 0 rgba(135, 135, 135, 0.50);
+      border-radius: 3px;
+      display:flex;
+      flex-wrap:nowrap;
+      .icon{
+        width:50*2px;
+        height: 100%;
+      };
+      .message{
+        flex:1;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
   img.icon-edit {
     display: inline-block;
     width: 22*2px !important;

@@ -18,6 +18,9 @@ vue.prototype.$dialog = {
   info: function (options) {
     _getInstance(options, 'info')
   },
+  message: function (options) {
+    _getInstance(options, 'message')
+  },
   close: function () {
     _getInstance({
       close: 'close'
