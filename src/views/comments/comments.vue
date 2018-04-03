@@ -182,7 +182,7 @@
           }
         }
         .comments-item {
-          color: #666;
+          color: #333;
           font-size: 20px;
         }
       }

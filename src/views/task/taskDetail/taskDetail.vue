@@ -6,7 +6,7 @@
       padding: 10*2px;
       position: relative;
       .task-slide {
-        margin-top: 17*2px
+        margin-top: 17*2px;
       }
       .task-slide-top {
         height: 57*2px;
@@ -16,6 +16,16 @@
           height: 57*2px;
           background: gray;
           border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border: 2px solid #0093FF;
+          img {
+            display: inline-block;
+            width: 56*2px;
+            height: 56*2px;
+            border-radius: 50%;
+          }
         }
         .right {
           flex: 1;
@@ -32,7 +42,7 @@
             justify-content: space-between;
             .task-name {
               font-size: 14*2px;
-              color: #666666;
+              color: #333;
               margin-top: 2*2px;
               overflow: hidden;
               text-overflow: ellipsis;
@@ -69,6 +79,7 @@
         }
       }
       .task-progress {
+        margin-top: 8*2px;
         position: absolute;
         bottom: 0;
         right: 10*2px;
@@ -82,7 +93,7 @@
           text-align: center;
           font-family: PingFangSC-Light;
           font-size: 12px*2;
-          color: #666666;
+          color: #666;
         }
         .detail-btn {
           width: 124*2px;
@@ -96,7 +107,7 @@
           font-family: PingFangSC-Regular;
           font-size: 14*2px;
           margin: 0 auto;
-          margin-top: 9*2px;
+          margin-top: 5*2px;
         }
       }
     }
@@ -136,14 +147,16 @@
   }
 
   .more {
-   height: 12*2px;
-   display: flex;
-   align-items: center;
-   font-size: 10*2px;
-    img{
-      display:inline-block;
-      height:8px*2;  
-      margin-left:4*2px;
+    height: 12*2px;
+    display: flex;
+    align-items: center;
+    font-family: PingFangSC-Medium;
+    color: #999;
+    font-size: 10*2px;
+    img {
+      display: inline-block;
+      height: 8px*2;
+      margin-left: 4*2px;
     }
   }
 
@@ -155,7 +168,6 @@
       display: block;
       height: 100%;
       width: 100%;
-      box-shadow: 0 5px rgb(135, 135, 135);
     }
   }
 
@@ -197,15 +209,14 @@
   }
 
   .current-progress {
-    padding: 4*2px 10*2px 0 10*2px;
+    padding: 4*2px 10*2px 8*2px 10*2px;
     font-family: PingFangSC-Medium;
     display: flex;
     color: #525252;
     justify-content: space-between;
-    padding-bottom: 12*2px;
     .left {
       font-size: 22*2px;
-      color: #525252;
+      color: #333;
       height: 34*2px;
       margin-left: 12*2px;
       margin-right: 30*2px
@@ -213,7 +224,11 @@
     .right {
       font-size: 12px*2;
       width: 233*2px;
-      height: 26*2px;
+      height: 34*2px;
+      color: #333;
+      line-height: 34px;
+      font-family: PingFangSC-Medium;
+      font-size: 12*2px;
       text-overflow: -o-ellipsis-lastline;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -222,13 +237,30 @@
       -webkit-box-orient: vertical;
     }
   }
+
+  .between {
+    padding-top: 16px !important;
+  }
+
+  img.partyLogo {
+    display: inline-block;
+    width: 16*2px;
+    height: 16*2px;
+    border-radius: 50%;
+    background: #999;
+    margin-left: 5*2px;
+    border: 2px solid #0093FF;
+  }
+
 </style>
 <template>
   <div class="task-detail-container">
     <div class="task-detail-slide">
       <div class="panel c-1 c_white-bg">
         <div class="task-slide-top">
-          <div class="user-icon"></div>
+          <div class="user-icon">
+            <img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" />
+          </div>
           <div class="right">
             <div class="show-task-detail">
               <div class="task-name">任务名名称</div>
@@ -248,24 +280,15 @@
           </div>
         </div>
         <!--轮播图-->
-        <div class="task-slide">
-          <div class="arrow">
-            <div class="left-arrow" @touchstart='minusIndex'>
-              <img src="@/assets/img/icon-right-slide03.png" />
-            </div>
-            <div class="right-arrow" @touchstart='addIndex '>
-              <img src="@/assets/img/icon-right-slide03.png" />
-            </div>
+        <slide ref="scroll" :loop='loop'>
+          <div class="slider-item" v-for="(item,index) in items" :key="index">
+            <img @load='loadImage' :src="item.imgUrl">
           </div>
-          <slide :loop='loop' :autoPlay='autoPlay' :height='height' :width='width' @slideChange='changeIndex'>
-            <div class="slider-item" v-for="(item,index) in items" :key="index">
-              <img :src="item.imgUrl">
-            </div>
-          </slide>
-        </div>
+        </slide>
+
         <div class="task-progress">
           <span class="task-desc">展台基础已布置完毕</span>
-          <div class="detail-btn">
+          <div class="detail-btn" @touchstart='towardsUpdateHistory'>
             查看上传历史
           </div>
         </div>
@@ -275,24 +298,35 @@
     <div class="b-LR-10">
       <div class="panel b-MT-10 c_white-bg">
         <div class="b-LR-10 b-T-5 between">
-          <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 b_FS-14 c_6 ">当前节点</span></p>
+          <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 b_FS-14 c_6 ">主体节点</span></p>
           <div @touchstart='taskHistoryOrUpdate' class="more b_FS-10  c_7">
-            更多项目节点<img src="@/assets/img/icon-right-slide03.png"/>
+            更多项目节点<img src="@/assets/img/icon-right-slide03.png" />
           </div>
         </div>
         <div class="current-progress">
           <div class="left">01/30</div>
           <div class="right">
-            布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处布置展管入口处
+            展台基础已布置完毕
           </div>
         </div>
       </div>
     </div>
-    <div class="project-party"></div>
+    <div class="project-party">
+      <div class="b-LR-10">
+        <div class="panel b-MT-10 c_white-bg">
+          <div class="b-LR-10 b-T-5 between">
+            <p class="middle b_FS-14 c_6 "><span class="dot success"></span><span class="b-L-4">进入项目群</span></p>
+            <div class="entry-project-party">
+              <img class="partyLogo" :src="item.partyImg" v-for="item in parties" :key="item.id" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <comments :members='members'></comments>
     <div class="judge-btn">
-      <div class="pass">关闭任务</div>
-      <div class="failed"> 验收通过</div>
+      <div class="pass" @touchstart='closeTask'>关闭任务</div>
+      <div class="failed" @touchstart='passTask'> 验收通过</div>
     </div>
   </div>
 </template>
@@ -307,27 +341,41 @@
         autoPlay: false,
         height: 382,
         width: 608,
+        //项目群
+        parties: [{
+            partyImg: 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
+            id: 0
+          },
+          {
+            partyImg: 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
+            id: 1
+          },
+          {
+            partyImg: 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
+            id: 2
+          }
+        ],
         members: [{ //审批留言
             name: '张三',
             role: '发布者',
             date: 'x年x月x日',
             time: '2018.10.25',
             comments: '会管家app',
-            imgUrl: require('@/assets/img/icon-nominee.png')
+            imgUrl: 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b'
           }, {
             name: '李四',
             role: '执行者',
             date: 'x年x月x日',
             time: '2018.10.25',
             comments: '会管家app',
-            imgUrl: require('@/assets/img/icon-nominee.png')
+            imgUrl: 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b'
           }, {
             name: '王五',
             role: '观察者',
             date: 'x年x月x日',
             time: '2018.10.25',
             comments: '会管家app',
-            imgUrl: require('@/assets/img/icon-nominee.png')
+            imgUrl: 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b'
           },
           {
             name: '小六',
@@ -335,25 +383,25 @@
             date: 'x年x月x日',
             time: '2018.10.25',
             comments: '会管家app',
-            imgUrl: require('@/assets/img/icon-nominee.png')
+            imgUrl: 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b'
           }
         ],
-        items: [{ //轮播图
-            imgUrl: 'http://img.htmleaf.com/1712/201712211424.jpg'
+        items: [{ //轮播图处理时   51 234 51遵守这个有原则
+            imgUrl: 'http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650'
           }, {
-            imgUrl: 'http://pic.sc.chinaz.com/files/pic/webjs1/201705/jiaoben5070.jpg'
+            imgUrl: 'http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg'
           },
           {
-            imgUrl: 'http://img.htmleaf.com/1801/2018011440.jpg'
+            imgUrl: 'http://bpic.588ku.com/element_origin_min_pic/16/06/20/165767ab7a315bd.jpg'
           },
           {
-            imgUrl: 'http://img.htmleaf.com/1801/201801061437.jpg'
+            imgUrl: 'http://bpic.588ku.com/element_origin_min_pic/18/03/24/494a50847f3dbef27c31355f35d0393d.jpg'
           },
           {
-            imgUrl: 'http://img.htmleaf.com/1712/201712211424.jpg'
+            imgUrl: 'http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650'
           },
           {
-            imgUrl: 'http://pic.sc.chinaz.com/files/pic/webjs1/201705/jiaoben5070.jpg'
+            imgUrl: 'http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg'
           }
 
         ]
@@ -364,23 +412,57 @@
       Slide
     },
     methods: {
-      taskHistoryOrUpdate(){
+      closeTask() {
+        this.$router.push({
+          path: 'conventEntry',
+          query: {
+            taskname: encodeURIComponent('task01'),
+            id: 0,
+            status: 'closed'
+          }
+        })
+      },
+      passTask() {
+        this.$router.push({
+          path: 'conventEntry',
+          query: {
+            taskname: encodeURIComponent('taskname?&'),
+            id: 0,
+            status: 'passed'
+          }
+        })
+      },
+      towardsUpdateHistory() { //查看历史上传
+        this.$router.push({
+          path: 'taskHistoryOrUpdate',
+          query: {
+            taskname: encodeURIComponent('task01'),
+            id: 0,
+            status: 'passed'
+          }
+        })
+      },
+      loadImage() { //轮播加载
+        if (!this.checkloaded) {
+          this.checkloaded = true;
+          this.$refs.scroll.refresh();
+        }
+      },
+      taskHistoryOrUpdate() {
         this.$router.push('taskHistoryOrUpdate')
       },
-      changeIndex(index) {
-        console.log(index)
-      },
-      addIndex() {
-        this.currentIndex = ++this.currentIndex;
-      },
-      minusIndex() {
-        this.currentIndex = --this.currentIndex;
+      init() {
+        //确认访问者身份(头像)
+        //确认当前任务详情(任务名,任务详细介绍)
+        //获取轮播图(上传任务图片)
+        //获取任务节点信息(主体节点信息)
+        //项目群信息(最多几个确认一下)
+        //获取审批留留言信息
+        //根据访问者身份确认底部是(浏览or确认任务进度)
       }
     },
-    watch: {
-      currentIndex(newVal) {
-        console.log(newVal)
-      }
+    mounted() {
+      this.init()
     }
   }
 

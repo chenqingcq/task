@@ -179,16 +179,43 @@
     }
   }
 
-  .is-active {
-    background: #BAD4FF;
-    border: 1*2px solid #4E8CEE !important;
-  }
+
 
   .name {
     margin-left: 4*2px;
     font-family: PingFangSC-Regular;
     font-size: 16px*2;
     color: #333333;
+  }
+
+  #appointer {
+    position: relative;
+    height: 100%;
+    span.name {
+      position: absolute;
+      height: 100%;
+      right: 12px;
+      display: inline-block;
+      line-height: 50*2px;
+      vertical-align: center;
+      font-family: PingFangSC-Regular;
+      font-size: 14*2px;
+      color: #666666;
+    }
+    span.arrow {
+      position: absolute;
+      display: inline-block;
+      height: 100%;
+
+      img {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        display: inline-block;
+        height: 26px;
+      }
+    }
+
   }
 
 </style>
@@ -211,7 +238,7 @@
           </div>
           <div class="task-setting"> 任务名称</div>
         </label>
-        <input class="userInput" type="text" id="item0" v-model="item0" maxlength="20" placeholder="添加任务名称" />
+        <input class="userInput" type="text" id="item0" v-model="taskname" maxlength="20" placeholder="添加任务名称" />
       </li>
       <li class="task-item">
         <label class="task-desc" for="item1">
@@ -220,7 +247,7 @@
           </div>
           <div class="task-setting"> 任务描述</div>
         </label>
-        <input class="userInput" type="text" id="item1" v-model="item1" maxlength="20" placeholder="添加任务描述" />
+        <input class="userInput" type="text" id="item1" v-model="taskdesc" maxlength="20" placeholder="添加任务描述" />
       </li>
       <li class="task-item time-logo-container">
         <label class="task-desc" for="item2">
@@ -230,7 +257,7 @@
           <div class="task-setting">开始时间<img class="time-logo" src="@/assets/img/icon-right-slide03.png"/></div>
         </label>
 
-        <v-datetime class="userInput selectStartTime " v-model="item2" format="YYYY.MM.DD" @on-change="startDate_change" placeholder="开始时间">
+        <v-datetime class="userInput selectStartTime " format="YYYY.MM.DD" @on-change="startDate_change" placeholder="开始时间">
           <!-- 开始时间 -->
         </v-datetime>
 
@@ -264,7 +291,12 @@
           </div>
           <div class="task-setting">指定执行人</div>
         </label>
-        <input class="userInput" type="text" id="item5" v-model="item5" maxlength="20" placeholder="添加执行人" />
+        <div class="userInput" id="appointer" @touchstart='appointerManager'>
+          <span class="name">{{executor}}</span>
+          <span class="arrow">
+            <img src="@/assets/img/icon-right-slide03.png" />            
+          </span>
+        </div>
       </li>
       <li class="task-item " id="allowCreateTask">
         <label class="task-desc" for="item5">
@@ -310,10 +342,10 @@
         <div class="editProgress">编辑项目节点</div>
         <img class="editmore" src="@/assets/img/icon-right-slide03.png">
       </li>
-      <li v-if="role == 'taskManager'" @touchstart='inviteOthers'>
+      <li v-if="role == 'taskManager'">
         <img class="editpng" src="@/assets/img/icon-invitation.png" />
         <div class="editProgress">邀约他人可见</div>
-        <div class="editmore">
+        <div class="editmore" @touchstart='inviteOthers'>
           <img class="editmore" src="@/assets/img/icon-right-slide03.png" ref='arrow'>
         </div>
       </li>
@@ -324,18 +356,22 @@
         <div class="name">{{item.name}}</div>
       </li>
     </ul>
-    <div class="confirm">确定</div>
+    <div @touchstart = 'confirm' class="confirm">确定</div>
   </div>
 </template>
 <script>
+  import {
+    mapMutations,
+    mapGetters
+  } from 'vuex';
   export default {
     data() {
       return {
         text: '...',
         taskTheme: '',
-        item0: '',
-        item1: '',
-        item2: '',
+        taskname: '',
+        taskdesc: '',
+        startTime: '',
         item3: '',
         item4: '',
         item5: '',
@@ -348,9 +384,23 @@
       }
     },
     computed: {
-
+      ...mapGetters(['taskExecutor']),
+      executor(){
+        return this.taskExecutor.nickname
+      }
+    },
+    watch:{
+      taskExecutor(newVal,oldVal){
+        console.log(newVal,oldVal)
+      }
     },
     methods: {
+      confirm(){
+        console.log(this.taskExecutor)
+      },
+      appointerManager() {
+        this.$router.push('appointMessager')
+      },
       selected(index, isAllowed) {
         this.members[index].isAllowed = !isAllowed;
         console.log(this.members)
@@ -379,10 +429,10 @@
         console.log(2)
       },
       startDate_change(val) {
-        console.log('startDate: ' + val)
+        this.startTime = val;
       },
       endDate_change(val) {
-        console.log('endDate: ' + val)
+        this.endTime = val;
       }
     },
     created() {
