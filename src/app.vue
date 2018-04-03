@@ -1,6 +1,8 @@
 <template>
   <div  :style = '[appContainerCss]'  >
-    <router-view class="wrapper" />
+    <keep-alive>
+       <router-view class="wrapper" />      
+    </keep-alive>
     <!--底部 会展 logo - 会管家-展会应用商店-->
     <v-bottom-sign v-if="isShowBottomSign"></v-bottom-sign>
   </div>
