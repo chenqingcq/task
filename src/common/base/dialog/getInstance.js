@@ -50,15 +50,14 @@ export default function getInstance(options) {
     vue.set(dialog, 'message', options.message);
     vue.set(dialog, 'icon', options.icon);
     vue.set(dialog, 'show', true);
-    return;
   }
   if (options.type === 'message') {
     dialog = new DialogConstructor({
       data() {
         return {
-          type: options.type, //确认图标类型
+          type: options.type, 
           message: options.message || "", //定义信息
-          icon: options.icon,
+          icon: options.icon,//确认图标类型
           show: true,
         }
       }

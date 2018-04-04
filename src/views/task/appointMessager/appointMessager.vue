@@ -169,7 +169,7 @@
       }
     },
     computed: {
-      ...mapGetters(['taskExecutor'])
+      ...mapGetters(['taskExecutor','taskSetting'])
     },
     methods: {
       ...mapMutations({

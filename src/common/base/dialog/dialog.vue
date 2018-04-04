@@ -37,9 +37,9 @@
       <div class="messageBox">
         <div class="box">
           <div class="icon">
-            <img :src="_icon" />
+            <img src='@/assets/img/image-notice01.png' />
           </div>
-          <div class="message">warn</div>
+          <div class="message">{{message}}</div>
         </div>
       </div>
     </template>
@@ -56,9 +56,6 @@
       }
     },
     computed: {
-      _icon() {
-        return ''
-      },
       imgUrl() { //根据state判断那种图标,三种:pass,fail,warn
         if (this.notice.state === 'pass') {
           return require('@/assets/img/image-pass.png')
@@ -82,16 +79,36 @@
       },
       judgeBtn() {
         this.btn = this.btnName === 'add' ? '添加' : this.btnName === 'delete' ? '删除' : ''
+      },
+      fadeOut() {
+        setTimeout(() => {
+          document.querySelector('.messageBox').parentNode.removeChild(this.$el);
+          this.show = false;
+        }, 1500)
       }
     },
     mounted() {
       this.type === 'notice' ? this.initPartIn() : '';
-      this.type === 'info' ? this.judgeBtn() : ''
-    }
+      this.type === 'info' ? this.judgeBtn() : '';
+      this.type === 'message' ? this.fadeOut() : ''
+    },
   };
 
 </script>
 <style lang='less' scoped>
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity .5s;
+  }
+
+  .fade-enter,
+  .fade-leave-to
+  /* .fade-leave-active below version 2.1.8 */
+
+    {
+    opacity: 0;
+  }
+
   .messageBox {
     position: fixed;
     z-index: 9999;
@@ -110,18 +127,35 @@
       background: #FFFFFF;
       box-shadow: 0 1px 5px 0 rgba(177, 177, 177, 0.60), inset 0 -1px 2px 0 rgba(135, 135, 135, 0.50);
       border-radius: 3px;
-      display:flex;
-      flex-wrap:nowrap;
-      .icon{
-        width:50*2px;
+      display: flex;
+      flex-wrap: nowrap;
+      .icon {
+        width: 50*2px;
         height: 100%;
-      };
-      .message{
-        flex:1;
+        position: relative;
+        img {
+          position: absolute;
+          width: 27*2px;
+          height: 27*2px;
+          top: 16*2px;
+          right: 7*2px;
+          bottom: 16*2px;
+          left: 16*2px;
+        }
+      }
+      ;
+      .message {
+        flex: 1;
         height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
+        font-family: PingFangSC-Regular;
+        font-size: 14*2px;
+        color: #666666;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap
       }
     }
   }

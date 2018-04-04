@@ -340,16 +340,18 @@
       <li v-if="role == 'taskCreater'">
         <img class="editpng" src="@/assets/img/icon-edit.png" />
         <div class="editProgress">编辑项目节点</div>
-        <img class="editmore" src="@/assets/img/icon-right-slide03.png">
+        <div class="editmore" @touchstart='editProgress'>
+          <img class="editmore" src="@/assets/img/icon-right-slide03.png">
+        </div>
       </li>
       <li v-if="role == 'taskManager'">
         <img class="editpng" src="@/assets/img/icon-invitation.png" />
         <div class="editProgress">邀约他人可见</div>
         <div class="editmore" @touchstart='inviteOthers'>
-          <img class="editmore" src="@/assets/img/icon-right-slide03.png" ref='arrow'>
+          <img src="@/assets/img/icon-right-slide03.png" ref='arrow'>
         </div>
       </li>
-      <li v-show="showMembers" v-for="(item,index) in members" :key="index">
+      <li v-if="showMembers" v-for="(item,index) in members" :key="index">
         <div @touchstart='selected(index,item.isAllowed)' class="select">
           <img src="@/assets/img/sign-selected.png" v-show="item.isAllowed" />
         </div>
@@ -364,7 +366,14 @@
     mapMutations,
     mapGetters
   } from 'vuex';
-
+  let reflect_to_task = {
+    taskTheme: '任务主题',
+    taskname: '任务名称',
+    taskdesc: '任务描述',
+    startTime: '开始时间',
+    endTime: '结束时间',
+    standard: ' 验收标准',
+  };
   export default {
     data() {
       return {
@@ -379,7 +388,8 @@
         allowedLook: true,
         role: '',
         showMembers: false,
-        members: []
+        members: [],
+        check_pass: false
       }
     },
     computed: {
@@ -397,34 +407,47 @@
       ...mapMutations({
         'SET_TASK': "SET_TASK"
       }),
+      editProgress() {
+        this.$router.push({
+          path: 'taskHistoryOrUpdate',
+          query: {
+            taskId: 0,
+            taskName: '007'
+          }
+        }) //编辑项目节点
+      },
       confirm() {
         // 点击确认之前先做验证
-        this.SET_TASK({
-          taskTheme: this.taskTheme,
-          taskName: this.taskname,
-          taskDesc: this.taskdesc,
-          startTime: this.startTime,
-          endTime: this.endTime,
-          standard: this.standard,
-          taskExecutor: this.executor,
-          allowedCreate: this.allowCreate,
-          ispublic: this.isPublic,
-          membersCanSee: this.showMembers,
-          othersCanSee: this.members
-        });
-        console.log(this.$data);
         this.validate()
-        // console.log(this.getTaskSetting)
+        if (this.check_pass) {
+          this.SET_TASK({ //需要后台给个id   
+            id:1,//先模拟id      
+            taskTheme: this.taskTheme,
+            taskName: this.taskname,
+            taskDesc: this.taskdesc,
+            startTime: this.startTime,
+            endTime: this.endTime,
+            standard: this.standard,
+            taskExecutor: this.executor,
+            allowedCreate: this.allowCreate,
+            ispublic: this.isPublic,
+            membersCanSee: this.showMembers,
+            othersCanSee: this.members
+          });
+          this.$router.push('conventEntry') //项目创建完毕
+        }
       },
       validate() {
         let k;
         for (k in this.$data) {
           if (typeof this.$data[k] == 'string' && this.$data[k].length === 0) {
-            console.log(k, this.$data[k]);
             this.$dialog.message({
-
-            })
+              message: `请添加${reflect_to_task[k]}`
+            });
+            this.check_pass = false;
             return
+          } else {
+            this.check_pass = true;
           }
         }
       },
@@ -433,7 +456,6 @@
       },
       selected(index, isAllowed) {
         this.members[index].isAllowed = !isAllowed;
-        console.log(this.members)
       },
       inviteOthers() { //邀约他人可见
         this.showMembers = !this.showMembers;
@@ -442,21 +464,12 @@
       },
       allowCreateChange(status) {
         this.allowCreate = status;
-        console.log(status, this.allowCreate)
       },
       isPublicChange(status) {
         this.isPublic = status;
-        console.log(status, this.isPublic)
       },
       allowedLookChange(status) {
         this.allowedLook = status;
-        console.log(status, this.allowedLook)
-      },
-      selectStartTime() {
-        console.log(1)
-      },
-      selectEndTime() {
-        console.log(2)
       },
       startDate_change(val) {
         this.startTime = val;
@@ -466,7 +479,8 @@
       }
     },
     created() {
-      this.role = 'taskManager'; //如果是项目发起人可见
+      // this.role = 'taskManager'; //邀约他人可见
+      this.role = 'taskCreater' //项目发起人编辑节点
       this.members = [{
           isAllowed: false,
           name: '李四'
@@ -476,7 +490,8 @@
           name: '张三'
         }
       ]
-    }
+    },
+
   }
 
 </script>

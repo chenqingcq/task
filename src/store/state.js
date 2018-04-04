@@ -7,7 +7,7 @@ const state = {
     headImage: '',
     userId: ''
   },
-  taskExecutor: {
+  taskExecutor: [{
     isSelected: false,
     nickname: '',
     updated: 0,
@@ -15,20 +15,21 @@ const state = {
     progress: 0,
     userId: '',
     userIcon: ""
-  },
-  taskSetting:{
-    taskTheme:'',
-    taskName:'',
-    taskDesc:'',
-    startTime:'',
-    endTime:'',
-    standard:'',
-    taskExecutor:"",
-    allowedCreate:true,
-    ispublic:false,
-    membersCanSee:true,
-    othersCanSee:[]
-  }
+  }],
+  taskSetting: [{
+    id:0,
+    taskTheme: '',
+    taskName: '',
+    taskDesc: '',
+    startTime: '',
+    endTime: '',
+    standard: '',
+    taskExecutor: "",
+    allowedCreate: true,
+    ispublic: false,
+    membersCanSee: true,
+    othersCanSee: []
+  }]
 
 }
 
