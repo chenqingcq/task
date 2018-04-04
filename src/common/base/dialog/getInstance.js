@@ -45,7 +45,6 @@ export default function getInstance(options) {
     })
   };
   if (dialog && options.type === 'message') {
-    console.log('///')
     vue.set(dialog, 'type', options.type);
     vue.set(dialog, 'message', options.message);
     vue.set(dialog, 'icon', options.icon);

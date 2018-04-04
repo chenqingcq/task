@@ -11,8 +11,12 @@
         height: 100%;
         z-index: 0;
       }
-      img.lis {
+      img.invite {
         position: absolute;
+        right: 10*2px;
+        top: 10*2px;
+        height: 15*2px;
+        z-index: 1;
       }
       ul {
         position: absolute;
@@ -45,6 +49,7 @@
       width: 100%;
       height: 300*2px;
       overflow: hidden;
+      background: #fff;
       ul {
         width: 100%;
         background: #fff;
@@ -154,20 +159,21 @@
       height: 45*2px;
       display: flex;
       justify-content: center;
-      background:#fff;
+      background: #fff;
       align-items: center;
       .chat- {
         width: 30*2px;
         color: #9D9D9D;
-        font-size: 10*2px;   
-        text-align: center  ;   
+        font-size: 10*2px;
+        text-align: center;
         img {
           display: block;
           width: 18*2px;
-          margin:0 auto;
-          margin-top: 4*2px;          
-        };
-        p{
+          margin: 0 auto;
+          margin-top: 4*2px;
+        }
+        ;
+        p {
           margin-top: 8*2px;
         }
       }
@@ -204,6 +210,7 @@
         <li>成员列表</li>
         <li @touchstart='changeIndex(index,item.type)' :class="{active:index==currentIndex}" v-for="(item,index) in navs" :key="index">{{item.name}}</li>
       </ul>
+      <img @touchstart='inviteOthers' class="invite" src="@/assets/img/icon-menu.png">
     </header>
     <div class="editDeadTime">
       <scroll>
@@ -230,13 +237,16 @@
           <p>群聊</p>
         </div>
       </div>
-      <div class="addExcutor" @touchstart='addExcutor'>指派人员</div>
-      <div class="deleteExcutor">删除人员</div>
+      <div v-if="taskExecutor.length>0" class="addExcutor" @touchstart='commandExcutor'>指派人员</div>
+      <div v-if="!taskExecutor.length" class="addExcutor" @touchstart='addExcutor'>添加人员</div>
+      <div class="deleteExcutor" @touchstart='deleteExcutor'>删除人员</div>
     </div>
+    <invites :showInvite='showInvite'></invites>
   </div>
 </template>
 <script>
   import scroll from '@/common/base/scroll/scroll.vue';
+  import invites from './invite.vue';
   import {
     mapMutations,
     mapGetters
@@ -244,6 +254,7 @@
   export default {
     data() {
       return {
+        showInvite: false,
         navs: [{
           name: '更新',
           type: 'updated'
@@ -261,8 +272,24 @@
       ...mapGetters(['taskExecutor']),
     },
     methods: {
-      addExcutor(){
-        this.$router.push('addTaskSetting')  
+      inviteOthers() { //分享
+        console.log(111)
+        this.showInvite = !this.showInvite
+      },
+      commandExcutor() {
+        this.$router.push('addTaskSetting')
+      },
+      addExcutor() {
+        this.$dialog.info({
+          btnName: 'add',
+          placeholder: '确定添加成员'
+        })
+      },
+      deleteExcutor() {
+        this.$dialog.info({
+          btnName: 'delete',
+          placeholder: '确定删除成员'
+        })
       },
       progress(val) {
         return val * 100 + "%"
@@ -287,7 +314,8 @@
       }
     },
     components: {
-      scroll
+      scroll,
+      invites
     },
     created() {
       this.SORT_TASK_EXECUTOR('updated')

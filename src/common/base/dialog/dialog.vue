@@ -6,11 +6,13 @@
           <img class="close" @touchstart='close' src="../../../assets/img/icon-close.png" />
           <input id="userIpt" class="b_FS-16" type="text" ref='input' v-model="text" :placeholder="placeholder" maxlength="20">
           <label for="userIpt" v-show="btnName=='add'">
-            <img class="icon-edit" v-show="btnName=='add'" src="@/assets/img/icon-edit01.png" />            
+            <!--<img class="icon-edit" v-show="btnName=='add'" src="@/assets/img/icon-edit01.png" />            -->
          </label>
           <div class="bar"></div>
           <div @touchstart='close'>
-            <div class="btn b_FS-16" @touchstart='operate(text)'><img v-show="btnName=='delete'" src="@/assets/img/icon-delete.png" />
+            <div class="btn b_FS-16" @touchstart='operate(text)'>
+              <img v-if="btnName=='add'" src="@/assets/img/icon -add01.png" />              
+              <img v-if="btnName=='delete'" src="@/assets/img/icon-delete.png" />
               <div>{{btn}}</div>
             </div>
           </div>

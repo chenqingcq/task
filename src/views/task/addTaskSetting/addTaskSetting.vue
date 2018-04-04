@@ -204,8 +204,8 @@
       font-family: PingFangSC-Regular;
       font-size: 14*2px;
       color: #666666;
-      text-align:right;
-      margin-right:13*2px;
+      text-align: right;
+      margin-right: 13*2px;
     }
     span.arrow {
       margin-top: 50%;
@@ -424,7 +424,7 @@
           return item.isSelected == true
         });
         console.log(selected);
-        this.executor = selected[0].nickname
+        this.executor = selected[0] && selected[0].nickname
       },
       ...mapMutations({
         'SET_TASK': "SET_TASK"
