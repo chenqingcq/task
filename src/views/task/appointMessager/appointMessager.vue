@@ -23,6 +23,8 @@
         li {
           float: left;
           color: #fff;
+          height: 20*2px;
+          min-width: 24*2px;
           font-size: 12*2px;
         }
         li:nth-child(1) {
@@ -41,7 +43,12 @@
     }
     .editDeadTime {
       width: 100%;
-      background: #fff;
+      height: 300*2px;
+      overflow: hidden;
+      ul {
+        width: 100%;
+        background: #fff;
+      }
       li {
         display: flex;
         align-items: center;
@@ -111,37 +118,125 @@
 
   .name {
     margin-left: 10*2px;
+    width: 32*2px;
     font-family: PingFangSC-Regular;
     font-size: 16px*2;
     color: #333333;
   }
 
+  .update {
+    width: 32*2px;
+    margin-left: 60*2px;
+  }
+
+  .comments {
+    width: 32*2px;
+    margin-left: 40*2px;
+  }
+
+  .progress {
+    width: 32*2px;
+    margin-left: 40*2px;
+  }
+
+  .active {
+    border-bottom: 2*2px solid #fff;
+  }
+
+  .operate {
+    width: 100%;
+    height: 45*2px;
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    .chat {
+      width: 45*2px;
+      height: 45*2px;
+      display: flex;
+      justify-content: center;
+      background:#fff;
+      align-items: center;
+      .chat- {
+        width: 30*2px;
+        color: #9D9D9D;
+        font-size: 10*2px;   
+        text-align: center  ;   
+        img {
+          display: block;
+          width: 18*2px;
+          margin:0 auto;
+          margin-top: 4*2px;          
+        };
+        p{
+          margin-top: 8*2px;
+        }
+      }
+
+    }
+    ;
+    .addExcutor {
+      flex: 1;
+      font-family: PingFangSC-Regular;
+      font-size: 16px*2;
+      color: #FFFFFF;
+      line-height: 45*2px;
+      text-align: center;
+      background-image: linear-gradient(-180deg, #86C0F8 0%, #4E8CEE 100%);
+    }
+    .deleteExcutor {
+      flex: 1;
+      font-family: PingFangSC-Regular;
+      font-size: 16px*2;
+      color: #FFFFFF;
+      line-height: 45*2px;
+      text-align: center;
+      background-image: linear-gradient(-180deg, #F1BAAF 0%, #EA6E5D 100%);
+    }
+  }
+
 </style>
 <template>
+
   <div class="appointer-container">
     <header>
       <img class="bg" src='@/assets/img/appointer.png' />
       <ul>
         <li>成员列表</li>
-        <li>更新</li>
-        <li>评论</li>
-        <li>进度</li>
+        <li @touchstart='changeIndex(index,item.type)' :class="{active:index==currentIndex}" v-for="(item,index) in navs" :key="index">{{item.name}}</li>
       </ul>
     </header>
-    <ul class="editDeadTime">
-      <li v-for="(item,index) in members" :key="index">
-        <div @touchstart='selected(index,item.isSelected)' class="select">
-          <img src="@/assets/img/sign-selected.png" v-show="item.isSelected" />
+    <div class="editDeadTime">
+      <scroll>
+        <ul>
+          <li v-for="(item,index) in taskExecutor" :key="index">
+            <div @touchstart='selected(index,item.isSelected)' class="select">
+              <img src="@/assets/img/sign-selected.png" v-show="item.isSelected" />
+            </div>
+            <div class="icon">
+              <img :src="item.userIcon">
+            </div>
+            <div class="name">{{item.nickname}}</div>
+            <div class="update">{{item.updated}}</div>
+            <div class="comments">{{item.comments}}</div>
+            <div class="progress">{{progress(item.progress)}}</div>
+          </li>
+        </ul>
+      </scroll>
+    </div>
+    <div class="operate">
+      <div class="chat">
+        <div class="chat-">
+          <img src="@/assets/img/groups.png">
+          <p>群聊</p>
         </div>
-        <div class="icon">
-          <img :src="item.imgUrl">
-        </div>
-        <div class="name">{{item.name}}</div>
-      </li>
-    </ul>
+      </div>
+      <div class="addExcutor" @touchstart='addExcutor'>指派人员</div>
+      <div class="deleteExcutor">删除人员</div>
+    </div>
   </div>
 </template>
 <script>
+  import scroll from '@/common/base/scroll/scroll.vue';
   import {
     mapMutations,
     mapGetters
@@ -149,59 +244,53 @@
   export default {
     data() {
       return {
-        members: [{
-            isSelected: false,
-            userIcon: 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-            name: '李四',
-            update: 9,
-            comments: 2,
-            progress: "10%"
-          },
-          {
-            isSelected: false,
-            userIcon: 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-            name: '张三',
-            updated: 10,
-            comments: 5,
-            progress: "20%"
-          }
-        ]
+        navs: [{
+          name: '更新',
+          type: 'updated'
+        }, {
+          name: '评论',
+          type: 'comments'
+        }, {
+          name: '进度',
+          type: 'progress'
+        }],
+        currentIndex: 0
       }
     },
     computed: {
-      ...mapGetters(['taskExecutor','taskSetting'])
+      ...mapGetters(['taskExecutor']),
     },
     methods: {
+      addExcutor(){
+        this.$router.push('addTaskSetting')  
+      },
+      progress(val) {
+        return val * 100 + "%"
+      },
       ...mapMutations({
-        "SET_TASK_EXECUTOR": "SET_TASK_EXECUTOR"
+        "SET_TASK_EXECUTOR": "SET_TASK_EXECUTOR",
+        'SORT_TASK_EXECUTOR': 'SORT_TASK_EXECUTOR'
       }),
       selected(index, isSelected) {
-        this.members[index].isSelected = !isSelected;
-        this.members.forEach((item, i) => {
-          if (i != index) {
-            item.isSelected= false;
-          }
-        })
-        if (this.members[index].isSelected) {
-          this.SET_TASK_EXECUTOR({ //更改执行人
-            isSelected: this.members[index].isSelected,
-            progress: this.members[index].progress,
-            comments: this.members[index].comments,
-            updated: this.members[index].updated,
-            nickname: this.members[index].name,
-            userIcon: this.members[index].userIcon,
-            userId: this.members[index].userId || 7 // 待定
-          })
-          console.log(this.taskExecutor)
-        };
-        //选中后怎么跳转? 至addTaskSetting?
-        setTimeout(() => {
-          this.$router.push('addTaskSetting');
-        }, 2000)
+        this.SET_TASK_EXECUTOR({
+          index,
+          isSelected
+        });
       },
+      changeIndex(i, type) {
+        this.currentIndex = i; //对数组进行排序
+        this.sort(type)
+      },
+      sort(type) {
+        this.SORT_TASK_EXECUTOR(type);
+        console.log(type, this.taskExecutor)
+      }
+    },
+    components: {
+      scroll
     },
     created() {
-      console.log(this.taskExecutor)
+      this.SORT_TASK_EXECUTOR('updated')
     }
   }
 

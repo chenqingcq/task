@@ -14,26 +14,22 @@ const matutaions = {
     state.user.token = data.token
     state.user.userId = data.userId
   },
-  [types.SET_TASK_EXECUTOR](state, selected) {
-    let {
-      nickname,
-      userId,
-      userIcon,
-      isSelected,
-      progress,
-      comments,
-      updated
-    } = selected;
-    state.taskExecutor.nickname = nickname;
-    state.taskExecutor.userId = userId;
-    state.taskExecutor.userIcon = userIcon;
-    state.taskExecutor.isSelected = isSelected;
-    state.taskExecutor.progress = progress;
-    state.taskExecutor.comments = comments;
-    state.taskExecutor.updated = updated;
+  [types.SET_TASK_EXECUTOR](state, val) {
+    console.log(arguments)
+    let i = 0;
+    for (i; i < state.taskExecutor.length; i++) {
+      if (i != val.index) {
+        state.taskExecutor[i].isSelected = false;
+      }
+    }
+    state.taskExecutor[val.index].isSelected = !val.isSelected;
+  },
+  [types.SORT_TASK_EXECUTOR](state, type) {
+    state.taskExecutor.sort((a, b) => {
+      return (b[type] - a[type])
+    })
   },
   [types.SET_TASK](state, val) {
-    console.log(val)
     let {
       id,
       taskTheme,

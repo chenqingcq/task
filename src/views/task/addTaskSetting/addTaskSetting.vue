@@ -191,22 +191,29 @@
   #appointer {
     position: relative;
     height: 100%;
+    width: 224px;
+    display: flex;
+    align-items: center;
     span.name {
-      position: absolute;
+      /*position: absolute;*/
       height: 100%;
-      right: 12px;
+      flex: 1;
       display: inline-block;
       line-height: 50*2px;
       vertical-align: center;
       font-family: PingFangSC-Regular;
       font-size: 14*2px;
       color: #666666;
+      text-align:right;
+      margin-right:13*2px;
     }
     span.arrow {
-      position: absolute;
+      margin-top: 50%;
+      transform: translateY(-50px);
       display: inline-block;
+      margin-right: 10*2px;
       height: 100%;
-
+      width: 20px;
       img {
         position: absolute;
         top: 50%;
@@ -291,7 +298,7 @@
           </div>
           <div class="task-setting">指定执行人</div>
         </label>
-        <div class="userInput" id="appointer" @touchstart='appointerManager'>
+        <div id="appointer" @touchstart='appointerManager'>
           <span class="name">{{executor}}</span>
           <span class="arrow">
             <img src="@/assets/img/icon-right-slide03.png" />            
@@ -383,6 +390,7 @@
         startTime: '',
         endTime: '',
         standard: '',
+        executor: '',
         allowCreate: true,
         isPublic: false,
         allowedLook: true,
@@ -394,16 +402,30 @@
     },
     computed: {
       ...mapGetters(['taskExecutor', 'getTaskSetting']),
-      executor() {
-        return this.taskExecutor.nickname
-      }
     },
     watch: {
       taskExecutor(newVal, oldVal) {
         console.log(newVal, oldVal)
       }
     },
+    beforeRouteEnter: (to, from, next) => {
+      if (from.path == "/appointMessager" && to.path == '/addTaskSetting') {;
+        next((vm) => {
+          console.log(vm.taskExecutor) //过滤选中的执行人
+          vm.getExcutors(vm.taskExecutor)
+        })
+      } else {
+        next()
+      }
+    },
     methods: {
+      getExcutors(members) {
+        let selected = members.filter((item, i) => {
+          return item.isSelected == true
+        });
+        console.log(selected);
+        this.executor = selected[0].nickname
+      },
       ...mapMutations({
         'SET_TASK': "SET_TASK"
       }),
@@ -421,7 +443,7 @@
         this.validate()
         if (this.check_pass) {
           this.SET_TASK({ //需要后台给个id   
-            id:1,//先模拟id      
+            id: 1, //先模拟id      
             taskTheme: this.taskTheme,
             taskName: this.taskname,
             taskDesc: this.taskdesc,
@@ -481,6 +503,7 @@
     created() {
       // this.role = 'taskManager'; //邀约他人可见
       this.role = 'taskCreater' //项目发起人编辑节点
+      console.log(this.taskExecutor)
       this.members = [{
           isAllowed: false,
           name: '李四'
