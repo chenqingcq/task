@@ -295,7 +295,8 @@ export default {
           type: "progress"
         }
       ],
-      currentIndex: 0
+      currentIndex: 0,
+      nowIndex:0
     };
   },
   computed: {
@@ -344,8 +345,8 @@ export default {
     deleteExcutor() {
       if (this.showBtntype) {
         //已经选中成员
-        console.log(this.currentIndex);
-        this.DELETE_TASK_EXECUTOR(this.currentIndex); //删除选中成员
+        console.log(this.nowIndex);
+        this.DELETE_TASK_EXECUTOR(this.nowIndex); //删除选中成员
       } else {
         let self = this;
         this.$dialog.info({
@@ -388,7 +389,7 @@ export default {
         index,
         isSelected
       });
-      this.currentIndex = index;
+      this.nowIndex = index;
       //决定显示 指派人员还是添加人员
       let status = this.taskExecutor.filter((item, index) => {
         return item.isSelected;

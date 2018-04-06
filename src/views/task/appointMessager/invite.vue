@@ -15,15 +15,15 @@
     justify-content: center;
     .invite-more,
     .invite-fast {
-      font-size: 18*2px;
+      font-size: 16*2px;
       font-family: PingFangSC-Regular;
       color: #6D8DC0;
     }
     .invite-more {
       color: #fff;
       position: absolute;
-      left: 120*2px;
-      top: 160*2px;
+      left: 110*2px;
+      top: 165*2px;
       transform: rotate(-2deg);
     }
     .invite-fast {
