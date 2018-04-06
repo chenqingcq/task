@@ -6,6 +6,12 @@ import router from './router'
 import 'lib-flexible/flexible.js'
 import store from './store'
 
+import VueLazyLoad from 'vue-lazyload'//图片懒加载
+Vue.use(VueLazyLoad,{
+    // error:'./static/error.png',
+    loading:'@/assets/img/icon-nominee.png'
+})
+
 // 项目组件
 import '../src/common/base/dialog'
 import Load from '@/common/base/loading'

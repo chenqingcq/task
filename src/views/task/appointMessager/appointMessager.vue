@@ -246,7 +246,7 @@
                   <img src="@/assets/img/sign-selected.png" v-show="item.isSelected" />
                 </div>
                 <div class="icon">
-                  <img :src="item.userIcon">
+                  <img v-lazy="item.userIcon">
                 </div>
                  <div class="name">{{item.nickname}}</div>
             </div>
