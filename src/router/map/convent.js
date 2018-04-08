@@ -2,8 +2,10 @@
  * Created by hejiahui on 2018/3/28.
  */
 /*
-* 项目 相关
-* */
+ * 项目 相关
+ * */
+const Login = resolve => require(['@/views/login/login.vue'], resolve) // 项目-首页- 入口
+
 const Entry = resolve => require(['@/views/conventEntry/conventEntry.vue'], resolve) // 项目-首页- 入口
 
 const help = resolve => require(['@/views/help/help'], resolve) // 项目- 使用帮助
@@ -12,19 +14,22 @@ const msgTips = resolve => require(['@/views/msgTips/msgTips'], resolve) // 项�
 
 const section = resolve => require(['@/views/section/section'], resolve) // 项目- 节点查看或者添加
 
-export default [
-  {
+export default [{
     path: '/',
     redirect: '/conventEntry'
+  },
+  {
+    path: '/login',
+    component:Login
   },
   {
     path: '/conventEntry',
     name: 'convententry',
     component: Entry,
     meta: {
-      title : '任务约定' ,
+      title: '任务约定',
       // 是否显示 底部栏 会展 logo
-      isShowBottomSign : true
+      isShowBottomSign: true
     }
   },
   {
@@ -32,9 +37,9 @@ export default [
     name: 'help',
     component: help,
     meta: {
-      title : '使用帮助' ,
+      title: '使用帮助',
       // 是否显示 底部栏 会展 logo
-      isShowBottomSign : false
+      isShowBottomSign: false
     }
   },
   {
@@ -43,17 +48,17 @@ export default [
     component: msgTips,
     meta: {
       // 是否显示 底部栏 会展 logo
-      isShowBottomSign : false,
+      isShowBottomSign: false,
       isWhiteBg: true
     }
-  },{
+  }, {
     path: '/section',
     name: 'section',
     component: section,
     meta: {
-      title : '节点信息' ,
+      title: '节点信息',
       // 是否显示 底部栏 会展 logo
-      isShowBottomSign : false,
+      isShowBottomSign: false,
       isWhiteBg: true
     }
   }
