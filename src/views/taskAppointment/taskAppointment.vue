@@ -114,7 +114,7 @@
     </header>
     <section>
       <div class="task">
-        <input type="text" v-model="taskName" placeholder="填写项目主题名称" />
+        <input type="text" v-model.trim="taskName" placeholder="填写项目主题名称" />
       </div>
       <div class="addTask" @touchstart='addTask'>添加任务</div>
     </section>
@@ -152,6 +152,10 @@
   </div>
 </template>
 <script>
+  import {
+    mapMutations,
+    mapGetters
+  } from 'vuex';
   export default {
     name: 'appointment',
     data() {
@@ -159,9 +163,23 @@
         taskName: ''
       }
     },
+    computed: {
+      ...mapGetters(['getTaskTheme'])
+    },
     methods: {
+      ...mapMutations({
+        'SET_TASKTHEME': 'SET_TASKTHEME'
+      }),
       addTask() {
-        this.$router.push('conventEntry')
+        if (!this.taskName.length) {
+          this.$dialog.message({
+            message: '填写项目主题名称!'
+          })
+        } else {
+          this.SET_TASKTHEME(this.taskName);
+          this.$router.push('conventEntry')
+        }
+        console.log(this.getTaskTheme)
       }
     }
   }

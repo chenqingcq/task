@@ -7,6 +7,7 @@ const state = {
     headImage: '',
     userId: ''
   },
+  taskTheme:'',
   taskExecutor: [{
       isSelected: false,
       nickname: 'jack',
