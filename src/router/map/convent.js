@@ -21,11 +21,17 @@ export default [{
   },
   {
     path: '/appointment',
-    component: Appointment
+    component: Appointment,
+    meta: {
+      title: '任务约定'
+    }
   },
   {
     path: '/login',
-    component: Login
+    component: Login,
+    meta: {
+      title: '任务约定'
+    }
   },
   {
     path: '/conventEntry',
