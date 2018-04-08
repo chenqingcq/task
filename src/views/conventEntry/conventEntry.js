@@ -20,13 +20,13 @@ export default {
 
       projectList : [{
         // 进行中
-        startTime : +new Date('2018-04-01') ,
-        endTime : +new Date('2018-04-13'),
-        status : 'pending' ,
-        process : 30,
-        text : '正在进行',
-        isSaw : false ,
-
+        startTime : +new Date('2018-04-01') , // 开始时间
+        endTime : +new Date('2018-04-13'),  // 结束时间
+        status : 'pending' , // 状态
+        process : 30,   // 进度
+        text : '正在进行',  // 文案
+        isSaw : false ,  // 是否已经查看
+        isLike : true , // 是否已经关注
       },
       {
         // 提前完成
@@ -36,7 +36,8 @@ export default {
         status : 'aheadCompleted' ,
         process : 90,
         text : '提前一天完成',
-        isSaw : true
+        isSaw : true ,
+        isLike : true
       },
       {
         // 超时
@@ -46,6 +47,7 @@ export default {
         text : '超时一天',
         process : 100,
         isSaw : false ,
+        isLike : false , // 是否已经关注
       },
       {
         // 超时
@@ -55,7 +57,19 @@ export default {
         text : '超时五天',
         process : 100,
         isSaw : false ,
+        isLike : false , // 是否已经关注
       },
+      {
+        // 关闭
+        startTime : +new Date('2018-04-01') ,
+        endTime : +new Date('2018-04-7'),
+        status : 'closed' ,
+        text : '已关闭',
+        process : 100,
+        isSaw : false ,
+        isLike : false , // 是否已经关注
+      },
+
       {
         // 按时完成
         startTime : +new Date('2018-04-06') ,
@@ -63,6 +77,7 @@ export default {
         status : 'completed' ,
         process : 100,
         isSaw : true ,
+        isLike : false , // 是否已经关注
       }] ,
       weekdays: [],
       monthDates : [],
@@ -76,6 +91,20 @@ export default {
     slideBar
   },
   methods:{
+
+    statusClass(list){
+      const status = list.status
+      let result = ''
+      switch (status){
+        case 'closed' : result = status;break ;
+        case 'completed' : result = 'complete' ;break;
+        case 'pending' : result = status ;break ;
+        case 'outDate' : result = status ;break ;
+      }
+      return result
+
+    },
+
     computedIsSameDay(date1, date2){
       var d1 = this.computedDate(date1)
       var d2 = this.computedDate(date2)

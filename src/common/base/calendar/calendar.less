@@ -1,3 +1,5 @@
+
+
 .calendar-wrapper{
   margin: auto;
   width: 340*2px;
@@ -57,6 +59,7 @@
     }
     .week-wrapper{
       margin-right: 10*2px;
+      width: 22*2px;
       /*周状态时的 日期 数字*/
       .date-weekday{
         text-align: center;
@@ -115,3 +118,36 @@
 .fade-enter, .fade-leave{
   opacity: 0.5
 }
+
+
+
+
+@-webkit-keyframes zoomIn {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.zoomIn {
+  -webkit-animation-name: zoomIn;
+  animation-name: zoomIn;
+}
+

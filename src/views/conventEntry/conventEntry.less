@@ -1,0 +1,291 @@
+@import "animate.less";
+.header-wrapper{
+  width: 100% ;
+  height: 54*2px;
+  .header-main{
+    display: flex;
+    align-items: center;
+    padding: 7*2px 7*2px 0 10*2px;
+    img{
+      display: inline-block;
+    }
+    .user-photo{
+      width :29*2px;
+      height: 29*2px;
+      display: inline-block;
+      border-radius: 100%;
+      box-shadow: 0 4px 8px 0 rgba(111,111,111,0.44);
+    }
+    .menu{
+      width: 20*2px;
+      padding-left: 4px;
+    }
+    .project-name{
+      width: 253*2px;
+      font-family: PingFangSC-Semibold;
+    }
+    .share, .add{
+      width: 24*2px;
+    }
+    .add{
+      padding-left: 6*2px;
+    }
+  }
+  .calendar-wrapper{
+    margin-top: 11*2px;
+  }
+}
+.task-list-wrapper{
+  margin-top: 34*2px;
+  .panel{
+    height: 70*2px ;
+    position: relative;
+    /*是否已关注*/
+    &.isLike-bg{
+      background-color: #E5E5E5;
+    }
+    .left-dot{
+      position: absolute;
+      top: 6*2px;
+      left: 6*2px;
+    }
+    .left-photo{
+      position: absolute;
+      left:19*2px;
+      top: 7*2px;
+      border-radius: 100%;
+      border: 2px solid transparent;
+
+      >img{
+        display: inline-block;
+        position: relative;
+        width: 57*2px;
+        height: 57*2px;
+        border-radius: 100%;
+        z-index: 3;
+
+      }
+      //外边框渐变
+      &::after{
+        position: absolute;
+        top: -3px; bottom: 2.5px;
+        left: -3px; right: -4px;
+        background: linear-gradient(#14C9FE, #0094FF);
+        content: '';
+        z-index: 2;
+        border-radius: 70px;
+      }
+
+    }
+    .right-content{
+      line-height:1.5;
+      margin-left: 86*2px;
+      margin-right: 10px*2 ;
+      .line1{
+        img{
+          display: inline-block;
+          width:16*2px;
+          padding-left: 2px;
+        }
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+    .month-process{
+      position: absolute;
+      top: 49*2px ;
+      left: 94*2px;
+      background: #F4F4F4;
+
+      .white-wrap{
+        white-space: nowrap;
+        width: 128px;
+        height: 13*2px;
+        float: left ;
+        border: 2px solid #FFFFFF;
+        border-right-width: 0 ;
+        box-shadow: inset 2px 2px 6px 0 rgba(0,0,0,0.17);
+        vertical-align: bottom;
+        line-height: 1;
+        background-color: #f4f4f4;
+        /*display:flex;*/
+
+        span{
+          display: inline-block;
+          width: 2px;
+          height: 9*2px;
+          margin-top: 2*2px;
+          background: #CEF3FF;
+          margin-left: 8*2px;
+          vertical-align: bottom;
+        }
+        span:last-child{
+          margin-right: 8*2px;
+        }
+        p{
+          position:relative ;
+          .week-in-chinese{
+            font-family: PingFangSC;
+            margin: 0;
+            left: -1px;
+            text-align: center;
+            top:19px;
+            position: absolute;
+            width:8*2px;
+            background-color: transparent ;
+            z-index: 3;
+          }
+        }
+        .grid-box{
+          position: absolute ;
+          .grid{
+            background: none;
+            display: inline-block;
+            box-sizing: border-box;
+            margin: 0;
+            margin-top: 2*2px;
+            display: inline-block;
+            height:9*2px;
+            width:18px;
+            &.pending{
+              border-right:2px solid #CEF3FF;
+            }
+            &.outDate{
+              border-right:2px solid #FFDDCA;
+            }
+
+          }
+          >span:last-child{
+            border-right: none!important;
+          }
+        }
+        p.off{
+          margin-top: 2*2px;
+          display: inline-block;
+          height:9*2px;
+          width:9*2px;
+          /*border-right:2px solid #CEF3FF;*/
+        }
+        p.on{
+          width : 9*2px;
+          height: 8*2px;
+          margin-top: 2*2px;
+          margin-bottom: 2px;
+          display: inline-block;
+          position:relative ;
+          &.pending{
+            background: #CEF3FF;
+          }
+          &.complete{
+            background-image: linear-gradient(-90deg, #99F1FF 0%, #27ABFA 100%);
+          }
+          &.outDate{
+            background-image: linear-gradient(-90deg, #FFDC99 0%, #FA6727 100%);
+          }
+          &.closed{
+            background-color: #D8D8D8;
+          }
+          .status-text{
+            width: 24.1*2px;
+            z-index : 2;
+            position:absolute ;
+            top: -21px ;
+            left: -6*2px;
+          }
+          .status-bg{
+            z-index : 1;
+            width: 24.1*2px;
+            position:absolute ;
+            top: -23px ;
+            right: -9*2px;
+          }
+        }
+      }
+      div:last-child{
+        border-right-width: 2px ;
+
+      }
+    }
+    .week-process{
+      position: absolute;
+      top: 49*2px ;
+      left: 98*2px;
+      background: #F4F4F4;
+      .white-wrap {
+        width: 34*2px;
+        height: 13 *2px;
+        float: left;
+        border: 2px solid #FFFFFF;
+        border-right-width: 0;
+        box-shadow: inset 2px 2px 6px 0 rgba(0, 0, 0, 0.17);
+        vertical-align: bottom;
+        line-height: 0;
+        background-color: #f4f4f4;
+        transform: translate3d(0,0,0);
+        .on{
+          transform: translate3d(0,0,0);
+          -webkit-transform: translate3d(0,0,0);
+          position: relative;
+          width: 100%;
+          height: 8*2px ;
+          margin-top: 2*2px;
+          &.pending{
+            background: #CEF3FF;
+          }
+          &.complete{
+            background-image: linear-gradient(-90deg, #99F1FF 0%, #27ABFA 100%);
+          }
+          &.outDate{
+            background-image: linear-gradient(-90deg, #FFDC99 0%, #FA6727 100%);
+          }
+          &.closed{
+            background-color: #D8D8D8;
+          }
+          /*文字进度以及背景*/
+          .status-text{
+            width: 20.1*2px;
+            z-index : 2;
+            position:absolute ;
+            top: -23px ;
+            left: 41.5px;
+          }
+          .status-bg{
+            z-index : 1;
+            width: 20.1*2px;
+            position:absolute ;
+            top: -27px ;
+            right: -9*2px;
+          }
+          /*不同状态的车*/
+          /*起跑  */
+          .begin-sign-logo{
+            width: 4*2px ;
+            height: 8*2px ;
+            position: absolute;
+          }
+          /*终点*/
+          .end-sign-logo{
+            position: absolute;
+            right: 0 ;
+            top: -10px;
+            width: 50*2px ;
+            height: 14*2px;
+          }
+        }
+      }
+      >div:last-child{
+        border-right-width: 2px;
+      }
+    }
+  }
+}
+
+.fadeInLeft-enter-active{
+  .animated;
+  .fadeInLeft;
+}
+.fadeInLeft-leave-active{
+  .animated;
+  .bounceOutRight;
+}

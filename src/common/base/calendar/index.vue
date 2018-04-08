@@ -5,7 +5,6 @@
 <template>
     <div>
       <div class='calendar-wrapper'>
-
         <calendar-switch class="b_d-inline-block switch-btn"
           :class="[ isMonth ? 'date-status' : 'week-status' ]"
           :status="isMonth"
@@ -18,20 +17,19 @@
             <template v-for="(range,index) in activeMonthDates">
               <div v-if="index >= calendarIndex"   @click="monthChangeArea(index)"  class="month-range-wrapper b_d-inline-block text-center">
                 <span class="b_FS-12 date-range b_d-inline-block c_6">{{ range.areaStr }}</span>
-                <transition name='fade'>
                   <div v-if="activeMonthIndex == index" class="active-bar date-status">
                   </div>
-                </transition>
-
               </div>
-
             </template>
           </div>
           <template v-if="!isMonth" v-for="(weekday,key) in activeWeekDays">
-            <div class="b_d-inline-block text-center week-wrapper" :class="[ key == activeWeekDays.length-1 && 'last' ]">
+            <div class="b_d-inline-block text-center week-wrapper"
+                 :class="[ key == activeWeekDays.length-1 && 'last' ]"
+                 @click="weekIndex = key"
+            >
               <p class="b_FS-12 weekday" :class="[weekday.week == 6 ||weekday.week == 0  ? 'c_12': 'c_6' ]" >{{ weekday.dayStr }}</p>
               <p class="weekday b_FS-6" :class="[weekday.week == 6 ||weekday.week == 0  ? 'c_12': 'c_6' ]" >{{ weeks[weekday.week] }}</p>
-              <div class="active-bar week-status">
+              <div v-show = "weekIndex == key" class="active-bar week-status">
               </div>
             </div>
 
@@ -100,6 +98,7 @@
               activeMonthDates : [],
               activeMonthIndex : -1 ,
               calendarIndex : -1 ,
+              weekIndex : 0,
             }
         },
         computed:{

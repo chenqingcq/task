@@ -11,7 +11,7 @@
           <div class="bar"></div>
           <div @touchstart='close'>
             <div class="btn b_FS-16" @touchstart='operate(text)' ref="btn">
-              <img v-if="btnName=='add'" src="@/assets/img/icon -add01.png" />
+              <img v-if="btnName=='add'" src="@/assets/img/icon-add01.png" />
               <img v-if="btnName=='delete'" src="@/assets/img/icon-delete.png" />
               <div>{{btn}}</div>
             </div>

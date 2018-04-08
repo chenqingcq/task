@@ -59,7 +59,7 @@
             <!--</div>-->
           </div>
           <div class="panel panel-conf">
-            <div class="text c_6">
+            <div class="text c_11">
               建筑的修饰布置工作，建筑的修饰布置工作。
             </div>
             <div v-if="process.imgs.length > 0" class="imgs-wrap b_FS-0">
