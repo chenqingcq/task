@@ -166,11 +166,11 @@
         height: 0;
       }
       span.allow—create-new {
-        display:block;
+        display: block;
         height: 0;
         font-size: 10px*2;
         color: #666;
-        margin-top:-30*2px;
+        margin-top: -30*2px;
       }
     }
   }
@@ -251,6 +251,10 @@
 
   }
 
+  input:disabled {
+    background: #fff;
+  }
+
 </style>
 <template>
   <div class="task-container">
@@ -262,7 +266,8 @@
           </div>
           <div class="task-setting">任务主题</div>
         </label>
-        <input class="userInput" type="text" id="item-1" v-model.trim=" taskTheme" maxlength="20" placeholder="添加任务主题" />
+        <input class="userInput" :disabled='disable' type="text" id="item-1" v-model.trim=" taskTheme" maxlength="20" placeholder="添加任务主题"
+        />
       </li>
       <li class="task-item">
         <label class="task-desc" for="item0">
@@ -331,7 +336,7 @@
           </span>
         </div>
       </li>
-      <li class="task-item " id="allowCreateTask">
+      <li class="task-item " id="allowCreateTask" v-if="role == 'taskCreater'">
         <label class="task-desc" for="item5">
           <div class="icon">
             <img src="@/assets/img/icon-task02.png" />
@@ -380,19 +385,6 @@
           <img class="editmore" src="@/assets/img/icon-right-slide03.png">
         </div>
       </li>
-      <li v-if="role == 'taskManager'">
-        <img class="editpng invitepng" src="@/assets/img/icon-invitation.png" />
-        <div class="editProgress">邀约他人可见</div>
-        <div class="editmore" @touchstart='inviteOthers'>
-          <img src="@/assets/img/icon-right-slide03.png" ref='arrow'>
-        </div>
-      </li>
-      <li v-if="showMembers" v-for="(item,index) in members" :key="index">
-        <div @touchstart='selected(index,item.isAllowed)' class="select">
-          <img src="@/assets/img/sign-selected.png" v-show="item.isAllowed" />
-        </div>
-        <div class="name">{{item.name}}</div>
-      </li>
     </ul>
     <div @touchstart='confirm' class="confirm">确定</div>
   </div>
@@ -430,7 +422,7 @@
       }
     },
     computed: {
-      ...mapGetters(['taskExecutor', 'getTaskSetting']),
+      ...mapGetters(['taskExecutor', 'getTaskSetting', 'getTaskTheme']),
     },
     watch: {
       taskExecutor(newVal, oldVal) {
@@ -448,6 +440,9 @@
       }
     },
     methods: {
+      disable() {
+        return this.role == 'taskCreater' ? true : false
+      },
       getExcutors(members) {
         let selected = members.filter((item, i) => {
           return item.isSelected == true
@@ -527,6 +522,11 @@
       },
       endDate_change(val) {
         this.endTime = val;
+      },
+      init() {
+        this.role == 'taskCreater' ? this.taskTheme = '' :
+          (this.role == 'taskManager' || this.role == 'watcher') ?
+          this.taskTheme = this.getTaskTheme : ""
       }
     },
     created() {
@@ -543,7 +543,11 @@
         }
       ]
     },
-
+    mounted() {
+      this.$nextTick(() => {
+        this.init()
+      })
+    }
   }
 
 </script>
