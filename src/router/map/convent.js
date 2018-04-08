@@ -4,7 +4,8 @@
 /*
  * 项目 相关
  * */
-const Login = resolve => require(['@/views/login/login.vue'], resolve) // 项目-首页- 入口
+const Login = resolve => require(['@/views/login/login.vue'], resolve) // 项目-登录
+const Appointment = resolve => require(['@/views/taskAppointment/taskAppointment.vue'], resolve) // 项目-任务约定
 
 const Entry = resolve => require(['@/views/conventEntry/conventEntry.vue'], resolve) // 项目-首页- 入口
 
@@ -16,11 +17,15 @@ const section = resolve => require(['@/views/section/section'], resolve) // 项�
 
 export default [{
     path: '/',
-    redirect: '/conventEntry'
+    redirect: '/login'
+  },
+  {
+    path: '/appointment',
+    component: Appointment
   },
   {
     path: '/login',
-    component:Login
+    component: Login
   },
   {
     path: '/conventEntry',

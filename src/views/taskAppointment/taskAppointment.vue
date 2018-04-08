@@ -23,46 +23,30 @@
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      p {
-        height: 30*2px;
-        position: relative;
-        width: 300*2px;
-        &:last-of-type {
-          margin-top: 40*2px;
-        }
-        label {
-          display: inline-block;
-          margin-right: 5*2px;
-          margin-top: 5*2px;
-          img {
-            display: inline-block;
-            width: 14*2px;
-          }
-        }
-        .countDown {
-          position: absolute;
-          right: 6*2px;
-          bottom: 6*2px;
-          font-size: 12*2px;
-          font-family: PingFangSC-Regular;
-          color: rgba(100, 160, 242, 1);
-          display: flex;
-          align-items: center;
-        }
+      .task {
+        margin-top: 26*2px;
+        width: 270*2px;
+        height: 44*2px;
+        font-size: 18*2px;
+        border-radius: 22*2px;
+        font-size: 16*2px;
+        text-align: center;
+        font-family: PingFangSC-Regular;
+        line-height: 44*2px;
+        border: 2px solid #6DA9F3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         input {
-          width: 274*2px;
           display: inline-block;
-          height: 100%;
-          padding-bottom: 6*2px;
-          border-bottom: 1*2px solid #71ABF3;
-          font-size: 16*2px;
-          font-family: PingFangSC-Regular;
+          width: 128*2px;
+          height: 16*2px;
           color: rgba(153, 153, 153, 1);
-          padding: 0 4*2px;
+          text-align: center;
         }
       }
-      .submit {
-        margin-top: 26*2px;
+      .addTask {
+        margin-top: 31*2px;
         width: 270*2px;
         height: 44*2px;
         font-size: 18*2px;
@@ -129,20 +113,10 @@
       </div>
     </header>
     <section>
-      <p>
-        <label for="telephone">
-              <img src="@/assets/img/phone-ios.png">
-          </label>
-        <input type="text" id="telephone" v-model.trim="telephone" placeholder="请输入手机号" maxlength="20">
-      </p>
-      <p>
-        <label for="checkCode">
-              <img src="@/assets/img/password.png">
-          </label>
-        <input type="text" id="checkCode" v-model.trim="checkCode" placeholder="验证码" maxlength="10">
-        <span class="countDown"> 获取验证码</span>
-      </p>
-      <div class="submit" @touchstart='login'>登录</div>
+      <div class="task">
+        <input type="text" v-model="taskName" placeholder="填写项目主题名称" />
+      </div>
+      <div class="addTask" @touchstart='addTask'>添加任务</div>
     </section>
     <footer>
       <ul>
@@ -179,16 +153,15 @@
 </template>
 <script>
   export default {
-    name: 'login',
+    name: 'appointment',
     data() {
       return {
-        telephone: '',
-        checkCode: ''
+        taskName: ''
       }
     },
     methods: {
-      login() {
-        this.$router.push('appointment') 
+      addTask() {
+        this.$router.push('conventEntry')
       }
     }
   }
