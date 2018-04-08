@@ -412,7 +412,7 @@
         endTime: '',
         standard: '',
         executor: '',
-        allowCreate: true,
+        allowCreate: false,
         isPublic: false,
         allowedLook: true,
         role: '',
@@ -530,8 +530,8 @@
       }
     },
     created() {
-      this.role = 'taskManager'; //邀约他人可见
-      // this.role = 'taskCreater' //项目发起人编辑节点
+      // this.role = 'taskManager'; //邀约他人可见
+      this.role = 'taskCreater' //项目发起人编辑节点
       console.log(this.taskExecutor)
       this.members = [{
           isAllowed: false,
