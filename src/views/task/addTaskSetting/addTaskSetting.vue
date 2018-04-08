@@ -110,6 +110,15 @@
         height: 26*2px;
         margin-right: 13*2px;
       }
+      img.invitepng {
+        margin-right: 8*2px;
+      }
+      div.editProgress {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        margin-left: 2*2px;
+      }
       div.editmore {
         display: inline-block;
         position: absolute;
@@ -147,6 +156,23 @@
 
   li#allowCreateTask {
     height: 60*2px;
+    .task-setting {
+      height: 100%;
+      /*display: flex;*/
+      flex-wrap: wrap;
+      span.allow—create {
+        display: block;
+        font-size: 16px*2;
+        height: 0;
+      }
+      span.allow—create-new {
+        display:block;
+        height: 0;
+        font-size: 10px*2;
+        color: #666;
+        margin-top:-30*2px;
+      }
+    }
   }
 
   .confirm {
@@ -232,7 +258,7 @@
       <li class="task-item">
         <label class="task-desc" for="item-1">
           <div class="icon">
-            <img src="@/assets/img/icon4.png" />
+            <img src="@/assets/img/icon-book.png" />
           </div>
           <div class="task-setting">任务主题</div>
         </label>
@@ -310,7 +336,10 @@
           <div class="icon">
             <img src="@/assets/img/icon-task02.png" />
           </div>
-          <div class="task-setting ">允许执行人创建任务</div>
+          <div class="task-setting ">
+            <span class="allow—create">允许执行人创建任务</span><br>
+            <span class="allow—create-new">可在该项目下创建新任务</span>
+          </div>
         </label>
         <div class="switch-contaiener">
           <v-switch :status="allowCreate" @getStatus="allowCreateChange"></v-switch>
@@ -319,12 +348,12 @@
     </ul>
     <div class="permit-setting"><span>权限设置</span></div>
     <ul class="task-panel permission-setting">
-      <li class="task-item">
+      <li class="task-item" id="task-setting-des">
         <label class="task-desc">
           <div class="icon">
             <img src="@/assets/img/icon-public.png" />
           </div>
-          <div class="task-setting">公开</div>
+          <div class="task-setting-des"><span class="task-setting0">公开</span><br><span class="task-setting1">所有成员可见</span></div>
         </label>
         <div class="switch-contaiener">
           <v-switch :status="isPublic" @getStatus="isPublicChange"></v-switch>
@@ -352,7 +381,7 @@
         </div>
       </li>
       <li v-if="role == 'taskManager'">
-        <img class="editpng" src="@/assets/img/icon-invitation.png" />
+        <img class="editpng invitepng" src="@/assets/img/icon-invitation.png" />
         <div class="editProgress">邀约他人可见</div>
         <div class="editmore" @touchstart='inviteOthers'>
           <img src="@/assets/img/icon-right-slide03.png" ref='arrow'>
@@ -501,8 +530,8 @@
       }
     },
     created() {
-      // this.role = 'taskManager'; //邀约他人可见
-      this.role = 'taskCreater' //项目发起人编辑节点
+      this.role = 'taskManager'; //邀约他人可见
+      // this.role = 'taskCreater' //项目发起人编辑节点
       console.log(this.taskExecutor)
       this.members = [{
           isAllowed: false,
