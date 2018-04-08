@@ -43,7 +43,8 @@
           position: absolute;
           right: 6*2px;
           bottom: 6*2px;
-          width: 60*2px;
+          min-width: 60*2px;
+          max-width:72*2px;
           font-size: 12*2px;
           font-family: PingFangSC-Regular;
           color: rgba(100, 160, 242, 1);
@@ -145,7 +146,7 @@
               <img src="@/assets/img/password.png">
           </label>
         <input type="text" id="checkCode" v-model.trim="checkCode" placeholder="验证码" maxlength="10">
-        <input type="button" class="countDown" value="获取验证码" @touchstart='settime' ref="checkCodeText" />
+        <input type="button" class="countDown" v-model="checkcode" @touchstart='settime' ref="checkCodeText" />
       </p>
       <div class="submit" @touchstart='login'>登录</div>
     </section>
@@ -189,6 +190,7 @@
       return {
         telephone: '',
         checkCode: '',
+        checkcode:'获取验证码',
         timer: null,
         count: 60
       }
@@ -198,7 +200,10 @@
         this.$router.push('appointment')
       },
       settime(e) {
-
+        while(this.count>0){
+          this.count --;
+          this.checkcode = this.count
+        }
       }
     },
     beforeDestroy() {
