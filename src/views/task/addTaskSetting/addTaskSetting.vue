@@ -401,6 +401,8 @@
     startTime: '开始时间',
     endTime: '结束时间',
     standard: ' 验收标准',
+    executor: '执行人',
+    projectDeadLine: '项目节点'
   };
   export default {
     data() {
@@ -453,10 +455,10 @@
       editProgress() {
         this.$router.push({
           path: 'taskHistoryOrUpdate',
-          query: {
-            taskId: 0,
-            taskName: '007'
-          }
+          // query: {
+          //   taskId: 0,
+          //   taskName: '007'
+          // }
         }) //编辑项目节点
       },
       confirm() {
@@ -482,8 +484,9 @@
       },
       validate() {
         let k;
-        for (k in this.$data) {
-          if (typeof this.$data[k] == 'string' && this.$data[k].length === 0) {
+        for (k in reflect_to_task) {
+          if (this.$data[k].length === 0) {
+            console.log(k)
             this.$dialog.message({
               message: `请添加${reflect_to_task[k]}`
             });
@@ -491,7 +494,18 @@
             return
           } else {
             this.check_pass = true;
-          }
+          };
+          // if (k === 'projectDeadLine') {
+          //   if (!this.getProjectDeadLine) {
+          //     this.$dialog.message({
+          //       message: `请添加${reflect_to_task[k]}`
+          //     });
+          //     this.check_pass = false;
+          //     return;
+          //   } else {
+          //     this.check_pass = true;
+          //   }
+          // };
         }
       },
       appointerManager() {
@@ -523,15 +537,14 @@
       setTaskTheme() {
         this.$refs.taskTheme.setAttribute('disabled', true);
         this.taskTheme = this.getTaskTheme;
-        console.log(this.taskTheme)
       },
       init() {
         this.role != 'taskCreater' ? this.setTaskTheme() : '';
       }
     },
     created() {
-      this.role = 'taskManager'; //邀约他人可见
-      // this.role = 'taskCreater' //项目发起人编辑节点
+      // this.role = 'taskManager'; //邀约他人可见
+      this.role = 'taskCreater' //项目发起人编辑节点
       console.log(this.taskExecutor)
     },
     mounted() {
