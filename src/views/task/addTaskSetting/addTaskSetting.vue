@@ -485,7 +485,7 @@
       validate() {
         let k;
         for (k in reflect_to_task) {
-          if (this.$data[k].length === 0) {
+          if (this.$data.hasOwnProperty(k) && (this.$data[k].length === 0)) {
             console.log(k)
             this.$dialog.message({
               message: `请添加${reflect_to_task[k]}`
@@ -495,7 +495,7 @@
           } else {
             this.check_pass = true;
           };
-          // if (k === 'projectDeadLine') {
+          // if (this.role === 'taskCreater' && k === 'projectDeadLine') {//项目创建人可见
           //   if (!this.getProjectDeadLine) {
           //     this.$dialog.message({
           //       message: `请添加${reflect_to_task[k]}`
