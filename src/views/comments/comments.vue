@@ -50,14 +50,14 @@
             role: '执行者',
             date: 'x年x月x日',
             time: '2018.10.25',
-            comments: '会管家app',
+            comments: '会管家',
             imgUrl: require('@/assets/img/icon-nominee.png')
           }, {
             name: '王五',
             role: '观察者',
             date: 'x年x月x日',
             time: '2018.10.25',
-            comments: '会管家app',
+            comments: '会管家',
             imgUrl: require('@/assets/img/icon-nominee.png')
           },
           {
@@ -65,7 +65,7 @@
             role: '观察者',
             date: 'x年x月x日',
             time: '2018.10.25',
-            comments: '会管家app',
+            comments: '会管家',
             imgUrl: require('@/assets/img/icon-nominee.png')
           }
         ],
@@ -120,7 +120,7 @@
     overflow: hidden;
     .lisItem {
       width: 100%;
-      height: 70*2px;
+      height: auto;
       display: flex;
       position: relative;
       .footbar {
@@ -134,7 +134,7 @@
       }
       .left {
         width: 64*2px;
-        height: 100%;
+        height: auto;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -158,6 +158,7 @@
       }
       .right {
         flex: 1;
+        min-height: 72*2px;
         .head {
           margin-top: 19*2px;
           height: 17*2px;
@@ -182,8 +183,13 @@
           }
         }
         .comments-item {
-          color: #333;
+          font-family: PingFangSC-Medium;
+          word-break: break-all;
+          text-align: left;
+          color: rgba(51, 51, 51, 1);
           font-size: 20px;
+          height: auto;
+          padding: 0 10*2px 10px 0;
         }
       }
     }

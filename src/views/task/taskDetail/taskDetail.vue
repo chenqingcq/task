@@ -360,7 +360,8 @@
             role: '发布者',
             date: 'x年x月x日',
             time: '2018.10.25',
-            comments: '会管家app',
+            comments: `关注“失控奔驰车”事件的最新进展。上周，央视新闻频道《法治在线》栏目连续两天播出了针对这一事件调查，4月8日晚上，栏目组收到了奔驰公司专门给法治在线发来的一封情况说明。在这份情况说明当中，奔驰方面首次公布了对车辆情况的初步分析结果，初步判断车辆的定速巡航系统及驾驶系统当晚运行正常，并表
+            示正在与薛先生沟通下一步的车辆检测工作。同时，车主薛先生也表示，希望可以尽快检测车辆，回归正常生活。`,
             imgUrl: 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b'
           }, {
             name: '李四',
@@ -413,24 +414,10 @@
     },
     methods: {
       closeTask() {
-        this.$router.push({
-          path: 'conventEntry',
-          query: {
-            taskname: encodeURIComponent('task01'),
-            id: 0,
-            status: 'closed'
-          }
-        })
+        this.$router.push('conventEntry')
       },
       passTask() {
-        this.$router.push({
-          path: 'conventEntry',
-          query: {
-            taskname: encodeURIComponent('taskname?&'),
-            id: 0,
-            status: 'passed'
-          }
-        })
+        this.$router.push('conventEntry')
       },
       towardsUpdateHistory() { //查看历史上传
         this.$router.push({
