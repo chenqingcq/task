@@ -14,6 +14,9 @@ const matutaions = {
     state.user.token = data.token;
     state.user.userId = data.userId;
   },
+  [types.SET_TASKTHEME](state,value){
+    state.taskTheme = value;
+  },
   [types.SET_TASK_EXECUTOR](state, val) {
     console.log(arguments);
     let i = 0;

@@ -7,6 +7,7 @@ const state = {
     headImage: '',
     userId: ''
   },
+  taskTheme:'',
   taskExecutor: [{
       isSelected: false,
       nickname: 'jack',
@@ -14,7 +15,7 @@ const state = {
       comments: 10,
       progress: .7,
       userId: '013161',
-      userIcon: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+      userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
     },
     {
       isSelected: false,
@@ -23,7 +24,7 @@ const state = {
       comments: 20,
       progress: .5,
       userId: '212344',
-      userIcon: "http://cdnq.duitang.com/uploads/item/201504/04/20150404H3338_N8Wir.jpeg"
+      userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
     },
     {
       isSelected: false,
@@ -32,7 +33,7 @@ const state = {
       comments: 20,
       progress: .5,
       userId: '212344',
-      userIcon: "http://img2.imgtn.bdimg.com/it/u=1224306677,1730366661&fm=27&gp=0.jpg"
+      userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
     },
     {
       isSelected: false,
@@ -41,7 +42,7 @@ const state = {
       comments: 20,
       progress: .9,
       userId: '212344',
-      userIcon: "http://a-ssl.duitang.com/uploads/item/201404/15/20140415192752_JGUFz.jpeg"
+      userIcon: "http://img4.duitang.com/uploads/item/201605/29/20160529093324_mZPCi.jpeg"
     },
     {
       isSelected: false,
@@ -50,7 +51,7 @@ const state = {
       comments: 20,
       progress: .5,
       userId: '212344',
-      userIcon: "http://img5.duitang.com/uploads/item/201609/26/20160926124027_vxRkt.jpeg"
+      userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpgg"
     },
     {
       isSelected: false,
@@ -59,7 +60,7 @@ const state = {
       comments: 30,
       progress: .4,
       userId: '212344',
-      userIcon: "http://img5.duitang.com/uploads/item/201412/04/20141204150752_vWUrc.jpeg"
+      userIcon:'http://img4.duitang.com/uploads/item/201605/29/20160529093324_mZPCi.jpeg'
     },
     {
       isSelected: false,
@@ -68,7 +69,7 @@ const state = {
       comments: 50,
       progress: .2,
       userId: '212344',
-      userIcon: "http://img5q.duitang.com/uploads/item/201503/21/20150321114038_fJyMS.jpeg"
+      userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
     },
     {
       isSelected: false,
@@ -77,7 +78,7 @@ const state = {
       comments: 20,
       progress: .8,
       userId: '212344',
-      userIcon: "http://img1.imgtn.bdimg.com/it/u=1214248342,1256011437&fm=27&gp=0.jpg"
+      userIcon: "http://img4.duitang.com/uploads/item/201605/29/20160529093324_mZPCi.jpeg"
     }
   ],
   taskSetting: [{

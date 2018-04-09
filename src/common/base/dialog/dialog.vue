@@ -157,7 +157,7 @@ export default {
       justify-content: center;
       font-family: PingFangSC-Regular;
       font-size: 14*2px;
-      color: #666666;
+      color: #333;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

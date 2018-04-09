@@ -110,6 +110,15 @@
         height: 26*2px;
         margin-right: 13*2px;
       }
+      img.invitepng {
+        margin-right: 8*2px;
+      }
+      div.editProgress {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        margin-left: 2*2px;
+      }
       div.editmore {
         display: inline-block;
         position: absolute;
@@ -147,6 +156,23 @@
 
   li#allowCreateTask {
     height: 60*2px;
+    .task-setting {
+      height: 100%;
+      /*display: flex;*/
+      flex-wrap: wrap;
+      span.allow—create {
+        display: block;
+        font-size: 16px*2;
+        height: 0;
+      }
+      span.allow—create-new {
+        display: block;
+        height: 0;
+        font-size: 10px*2;
+        color: #666;
+        margin-top: -30*2px;
+      }
+    }
   }
 
   .confirm {
@@ -225,18 +251,23 @@
 
   }
 
+  input:disabled {
+    background: #fff;
+  }
+
 </style>
 <template>
   <div class="task-container">
     <ul class="task-panel">
       <li class="task-item">
-        <label class="task-desc" for="item-1">
+        <label class="task-desc" for="taskTheme">
           <div class="icon">
-            <img src="@/assets/img/icon4.png" />
+            <img src="@/assets/img/icon-book.png" />
           </div>
           <div class="task-setting">任务主题</div>
         </label>
-        <input class="userInput" type="text" id="item-1" v-model.trim=" taskTheme" maxlength="20" placeholder="添加任务主题" />
+        <input class="userInput" ref="taskTheme" type="text" id="taskTheme" v-model.trim=" taskTheme" maxlength="20" placeholder="添加任务主题"
+        />
       </li>
       <li class="task-item">
         <label class="task-desc" for="item0">
@@ -305,12 +336,15 @@
           </span>
         </div>
       </li>
-      <li class="task-item " id="allowCreateTask">
+      <li class="task-item " id="allowCreateTask" v-if="role == 'taskCreater'">
         <label class="task-desc" for="item5">
           <div class="icon">
             <img src="@/assets/img/icon-task02.png" />
           </div>
-          <div class="task-setting ">允许执行人创建任务</div>
+          <div class="task-setting ">
+            <span class="allow—create">允许执行人创建任务</span><br>
+            <span class="allow—create-new">可在该项目下创建新任务</span>
+          </div>
         </label>
         <div class="switch-contaiener">
           <v-switch :status="allowCreate" @getStatus="allowCreateChange"></v-switch>
@@ -319,12 +353,12 @@
     </ul>
     <div class="permit-setting"><span>权限设置</span></div>
     <ul class="task-panel permission-setting">
-      <li class="task-item">
+      <li class="task-item" id="task-setting-des">
         <label class="task-desc">
           <div class="icon">
             <img src="@/assets/img/icon-public.png" />
           </div>
-          <div class="task-setting">公开</div>
+          <div class="task-setting-des"><span class="task-setting0">公开</span><br><span class="task-setting1">所有成员可见</span></div>
         </label>
         <div class="switch-contaiener">
           <v-switch :status="isPublic" @getStatus="isPublicChange"></v-switch>
@@ -351,19 +385,6 @@
           <img class="editmore" src="@/assets/img/icon-right-slide03.png">
         </div>
       </li>
-      <li v-if="role == 'taskManager'">
-        <img class="editpng" src="@/assets/img/icon-invitation.png" />
-        <div class="editProgress">邀约他人可见</div>
-        <div class="editmore" @touchstart='inviteOthers'>
-          <img src="@/assets/img/icon-right-slide03.png" ref='arrow'>
-        </div>
-      </li>
-      <li v-if="showMembers" v-for="(item,index) in members" :key="index">
-        <div @touchstart='selected(index,item.isAllowed)' class="select">
-          <img src="@/assets/img/sign-selected.png" v-show="item.isAllowed" />
-        </div>
-        <div class="name">{{item.name}}</div>
-      </li>
     </ul>
     <div @touchstart='confirm' class="confirm">确定</div>
   </div>
@@ -380,6 +401,8 @@
     startTime: '开始时间',
     endTime: '结束时间',
     standard: ' 验收标准',
+    executor: '执行人',
+    projectDeadLine: '项目节点'
   };
   export default {
     data() {
@@ -391,7 +414,7 @@
         endTime: '',
         standard: '',
         executor: '',
-        allowCreate: true,
+        allowCreate: false,
         isPublic: false,
         allowedLook: true,
         role: '',
@@ -401,7 +424,7 @@
       }
     },
     computed: {
-      ...mapGetters(['taskExecutor', 'getTaskSetting']),
+      ...mapGetters(['taskExecutor', 'getTaskSetting', 'getTaskTheme']),
     },
     watch: {
       taskExecutor(newVal, oldVal) {
@@ -432,10 +455,10 @@
       editProgress() {
         this.$router.push({
           path: 'taskHistoryOrUpdate',
-          query: {
-            taskId: 0,
-            taskName: '007'
-          }
+          // query: {
+          //   taskId: 0,
+          //   taskName: '007'
+          // }
         }) //编辑项目节点
       },
       confirm() {
@@ -461,8 +484,9 @@
       },
       validate() {
         let k;
-        for (k in this.$data) {
-          if (typeof this.$data[k] == 'string' && this.$data[k].length === 0) {
+        for (k in reflect_to_task) {
+          if (this.$data[k].length === 0) {
+            console.log(k)
             this.$dialog.message({
               message: `请添加${reflect_to_task[k]}`
             });
@@ -470,7 +494,18 @@
             return
           } else {
             this.check_pass = true;
-          }
+          };
+          // if (k === 'projectDeadLine') {
+          //   if (!this.getProjectDeadLine) {
+          //     this.$dialog.message({
+          //       message: `请添加${reflect_to_task[k]}`
+          //     });
+          //     this.check_pass = false;
+          //     return;
+          //   } else {
+          //     this.check_pass = true;
+          //   }
+          // };
         }
       },
       appointerManager() {
@@ -498,23 +533,25 @@
       },
       endDate_change(val) {
         this.endTime = val;
+      },
+      setTaskTheme() {
+        this.$refs.taskTheme.setAttribute('disabled', true);
+        this.taskTheme = this.getTaskTheme;
+      },
+      init() {
+        this.role != 'taskCreater' ? this.setTaskTheme() : '';
       }
     },
     created() {
       // this.role = 'taskManager'; //邀约他人可见
       this.role = 'taskCreater' //项目发起人编辑节点
       console.log(this.taskExecutor)
-      this.members = [{
-          isAllowed: false,
-          name: '李四'
-        },
-        {
-          isAllowed: false,
-          name: '张三'
-        }
-      ]
     },
-
+    mounted() {
+      this.$nextTick(() => {
+        this.init()
+      })
+    }
   }
 
 </script>
