@@ -20,10 +20,8 @@
       }
     }
     section {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
       .task {
+        margin: 0 auto;
         margin-top: 26*2px;
         width: 270*2px;
         height: 44*2px;
@@ -46,6 +44,7 @@
         }
       }
       .addTask {
+        margin: 0 auto;
         margin-top: 31*2px;
         width: 270*2px;
         height: 44*2px;

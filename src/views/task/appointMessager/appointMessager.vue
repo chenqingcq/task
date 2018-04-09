@@ -373,7 +373,7 @@
             placeholder: "确定删除成员",
             operate(member) {
               //先确定该成员是否在成员列表 否则提示该成员不存在
-              if (member) {
+              if (member) {3
                 let selected = self.taskExecutor.findIndex((item, index) => {
                   return item.nickname == member;
                 });

@@ -20,11 +20,10 @@
       }
     }
     section {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
       p {
+        margin: 0 auto;
         height: 30*2px;
+        width: 100%;
         position: relative;
         width: 300*2px;
         &:last-of-type {
@@ -68,6 +67,7 @@
         }
       }
       .submit {
+        margin: 0 auto;
         margin-top: 26*2px;
         width: 270*2px;
         height: 44*2px;
@@ -84,9 +84,12 @@
     footer {
       position: absolute;
       bottom: 0;
+      width: 100%;
       ul {
         width: 100%;
         height: 50*2px;
+        display: flex;
+        justify-content: center;
         li {
           float: left;
           height: 100%;
@@ -96,9 +99,6 @@
           justify-content: center;
           align-items: center;
           flex-wrap: wrap;
-          &:nth-child(1) {
-            margin-left: 50*2px;
-          }
           div {
             img {
               display: inline-block;
@@ -109,6 +109,7 @@
             font-size: 10*2px;
             font-family: PingFangSC-Regular;
             color: rgba(90, 169, 252, 1);
+            min-width: 40*2px;
           }
         }
       }
@@ -141,6 +142,7 @@
           </label>
         <input type="text" id="telephone" v-model.trim="telephone" placeholder="请输入手机号" maxlength="20">
       </p>
+      <br/>
       <p>
         <label for="checkCode">
               <img src="@/assets/img/password.png">
