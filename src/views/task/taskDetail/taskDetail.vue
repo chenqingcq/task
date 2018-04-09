@@ -461,7 +461,7 @@
     },
     methods: {
       link_to_taskSetting(){
-        this.$router.push('addTaskSetting')
+        this.$router.push('taskSetting')
       },
       closeTask() {
         this.$router.push('conventEntry')

@@ -1,6 +1,10 @@
 <style lang="less" scoped>
   .task-container {
-    width: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right:0;
     .task-panel {
       width: 100%;
       li.task-item {
@@ -206,8 +210,11 @@
   }
 
   .confirm {
+    position: absolute;
+    bottom: 8*2px;
+    right:8*2px; 
+    left: 8*2px;
     height: 44*2px;
-    margin: 16px;
     background: #fff;
     background-image: linear-gradient(-180deg, #86C0F8 0%, #4E8CEE 100%);
     box-shadow: 0 2*2px 4px 0 rgba(0, 0, 0, 0.38);
