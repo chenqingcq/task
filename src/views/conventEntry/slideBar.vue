@@ -1,11 +1,21 @@
 <style lang="less" scoped>
+  @import "animate.less";
+  .mask{
+    position: fixed;
+    top: 0 ;
+    left: 0 ;
+    width: 100vw ;
+    height: 100vh ;
+    background: rgba(0,0,0,.6);
+    z-index : 99;
+  }
   .m-t-64{
     margin-top: 64px;
   }
   .slide-wrap{
     position: fixed;
     /*switch 的z-index 是99*/
-    z-index : 100;
+      z-index : 100;
     left: 0 ;
     top: 0;
     height: 100vh;
@@ -107,69 +117,121 @@
       }
     }
   }
+  .content-enter-active, {
+    .animate-slideInLeft ;
+
+  }
+  .content-leave-to{
+    .animate-slideOutLeft ;
+  }
+
+  .mask-enter-active {
+    .animate-fadeIn ;
+  }
+  .mask-leave-to{
+    .animate-fadeOut ;
+  }
+
 </style>
 <template>
-    <div v-if="isShow">
-      <div class="slide-wrap c_white-bg">
-        <img class="banner" src="../../assets/img/image-background01.png" alt="">
-        <img class="help" src="../../assets/img/icon-help.png" alt="">
-        <div class="nav-container b_d-flex c_white-bg" >
-          <div @click="navTab = 0" class="nav" :class="[navTab == 0 ? 'active' : 'default c_7' ]"  >
-            <p class="b_FS-12" >我完成</p>
-            <div class="line" ></div>
+  <div>
+    <transition name="mask">
+      <div v-if="isShow" class="mask" @touchstart="isShow = false" ></div>
+    </transition>
+    <transition name="content" >
+
+        <div  v-if="isShow"  class="slide-wrap c_white-bg">
+          <img class="banner" src="../../assets/img/image-background01.png" alt="">
+          <img @click="skipToHelp" class="help" src="../../assets/img/icon-help.png" alt="">
+          <div class="nav-container b_d-flex c_white-bg" >
+            <div @click="navTab = 0" class="nav" :class="[navTab == 0 ? 'active' : 'default c_7' ]"  >
+              <p class="b_FS-12" >我完成</p>
+              <div class="line" ></div>
+            </div>
+            <div @click="navTab = 1" class="nav" :class="[navTab == 1 ? 'active' : 'default c_7' ]" >
+              <p class="b_FS-12" >我发布</p>
+              <div class="line" ></div>
+            </div>
+            <div @click="navTab = 2" class="nav" :class="[navTab == 2 ? 'active' : 'default c_7' ]"  >
+              <p class="b_FS-12" >我执行</p>
+              <div class="line" ></div>
+            </div>
           </div>
-          <div @click="navTab = 1" class="nav" :class="[navTab == 1 ? 'active' : 'default c_7' ]" >
-            <p class="b_FS-12" >我发布</p>
-            <div class="line" ></div>
-          </div>
-          <div @click="navTab = 2" class="nav" :class="[navTab == 2 ? 'active' : 'default c_7' ]"  >
-            <p class="b_FS-12" >我执行</p>
-            <div class="line" ></div>
-          </div>
-        </div>
-        <div class="main ">
-          <div class="panel c_white-bg">
-            <template v-for="(val) in 20">
-              <div class="item"  >
-                <p class="left-photo"  >
-                  <img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">
-                </p>
-                <p class="c_11 b_FS-14">
-                  日常工作进度查看
-                </p>
+          <div class="main ">
+            <div class="panel c_white-bg">
+              <template v-for="(val) in 20">
+                <div class="item"  >
+                  <p class="left-photo"  >
+                    <img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">
+                  </p>
+                  <p class="c_11 b_FS-14">
+                    日常工作进度查看
+                  </p>
+                </div>
+                <div class="bar"></div>
+              </template>
+
+            </div>
+
+            <div class="btn-warp m-t-64">
+              <div class="btn-small-success b_FS-28  ">
+                <div class="b_d-flex b_flex-center-col b_flex-center-row" @touchstart = 'newAproject' >
+                  <img style="width: 36px;height: 34px;padding-right:4px" src="../../assets/img/icon-add01.png" alt=""> 新增项目
+                </div>
               </div>
-              <div class="bar"></div>
-            </template>
-
-          </div>
-
-          <div class="btn-warp m-t-64">
-            <div class="btn-small-success b_FS-28  ">
-              <div class="b_d-flex b_flex-center-col b_flex-center-row">
-                <img style="width: 36px;height: 34px;padding-right:4px" src="../../assets/img/icon-add01.png" alt=""> 新增项目
-              </div>
-
             </div>
           </div>
         </div>
-      </div>
-    </div>
+
+    </transition>
+
+  </div>
+
 </template>
 <script>
     export default{
         props: {
-          isShow: {
-            type: Boolean,
-            default:false
-          }
+
         },
         data(){
             return{
                navTab : 0,// 12
+              isShow : false
             }
         },
         components:{
 
+        },
+        mounted(){
+
+        },
+        methods:{
+          open(){
+            this.isShow = true
+          },
+          close(){
+            this.isShow = false
+            debugger
+            console.log(this)
+          },
+          closeCb(){
+
+          },
+          // 跳转到帮助页面
+          skipToHelp(){
+            this.$router.push('/help')
+          },
+          // 弹出新建项目弹窗
+          newAproject(){
+            this.$dialog.info({
+              placeholder : '请填写项目名称' ,
+              btnName : 'add',
+              operate: this.doSubmitNewAproject
+            })
+          },
+          doSubmitNewAproject(text){
+            console.log(22222, text)
+          }
         }
     }
 </script>

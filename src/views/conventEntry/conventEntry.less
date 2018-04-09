@@ -18,7 +18,7 @@
     }
     .menu{
       width: 20*2px;
-      padding-left: 4px;
+      padding-left: 6px;
     }
     .project-name{
       width: 253*2px;
@@ -35,11 +35,20 @@
     margin-top: 11*2px;
   }
 }
+// 动画层级问题
+.slide-bar{
+  position: relative;
+  z-index : 2;
+}
+// 动画层级问题
 .task-list-wrapper{
   margin-top: 34*2px;
+  position: relative;
+  z-index: 1;
   .panel{
     height: 70*2px ;
     position: relative;
+    transform: translateZ(0);
     /*是否已关注*/
     &.isLike-bg{
       background-color: #E5E5E5;
@@ -223,6 +232,13 @@
         line-height: 0;
         background-color: #f4f4f4;
         transform: translate3d(0,0,0);
+        position: relative;
+        &.zIndex10{
+          z-index: 10;
+        }
+        &.zIndex9{
+          z-index: 9;
+        }
         .on{
           transform: translate3d(0,0,0);
           -webkit-transform: translate3d(0,0,0);
@@ -247,7 +263,7 @@
             width: 20.1*2px;
             z-index : 2;
             position:absolute ;
-            top: -23px ;
+            top: -17px ;
             left: 41.5px;
           }
           .status-bg{
@@ -281,9 +297,12 @@
   }
 }
 
+
+
+
 .fadeInLeft-enter-active{
   .animated;
-  .fadeInLeft;
+  //.fadeInLeft;
 }
 .fadeInLeft-leave-active{
   .animated;

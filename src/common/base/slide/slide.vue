@@ -48,7 +48,7 @@
           if (!this.scroll) {
             return;
           }
-          this._setSliderWidth(true);
+          this.setSliderWidth(true);
           this.scroll.refresh();
         });
       }, 20);

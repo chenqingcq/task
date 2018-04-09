@@ -102,7 +102,7 @@
             }
         },
         computed:{
-
+          // 选中的周数组
           activeWeekDays(){
             if( this.activeMonthIndex ==-1 ){
               return []
@@ -112,15 +112,12 @@
             var flxibleTime = dateObj.startTmp ,
              start = dateObj.startTmp,
              weekdays = []
-
-            console.log(dateObj)
             for(let i = 0 ; i< 7 ;i++ ){
 
               let _weekday = new Date(flxibleTime)
               if( i == 0){
                 console.log( _weekday )
               }
-              console.log()
               let area = {
                 dayStr : _weekday.getDate() ,
                 week : _weekday.getDay() ,
@@ -129,14 +126,12 @@
               flxibleTime += 24*60*60*1000
               weekdays.push(area)
             }
-            console.log('weekdays',weekdays)
             return weekdays
           },
           splitMonthDays(){
               var arr = this.activeMonthDates
               var totalArray =  arr.slice(this.calendarIndex , this.calendarIndex + 4 )
               var res = this._splitAsingleMonthArea(totalArray)
-            console.log( '>>>>>>>>>>>>totalArray', res)
               return res
           }
         },
@@ -152,25 +147,20 @@
               return []
             }
             const oneDayTmp = 24 * 60 *60000
+            // Array 分割月份区域换成7天 临时存放
             let monthFullDays = []
             let j = 0
             while(j < 4){
 
-
               var dateObj = arr[j]
-              console.log('computed weeks', dateObj)
               var flxibleTime = dateObj.startTmp ,
-
-                fullWeekdays = []
-
-              console.log(dateObj)
+              fullWeekdays = []
               for(let i = 0 ; i< 7 ;i++ ){
 
                 let _weekday = new Date(flxibleTime)
                 if( i == 0){
-                  console.log( _weekday )
+//                  console.log( _weekday )
                 }
-                console.log()
                 let area = {
                   dayStr : _weekday.getDate() ,
                   week : _weekday.getDay() ,
@@ -211,44 +201,32 @@
           },
           renderMonthDates(date, flag ){
             let firstDateOfMonth = date    //这月第一天 or 指定的 某一天
-
             let startAreaDate =  firstDateOfMonth
-//            var lastDateOfMonth = new Date(year, month + 1, 0); //这月最后一天
-//            var monthLenght = lastDateOfMonth.getDate() - firstDateOfMonth.getDate() + 1;
             if( !this.activeMonthDates.length ){
                 // 计算四个期间出来
               for(let i = 0 ; i < 4 ;i++){
                 let  _endAreaDate =  new Date( +startAreaDate + this.timeDistance)
-
+                // todo 定位 从 那个哪标 显示日历
                 if( this.currentTime > startAreaDate && this.currentTime <= _endAreaDate ){
                   this.activeMonthIndex = i
-                  console.log(i)
                 }
-
                 let area = {
                   startTmp: +startAreaDate ,
                   endTmp: +_endAreaDate - 86400000  ,
                   startWeekDay: startAreaDate.getDay() ,
                   areaStr: startAreaDate.getDate() + '-' + (_endAreaDate.getDate()-1 ),
                 }
-                console.log('areaStr', area.areaStr )
                 this.activeMonthDates.push(area)
 
                 startAreaDate = _endAreaDate
               }
-              // 从 那个下标 显示 日历
-
-              console.log( this.activeMonthDates )
-
             }
             else{
               // 结束
               let   area
               if(flag == 'prev'){
-
                 // 会比计算前的 开始时间 少一天
                 let _startAreaDate = new Date( +startAreaDate - this.timeDistance )
-                console.log(_startAreaDate,174  )
                 let _endAreaDate = new Date(+startAreaDate - 86400000)
                 area = {
                   startTmp: +_startAreaDate ,
@@ -258,7 +236,6 @@
                 }
               }
               else{
-                console.log(10111)
                 let _endAreaDate = new Date( +startAreaDate + this.timeDistance - 86400000 )
                 area = {
                   startTmp: +startAreaDate ,
@@ -267,10 +244,6 @@
                   areaStr: startAreaDate.getDate() + '-' + _endAreaDate.getDate(),
                 }
               }
-//              if( this.currentTime > startAreaDate && this.currentTime <= _endAreaDate ){
-//                this.activeMonthIndex = i
-//                console.log(i)
-//              }
               // 分区对象
               if( flag == 'prev' ){
                 // 在数组开头添加
@@ -297,7 +270,6 @@
               this.emitData()
               return
             }
-            // console.log(this.activeMonthDates[this.calendarIndex])
             let startDate = new Date(this.activeMonthDates[this.calendarIndex].startTmp)
             this.renderMonthDates( startDate ,'prev').done(()=>{
               if( this.calendarIndex == 0 ){
@@ -307,7 +279,6 @@
                 if( this.activeMonthIndex > 0){
                   this.activeMonthIndex -=1
                 }
-
               }
               this.emitData()
             })

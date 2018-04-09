@@ -36,16 +36,17 @@
   }
   .turnLeft{
     transition: transform cubic-bezier(0.4, 0.4, 0.25, 1.35) 0.28s;
-    transform:translateX(-18%);
+    transform:translateX(-6px);
   }
   .switch_btn{
     height: 18*2px;
     position: absolute;
-    z-index: 99;
-    top: -2px;
+    z-index: 1;
+    top: -3px;
     background: #fff;
     width: 18*2px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    box-shadow: 2px 4px 6px 0 rgba(87,87,87,0.50), inset 0 2px 6px 0 rgba(187,187,187,0.50);
     border-radius: 50%;
   }
   .turnSuccess{
