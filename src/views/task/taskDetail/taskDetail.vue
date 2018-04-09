@@ -252,6 +252,37 @@
     border: 2px solid #0093FF;
   }
 
+  .common {
+    display: inline-block;
+    font-size: 10px*2;
+    font-family: PingFangSC-Regular;
+    color: rgba(255, 255, 255, 1);
+    border-radius: 9*2px;
+    width: 55*2px;
+    height: 16*2px;
+    text-align: center;
+    line-height: 16*2px;
+  }
+
+  .isCompleted {
+    background-image: linear-gradient(-180deg, #C1FE7F 0%, #74C126 100%);
+  }
+
+  .isInProgress {
+    background-image: linear-gradient(-180deg, #FEEA7F 0%, #FBCC52 100%);
+  }
+
+  .overDeadLined {
+    background-image: linear-gradient(-180deg, #FEC37F 0%, #EC584B 100%)
+  }
+
+  .deadline {
+    font-size: 10*2px;
+    font-family: PingFangSC-Regular;
+    color: rgba(102, 102, 102, 1);
+    margin-left: 4*2px;
+  }
+
 </style>
 <template>
   <div class="task-detail-container">
@@ -266,11 +297,12 @@
               <div class="task-name">任务名名称</div>
               <div class="task-detail">任务详情</div>
               <div class="progress">
-                <div class="b_status pending">进行中</div>
+                <span :class="[common,active]">{{activeFont}}</span>
+                <span class="deadline">01/20-02/21</span>
               </div>
             </div>
             <div class="task-focus">
-              <div class="focus-star">
+              <div @touchstart='link_to_taskSetting' v-show="role =='taskCreater'" class="focus-star">
                 <img src="@/assets/img/icon-set up.png" />
               </div>
               <div class="focus-star">
@@ -336,6 +368,7 @@
   export default {
     data() {
       return {
+        role: '',
         loop: true,
         currentIndex: 0,
         autoPlay: false,
@@ -368,14 +401,14 @@
             role: '执行者',
             date: 'x年x月x日',
             time: '2018.10.25',
-            comments: '会管家app',
+            comments: '会管家',
             imgUrl: 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b'
           }, {
             name: '王五',
             role: '观察者',
             date: 'x年x月x日',
             time: '2018.10.25',
-            comments: '会管家app',
+            comments: '会管家',
             imgUrl: 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b'
           },
           {
@@ -383,7 +416,7 @@
             role: '观察者',
             date: 'x年x月x日',
             time: '2018.10.25',
-            comments: '会管家app',
+            comments: '会管家',
             imgUrl: 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b'
           }
         ],
@@ -408,11 +441,28 @@
         ]
       }
     },
+    computed: {
+      common() {
+        return 'common'
+      },
+      active() {
+        return 'overDeadLined' //确定任务完成状态
+      },
+      activeFont() {
+        return this.active === 'isCompleted' ?
+          '已完成' : this.active == 'isInProgress' ?
+          '进行中' : this.active == 'overDeadLined' ?
+          '已超时' : ''
+      }
+    },
     components: {
       comments,
       Slide
     },
     methods: {
+      link_to_taskSetting(){
+        this.$router.push('addTaskSetting')
+      },
       closeTask() {
         this.$router.push('conventEntry')
       },
@@ -422,11 +472,6 @@
       towardsUpdateHistory() { //查看历史上传
         this.$router.push({
           path: 'taskHistoryOrUpdate',
-          query: {
-            taskname: encodeURIComponent('task01'),
-            id: 0,
-            status: 'passed'
-          }
         })
       },
       loadImage() { //轮播加载
@@ -439,6 +484,7 @@
         this.$router.push('taskHistoryOrUpdate')
       },
       init() {
+        this.role = 'taskCreater'
         //确认访问者身份(头像)
         //确认当前任务详情(任务名,任务详细介绍)
         //获取轮播图(上传任务图片)
@@ -448,9 +494,11 @@
         //根据访问者身份确认底部是(浏览or确认任务进度)
       }
     },
-    mounted() {
-      this.init()
-    }
+    created() {
+      this.init();
+      console.log(this.role)
+    },
+    mounted() {}
   }
 
 </script>

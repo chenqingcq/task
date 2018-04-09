@@ -24,7 +24,7 @@
                 <div class="time-panel"><span>{{item.date}}</span><span>{{item.time}}</span></div>
               </div>
               <div class="comments-item">{{item.comments}}</div>
-            </div>
+            </div> 
             <i class="footbar"></i>
           </li>
         </ul>
@@ -38,37 +38,6 @@
     name: 'comments',
     data() {
       return {
-        items: [{
-            name: '张三',
-            role: '发布者',
-            date: 'x年x月x日',
-            time: '2018.10.25',
-            comments: '会管家app',
-            imgUrl: require('@/assets/img/icon-nominee.png')
-          }, {
-            name: '李四',
-            role: '执行者',
-            date: 'x年x月x日',
-            time: '2018.10.25',
-            comments: '会管家',
-            imgUrl: require('@/assets/img/icon-nominee.png')
-          }, {
-            name: '王五',
-            role: '观察者',
-            date: 'x年x月x日',
-            time: '2018.10.25',
-            comments: '会管家',
-            imgUrl: require('@/assets/img/icon-nominee.png')
-          },
-          {
-            name: '小六',
-            role: '观察者',
-            date: 'x年x月x日',
-            time: '2018.10.25',
-            comments: '会管家',
-            imgUrl: require('@/assets/img/icon-nominee.png')
-          }
-        ],
         height: 140 * 2 + "px"
       }
     },

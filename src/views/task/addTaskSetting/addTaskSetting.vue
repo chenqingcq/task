@@ -59,8 +59,39 @@
         align-items: center;
       }
     }
-    .permission-setting {
+    ul.permission-setting {
       /*margin-top: 32*2px;*/
+      height: 56*2px !important;
+      li {
+        padding: 0 12*2px;
+        height: 100% !important;
+        div {
+          flex: 1;
+          p {
+            text-align: center;
+            &:first-of-type {
+              margin-top: 4*2px;
+              height: 22*2px;
+              font-size: 16*2px;
+              font-family: PingFangSC-Regular;
+              color: rgba(51, 51, 51, 1);
+              line-height: 22*2px;
+            }
+          }
+          span {
+            &:first-of-type {
+              padding: 2*2px;
+              display: inline-block;
+              margin: 0 auto;
+              width: auto;
+              font-size: 12*2px;
+              font-family: PingFangSC-Regular;
+              color: rgba(102, 102, 102, 1);
+              line-height: 17*2px;
+            }
+          }
+        }
+      }
     }
     .permit-setting {
       width: 100%;
@@ -93,7 +124,6 @@
 
   .editDeadTime {
     width: 100%;
-    margin-top: 8*2px;
     background: #fff;
     li {
       display: flex;
@@ -255,6 +285,10 @@
     background: #fff;
   }
 
+  .active {
+    border-bottom: 4*2px solid rgba(107, 167, 243, 1);
+  }
+
 </style>
 <template>
   <div class="task-container">
@@ -351,32 +385,6 @@
         </div>
       </li>
     </ul>
-    <div class="permit-setting"><span>权限设置</span></div>
-    <ul class="task-panel permission-setting">
-      <li class="task-item" id="task-setting-des">
-        <label class="task-desc">
-          <div class="icon">
-            <img src="@/assets/img/icon-public.png" />
-          </div>
-          <div class="task-setting-des"><span class="task-setting0">公开</span><br><span class="task-setting1">所有成员可见</span></div>
-        </label>
-        <div class="switch-contaiener">
-          <v-switch :status="isPublic" @getStatus="isPublicChange"></v-switch>
-        </div>
-      </li>
-      <li class="task-item " id="task-setting-des">
-        <label class="task-desc">
-          <div class="icon">
-            <img src="@/assets/img/icon-not public.png" />
-          </div>
-          <div class="task-setting-des"><span class="task-setting0">项目成员可见</span><br><span class="task-setting1">该项目成员可见</span></div>
-        </label>
-        <div class="switch-contaiener">
-          <v-switch :status="allowedLook" @getStatus="allowedLookChange"></v-switch>
-        </div>
-      </li>
-    </ul>
-    <!--项目发起人可见项目节点-->
     <ul class="editDeadTime">
       <li v-if="role == 'taskCreater'">
         <img class="editpng" src="@/assets/img/icon-edit.png" />
@@ -386,6 +394,18 @@
         </div>
       </li>
     </ul>
+    <div class="permit-setting"><span>权限设置</span></div>
+    <ul class="task-panel permission-setting">
+      <li class="task-item">
+        <div v-for="(item,index) in setting" :key="index" @touchstart='changeIndex(index)'>
+          <p>{{item.title}}</p>
+          <p>
+            <span :class='{active : currentIndex == index}'>{{item.detail}}</span>
+          </p>
+        </div>
+      </li>
+    </ul>
+    <!--项目发起人可见项目节点-->
     <div @touchstart='confirm' class="confirm">确定</div>
   </div>
 </template>
@@ -407,6 +427,16 @@
   export default {
     data() {
       return {
+        setting: [{
+            title: '公开',
+            detail: '所有成员可见'
+          },
+          {
+            title: '项目成员可见',
+            detail: '该项目的成员可见'
+          }
+        ],
+        currentIndex: 0,
         taskTheme: '',
         taskname: '',
         taskdesc: '',
@@ -442,11 +472,13 @@
       }
     },
     methods: {
+      changeIndex(index) {
+        this.currentIndex = index
+      },
       getExcutors(members) {
         let selected = members.filter((item, i) => {
           return item.isSelected == true
         });
-        console.log(selected);
         this.executor = selected[0] && selected[0].nickname
       },
       ...mapMutations({
