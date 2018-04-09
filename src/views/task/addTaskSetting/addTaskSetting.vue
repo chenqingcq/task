@@ -445,8 +445,8 @@
         standard: '',
         executor: '',
         allowCreate: false,
-        isPublic: false,
-        allowedLook: true,
+        isPublic: true,
+        allowedLook: false,
         role: '',
         showMembers: false,
         members: [],
@@ -473,7 +473,15 @@
     },
     methods: {
       changeIndex(index) {
-        this.currentIndex = index
+        this.currentIndex = index;
+        if (this.currentIndex == 0) {
+          this.isPublic = true;
+          this.allowedLook = false;
+        }
+        if (this.currentIndex == 1) {
+          this.isPublic = false;
+          this.allowedLook = true;
+        }
       },
       getExcutors(members) {
         let selected = members.filter((item, i) => {
@@ -487,10 +495,6 @@
       editProgress() {
         this.$router.push({
           path: 'taskHistoryOrUpdate',
-          // query: {
-          //   taskId: 0,
-          //   taskName: '007'
-          // }
         }) //编辑项目节点
       },
       confirm() {
