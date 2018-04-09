@@ -5,6 +5,9 @@
  * 项目 相关
  * */
 const Login = resolve => require(['@/views/login/login.vue'], resolve) // 项目-登录
+
+const ExhibitorSystem = resolve => require(['@/views/exhibitorSystem/exhibitorSystem.vue'], resolve) // 项目-展商系统
+
 const Appointment = resolve => require(['@/views/taskAppointment/taskAppointment.vue'], resolve) // 项目-任务约定
 
 const Entry = resolve => require(['@/views/conventEntry/conventEntry.vue'], resolve) // 项目-首页- 入口
@@ -49,6 +52,16 @@ export default [{
     component: help,
     meta: {
       title: '使用帮助',
+      // 是否显示 底部栏 会展 logo
+      isShowBottomSign: false
+    }
+  },
+  {
+    path: '/exhibitorSystem',
+    name: 'help',
+    component: ExhibitorSystem,
+    meta: {
+      title: '展商系统',
       // 是否显示 底部栏 会展 logo
       isShowBottomSign: false
     }
