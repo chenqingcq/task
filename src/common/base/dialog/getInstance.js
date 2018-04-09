@@ -10,7 +10,7 @@ export default function getInstance(options) {
   }
   if (options.type === 'notice') {
     let notice = {
-      state: "", //字体图标
+      state: "" || 'pass', //字体图标
       title: "", //任务描述
       task: "", //任务名称
       charge: '', //负责人
@@ -54,9 +54,9 @@ export default function getInstance(options) {
     dialog = new DialogConstructor({
       data() {
         return {
-          type: options.type, 
+          type: options.type,
           message: options.message || "", //定义信息
-          icon: options.icon,//确认图标类型
+          icon: options.icon, //确认图标类型
           show: true,
         }
       }

@@ -91,9 +91,9 @@
           display: inline-block;
           width: 100%;
           text-align: center;
-          font-family: PingFangSC-Light;
           font-size: 12px*2;
-          color: #666;
+          font-family: PingFangSC-Light;
+          color: rgba(102, 102, 102, 1)
         }
         .detail-btn {
           width: 124*2px;
@@ -283,6 +283,33 @@
     margin-left: 4*2px;
   }
 
+  .no-historyUpdate {
+    overflow: hidden;
+    margin: 0 auto;
+    width: 608px;
+    height: 382px;
+    margin-top: 17*2px;
+    .logo {
+      width: auto;
+      height: 100%;
+      margin-top: 40*2px;
+      img {
+        margin: 0 auto;
+        display: block;
+        width: 145*2px;
+      }
+      span {
+        display: block;
+        margin: 0 auto;
+        margin-top: 4*2px;
+        font-size: 18*2px;
+        font-family: PingFangSC-Regular;
+        color: rgba(255, 115, 100, 1);
+        text-align: center;
+      }
+    }
+  }
+
 </style>
 <template>
   <div class="task-detail-container">
@@ -312,12 +339,17 @@
           </div>
         </div>
         <!--轮播图-->
-        <slide ref="scroll" :loop='loop'>
+        <slide ref="scroll" :loop='loop' v-if="showSlide">
           <div class="slider-item" v-for="(item,index) in items" :key="index">
             <img @load='loadImage' :src="item.imgUrl">
           </div>
         </slide>
-
+        <div v-else class="no-historyUpdate" >
+          <div class="logo">
+            <img src="@/assets/img/image-notice.png" />
+            <span>暂无资料上传</span>
+          </div>
+        </div>
         <div class="task-progress">
           <span class="task-desc">展台基础已布置完毕</span>
           <div class="detail-btn" @touchstart='towardsUpdateHistory'>
@@ -365,11 +397,16 @@
 <script>
   import comments from '@/views/comments/comments';
   import Slide from '@/common/base/slide/slide.vue';
+  import {
+    mapGetters,
+    mapMutations
+  } from 'vuex';
   export default {
     data() {
       return {
         role: '',
         loop: true,
+        showSlide: true,
         currentIndex: 0,
         autoPlay: false,
         height: 382,
@@ -442,11 +479,12 @@
       }
     },
     computed: {
+      // ...mapGetters(['getTaskHistoryOrUpdate']),//获取上传的轮播图图片
       common() {
         return 'common'
       },
       active() {
-        return 'overDeadLined' //确定任务完成状态
+        return 'isInProgress' //确定任务完成状态
       },
       activeFont() {
         return this.active === 'isCompleted' ?
@@ -460,8 +498,9 @@
       Slide
     },
     methods: {
-      link_to_taskSetting(){
-        this.$router.push('taskSetting')
+
+      link_to_taskSetting() {
+        this.$router.push('addTaskSetting')
       },
       closeTask() {
         this.$router.push('conventEntry')
@@ -484,7 +523,11 @@
         this.$router.push('taskHistoryOrUpdate')
       },
       init() {
-        this.role = 'taskCreater'
+        this.role = 'taskCreater';
+        console.log(this.getTaskHistoryOrUpdate) //获取历史上传图片
+        if (!this.getTaskHistoryOrUpdate) {
+          this.showSlide = false;
+        }
         //确认访问者身份(头像)
         //确认当前任务详情(任务名,任务详细介绍)
         //获取轮播图(上传任务图片)

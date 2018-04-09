@@ -94,8 +94,7 @@ const state = {
     ispublic: false,
     membersCanSee: true,
     othersCanSee: []
-  }]
-
+  }],
 }
 
 export default state

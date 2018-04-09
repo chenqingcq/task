@@ -10,8 +10,8 @@
         </div>
       </div>
     </div>
-    <div class="slide" ref="slider">
-      <div class="slide-group" ref='slideGroup'>
+    <div class="slide" ref="slider" >
+      <div class="slide-group" ref='slideGroup' >
         <slot>
         </slot>
       </div>
