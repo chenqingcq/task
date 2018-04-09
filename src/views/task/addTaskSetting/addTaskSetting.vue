@@ -260,13 +260,13 @@
   <div class="task-container">
     <ul class="task-panel">
       <li class="task-item">
-        <label class="task-desc" for="item-1">
+        <label class="task-desc" for="taskTheme">
           <div class="icon">
             <img src="@/assets/img/icon-book.png" />
           </div>
           <div class="task-setting">任务主题</div>
         </label>
-        <input class="userInput" :disabled='disable' type="text" id="item-1" v-model.trim=" taskTheme" maxlength="20" placeholder="添加任务主题"
+        <input class="userInput" ref="taskTheme" type="text" id="taskTheme" v-model.trim=" taskTheme" maxlength="20" placeholder="添加任务主题"
         />
       </li>
       <li class="task-item">
@@ -440,9 +440,6 @@
       }
     },
     methods: {
-      disable() {
-        return this.role == 'taskCreater' ? true : false
-      },
       getExcutors(members) {
         let selected = members.filter((item, i) => {
           return item.isSelected == true
@@ -523,25 +520,19 @@
       endDate_change(val) {
         this.endTime = val;
       },
+      setTaskTheme() {
+        this.$refs.taskTheme.setAttribute('disabled', true);
+        this.taskTheme = this.getTaskTheme;
+        console.log(this.taskTheme)
+      },
       init() {
-        this.role == 'taskCreater' ? this.taskTheme = '' :
-          (this.role == 'taskManager' || this.role == 'watcher') ?
-          this.taskTheme = this.getTaskTheme : ""
+        this.role != 'taskCreater' ? this.setTaskTheme() : '';
       }
     },
     created() {
-      // this.role = 'taskManager'; //邀约他人可见
-      this.role = 'taskCreater' //项目发起人编辑节点
+      this.role = 'taskManager'; //邀约他人可见
+      // this.role = 'taskCreater' //项目发起人编辑节点
       console.log(this.taskExecutor)
-      this.members = [{
-          isAllowed: false,
-          name: '李四'
-        },
-        {
-          isAllowed: false,
-          name: '张三'
-        }
-      ]
     },
     mounted() {
       this.$nextTick(() => {
