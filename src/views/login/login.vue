@@ -89,12 +89,11 @@
         width: 100%;
         height: 50*2px;
         display: flex;
-        justify-content: center;
+        justify-content: space-around;
         li {
           float: left;
           height: 100%;
           width: 40*2px;
-          margin-left: 38*2px;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -154,29 +153,11 @@
     </section>
     <footer>
       <ul>
-        <li>
+        <li @touchstart='link_to_help' v-for="(item,index) in items" :key="index">
           <div>
-            <img src="@/assets/img/book.png">
+            <img :src="item.imgUrl">
           </div>
-          <span>操作手册</span>
-        </li>
-        <li>
-          <div>
-            <img src="@/assets/img/delete.png">
-          </div>
-          <span>流程演示</span>
-        </li>
-        <li>
-          <div>
-            <img src="@/assets/img/manul.png">
-          </div>
-          <span>在线客服</span>
-        </li>
-        <li>
-          <div>
-            <img src="@/assets/img/comments.png">
-          </div>
-          <span>客户对话</span>
+          <span>{{item.content}}</span>
         </li>
       </ul>
       <div class="footer-bg">
@@ -190,6 +171,23 @@
     name: 'login',
     data() {
       return {
+        items: [{
+            imgUrl: require('@/assets/img/book.png'),
+            content: '操作手册'
+          },
+          {
+            imgUrl: require('@/assets/img/delete.png'),
+            content: '流程演示'
+          },
+          {
+            imgUrl: require('@/assets/img/manul.png'),
+            content: '在线客服'
+          },
+          {
+            imgUrl: require('@/assets/img/comments.png'),
+            content: '客户对话'
+          },
+        ],
         telephone: '',
         checkCode: '',
         checkcode: '获取验证码',
@@ -200,6 +198,9 @@
     methods: {
       login() {
         this.$router.push('appointment')
+      },
+      link_to_help(){
+        this.$router.push('help')
       },
       settime(e) {
         // while (this.count > 0) {

@@ -1,110 +1,130 @@
 <style lang="less" scoped>
-  .panel{
-    line-height: 1.5;
-  }
-  .power-img-wrap{
-    height: 602px;
-    .power-img1{
-
-      float: left ;
-      width: 338px;
-      height: 602px;
-    }
-    .power-img2{
-
-      float: right ;
-      width: 338px;
-      height: 602px;
-    }
-    .power-img-center{
-      width: 338px;
-      height: 602px;
-    }
-
-  }
-  .power-desc{
-    padding : 20px 41px 10px;
-    .icon{
-
-      height: 32px;
-    }
-    .box-shadow{
-      box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.17);
-      div:first-child{
-        margin-bottom: 2px;
+  .help-container {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(244, 244, 244, 1);
+    position: fixed;
+    nav {
+      .banner {
+        height: 6*2px;
+        background: rgba(11, 175, 254, 1);
       }
     }
-  }
-  .im-logo{
-    height: 34px;
-    padding-left: 8px;
+    section {
+      ul {
+        display: flex;
+        margin-top: 12*2px;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        li {
+          display: inline-block;
+          width: 123*2px;
+          height: 109*2px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-wrap: wrap;
+          background: #fff;
+          margin-top: 3*2px;
+          box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
+          &:last-of-type {
+            margin-right: 126*2px;
+          }
+          div {
+            width: 56*2px;
+            height: 56*2px;
+            img {
+              display: block;
+              margin: 0 auto;
+              width: 28*2px;
+              height: auto;
+            }
+          }
+          span {
+            display: inline-block;
+            height: 20*2px;
+            margin-top: 10*2px;
+            width: auto;
+            font-size: 14*2px;
+            font-family: PingFangSC-Regular;
+            color: rgba(51, 51, 51, 1);
+            line-height: 20*2px;
+          }
+        }
+      }
+
+    }
+    footer {
+      position: absolute;
+      bottom: 0;
+      .imgBg {
+        width: 100%;
+        img {
+          display: inline-block;
+          width: 100%;
+          height: 112*2px;
+        }
+      }
+    }
   }
 
 </style>
 <template>
-    <div>
-      <div class="b-LR-10 b-T-10" >
-        <div class="panel  c_white-bg">
-          <div class="b-LR-10 b-TB-5 between">
-            <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 c_6">1.权限管理添加人员，人员权限添加权限</span></p>
-          </div>
-        </div>
-      </div>
-      <div class="b-LR-10 b-MT-10 power-img-wrap">
-        <img class="power-img1" src="../../assets/img/image-help01.png" alt="">
-        <img class="power-img2" src="../../assets/img/image-help02.png" alt="">
-      </div>
-      <div class="b-LR-10 b-T-10" >
-        <div class="panel  c_white-bg">
-          <div class="b-LR-10 b-TB-5 between">
-            <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 c_6">2.添加决策人、执行人</span></p>
-          </div>
-        </div>
-      </div>
-      <div class="power-desc">
-        <div class=" box-shadow">
-           <div class="c_white-bg b-LR-10 b-TB-15 b_d-flex b_flex-between-col b_flex-center-row ">
-              <span>
-                决策人
-              </span>
-             <img class="icon" src="../../assets/img/icon-right-slide02.png" alt="">
-           </div>
-           <div class="c_white-bg b-LR-10 b-TB-15 b_d-flex b_flex-between-col b_flex-center-row">
-              <span>
-                决策人
-              </span>
-              <img class="icon" src="../../assets/img/icon-right-slide02.png" alt="">
-           </div>
-        </div>
+  <div class="help-container">
+    <nav>
+      <div class="banner">
 
       </div>
-
-      <div class="b-LR-10 b-T-10" >
-        <div class="panel  c_white-bg">
-          <div class="b-LR-10 b-TB-5 between">
-            <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 c_6">3.项目管理添加项目，管理项目</span></p>
+    </nav>
+    <section>
+      <ul>
+        <li v-for="(item,index) in items" :key="index">
+          <div>
+            <img :src="item.imgUrl" />
+            <span>{{item.content}}</span>
           </div>
-        </div>
+        </li>
+      </ul>
+    </section>
+    <footer>
+      <div class="imgBg">
+        <img src="@/assets/img/image-background.png" />
       </div>
-      <div class="b-MT-10 power-img-wrap text-center">
-        <img src="../../assets/img/image-help-03.png" class="power-img-center" alt="">
-      </div>
-      <div class="btn-warp b-T-15 b-B-10">
-        <div class="btn-full-success b_d-flex text-center b_flex-center b_flex-center-col">
-          人工客服 <img class="im-logo" src="../../assets/img/icon-customer service.png" alt="">
-        </div>
-      </div>
-    </div>
+    </footer>
+  </div>
 </template>
 <script>
-    export default{
-        data(){
-            return{
+  export default {
+    data() {
+      return {
+        items: [{
+            imgUrl: require('@/assets/img/icon-manual.png'),
+            content: '操作手册'
+          },
+          {
+            imgUrl: require('@/assets/img/icon3.png'),
+            content: '流程演示'
+          },
+          {
+            imgUrl: require('@/assets/img/icon-certificate.png'),
+            content: '在线客服'
+          },
+          {
+            imgUrl: require('@/assets/img/icon.png'),
+            content: '访客群'
+          },
+          {
+            imgUrl: require('@/assets/img/icon2.png'),
+            content: '交互奖励'
+          },
+        ]
+      }
+    },
+    components: {
 
-            }
-        },
-        components:{
-
-        }
     }
+  }
+
 </script>
