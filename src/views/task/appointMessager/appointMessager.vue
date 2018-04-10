@@ -322,7 +322,7 @@
         if (!newVal) {
           this.$refs.deleteBtn.removeEventListener('touchstart',()=>{});
         } else {
-          // this.$refs.deleteBtn.addEventListener('touchstart', this.deleteExcutor)                
+          this.$refs.deleteBtn.addEventListener('touchstart', this.deleteExcutor)                
         }
       }
     },
@@ -408,16 +408,8 @@
                   //该成员存在
                   self.DELETE_TASK_EXECUTOR(selected); //删除输入的成员
                   self.sort(self.type) //重新排序                         
-                } else {
-                  self.$dialog.message({
-                    message: "该成员不存在！"
-                  });
-                }
-              } else {
-                self.$dialog.message({
-                  message: "输入要删除的成员！"
-                });
-              }
+                } 
+              } 
             }
           });
         }
@@ -492,7 +484,7 @@
     },
     created() {
       this.SORT_TASK_EXECUTOR(this.type);
-      this.init(); //第一次进入该页面 弹出邀请页面
+      this.init(); 
     },
     mounted() {
       this.activeClass('update');

@@ -498,12 +498,18 @@
       Slide
     },
     methods: {
-
       link_to_taskSetting() {
         this.$router.push('addTaskSetting')
       },
       closeTask() {
-        this.$router.push('conventEntry')
+        this.$dialog.notice({
+          state: 'pass',
+          title: '任务已关闭',
+          task: '展台基础工作'
+        })
+        this.timer = setTimeout(() => {
+          this.$router.push('conventEntry')
+        }, 1500);
       },
       passTask() {
         this.$dialog.notice({
@@ -546,7 +552,6 @@
         //获取任务节点信息(主体节点信息)
         //项目群信息(最多几个确认一下)
         //获取审批留留言信息
-        //根据访问者身份确认底部是(浏览or确认任务进度)
       }
     },
     created() {
