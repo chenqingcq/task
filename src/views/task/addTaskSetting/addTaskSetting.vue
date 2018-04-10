@@ -291,8 +291,11 @@
   input:disabled {
     background: #fff;
   }
-
+  .active_{
+    color: rgba(107, 167, 243, 1) !important;    
+  }
   .active {
+    color: rgba(107, 167, 243, 1) !important;
     border-bottom: 4*2px solid rgba(107, 167, 243, 1);
   }
 
@@ -405,7 +408,7 @@
     <ul class="task-panel permission-setting">
       <li class="task-item">
         <div v-for="(item,index) in setting" :key="index" @touchstart='changeIndex(index)'>
-          <p>{{item.title}}</p>
+          <p :class="{active_:currentIndex == index}">{{item.title}} </p>
           <p>
             <span :class='{active : currentIndex == index}'>{{item.detail}}</span>
           </p>
