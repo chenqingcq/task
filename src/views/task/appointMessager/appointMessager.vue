@@ -215,14 +215,20 @@
       text-align: center;
       background-image: linear-gradient(-180deg, #86c0f8 0%, #4e8cee 100%);
     }
-    .deleteExcutor {
+    .deleteBtn {
       flex: 1;
       font-family: PingFangSC-Regular;
       font-size: 16px*2;
       color: #ffffff;
       line-height: 45*2px;
       text-align: center;
+    }
+    .deleteExcutor {
       background-image: linear-gradient(-180deg, #f1baaf 0%, #ea6e5d 100%);
+    }
+    ;
+    .deleteExcutorDisable {
+      background: linear-gradient(180deg, rgba(224, 224, 224, 1), rgba(183, 183, 183, 1));
     }
   }
 
@@ -271,7 +277,7 @@
       </div>
       <div v-if="showBtntype" class="addExcutor" @touchstart='commandExcutor'>指派人员</div>
       <div v-if="!showBtntype" class="addExcutor" @touchstart='addExcutor'>添加人员</div>
-      <div class="deleteExcutor" @touchstart='deleteExcutor'>删除人员</div>
+      <div ref="deleteBtn" :class="{deleteBtn:true,deleteExcutor: showBtntype,deleteExcutorDisable :!showBtntype}" @touchstart.native='deleteExcutor'>删除人员</div>
     </div>
     <invites :showInvite='showInvite'></invites>
   </div>
@@ -288,6 +294,7 @@
       return {
         showBtntype: false, //默认显示添加成员按钮
         flag: false, //第一次进入添加成员界面
+        type: "updated",
         showInvite: false,
         navs: [{
             name: "更新",
@@ -308,6 +315,18 @@
     },
     computed: {
       ...mapGetters(["taskExecutor"])
+    },
+    watch: {
+      showBtntype(newVal, oldVal) {
+        console.log(newVal,oldVal)
+        if (!newVal) {
+          this.$refs.deleteBtn.removeEventListener('touchstart',()=>{});
+          this.showBtntype = false;
+        } else {
+          this.$refs.deleteBtn.addEventListener('touchstart', this.deleteExcutor)  
+          this.showBtntype =true;                 
+        }
+      }
     },
     methods: {
       inviteOthers() {
@@ -365,7 +384,15 @@
         if (this.showBtntype) {
           //已经选中成员
           console.log(this.nowIndex);
-          this.DELETE_TASK_EXECUTOR(this.nowIndex); //删除选中成员
+          let self = this;
+          this.$dialog.info({
+            btnName: 'delete',
+            placeholder: "确定删除成员",
+            operate() {
+              self.DELETE_TASK_EXECUTOR(self.nowIndex); //删除选中成员      
+              self.sort(self.type) //重新排序       
+            }
+          });
         } else {
           let self = this;
           this.$dialog.info({
@@ -373,7 +400,7 @@
             placeholder: "确定删除成员",
             operate(member) {
               //先确定该成员是否在成员列表 否则提示该成员不存在
-              if (member) {3
+              if (member) {
                 let selected = self.taskExecutor.findIndex((item, index) => {
                   return item.nickname == member;
                 });
@@ -381,6 +408,7 @@
                 if (selected > -1) {
                   //该成员存在
                   self.DELETE_TASK_EXECUTOR(selected); //删除输入的成员
+                  self.sort(self.type) //重新排序                         
                 } else {
                   self.$dialog.message({
                     message: "该成员不存在！"
@@ -417,6 +445,7 @@
         this.showBtntype = status.length ? true : false;
       },
       changeIndex(i, type) {
+        this.type = type;
         this.currentIndex = i; //对数组进行排序
         this.sort(type);
         this.clearClass(type);
@@ -462,7 +491,7 @@
       invites
     },
     created() {
-      this.SORT_TASK_EXECUTOR("updated");
+      this.SORT_TASK_EXECUTOR(this.type);
       this.init(); //第一次进入该页面 弹出邀请页面
     },
     mounted() {

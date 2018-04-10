@@ -344,7 +344,7 @@
             <img @load='loadImage' :src="item.imgUrl">
           </div>
         </slide>
-        <div v-else class="no-historyUpdate" >
+        <div v-else class="no-historyUpdate">
           <div class="logo">
             <img src="@/assets/img/image-notice.png" />
             <span>暂无资料上传</span>
@@ -506,7 +506,14 @@
         this.$router.push('conventEntry')
       },
       passTask() {
-        this.$router.push('conventEntry')
+        this.$dialog.notice({
+          state: 'pass',
+          title: '任务已通过',
+          task: '展台基础工作'
+        })
+        this.timer = setTimeout(() => {
+          this.$router.push('conventEntry')
+        }, 1500);
       },
       towardsUpdateHistory() { //查看历史上传
         this.$router.push({
@@ -541,7 +548,10 @@
       this.init();
       console.log(this.role)
     },
-    mounted() {}
+    mounted() {},
+    beforeDestroy() {
+      this.timer = null;
+    }
   }
 
 </script>
