@@ -57,7 +57,7 @@
     .editDeadTime {
       width: 100%;
       height: 300*2px;
-      overflow: hidden;
+      overflow:auto;
       background: #fff;
       ul {
         width: 100%;
