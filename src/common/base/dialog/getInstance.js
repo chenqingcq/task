@@ -44,12 +44,12 @@ export default function getInstance(options) {
       }
     })
   };
-  if (dialog && options.type === 'message') {
-    vue.set(dialog, 'type', options.type);
-    vue.set(dialog, 'message', options.message);
-    vue.set(dialog, 'icon', options.icon);
-    vue.set(dialog, 'show', true);
-  }
+  // if (dialog && options.type === 'message') {
+  //   vue.set(dialog, 'type', options.type);
+  //   vue.set(dialog, 'message', options.message);
+  //   vue.set(dialog, 'icon', options.icon);
+  //   vue.set(dialog, 'show', true);
+  // }
   if (options.type === 'message') {
     dialog = new DialogConstructor({
       data() {
