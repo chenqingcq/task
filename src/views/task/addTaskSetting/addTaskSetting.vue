@@ -4,7 +4,7 @@
     left: 0;
     top: 0;
     bottom: 0;
-    right:0;
+    right: 0;
     .task-panel {
       width: 100%;
       li.task-item {
@@ -124,11 +124,13 @@
     margin-right: 52px !important;
     display: flex !important;
     align-items: center !important;
+    color: rgba(102, 102, 102, 0.5) !important;
   }
 
   .editDeadTime {
     width: 100%;
     background: #fff;
+    margin-bottom: 6*2px;
     li {
       display: flex;
       align-items: center;
@@ -212,7 +214,7 @@
   .confirm {
     position: absolute;
     bottom: 8*2px;
-    right:8*2px; 
+    right: 8*2px;
     left: 8*2px;
     height: 44*2px;
     background: #fff;
@@ -291,9 +293,11 @@
   input:disabled {
     background: #fff;
   }
-  .active_{
-    color: rgba(107, 167, 243, 1) !important;    
+
+  .active_ {
+    color: rgba(107, 167, 243, 1) !important;
   }
+
   .active {
     color: rgba(107, 167, 243, 1) !important;
     border-bottom: 4*2px solid rgba(107, 167, 243, 1);
@@ -308,17 +312,26 @@
           <div class="icon">
             <img src="@/assets/img/icon-book.png" />
           </div>
-          <div class="task-setting">任务主题</div>
+          <div :class="[_tasksetting,{active_:isTaskTheme}]">项目主题</div>
         </label>
-        <input class="userInput" ref="taskTheme" type="text" id="taskTheme" v-model.trim=" taskTheme" maxlength="20" placeholder="添加任务主题"
+        <input class="userInput" ref="taskTheme" type="text" id="taskTheme" v-model.trim="taskTheme" maxlength="20" placeholder="添加项目主题"
         />
       </li>
+      <ul class="editDeadTime">
+        <li v-if="role == 'taskCreater'">
+          <img class="editpng" src="@/assets/img/icon-edit.png" />
+          <div class="editProgress">编辑项目节点</div>
+          <div class="editmore" @touchstart='editProgress'>
+            <img class="editmore" src="@/assets/img/icon-right-slide03.png">
+          </div>
+        </li>
+      </ul>
       <li class="task-item">
         <label class="task-desc" for="item0">
           <div class="icon">
             <img src="@/assets/img/icon-project.png" />
           </div>
-          <div class="task-setting"> 任务名称</div>
+          <div :class="[_tasksetting,{active_:isTaskName}]"> 任务名称</div>
         </label>
         <input class="userInput" type="text" id="item0" v-model.trim="taskname" maxlength="20" placeholder="添加任务名称" />
       </li>
@@ -327,7 +340,7 @@
           <div class="icon">
             <img src="@/assets/img/icon-describe.png" />
           </div>
-          <div class="task-setting"> 任务描述</div>
+          <div :class="[_tasksetting,{active_:isTaskDesc}]"> 任务描述</div>
         </label>
         <input class="userInput" type="text" id="item1" v-model.trim="taskdesc" maxlength="20" placeholder="添加任务描述" />
       </li>
@@ -336,10 +349,10 @@
           <div class="icon">
             <img src="@/assets/img/icon-start time.png" />
           </div>
-          <div class="task-setting">开始时间<img class="time-logo" src="@/assets/img/icon-right-slide03.png"/></div>
+          <div ref="startDate" class="task-setting">开始时间<img class="time-logo" src="@/assets/img/icon-right-slide03.png"/></div>
         </label>
 
-        <v-datetime class="userInput selectStartTime " format="YYYY.MM.DD" @on-change="startDate_change" placeholder="开始时间">
+        <v-datetime ref="startTime" class="userInput selectStartTime " format="YYYY.MM.DD" @on-change="startDate_change" placeholder="开始时间">
           <!-- 开始时间 -->
         </v-datetime>
 
@@ -349,20 +362,17 @@
           <div class="icon">
             <img src="@/assets/img/icon-end time.png" />
           </div>
-          <div class="task-setting">结束时间 <img class="time-logo" src="@/assets/img/icon-right-slide03.png"/></div>
+          <div  ref="endDate" class="task-setting">结束时间 <img class="time-logo" src="@/assets/img/icon-right-slide03.png"/></div>
         </label>
-        <v-datetime class="userInput selectEndTime " v-model="endTime" format="YYYY.MM.DD" @on-change="endDate_change" placeholder="結束时间">
-          <!-- 开始时间 -->
+        <v-datetime  ref="endTime" class="userInput selectEndTime " v-model="endTime" format="YYYY.MM.DD" @on-change="endDate_change" placeholder="结束时间">
         </v-datetime>
-        <!-- <input class="userInput selectEndTime" @focus='selectEndTime' type="text" id="item3" v-model="item3" maxlength="20" placeholder="结束时间"
-        /> -->
       </li>
       <li class="task-item">
         <label class="task-desc" for="item4">
           <div class="icon">
             <img src="@/assets/img/icon-standard.png" />
           </div>
-          <div class="task-setting">验收标准</div>
+          <div :class="[_tasksetting,{active_:isTaskStandard}]">验收标准</div>
         </label>
         <input class="userInput" type="text" id="item4" v-model.trim="standard" maxlength="20" placeholder="添加验收标准" />
       </li>
@@ -371,7 +381,7 @@
           <div class="icon">
             <img src="@/assets/img/icon-nominee.png" />
           </div>
-          <div class="task-setting">指定执行人</div>
+          <div class="task-setting" ref="excutor">指定执行人</div>
         </label>
         <div id="appointer" @touchstart='appointerManager'>
           <span class="name">{{executor}}</span>
@@ -380,30 +390,8 @@
           </span>
         </div>
       </li>
-      <li class="task-item " id="allowCreateTask" v-if="role == 'taskCreater'">
-        <label class="task-desc" for="item5">
-          <div class="icon">
-            <img src="@/assets/img/icon-task02.png" />
-          </div>
-          <div class="task-setting ">
-            <span class="allow—create">允许执行人创建任务</span><br>
-            <span class="allow—create-new">可在该项目下创建新任务</span>
-          </div>
-        </label>
-        <div class="switch-contaiener">
-          <v-switch :status="allowCreate" @getStatus="allowCreateChange"></v-switch>
-        </div>
-      </li>
     </ul>
-    <ul class="editDeadTime">
-      <li v-if="role == 'taskCreater'">
-        <img class="editpng" src="@/assets/img/icon-edit.png" />
-        <div class="editProgress">编辑项目节点</div>
-        <div class="editmore" @touchstart='editProgress'>
-          <img class="editmore" src="@/assets/img/icon-right-slide03.png">
-        </div>
-      </li>
-    </ul>
+
     <div class="permit-setting"><span>权限设置</span></div>
     <ul class="task-panel permission-setting">
       <li class="task-item">
@@ -425,7 +413,7 @@
     mapGetters
   } from 'vuex';
   let reflect_to_task = {
-    taskTheme: '任务主题',
+    taskTheme: '项目主题',
     taskname: '任务名称',
     taskdesc: '任务描述',
     startTime: '开始时间',
@@ -465,6 +453,21 @@
     },
     computed: {
       ...mapGetters(['taskExecutor', 'getTaskSetting', 'getTaskTheme']),
+      isTaskTheme() {
+        return this.taskTheme.length ? true : false;
+      },
+      isTaskName() {
+        return this.taskname.length ? true : false;
+      },
+      isTaskDesc() {
+        return this.taskdesc.length ? true : false;
+      },
+      isTaskStandard() {
+        return this.standard.length ? true : false;
+      },
+      _tasksetting() {
+        return 'task-setting'
+      }
     },
     watch: {
       taskExecutor(newVal, oldVal) {
@@ -475,6 +478,7 @@
       if (from.path == "/appointMessager" && to.path == '/addTaskSetting') {;
         next((vm) => {
           console.log(vm.taskExecutor) //过滤选中的执行人
+          vm.$refs.excutor.classList.add('active_')
           vm.getExcutors(vm.taskExecutor)
         })
       } else {
@@ -575,9 +579,11 @@
         this.allowedLook = status;
       },
       startDate_change(val) {
+        this.$refs.startDate.classList.add('active_');
         this.startTime = val;
       },
       endDate_change(val) {
+        this.$refs.endDate.classList.add('active_')
         this.endTime = val;
       },
       setTaskTheme() {

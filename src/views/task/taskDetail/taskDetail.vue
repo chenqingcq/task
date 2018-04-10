@@ -498,12 +498,18 @@
       Slide
     },
     methods: {
-
       link_to_taskSetting() {
         this.$router.push('addTaskSetting')
       },
       closeTask() {
-        this.$router.push('conventEntry')
+        this.$dialog.notice({
+          state: 'pass',
+          title: '任务已关闭',
+          task: '展台基础工作'
+        })
+        this.timer = setTimeout(() => {
+          this.$router.push('conventEntry')
+        }, 1500);
       },
       passTask() {
         this.$dialog.notice({

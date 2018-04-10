@@ -20,7 +20,7 @@
       </template>
       <template v-if="type==='notice'" v-show="showNotice">
         <div class="panel-notice">
-          <img class="close" @touchstart='close' src="../../../assets/img/icon-close.png" />
+          <!--<img class="close" @touchstart='close' src="../../../assets/img/icon-close.png" />-->
           <div class="top">
             <div class="noticeIcon">
               <img class="noticeImg" :src="imgUrl" />
@@ -195,7 +195,7 @@
     align-items: center;
     .panel-notice {
       min-width: 252*2px;
-      min-height: 275*2px;
+      min-height: 252*2px;
       background-color: #fff;
       border-radius: 18px;
       position: relative;
