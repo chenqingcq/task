@@ -1,8 +1,10 @@
 <template>
   <div  :style = '[appContainerCss]'  >
-    <keep-alive>
-       <router-view class="wrapper" />
-    </keep-alive>
+    <!--<keep-alive>-->
+      <transition :name="transitionName">
+        <router-view class="wrapper Router" />
+     </transition>
+    <!--</keep-alive>-->
     <!--底部 会展 logo - 会管家-展会应用商店-->
     <v-bottom-sign v-if="isShowBottomSign"></v-bottom-sign>
   </div>
@@ -20,7 +22,10 @@
         appContainerCss:{
           backgroundColor : '#f4f4f4',
           minHeight: '100%'
-        }
+        },
+
+        transitionName: 'slide-right'  // 默认动态路由变化为slide-right
+
 
       };
     },
@@ -31,6 +36,16 @@
 
         this.isShowBottomSign  = to.meta.isShowBottomSign ? true : false
         this.appContainerCss.backgroundColor = to.meta.isWhiteBg ? '#fff' : '#f4f4f4'
+
+        let isBack = this.$router.isBack  //  监听路由变化时的状态为前进还是后退
+        if(isBack) {
+          this.transitionName = 'slide-right'
+        } else {
+          this.transitionName = 'slide-left'
+        }
+        this.$router.isBack = false
+
+
       }
     }
   };
@@ -47,4 +62,34 @@
   .wrapper{
     min-height: 629*2px;
   }
+
+
+  .Router {
+    /*position: absolute;*/
+    width: 100%;
+    transition: all .8s ease;
+    /*top: 40px;*/
+  }
+
+  .slide-left-enter,
+  .slide-right-leave-active {
+    position: absolute;
+    opacity: 0;
+    -webkit-transform: translate3d(100%, 0,0);
+    transform: translate3d(100%, 0,0);
+  }
+
+  .slide-left-leave-active,
+  .slide-right-enter {
+    position: absolute;
+    opacity: 0;
+    -webkit-transform: translate3d(-100%, 0,0);
+    transform: translate3d(-100% 0,0);
+  }
+  .slide-left-enter-to,.slide-right-enter-to{
+    position: relative!important;
+  }
+
+
+
 </style>

@@ -37,7 +37,7 @@
       .panel-conf{
         display: inline-block;
         width: 516px;
-        height: 107.00000025px;
+        height: 108px;
         .text{
           margin-left: 20px;
           margin-top: 14px;
@@ -226,130 +226,6 @@
             </div>
           </template>
         </div>
-
-
-        <!--<div class="right-panel">-->
-
-        <!--<div class="start-section b_d-flex ">-->
-        <!--<div class="timer-shaft">-->
-        <!--<div class="c_7 b_FS-18 b_font-PFR text-center">-->
-        <!--起点-->
-        <!--</div>-->
-        <!--<div class="light start"></div>-->
-        <!--<div class="link-dot"></div>-->
-        <!--<div class="link-dot"></div>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="edit-section b_d-flex b_flex-center">-->
-        <!--<div class="timer-shaft">-->
-        <!--<div class="c_white-bg c_7 b_FS-18 b_font-PFR text-center">-->
-        <!--{{ todayDate }}-->
-        <!--</div>-->
-        <!--<div class="light doing"></div>-->
-        <!--<div class="link-dot"></div>-->
-        <!--<div class="link-dot"></div>-->
-        <!--<div class="link-dot"></div>-->
-        <!--<div class="link-dot b-MB-0"></div>-->
-        <!--&lt;!&ndash;<div class="light start"></div>&ndash;&gt;-->
-        <!--</div>-->
-        <!--<div class="panel panel-conf edit">-->
-        <!--<textarea class="input" v-model="newSectionVal" name="" placeholder="这里填写节点" id="" cols="30" ></textarea>-->
-        <!--<img v-if="newSectionVal.length ==0" class="placeholder-icon" src="../../assets/img/icon-edit02.png" alt="">-->
-        <!--<div class="btn-small-primary b-MT-5">提交</div>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="timer-shaft">-->
-        <!--<div class="link-dot b-MT-0"></div>-->
-        <!--<div class="link-dot"></div>-->
-        <!--<div class="link-dot b-MB-0"></div>-->
-        <!--</div>-->
-        <!--<div class="complete-section b_d-flex b_flex-center">-->
-        <!--<div class="timer-shaft">-->
-
-        <!--<div class="c_white-bg c_7 b_FS-18 b_font-PFR text-center">-->
-        <!--01/16-->
-        <!--</div>-->
-
-        <!--</div>-->
-        <!--<div class="panel panel-conf">-->
-        <!--<div class="text c_6">-->
-        <!--建筑的修饰布置工作，建筑的修饰布置工作。-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="timer-shaft">-->
-        <!--<div class="link-dot b-MT-0"></div>-->
-        <!--<div class="link-dot"></div>-->
-        <!--<div class="link-dot"></div>-->
-        <!--<div class="link-dot"></div>-->
-        <!--<div class="link-dot b-MB-0"></div>-->
-        <!--</div>-->
-        <!--<div class="doing-section b_d-flex b_flex-center">-->
-        <!--<div class="timer-shaft">-->
-        <!--<div class="c_white-bg c_primary b_FS-18 b_font-PFR text-center">-->
-        <!--01/16-->
-        <!--</div>-->
-        <!--<div class="b_FS-10 c_7 b_font-PFR text-center">运行中</div>-->
-        <!--<div class="light doing"></div>-->
-        <!--</div>-->
-        <!--<div class="panel panel-conf">-->
-        <!--<div class="text c_11">-->
-        <!--建筑的修饰布置工作，建筑的修饰布置工作。-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="timer-shaft">-->
-        <!--<div class="link-dot b-MT-0"></div>-->
-        <!--<div class="link-dot"></div>-->
-        <!--<div class="link-dot"></div>-->
-        <!--<div class="link-dot"></div>-->
-        <!--<div class="link-dot b-MB-0"></div>-->
-        <!--</div>-->
-        <!--<div class="complete-section b_d-flex b_flex-center">-->
-        <!--<div class="timer-shaft">-->
-        <!--<div class="c_white-bg c_7 b_FS-18 b_font-PFR text-center">-->
-        <!--01/16-->
-        <!--</div>-->
-        <!--<div class="light pass"></div>-->
-
-        <!--</div>-->
-        <!--<div class="panel panel-conf">-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="timer-shaft">-->
-        <!--<div class="link-dot b-MT-0"></div>-->
-        <!--<div class="link-dot"></div>-->
-        <!--<div class="link-dot"></div>-->
-        <!--<div class="link-dot"></div>-->
-        <!--<div class="link-dot b-MB-0"></div>-->
-        <!--</div>-->
-
-        <!--<div class="complete-section b_d-flex b_flex-center">-->
-        <!--<div class="timer-shaft">-->
-
-        <!--<div class="c_white-bg c_7 b_FS-18 b_font-PFR text-center">-->
-        <!--01/16-->
-        <!--</div>-->
-        <!--<div class="light pass"></div>-->
-
-        <!--</div>-->
-        <!--<div class="panel panel-conf">-->
-        <!--</div>-->
-        <!--</div>-->
-
-
-        <!--<div class="end-section">-->
-
-        <!--<div class="timer-shaft">-->
-        <!--<div class="link-dot b-MT-0"></div>-->
-        <!--<div class="link-dot"></div>-->
-        <!--<div class="c_7 b_FS-18 b_font-PFR text-center">-->
-        <!--终点-->
-        <!--</div>-->
-        <!--<div class="light end"></div>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
       </div>
       <img src="../../assets/img/image-background.png" alt="" class="bottom-bg">
     </div>

@@ -363,7 +363,7 @@
       <div class="panel b-MT-10 c_white-bg">
         <div class="b-LR-10 b-T-5 between">
           <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 b_FS-14 c_6 ">主体节点</span></p>
-          <div @touchstart='taskHistoryOrUpdate' class="more b_FS-10  c_7">
+          <div @touchstart='linkToSection' class="more b_FS-10  c_7">
             更多项目节点<img src="@/assets/img/icon-right-slide03.png" />
           </div>
         </div>
@@ -518,6 +518,11 @@
       towardsUpdateHistory() { //查看历史上传
         this.$router.push({
           path: 'taskHistoryOrUpdate',
+        })
+      },
+      linkToSection(){
+        this.$router.push({
+          path: '/section',
         })
       },
       loadImage() { //轮播加载
