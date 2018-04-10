@@ -17,6 +17,8 @@ import '../src/common/base/dialog'
 import Load from '@/common/base/loading'
 import AppCom from '../src/common/index.js'
 
+import './assets/css/animate.less'
+
 Vue.use(AppCom);
 Vue.use(Load)
 

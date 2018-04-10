@@ -1,7 +1,7 @@
 <template>
   <div  :style = '[appContainerCss]'  >
     <keep-alive>
-       <router-view class="wrapper" />      
+       <router-view class="wrapper" />
     </keep-alive>
     <!--底部 会展 logo - 会管家-展会应用商店-->
     <v-bottom-sign v-if="isShowBottomSign"></v-bottom-sign>
@@ -39,6 +39,7 @@
 <style lang='less'  >
   @import "./assets/css/theme/theme.less";
   @import "./assets/css/normalize.less";
+  @import "./assets/css/animate.less";
   @import "./assets/css/common.less";
   #app{
     min-height: 100%!important;

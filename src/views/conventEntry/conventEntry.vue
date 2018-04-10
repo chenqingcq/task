@@ -10,7 +10,7 @@
           <img class="user-photo" src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">
           <img class="menu" @click="showSlideBar" src="../../assets/img/icon-menu.png" alt="">
           <span class="project-name c_white b_FS-18 text-center">展会项目一</span>
-          <img class="share" src="../../assets/img/icon-share.png" alt="">
+          <!--<img style="visibility: hidden" class="share" src="../../assets/img/icon-share.png" alt="">-->
           <img class="add" @click="addTask" src="../../assets/img/icon-add.png" alt="">
         </div>
         <div class="calendar-wrapper">

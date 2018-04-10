@@ -1,11 +1,21 @@
 @import "animate.less";
+
+@sliderBarZindex : 4 ;
+@calendarZindex: 2 ;
+@taskWrapZindex : 1 ;
+
 .header-wrapper{
+  position: fixed;
+  top: 0 ;
+  left: 0 ;
+  z-index: @calendarZindex ;
   width: 100% ;
   height: 54*2px;
   .header-main{
     display: flex;
     align-items: center;
     padding: 7*2px 7*2px 0 10*2px;
+
     img{
       display: inline-block;
     }
@@ -25,10 +35,12 @@
       font-family: PingFangSC-Semibold;
     }
     .share, .add{
-      width: 24*2px;
+
     }
     .add{
-      padding-left: 6*2px;
+
+      width: 44px;
+      margin-left: 30*2px;
     }
   }
   .calendar-wrapper{
@@ -38,13 +50,13 @@
 // 动画层级问题
 .slide-bar{
   position: relative;
-  z-index : 2;
+  z-index : @sliderBarZindex;
 }
 // 动画层级问题
 .task-list-wrapper{
-  margin-top: 34*2px;
+  padding-top: 156px;
   position: relative;
-  z-index: 1;
+  z-index: @taskWrapZindex;
   .panel{
     height: 70*2px ;
     position: relative;

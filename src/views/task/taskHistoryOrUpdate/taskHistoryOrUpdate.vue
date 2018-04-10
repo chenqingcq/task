@@ -59,6 +59,7 @@
             <!--</div>-->
           </div>
           <div class="panel panel-conf">
+            <img @click="deleteTask( key )" class = "delete"  src="../../../assets/img/icon-close.png" alt="">
             <div class="text c_11">
               建筑的修饰布置工作，建筑的修饰布置工作。
             </div>
@@ -80,6 +81,70 @@
         </div>
       </template>
 
+      <div class="b-LR-10">
+
+        <div class="panel  c_white-bg task-desc-bar">
+              <div class="b-LR-10 b-T-5 between">
+                <template v-if="!isShowAllTask" >
+                  <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 c_6">任务名称</span></p>
+                  <div class=" b_FS-14 c_11">
+                    展台基础工作
+                    <img @click.self="isShowAllTask = true" class="tran" src="../../../assets/img/icon-slide downward.png"  alt="">
+                  </div>
+                </template>
+
+
+                <template v-if="isShowAllTask" >
+                  <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 c_6">任务名称</span></p>
+                  <img  @click.self="isShowAllTask = false"  class="tran-up" src="../../../assets/img/icon-slide downward.png"  alt="">
+                </template>
+            </div>
+          <transition
+            name="top"
+          >
+            <div class="b-LR-20 b-TB-5 b_font-PFR"  v-if="isShowAllTask"  >
+              <div class="c_11 b_FS-12 b-B-10">
+                展台基础工作
+              </div>
+              <div class="c_6 b_FS-14">
+                任务描述
+              </div>
+              <div class="c_11 b_FS-12 b-B-10">
+                展台工作安排布置展台工作安排布置展台工作安排布置展台工作安排布置展台工作安排布置
+              </div>
+              <div class="c_6 b_FS-14">
+                任务描述
+              </div>
+              <div class="c_11 b_FS-12 b-B-5">
+                展台工作安排布置展台工作安排布置展台工作安排布置展台工作安排布置展台工作安排布置
+              </div>
+            </div>
+          </transition>
+        </div>
+
+      </div>
+
+      <div class="b-LR-10">
+        <div class="panel-dot bottom-panel c_white-bg ">
+          <div class="b-LR-10 b-TB-5 text-main b_font-PFM between middle">
+            <div  class="date c_11 text-center">
+              <div >
+                01/06
+              </div>
+              <div class="b_FS-12"
+              >开始时间</div>
+            </div>
+            <div class="line c_7-bg "></div>
+            <div  class="date c_11 text-center">
+              <div >
+                01/06
+              </div>
+              <div class="b_FS-12"
+              >开始时间</div>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
     </div>
@@ -129,8 +194,9 @@
           imgs:[
             'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b'
           ]
-        }]
+        }],
 
+        isShowAllTask : false
 
       }
     },
@@ -159,6 +225,10 @@
           date
         }
 //        return ( m <10 ? ('0'+ m ): m )+ '/' + (day < 10 ? ('0' + day) : day)
+      },
+      deleteTask(key){
+        console.log(key)
+        this.processData.splice(key,1 )
       }
     }
 

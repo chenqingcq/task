@@ -12,6 +12,8 @@ import calendar from './base/calendar'
 // 时间选择器
 import dateTimer from './base/vux-datetime/index.vue' // 时间选择器
 
+// 自定义弹层
+import pop from './base/pop/index.vue' //
 
 const install = Vue => {
   // 开关
@@ -22,8 +24,8 @@ const install = Vue => {
   Vue.component(calendar.name, calendar)
   // 日期选择器
   Vue.component(dateTimer.name, dateTimer)
-
-
+  //
+  Vue.component( pop.name, pop )
 }
 
 export default install

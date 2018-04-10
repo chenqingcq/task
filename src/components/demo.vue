@@ -37,8 +37,8 @@
       </div>
       <div class="btn-warp b-MT-10">
         .btn-small-success
-        <div class="btn-small-primary">
-          添加节点
+        <div @click="openPop" class="btn-small-primary">
+          打开popUp
         </div>
       </div>
       <div class="b-LR-10 b-MT-10">
@@ -77,7 +77,11 @@
       <div class="b_status pending">进行中</div>
       <div class="b_status out-date">已超时</div>
 
-
+      <v-pop ref="popup" animate="left" @onHide="hideCb" >
+        <div class="bottom c_white-bg">
+          121adl;kfskjflasjklfjlkasdjfljsad
+        </div>
+      </v-pop>
 
     </div>
 </template>
@@ -85,7 +89,7 @@
     export default{
         data(){
             return{
-              isOpen : false
+              isOpen : false ,
             }
         },
         components:{
@@ -95,7 +99,17 @@
           statusChange(status){
             this.isOpen = status
             console.log(status, this.isOpen)
+          },
+          openPop(){
+            this.$refs.popup.open()
+          },
+          closePop(){
+            this.$refs.popup.close()
+          },
+          hideCb(){
+            console.log('do sthing..')
           }
+
         },
     }
 </script>

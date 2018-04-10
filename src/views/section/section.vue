@@ -41,7 +41,7 @@
         .text{
           margin-left: 20px;
           margin-top: 14px;
-          width: 490px;
+          width: 470px;
           line-height:40px;
           font-size: 28px;
         }
@@ -211,6 +211,7 @@
                 <div v-if="key != (sectionDataLook.length -1)" class="light" :class="[section.isDoing? 'doing': 'pass']"></div>
               </div>
               <div class="panel panel-conf">
+                <img @click="deleteSect( key )" class = "delete"  src="../../assets/img/icon-close.png" alt="">
                 <div class="text c_11">
                   建筑的修饰布置工作，建筑的修饰布置工作。
                 </div>
@@ -401,6 +402,9 @@
             var day = d.getDate()
             console.log(( m <10 ? ('0'+ m ): m )+ '/' + (day < 10 ? ('0' + day) : day))
             return ( m <10 ? ('0'+ m ): m )+ '/' + (day < 10 ? ('0' + day) : day)
+          },
+          deleteSect(key){
+
           }
         }
 
