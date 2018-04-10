@@ -398,12 +398,11 @@
         <div v-for="(item,index) in setting" :key="index" @touchstart='changeIndex(index)'>
           <p :class="{active_:currentIndex == index}">{{item.title}} </p>
           <p>
-            <span :class='{active : currentIndex == index}'>{{item.detail}}</span>
+            <span :class='{active :currentIndex == index}'>{{item.detail}}</span>
           </p>
         </div>
       </li>
     </ul>
-    <!--项目发起人可见项目节点-->
     <div @touchstart='confirm' class="confirm">确定</div>
   </div>
 </template>
