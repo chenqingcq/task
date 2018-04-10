@@ -318,13 +318,11 @@
     },
     watch: {
       showBtntype(newVal, oldVal) {
-        console.log(newVal,oldVal)
+        console.log('btn'+newVal)
         if (!newVal) {
           this.$refs.deleteBtn.removeEventListener('touchstart',()=>{});
-          this.showBtntype = false;
         } else {
-          this.$refs.deleteBtn.addEventListener('touchstart', this.deleteExcutor)  
-          this.showBtntype =true;                 
+          // this.$refs.deleteBtn.addEventListener('touchstart', this.deleteExcutor)                
         }
       }
     },
@@ -390,14 +388,15 @@
             placeholder: "确定删除成员",
             operate() {
               self.DELETE_TASK_EXECUTOR(self.nowIndex); //删除选中成员      
-              self.sort(self.type) //重新排序       
+              self.sort(self.type); //重新排序  
+              self.showBtntype = false;
             }
           });
         } else {
           let self = this;
           this.$dialog.info({
             btnName: "delete",
-            placeholder: "确定删除成员",
+            placeholder: "选择要删除的成员",
             operate(member) {
               //先确定该成员是否在成员列表 否则提示该成员不存在
               if (member) {
@@ -443,6 +442,7 @@
           return item.isSelected;
         });
         this.showBtntype = status.length ? true : false;
+        console.log(this.showBtntype)
       },
       changeIndex(i, type) {
         this.type = type;

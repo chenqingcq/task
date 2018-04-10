@@ -86,7 +86,7 @@
   }
 
   .comments-container {
-    overflow: hidden;
+    overflow:auto;
     .lisItem {
       width: 100%;
       height: auto;
