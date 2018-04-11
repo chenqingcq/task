@@ -269,6 +269,8 @@
 
         },
         mounted(){
+          const mode = this.$route.query.mode
+          this.mode = mode == 'edit' ? 'edit' : 'look'
           this.todayDate = this.initDate()
         },
         methods:{

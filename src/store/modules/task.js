@@ -101,7 +101,7 @@ const state = {
     othersCanSee: []
   }],
 }
-const matutaions = {
+const mutations = {
   [types.SET_USER_TYPE](state, type) {
     state.user.type = type;
   },
@@ -182,5 +182,5 @@ const matutaions = {
 
 export default {
   state ,
-  matutaions ,
+  mutations
 }

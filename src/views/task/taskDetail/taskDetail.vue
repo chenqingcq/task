@@ -346,7 +346,7 @@
               </div>
             </div>
             <div class="task-focus">
-              <div @touchstart='link_to_taskSetting' v-show="role =='taskCreater'" class="focus-star">
+              <div @touchstart='link_to_taskSetting' v-show="role =='creator'" class="focus-star">
                 <img src="@/assets/img/icon-set up.png" />
               </div>
               <div class="focus-star">
@@ -405,13 +405,26 @@
       </div>
     </div>
     <comments :members='members'></comments>
-    <div class="judge-btn">
-      <div class="pass" @touchstart='closeTask'>关闭任务</div>
-      <div class="failed" @touchstart='passTask'> 验收通过</div>
+    <div v-if="role == 'creator'"
+         class="btn-warp b-LR-8 clearfix">
+      <div @touchstart='closeTask' class="btn-normal-warn b_left b-MT-10">
+        关闭任务
+      </div>
+      <div @touchstart='passTask' class="btn-normal-success b_right b-MT-10">
+        验收通过
+      </div>
     </div>
+    <!-- 执行者 -->
+    <div v-if="role == 'operator'"
+         class="btn-warp b-LR-8">
+      <div @touchstart="rejectTask" class="btn-full-warn b-MT-10 ">
+        拒绝任务
+      </div>
+    </div>
+
   </div>
 </template>
-<script>
+<script type="text/babel">
   import comments from '@/views/comments/comments';
   import Slide from '@/common/base/slide/slide.vue';
   import {
@@ -421,7 +434,6 @@
   export default {
     data() {
       return {
-        role: '',
         loop: true,
         showSlide: true,
         currentIndex: 0,
@@ -497,6 +509,9 @@
     },
     computed: {
       // ...mapGetters(['getTaskHistoryOrUpdate']),//获取上传的轮播图图片
+      ...mapGetters({
+        role: 'getProjectRole'
+      }),
       common() {
         return 'common'
       },
@@ -508,7 +523,8 @@
           '已完成' : this.active == 'isInProgress' ?
           '进行中' : this.active == 'overDeadLined' ?
           '已超时' : ''
-      }
+      },
+
     },
     components: {
       comments,
@@ -538,6 +554,16 @@
           this.$router.push('conventEntry')
         }, 1500);
       },
+      rejectTask(){
+        this.$dialog.notice({
+          state: 'pass',
+          title: '任务已拒绝',
+          task: '展台基础工作'
+        })
+        this.timer = setTimeout(() => {
+          this.$router.push('conventEntry')
+        }, 1500);
+      },
       towardsUpdateHistory() { //查看历史上传
         this.$router.push({
           path: 'taskHistoryOrUpdate',
@@ -558,7 +584,7 @@
         this.$router.push('taskHistoryOrUpdate')
       },
       init() {
-        this.role = 'taskCreater';
+
         console.log(this.getTaskHistoryOrUpdate) //获取历史上传图片
         if (!this.getTaskHistoryOrUpdate) {
           this.showSlide = false;
@@ -573,7 +599,6 @@
     },
     created() {
       this.init();
-      console.log(this.role)
     },
     mounted() {},
     beforeDestroy() {

@@ -319,10 +319,10 @@
           />
         </li>
         <ul class="editDeadTime">
-          <li v-if="role == 'creator'">
+          <li v-if="role == 'creator'" @touchstart='editSection' >
             <img class="editpng" src="@/assets/img/icon-edit.png" />
             <div class="editProgress">编辑项目节点</div>
-            <div class="editmore" @touchstart='editProgress'>
+            <div class="editmore" >
               <img class="editmore" src="@/assets/img/icon-right-slide03.png">
             </div>
           </li>
@@ -516,7 +516,12 @@
       }),
       editProgress() {
         this.$router.push({
-          path: 'taskHistoryOrUpdate',
+          path: 'taskHistoryOrUpdate'
+        }) //编辑项目节点
+      },
+      editSection(){
+        this.$router.push({
+          path: '/section?mode=edit'
         }) //编辑项目节点
       },
       confirm() {
