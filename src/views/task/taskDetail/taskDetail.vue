@@ -1,4 +1,5 @@
 <style lang="less" scoped>
+  @import "../../../assets/css/animate.less";
   @keyframes scale {
     0% {
       transform: scale(1.5,1.5);
@@ -79,9 +80,10 @@
           .task-focus {
             width: 80*2px;
             height: 32*2px;
+            padding-left: 100px;
             .focus-star {
               height: 100%;
-              width: calc(50%+1px);
+              width: 74ox;
               display: inline-block;
               &:nth-child(2) {
                 float: right;
@@ -327,6 +329,102 @@
     }
   }
 
+
+
+  @-webkit-keyframes zoomInDown {
+    from {
+      opacity: 0;
+      -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+      transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+      -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+      animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+
+    60% {
+      opacity: 1;
+      -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+      transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+      -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+      animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    }
+  }
+
+  @keyframes zoomInDown {
+    from {
+      opacity: 0;
+      -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+      transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+      -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+      animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+
+    60% {
+      opacity: 1;
+      -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+      transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+      -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+      animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    }
+  }
+
+  .zoomInDown {
+    -webkit-animation-name: zoomInDown;
+    animation-name: zoomInDown;
+  }
+
+  @-webkit-keyframes zoomOut {
+    from {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0;
+      -webkit-transform: scale3d(0.3, 0.3, 0.3);
+      transform: scale3d(0.3, 0.3, 0.3);
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes zoomOut {
+    from {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0;
+      -webkit-transform: scale3d(0.3, 0.3, 0.3);
+      transform: scale3d(0.3, 0.3, 0.3);
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+
+  .zoomOut {
+    -webkit-animation-name: zoomOut;
+    animation-name: zoomOut;
+  }
+
+  .zoomInDown-enter-active{
+    .zoomInDown;
+    .animated;
+  }
+  .zoomInDown-leave-active{
+    .zoomOut;
+    .animated(0.1s);
+  }
+  .canelLike-leave-active{
+    .fadeOut ;
+    .animated(0.1s) ;
+  }
+  .canelLike-enter-active{
+    .fadeIn ;
+    .animated ;
+  }
 </style>
 <template>
   <div class="task-detail-container">
@@ -346,12 +444,20 @@
               </div>
             </div>
             <div class="task-focus">
-              <div @touchstart='link_to_taskSetting' v-show="role =='creator'" class="focus-star">
-                <img src="@/assets/img/icon-set up.png" />
-              </div>
-              <div class="focus-star">
-                <img class="focus-star" src="@/assets/img/icon-collection-highlight.png" />
-              </div>
+              <!--<div @touchstart='link_to_taskSetting' style="visibility: hidden" class="focus-star">-->
+                <!--<img src="@/assets/img/icon-set up.png" />-->
+              <!--</div>-->
+              <transition name="zoomInDown">
+                <div v-if='isLike' @touchstart="toggleLike" class="focus-star " >
+                  <img class="focus-star" src="@/assets/img/icon-collection-highlight.png" />
+                </div>
+              </transition>
+              <transition name="canelLike">
+                <div v-if="!isLike" @touchstart="toggleLike" class="focus-star">
+                  <img class="focus-star" src="@/assets/img/icon-collection-normal.png" />
+                </div>
+              </transition>
+
             </div>
           </div>
         </div>
@@ -440,6 +546,8 @@
         autoPlay: false,
         height: 382,
         width: 608,
+        // 是否关注
+        isLike : false ,
         //项目群
         parties: [{
             partyImg: 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
@@ -531,6 +639,9 @@
       Slide
     },
     methods: {
+      toggleLike(){
+        this.isLike = !this.isLike
+      },
       link_to_taskSetting() {
         this.$router.push('addTaskSetting')
       },
