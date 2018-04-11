@@ -75,24 +75,31 @@
   }
 
   @keyframes rotate {
-    to {
-      transform: rotate(360deg);
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: .8;
+    }
+
+    100% {
+      opacity: 1;  
     }
   }
 
   .rotate {
-    animation: rotate 2s linear infinite;
+    animation: rotate 1s linear;
   }
 
 </style>
 <template>
   <transition>
-    <div class="invite-container" v-show="show">
+    <div class="invite-container" v-show="!show">
       <div class="invite-panel">
         <div class="invite-img" ref="invite">
-          <img @touchstart='close' ref="close" class="close-img" src="@/assets/img/icon-close01.png" />
+          <img @touchstart='close' ref="close"  class="close-img" src="@/assets/img/icon-close01.png" />
           <img src="@/assets/img/image-popup.png" />
-          <div class="invite-more">点击邀请更多好友</div>
+          <div ref="invitemore" class="invite-more">点击邀请更多好友</div>
           <div class="invite-fast">还不是好友赶快邀请</div>
         </div>
       </div>
@@ -118,6 +125,7 @@
       },
       init() {
         this.$refs.invite.classList.add('active');
+        this.$refs.invitemore.classList.add('rotate');
         this.$refs.close.classList.add('rotate');
       },
     },

@@ -1,6 +1,7 @@
 <style lang="less" scoped>
   .appointer-container {
     width: 100%;
+    height: 100vh;
     header {
       width: 100%;
       height: 65*2px;
@@ -18,7 +19,7 @@
         height: 15*2px;
         z-index: 1;
       }
-      ul {
+      ul.list-items {
         position: absolute;
         bottom: 15*2px;
         z-index: 1;
@@ -238,7 +239,7 @@
   <div class="appointer-container">
     <header>
       <img class="bg" src='@/assets/img/appointer.png' />
-      <ul>
+      <ul class="list-items">
         <li class="lists">
           <span>成员列表</span>
         </li>
@@ -247,6 +248,13 @@
         </li>
       </ul>
       <img @touchstart='inviteOthers' class="invite" src="@/assets/img/icon-menu.png">
+      <share :showShare='showShare'>
+        <ul class="share-items">
+          <div class="arrow"></div>
+          <li><img src="@/assets/img/01.png"/>微信分发</li>
+          <li><img src="@/assets/img/02.png"/>面对面发</li>
+        </ul>
+      </share>
     </header>
     <div class="editDeadTime">
       <scroll>
@@ -285,6 +293,7 @@
 <script>
   import scroll from "@/common/base/scroll/scroll.vue";
   import invites from "./invite.vue";
+  import share from "./share.vue";
   import {
     mapMutations,
     mapGetters
@@ -292,6 +301,7 @@
   export default {
     data() {
       return {
+        showShare:false,
         showBtntype: false, //默认显示添加成员按钮
         flag: false, //第一次进入添加成员界面
         type: "updated",
@@ -318,7 +328,7 @@
     },
     watch: {
       showBtntype(newVal, oldVal) {
-        console.log('btn' + newVal)
+        console.log(newVal, oldVal)
         if (!newVal) {
           this.$refs.deleteBtn.removeEventListener('touchstart', () => {});
         } else {
@@ -329,7 +339,9 @@
     methods: {
       inviteOthers() {
         //分享
+        console.log(12)
         this.showInvite = !this.showInvite;
+        this.showShare = !this.showShare;
       },
       commandExcutor() {
         this.$router.push("addTaskSetting");
@@ -343,117 +355,105 @@
             isSelected
           });
           this.$router.push("addTaskSetting");
+          this.showBtntype = false
+          return;
+        } else {
+          this.showShare = !this.showShare;
         }
-    },
-    deleteExcutor() {
-      if (this.showBtntype) {
-        //已经选中成员
-        console.log(this.nowIndex);
-        let self = this;
-        this.$dialog.info({
-          btnName: 'delete',
-          placeholder: "确定删除成员",
-          operate() {
-            self.DELETE_TASK_EXECUTOR(self.nowIndex); //删除选中成员      
-            self.sort(self.type); //重新排序  
-            self.showBtntype = false;
-          }
-        });
-      } else {
-        let self = this;
-        this.$dialog.info({
-          btnName: "delete",
-          placeholder: "选择要删除的成员",
-          operate(member) {
-            //先确定该成员是否在成员列表 否则提示该成员不存在
-            if (member) {
-              let selected = self.taskExecutor.findIndex((item, index) => {
-                return item.nickname == member;
-              });
-              console.log(selected)
-              if (selected > -1) {
-                //该成员存在
-                self.DELETE_TASK_EXECUTOR(selected); //删除输入的成员
-                self.sort(self.type) //重新排序                         
-              }
+      },
+      deleteExcutor() {
+        if (this.showBtntype) {
+          //已经选中成员
+          console.log(this.nowIndex);
+          let self = this;
+          this.$dialog.info({
+            btnName: 'delete',
+            placeholder: "确定删除成员",
+            operate() {
+              self.DELETE_TASK_EXECUTOR(self.nowIndex); //删除选中成员      
+              self.sort(self.type); //重新排序  
+              self.showBtntype = false;
             }
-          }
+          });
+        } else {
+          console.log('跳转至删除人员界面')
+          let self = this;
+          this.$dialog.info({
+            btnName: "delete",
+            placeholder: "选择要删除的成员"
+          });
+        }
+      },
+      progress(val) {
+        return val * 100 + "%";
+      },
+      ...mapMutations({
+        SET_TASK_EXECUTOR: "SET_TASK_EXECUTOR",
+        SORT_TASK_EXECUTOR: "SORT_TASK_EXECUTOR",
+        ADD_TASK_EXECUTOR: "ADD_TASK_EXECUTOR",
+        DELETE_TASK_EXECUTOR: "DELETE_TASK_EXECUTOR"
+      }),
+      selected(index, isSelected) {
+        this.SET_TASK_EXECUTOR({
+          index,
+          isSelected
         });
-      }
-    },
-    progress(val) {
-      return val * 100 + "%";
-    },
-    ...mapMutations({
-      SET_TASK_EXECUTOR: "SET_TASK_EXECUTOR",
-      SORT_TASK_EXECUTOR: "SORT_TASK_EXECUTOR",
-      ADD_TASK_EXECUTOR: "ADD_TASK_EXECUTOR",
-      DELETE_TASK_EXECUTOR: "DELETE_TASK_EXECUTOR"
-    }),
-    selected(index, isSelected) {
-      this.SET_TASK_EXECUTOR({
-        index,
-        isSelected
-      });
-      this.nowIndex = index;
-      //决定显示 指派人员还是添加人员
-      let status = this.taskExecutor.filter((item, index) => {
-        return item.isSelected;
-      });
-      this.showBtntype = status.length ? true : false;
-      console.log(this.showBtntype)
-    },
-    changeIndex(i, type) {
-      this.type = type;
-      this.currentIndex = i; //对数组进行排序
-      this.sort(type);
-      this.clearClass(type);
-    },
-    clearClass(type) {
-      let updates = document.querySelectorAll('.update');
-      let comments = document.querySelectorAll('.comments');
-      let progess = document.querySelectorAll('.progress');
-      this.$nextTick(() => {
-        this.removeClass(updates, 'active-font');
-        this.removeClass(comments, 'active-font');
-        this.removeClass(progess, 'active-font');
-        this.activeClass(type);
-      })
-    },
-    removeClass(doms, className) {
-      console.log('doms', doms)
-      doms.forEach((item, index) => {
-        item.classList.remove(className)
-      })
-    },
-    activeClass(type) {
-      let doms = document.querySelectorAll(`.${type}`);
-      doms.forEach((item, index) => {
-        item.classList.add('active-font')
-      })
-    },
-    sort(type) {
-      this.SORT_TASK_EXECUTOR(type);
-      console.log(type, this.taskExecutor);
-    },
-    init() {
-      if (!this.taskExecutor.length) {
+        this.nowIndex = index;
+        //决定显示 指派人员还是添加人员
+        let status = this.taskExecutor.filter((item, index) => {
+          return item.isSelected;
+        });
+        this.showBtntype = status.length ? true : false;
+        console.log(this.showBtntype)
+      },
+      changeIndex(i, type) {
+        this.type = type;
+        this.currentIndex = i; //对数组进行排序
+        this.sort(type);
+        this.clearClass(type);
+      },
+      clearClass(type) {
+        let updates = document.querySelectorAll('.update');
+        let comments = document.querySelectorAll('.comments');
+        let progess = document.querySelectorAll('.progress');
+        this.$nextTick(() => {
+          this.removeClass(updates, 'active-font');
+          this.removeClass(comments, 'active-font');
+          this.removeClass(progess, 'active-font');
+          this.activeClass(type);
+        })
+      },
+      removeClass(doms, className) {
+        console.log('doms', doms)
+        doms.forEach((item, index) => {
+          item.classList.remove(className)
+        })
+      },
+      activeClass(type) {
+        let doms = document.querySelectorAll(`.${type}`);
+        doms.forEach((item, index) => {
+          item.classList.add('active-font')
+        })
+      },
+      sort(type) {
+        this.SORT_TASK_EXECUTOR(type);
+        console.log(type, this.taskExecutor);
+      },
+      init() {
+        document.querySelector('.deleteBtn').addEventListener('touchstart', this.deleteExcutor)
         this.showInvite = true;
-      } else {
-        this.showInvite = false;
       }
-      this.showInvite = true;
-    }
-  },
-  components: {
+    },
+    components: {
       scroll,
-      invites
+      invites,
+      share
     },
     created() {
       this.SORT_TASK_EXECUTOR(this.type);
-      this.init();
     },
     mounted() {
+      this.init();
       this.activeClass('update');
     }
   };
