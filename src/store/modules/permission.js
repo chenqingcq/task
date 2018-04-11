@@ -9,7 +9,7 @@ export default {
     // 角色
     userInfo : {} ,
     project:{
-      role : 'visitor' ,// creator 创建者 、operator 执行者 、visitor 访问者
+      role : 'creator' ,// creator 创建者 、operator 执行者 、visitor 访问者
       id : '0', // 项目id
       themeName : '测试项目',
 

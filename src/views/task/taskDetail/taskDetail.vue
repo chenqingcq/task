@@ -530,7 +530,7 @@
 
   </div>
 </template>
-<script type="text/babel">
+<script>
   import comments from '@/views/comments/comments';
   import Slide from '@/common/base/slide/slide.vue';
   import {
