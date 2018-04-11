@@ -6,6 +6,9 @@ import slideBar from './slideBar.vue'
 // 周／月 样式 计算
 import proccesComputed from './mixis/processComputed'
 
+//vuex
+import { mapGetters } from 'vuex'
+
 export default {
   mixins:[proccesComputed],
   data(){
@@ -22,7 +25,7 @@ export default {
 
       weekStrArr : ['日', '一', '二', '三', '四', '五', '六'] ,
 
-      projectList : [{
+      taskList : [{
         id: 0 ,
         // 进行中
         startTime : +new Date('2018-04-01') , // 开始时间
@@ -112,15 +115,21 @@ export default {
   components:{
     slideBar
   },
+  computed:{
+    ...mapGetters({
+      role : 'getProjectRole',
+      themeName : 'getProjectThemeName',
+      projectId : 'getProjectId'
+    })
+  },
   methods:{
 
     // 周／月
     statusChange(status){
-
       this.isMonthMode = status
     },
     addTask(){
-      if( this.projectList.length == 0 ){
+      if( this.taskList.length == 0 ){
         this.$dialog.info({
           placeholder : '请填写项目名称',
         })
@@ -130,7 +139,12 @@ export default {
         //setTimeout(()=>{
         //  this.$loadingClose()
         //},1000)
-        this.$router.push('/addTaskSetting')
+        if( this.role == 'visitor'){
+          this.$refs.slide.newAproject()
+        }
+        else {
+          this.$router.push('/addTaskSetting')
+        }
       }
     },
     // 日历组件里的 发出回调
@@ -148,6 +162,10 @@ export default {
     },
     onHideSlideBar(){
       console.log('hello slidebar')
+    },
+    changeProject(){
+      console.log('change', this.projectId)
+
     }
   }
 }

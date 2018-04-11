@@ -58,7 +58,7 @@ export default [{
   },
   {
     path: '/exhibitorSystem',
-    name: 'help',
+    name: 'exhibitorSystem',
     component: ExhibitorSystem,
     meta: {
       title: '展商系统',

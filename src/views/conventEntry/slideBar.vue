@@ -174,21 +174,15 @@
                     <i :class="[ isPositive ? 'c_primary' : '']">↓</i><i :class="[ !isPositive ? 'c_primary' : '']">↑</i>
                   </span>
 
-            <!--<span-->
             <div class="panel c_white-bg">
 
-                    <!--class="reverse b_FS-24 positive" style="color:#979FAE;display: none"  >-->
-                    <!--&lt;!&ndash;(10-01,10-02,10-03)&ndash;&gt;-->
-
-                     <!--<i>↓</i><i class="c_primary" >↑</i>-->
-                  <!--</span>-->
-              <template v-for="(val) in 20">
-                <div class="item"  >
+              <template v-for="(project, key) in projectList">
+                <div class="item" @click = "selectProject(project)" >
                   <p class="left-photo"  >
                     <img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">
                   </p>
                   <p class="c_11 b_FS-14">
-                    日常工作进度查看
+                    {{ project.themeName }}
                   </p>
                 </div>
                 <div class="bar"></div>
@@ -209,31 +203,55 @@
   </div>
 
 </template>
-<script>
+<script type="text/babel">
+    // 引入vuex操作
+    import { mapGetters, mapActions } from 'vuex'
     export default{
         props: {
 
         },
         data(){
             return{
-               navTab : 0,// 12
-              isShow : false,
-              isPositive: false , // 顺序
+                navTab : 0,// 12
+                isShow : false,
+                isPositive: false , // 顺序
+                projectList: [{
+                  themeName : '我是创建者' ,
+                  id: '1' ,
+                  role : 'creator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是访问者' ,
+                  id: '3' ,
+                  role : 'visitor'
+                }]
             }
         },
         components:{
+          ...mapGetters({
 
+          })
         },
         mounted(){
 
         },
         methods:{
+          ...mapActions([
+            'setCurrentProject'
+          ]),
+
+
           open(){
             this.$refs.slide.open()
             this.isShow = true
           },
           close(){
-            this,$refs.slide.close()
+            this.$refs.slide.close()
 
             console.log(this)
           },
@@ -243,6 +261,13 @@
           // 跳转到帮助页面
           skipToHelp(){
             this.$router.push('/help')
+          },
+          // 选择项目
+          selectProject(project = {}){
+            console.log(project)
+            this.setCurrentProject( project )
+            this.close()
+            this.$emit( 'changeProject' )
           },
           // 弹出新建项目弹窗
           newAproject(){
@@ -254,6 +279,23 @@
           },
           doSubmitNewAproject(text){
             console.log(22222, text)
+
+            if(!text)  this.$dialog.message({
+                message: `项目名称不能为空`
+              })
+            else{
+              setTimeout(()=>{
+                const project = {
+                  id : '2',
+                  themeName : text ,
+                  role : 'creator'
+                }
+                // update state
+                this.setCurrentProject(project)
+                this.$router.push('/addTaskSetting')
+              },100)
+            }
+
           },
           reverseList(){
             this.isPositive = !this.isPositive

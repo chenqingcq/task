@@ -6,11 +6,13 @@ import state from './state'
 import mutations from './mutations'
 import createLogger from 'vuex/dist/logger'
 
+// modules
+import task from './modules/task'
+import permission from './modules/permission'
 
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
-
 
 const store = new Vuex.Store({
   actions,
@@ -18,6 +20,8 @@ const store = new Vuex.Store({
   state,
   mutations,
   modules: {
+    task ,
+    permission
   },
   strict: debug,
   plugins: debug ? [createLogger()] : []

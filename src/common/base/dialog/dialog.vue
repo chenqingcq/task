@@ -4,7 +4,7 @@
       <template v-if="type==='info'">
         <div class="panel-info">
           <img class="close" @touchstart='close' src="../../../assets/img/icon-close.png" />
-          <input disabled id="userIpt" class="b_FS-16" type="text" ref='input' v-model="text" :placeholder="placeholder" maxlength="20">
+          <input  id="userIpt" class="b_FS-16" type="text" ref='input' v-model="text" :placeholder="placeholder" maxlength="20">
           <label for="userIpt" v-show="btnName=='add'">
             <!--<img class="icon-edit" v-show="btnName=='add'" src="@/assets/img/icon-edit01.png" />            -->
          </label>

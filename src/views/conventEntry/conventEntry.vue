@@ -3,13 +3,13 @@
 </style>
 <template>
     <div>
-      <slide-bar ref="slide" @onHide="onHideSlideBar" class="slide-bar"></slide-bar>
+      <slide-bar ref="slide" @onHide="onHideSlideBar" @changeProject="changeProject" class="slide-bar"></slide-bar>
       <!--头部日历导航栏-->
       <div class="header-wrapper c_1-bg">
         <div class="header-main">
           <img class="user-photo" src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">
           <img class="menu" @click="showSlideBar" src="../../assets/img/icon-menu.png" alt="">
-          <span class="project-name c_white b_FS-18 text-center">展会项目一</span>
+          <span class="project-name c_white b_FS-18 text-center">{{ themeName }}</span>
           <!--<img style="visibility: hidden" class="share" src="../../assets/img/icon-share.png" alt="">-->
           <img class="add" @click="addTask" src="../../assets/img/icon-add.png" alt="">
         </div>
@@ -21,8 +21,7 @@
       </div><!--头部日历导航栏 end-->
       <!--任务列表-->
       <div class="task-list-wrapper b-LR-10">
-
-        <template v-for="(list,index) in projectList" >
+        <template v-for="(list,index) in taskList" >
           <div @click="linkToTaskDetail(list)" class="panel b-MT-10" :class="[list.isLike ? 'isLike-bg' : 'c_white-bg' ]">
             <div class="b-LR-10 b-T-5">
               <span class="left-dot dot " :class="[list.isSaw ? 'info': 'warn']" ></span>
