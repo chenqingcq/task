@@ -1,4 +1,20 @@
 <style lang="less" scoped>
+  @keyframes scale {
+    0% {
+      transform: scale(1.5,1.5);
+      opacity: .5;
+    }
+    50% {
+      transform: scale(.8, .8);
+      opacity: .8;
+    }
+
+    100% {
+      transform: scale(1, 1);
+      opacity: 1;
+    }
+  }
+
   .task-detail-slide {
     padding: 4*2px 10*2px 0 10*2px;
     .panel {
@@ -297,6 +313,7 @@
         margin: 0 auto;
         display: block;
         width: 145*2px;
+        animation: scale .5s ease;
       }
       span {
         display: block;
@@ -526,7 +543,7 @@
           path: 'taskHistoryOrUpdate',
         })
       },
-      linkToSection(){
+      linkToSection() {
         this.$router.push({
           path: '/section',
         })

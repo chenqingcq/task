@@ -57,7 +57,7 @@
     .editDeadTime {
       width: 100%;
       height: 300*2px;
-      overflow:auto;
+      overflow: auto;
       background: #fff;
       ul {
         width: 100%;
@@ -318,11 +318,11 @@
     },
     watch: {
       showBtntype(newVal, oldVal) {
-        console.log('btn'+newVal)
+        console.log('btn' + newVal)
         if (!newVal) {
-          this.$refs.deleteBtn.removeEventListener('touchstart',()=>{});
+          this.$refs.deleteBtn.removeEventListener('touchstart', () => {});
         } else {
-          this.$refs.deleteBtn.addEventListener('touchstart', this.deleteExcutor)                
+          this.$refs.deleteBtn.addEventListener('touchstart', this.deleteExcutor)
         }
       }
     },
@@ -343,148 +343,115 @@
             isSelected
           });
           this.$router.push("addTaskSetting");
-        } else {
-          this.$dialog.info({
-            btnName: "add",
-            placeholder: "确定添加成员",
-            operate(member) {
-              //如果输入的人在好友列表那么直接添加到成员列表里面去，否则需要邀约加入
-              //这里模拟一下后台放回的好友列表
-              let members = [{
-                  name: "张三",
-                  id: "123456"
-                },
-                {
-                  name: "李四",
-                  id: "654321"
-                },
-                {
-                  name: "王五",
-                  id: "543210"
-                }
-              ];
-              let selected = members.filter((item, index) => {
-                return item.name == member;
+        }
+    },
+    deleteExcutor() {
+      if (this.showBtntype) {
+        //已经选中成员
+        console.log(this.nowIndex);
+        let self = this;
+        this.$dialog.info({
+          btnName: 'delete',
+          placeholder: "确定删除成员",
+          operate() {
+            self.DELETE_TASK_EXECUTOR(self.nowIndex); //删除选中成员      
+            self.sort(self.type); //重新排序  
+            self.showBtntype = false;
+          }
+        });
+      } else {
+        let self = this;
+        this.$dialog.info({
+          btnName: "delete",
+          placeholder: "选择要删除的成员",
+          operate(member) {
+            //先确定该成员是否在成员列表 否则提示该成员不存在
+            if (member) {
+              let selected = self.taskExecutor.findIndex((item, index) => {
+                return item.nickname == member;
               });
-              if (selected[0]) {
-                self.ADD_TASK_EXECUTOR(selected[0].name); //这里用户id怎么处理
-                console.log(self.taskExecutor);
-              } else { //该成员不存在提示
-                this.$dialog.message({
-                  message: '该成员不存在!'
-                })
+              console.log(selected)
+              if (selected > -1) {
+                //该成员存在
+                self.DELETE_TASK_EXECUTOR(selected); //删除输入的成员
+                self.sort(self.type) //重新排序                         
               }
             }
-          });
-        }
-      },
-      deleteExcutor() {
-        if (this.showBtntype) {
-          //已经选中成员
-          console.log(this.nowIndex);
-          let self = this;
-          this.$dialog.info({
-            btnName: 'delete',
-            placeholder: "确定删除成员",
-            operate() {
-              self.DELETE_TASK_EXECUTOR(self.nowIndex); //删除选中成员      
-              self.sort(self.type); //重新排序  
-              self.showBtntype = false;
-            }
-          });
-        } else {
-          let self = this;
-          this.$dialog.info({
-            btnName: "delete",
-            placeholder: "选择要删除的成员",
-            operate(member) {
-              //先确定该成员是否在成员列表 否则提示该成员不存在
-              if (member) {
-                let selected = self.taskExecutor.findIndex((item, index) => {
-                  return item.nickname == member;
-                });
-                console.log(selected)
-                if (selected > -1) {
-                  //该成员存在
-                  self.DELETE_TASK_EXECUTOR(selected); //删除输入的成员
-                  self.sort(self.type) //重新排序                         
-                } 
-              } 
-            }
-          });
-        }
-      },
-      progress(val) {
-        return val * 100 + "%";
-      },
-      ...mapMutations({
-        SET_TASK_EXECUTOR: "SET_TASK_EXECUTOR",
-        SORT_TASK_EXECUTOR: "SORT_TASK_EXECUTOR",
-        ADD_TASK_EXECUTOR: "ADD_TASK_EXECUTOR",
-        DELETE_TASK_EXECUTOR: "DELETE_TASK_EXECUTOR"
-      }),
-      selected(index, isSelected) {
-        this.SET_TASK_EXECUTOR({
-          index,
-          isSelected
+          }
         });
-        this.nowIndex = index;
-        //决定显示 指派人员还是添加人员
-        let status = this.taskExecutor.filter((item, index) => {
-          return item.isSelected;
-        });
-        this.showBtntype = status.length ? true : false;
-        console.log(this.showBtntype)
-      },
-      changeIndex(i, type) {
-        this.type = type;
-        this.currentIndex = i; //对数组进行排序
-        this.sort(type);
-        this.clearClass(type);
-      },
-      clearClass(type) {
-        let updates = document.querySelectorAll('.update');
-        let comments = document.querySelectorAll('.comments');
-        let progess = document.querySelectorAll('.progress');
-        this.$nextTick(() => {
-          this.removeClass(updates, 'active-font');
-          this.removeClass(comments, 'active-font');
-          this.removeClass(progess, 'active-font');
-          this.activeClass(type);
-        })
-      },
-      removeClass(doms, className) {
-        console.log('doms', doms)
-        doms.forEach((item, index) => {
-          item.classList.remove(className)
-        })
-      },
-      activeClass(type) {
-        let doms = document.querySelectorAll(`.${type}`);
-        doms.forEach((item, index) => {
-          item.classList.add('active-font')
-        })
-      },
-      sort(type) {
-        this.SORT_TASK_EXECUTOR(type);
-        console.log(type, this.taskExecutor);
-      },
-      init() {
-        if (!this.taskExecutor.length) {
-          this.showInvite = true;
-        } else {
-          this.showInvite = false;
-        }
-        this.showInvite = true;
       }
     },
-    components: {
+    progress(val) {
+      return val * 100 + "%";
+    },
+    ...mapMutations({
+      SET_TASK_EXECUTOR: "SET_TASK_EXECUTOR",
+      SORT_TASK_EXECUTOR: "SORT_TASK_EXECUTOR",
+      ADD_TASK_EXECUTOR: "ADD_TASK_EXECUTOR",
+      DELETE_TASK_EXECUTOR: "DELETE_TASK_EXECUTOR"
+    }),
+    selected(index, isSelected) {
+      this.SET_TASK_EXECUTOR({
+        index,
+        isSelected
+      });
+      this.nowIndex = index;
+      //决定显示 指派人员还是添加人员
+      let status = this.taskExecutor.filter((item, index) => {
+        return item.isSelected;
+      });
+      this.showBtntype = status.length ? true : false;
+      console.log(this.showBtntype)
+    },
+    changeIndex(i, type) {
+      this.type = type;
+      this.currentIndex = i; //对数组进行排序
+      this.sort(type);
+      this.clearClass(type);
+    },
+    clearClass(type) {
+      let updates = document.querySelectorAll('.update');
+      let comments = document.querySelectorAll('.comments');
+      let progess = document.querySelectorAll('.progress');
+      this.$nextTick(() => {
+        this.removeClass(updates, 'active-font');
+        this.removeClass(comments, 'active-font');
+        this.removeClass(progess, 'active-font');
+        this.activeClass(type);
+      })
+    },
+    removeClass(doms, className) {
+      console.log('doms', doms)
+      doms.forEach((item, index) => {
+        item.classList.remove(className)
+      })
+    },
+    activeClass(type) {
+      let doms = document.querySelectorAll(`.${type}`);
+      doms.forEach((item, index) => {
+        item.classList.add('active-font')
+      })
+    },
+    sort(type) {
+      this.SORT_TASK_EXECUTOR(type);
+      console.log(type, this.taskExecutor);
+    },
+    init() {
+      if (!this.taskExecutor.length) {
+        this.showInvite = true;
+      } else {
+        this.showInvite = false;
+      }
+      this.showInvite = true;
+    }
+  },
+  components: {
       scroll,
       invites
     },
     created() {
       this.SORT_TASK_EXECUTOR(this.type);
-      this.init(); 
+      this.init();
     },
     mounted() {
       this.activeClass('update');

@@ -107,9 +107,25 @@
 
 </script>
 <style lang='less' scoped>
-  input:disabled{
+  @keyframes scale {
+    0% {
+      transform: scale(.8, .8);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.2, 1.2);
+      opacity: .8;
+    }
+    100% {
+      transform: scale(1, 1);
+      opacity: 1
+    }
+  }
+
+  input:disabled {
     background: #fff;
   }
+
   .fade-enter-active,
   .fade-leave-active {
     transition: opacity 0.5s;
@@ -193,6 +209,7 @@
     justify-content: center;
     align-items: center;
     .panel-notice {
+      animation: scale .5s ease;
       min-width: 252*2px;
       min-height: 252*2px;
       background-color: #fff;

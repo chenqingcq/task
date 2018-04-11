@@ -50,18 +50,44 @@
     }
   }
 
+  .active {
+    animation: scale 1s ease;
+  }
+
+  .active_ {
+    animation: scale 1s ease reverse;
+  }
+
+  @keyframes scale {
+    0% {
+      transform: scale(1.5, 1.5);
+      opacity: .5;
+    }
+    50% {
+      transform: scale(.8, .8);
+      opacity: .8;
+    }
+
+    100% {
+      transform: scale(1, 1);
+      opacity: 1;
+    }
+  }
+
 </style>
 <template>
-  <div class="invite-container" v-show="show">
-    <div class="invite-panel">
-      <div class="invite-img">
-        <img @touchstart='close' class="close-img" src="@/assets/img/icon-close01.png" />
-        <img src="@/assets/img/image-popup.png" />
-        <div class="invite-more">点击邀请更多好友</div>
-        <div class="invite-fast">还不是好友赶快邀请</div>
+  <transition >
+    <div class="invite-container" v-show="show">
+      <div class="invite-panel">
+        <div class="invite-img" ref="invite">
+          <img @touchstart='close' class="close-img" src="@/assets/img/icon-close01.png" />
+          <img src="@/assets/img/image-popup.png" />
+          <div class="invite-more">点击邀请更多好友</div>
+          <div class="invite-fast">还不是好友赶快邀请</div>
+        </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 <script>
   export default {
@@ -78,11 +104,20 @@
     },
     methods: {
       close() {
-        this.show = !this.show;
-      }
+          this.show = !this.show;
+      },
+      init() {
+        this.$refs.invite.classList.add('active')
+      },
     },
     created() {
       this.show = this.showInvite;
+    },
+    mounted() {
+      this.init()
+    },
+    beforeDestroy(){
+      this.timer = null
     }
   };
 
