@@ -243,8 +243,8 @@
         <li class="lists">
           <span>成员列表</span>
         </li>
-        <li @touchstart='changeIndex(index,item.type)' v-for="(item,index) in navs" :key="index">
-          <span :class="{active:index==currentIndex}">{{item.name}}</span>
+        <li  v-for="(item,index) in navs" :key="index">
+          <span >{{item.name}}</span>
         </li>
       </ul>
       <img @touchstart='inviteOthers' class="invite" src="@/assets/img/icon-menu.png">
@@ -442,6 +442,7 @@
       init() {
         document.querySelector('.deleteBtn').addEventListener('touchstart', this.deleteExcutor)
         this.showInvite = true;
+        console.log(this.taskExecutor)
       }
     },
     components: {
@@ -454,7 +455,6 @@
     },
     mounted() {
       this.init();
-      this.activeClass('update');
     }
   };
 
