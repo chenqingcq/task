@@ -74,13 +74,23 @@
     }
   }
 
+  @keyframes rotate {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .rotate {
+    animation: rotate 2s linear infinite;
+  }
+
 </style>
 <template>
-  <transition >
+  <transition>
     <div class="invite-container" v-show="show">
       <div class="invite-panel">
         <div class="invite-img" ref="invite">
-          <img @touchstart='close' class="close-img" src="@/assets/img/icon-close01.png" />
+          <img @touchstart='close' ref="close" class="close-img" src="@/assets/img/icon-close01.png" />
           <img src="@/assets/img/image-popup.png" />
           <div class="invite-more">点击邀请更多好友</div>
           <div class="invite-fast">还不是好友赶快邀请</div>
@@ -104,10 +114,11 @@
     },
     methods: {
       close() {
-          this.show = !this.show;
+        this.show = !this.show;
       },
       init() {
-        this.$refs.invite.classList.add('active')
+        this.$refs.invite.classList.add('active');
+        this.$refs.close.classList.add('rotate');
       },
     },
     created() {
@@ -116,7 +127,7 @@
     mounted() {
       this.init()
     },
-    beforeDestroy(){
+    beforeDestroy() {
       this.timer = null
     }
   };
