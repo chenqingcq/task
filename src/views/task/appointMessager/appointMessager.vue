@@ -300,7 +300,7 @@
           <div v-for="(item,index) in taskExecutors" :key="index">
             <li>
               <div class="user">
-                <div @touchstart='selected(index_,item[0].isSelected)' class="select">
+                <div @touchstart='selected(index,item[0].isSelected)' class="select">
                   <img src="@/assets/img/sign-selected.png" v-show="item[0].isSelected" />
                 </div>
                 <div class="icon">
@@ -312,10 +312,10 @@
               <div class="comments">{{item[0].comments}}</div>
               <div class="progress">{{progress(item[0])}}</div>
               <div class="arrow" @touchstart='showSub(index)'>
-                <img :src="imgUrl" />
+                <img :src="imgUrl(index)" />
               </div>
             </li>
-            <li class="sub-item" v-for="(item_,index_) in item" v-show="isExtend && currentIndex == index ">
+            <li class="sub-item" v-for="(item_,index_) in item" v-show="(currentIndex == index )">
               <!--下拉可见-->
               <div class="user">
                 <div @touchstart='selected(index,item.isSelected)' class="select">
@@ -384,13 +384,6 @@
     },
     computed: {
       ...mapGetters(['taskExecutors']),
-      imgUrl(index) {
-        if (this.currentIndex == index) {
-          return require('@/assets/img/05.png')
-        } else {
-          return require('@/assets/img/04.png')
-        }
-      }
     },
     watch: {
       showBtntype(newVal, oldVal) {
@@ -406,7 +399,13 @@
       progress(item) {
         return '200%'
       },
-
+      imgUrl(index) {
+        if (this.isExtend && this.currentIndex === index) {
+          return require('@/assets/img/05.png')
+        } else {
+          return require('@/assets/img/04.png')
+        }
+      },
       showSub(index) {
         this.currentIndex = index;
         console.log(index);
@@ -465,6 +464,7 @@
         DELETE_TASK_EXECUTOR: "DELETE_TASK_EXECUTOR"
       }),
       selected(index, isSelected) {
+        return;
         this.SET_TASK_EXECUTOR({
           index,
           isSelected
