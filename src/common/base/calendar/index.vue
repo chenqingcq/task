@@ -108,7 +108,6 @@
               return []
             }
             var dateObj = this.activeMonthDates[this.activeMonthIndex]
-            console.log('computed weeks', dateObj)
             var flxibleTime = dateObj.startTmp ,
              start = dateObj.startTmp,
              weekdays = []
@@ -116,7 +115,7 @@
 
               let _weekday = new Date(flxibleTime)
               if( i == 0){
-                console.log( _weekday )
+                // console.log( _weekday )
               }
               let area = {
                 dayStr : _weekday.getDate() ,
@@ -284,7 +283,6 @@
             })
           },
           nextMonthArea(){
-            console.log('next')
             if( ( this.calendarIndex + 4 ) < this.activeMonthDates.length ){
               this.calendarIndex += 1
               this.activeMonthIndex += 1
@@ -303,7 +301,7 @@
             this.emitData()
           },
           emitData(){
-            console.log('emitData')
+
             const months =  this.splitMonthDays
             this.$emit('getDateData',{
                 activeWeekDays: this.activeWeekDays ,
