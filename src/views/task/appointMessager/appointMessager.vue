@@ -312,8 +312,7 @@
               <div class="comments">{{item[0].comments}}</div>
               <div class="progress">{{progress(item[0])}}</div>
               <div class="arrow" @touchstart='showSub(index)'>
-                <img v-if="!isExtend" src="@/assets/img/05.png" />
-                <img v-else src="@/assets/img/04.png" />
+                <img :src="imgUrl" />
               </div>
             </li>
             <li class="sub-item" v-for="(item_,index_) in item" v-show="isExtend && currentIndex == index ">
@@ -385,6 +384,13 @@
     },
     computed: {
       ...mapGetters(['taskExecutors']),
+      imgUrl(index) {
+        if (this.currentIndex == index) {
+          return require('@/assets/img/05.png')
+        } else {
+          return require('@/assets/img/04.png')
+        }
+      }
     },
     watch: {
       showBtntype(newVal, oldVal) {
