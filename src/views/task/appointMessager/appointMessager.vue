@@ -315,7 +315,7 @@
                 <img :src="imgUrl(index)" />
               </div>
             </li>
-            <li class="sub-item" v-for="(item_,index_) in item" v-show="(currentIndex == index )">
+            <li class="sub-item" v-for="(item_,index_) in item" v-show="isSubShow[index]">
               <!--下拉可见-->
               <div class="user">
                 <div @touchstart='selected(index,item.isSelected)' class="select">
@@ -360,6 +360,7 @@
       return {
         showShare: false,
         isExtend: false,
+        isSubShow: '',
         showBtntype: false, //默认显示添加成员按钮
         flag: false, //第一次进入添加成员界面
         type: "updated",
@@ -409,6 +410,7 @@
       showSub(index) {
         this.currentIndex = index;
         console.log(index);
+        this.isSubShow[index] = !this.isSubShow[index];
         this.isExtend = !this.isExtend;
       },
       inviteOthers() {
@@ -513,7 +515,8 @@
       init() {
         document.querySelector('.deleteBtn').addEventListener('touchstart', this.deleteExcutor)
         this.showInvite = true;
-        console.log(this.taskExecutors);
+        this.isSubShow = new Array(this.taskExecutors.length).fill(false);
+        console.log(this.taskExecutors, this.isSubShow);
       }
     },
     components: {
