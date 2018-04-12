@@ -73,7 +73,10 @@
           let me = this
           this.scroll.on('scroll', (pos) => {
             me.$emit('scroll', pos)
-          })
+          });
+          this.scroll.on('scrollEnd', (pos) => {
+            me.$emit('scrollEnd', pos)
+          });
         }
 
         if (this.pullup) {
@@ -118,8 +121,9 @@
 </script>
 
 <style scoped lang="less">
-.wrapper_{
-  width: 100%;
-  height: 100%;
-}
+  .wrapper_ {
+    width: 100%;
+    height: 100%;
+  }
+
 </style>

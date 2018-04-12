@@ -15,187 +15,63 @@ const state = {
   pojects: {
     'all': [],
     'recieved': [],
-    'published': [{//已发布的任务
-      projectTheme: '',
-      id: 0,
-      tasks: {
-        taskExecutor: [{
-            isSelected: false,
-            nickname: 'jack',
-            updated: 15,
-            comments: 10,
-            progress: .7,
-            userId: '013161',
-            userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
-          },
-          {
-            isSelected: false,
-            nickname: 'jack',
-            updated: 15,
-            comments: 10,
-            progress: .5,
-            userId: '013161',
-            userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
-          },
-          {
-            isSelected: false,
-            nickname: 'sam',
-            updated: 10,
-            comments: 20,
-            progress: .5,
-            userId: '212344',
-            userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
-          },
-          {
-            isSelected: false,
-            nickname: 'smith',
-            updated: 10,
-            comments: 20,
-            progress: .5,
-            userId: '212344',
-            userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
-          },
-          {
-            isSelected: false,
-            nickname: 'jordon',
-            updated: 10,
-            comments: 20,
-            progress: .9,
-            userId: '212344',
-            userIcon: "http://img4.duitang.com/uploads/item/201605/29/20160529093324_mZPCi.jpeg"
-          },
-          {
-            isSelected: false,
-            nickname: 'mike',
-            updated: 10,
-            comments: 20,
-            progress: .5,
-            userId: '212344',
-            userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpgg"
-          },
-          {
-            isSelected: false,
-            nickname: 'simon',
-            updated: 30,
-            comments: 30,
-            progress: .4,
-            userId: '212344',
-            userIcon: 'http://img4.duitang.com/uploads/item/201605/29/20160529093324_mZPCi.jpeg'
-          },
-          {
-            isSelected: false,
-            nickname: 'ashe',
-            updated: 60,
-            comments: 50,
-            progress: .2,
-            userId: '212344',
-            userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
-          },
-          {
-            isSelected: false,
-            nickname: 'james',
-            updated: 10,
-            comments: 20,
-            progress: .8,
-            userId: '212344',
-            userIcon: "http://img4.duitang.com/uploads/item/201605/29/20160529093324_mZPCi.jpeg"
-          }
-        ]
-      }
-    }]
+    'published': [
+      [{},
+        {}
+      ],
+      [{}]
+    ]
   },
   taskTheme: '',
-  taskExecutor: [{// 已经结束的任务不放回 ，只放回未完成的任务
+  taskExecutors: [
+    [{
+        isSelected: false,
+        executor: 'jack',
+        startTime: '2018/4/10',
+        endTime: '2018/4/30',
+        updated: 15,
+        comments: 10,
+        progress: .5,
+        userId: '013161',
+        endDate: '2018/4/26',
+        userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
+      },
+      {
+        isSelected: false,
+        executor: 'jack',
+        startTime: '2018/4/12',
+        endTime: '2018/4/30',
+        updated: 15,
+        comments: 10,
+        userId: '013161',
+        endDate: '2018/4/26',
+        userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
+      }
+    ],
+    [{
       isSelected: false,
-      nickname: 'jack',
+      executor: 'jim',
+      startTime: '2018/4/11',
+      endTime: '2018/4/30',
       updated: 15,
       comments: 10,
-      progress: .7,
       userId: '013161',
-      endDate:'2018/4/26',      
+      endDate: '2018/4/26',
       userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
-    },
-    {
+    }],
+    [{
       isSelected: false,
-      nickname: 'jack',
+      executor: '陈庆',
+      startTime: '2018/4/11',
+      endTime: '2018/4/30',
       updated: 15,
       comments: 10,
-      progress: .5,
-      endDate:'2018/4/20',
       userId: '013161',
+      endDate: '2018/4/26',
       userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
-    },
-    {
-      isSelected: false,
-      nickname: 'sam',
-      updated: 10,
-      comments: 20,
-      progress: .5,
-      endDate:'2018/4/29',      
-      userId: '212344',
-      userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
-    },
-    {
-      isSelected: false,
-      nickname: 'smith',
-      updated: 10,
-      comments: 20,
-      progress: .5,
-      userId: '212344',
-      endDate:'2018/4/30',      
-      userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
-    },
-    {
-      isSelected: false,
-      nickname: 'jordon',
-      updated: 10,
-      comments: 20,
-      progress: .9,
-      userId: '212344',
-      endDate:'2018/3/20',            
-      userIcon: "http://img4.duitang.com/uploads/item/201605/29/20160529093324_mZPCi.jpeg"
-    },
-    {
-      isSelected: false,
-      nickname: 'mike',
-      updated: 10,
-      comments: 20,
-      progress: .5,
-      userId: '212344',
-      endDate:'2018/3/20',                  
-      userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpgg"
-    },
-    {
-      isSelected: false,
-      nickname: 'simon',
-      updated: 30,
-      comments: 30,
-      progress: .4,
-      userId: '212344',
-      endDate:'2018/3/20',                  
-      userIcon: 'http://img4.duitang.com/uploads/item/201605/29/20160529093324_mZPCi.jpeg'
-    },
-    {
-      isSelected: false,
-      nickname: 'ashe',
-      updated: 60,
-      comments: 50,
-      progress: .2,
-      userId: '212344',
-      endDate:'2018/3/20',                        
-      userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
-    },
-    {
-      isSelected: false,
-      nickname: 'james',
-      updated: 10,
-      comments: 20,
-      progress: .8,
-      endDate:'2018/3/20',                  
-      userId: '212344',
-      userIcon: "http://img4.duitang.com/uploads/item/201605/29/20160529093324_mZPCi.jpeg"
-    }
+    }],
   ],
+
   taskSetting: [{
     id: 0,
     taskTheme: '',

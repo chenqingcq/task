@@ -59,7 +59,7 @@
       width: 100%;
       height: 300*2px;
       overflow: auto;
-      background: #fff;
+      background: linear-gradient(to bottom, rgba(105, 198, 254, .6), rgba(105, 198, 254, .6));
       ul {
         width: 100%;
         background: #fff;
@@ -72,7 +72,15 @@
         font-size: 16px*2;
         color: #333333;
         position: relative;
+        background: #fff;
         border-bottom: 2px solid rgba(151, 151, 151, 0.21);
+        &.sub-item {
+          .select {
+            position: absolute;
+            left: 45*2px !important;
+          }
+        }
+        ;
         .user {
           width: 160*2px;
           height: 50*2px;
@@ -165,6 +173,19 @@
     text-align: center;
   }
 
+  .arrow {
+    width: 26*2px;
+    height: 100%;
+    text-align: center;
+    img {
+      display: inline-block;
+      line-height: 50*2px;
+      width: 10*2px;
+      margin-top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
   .progress {
     width: 32*2px;
     text-align: center;
@@ -233,46 +254,87 @@
     }
   }
 
+  .active_zoom {
+    animation: zoom .5s ease;
+  }
+
+  @keyframes zoom {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: .8;
+    }
+    100% {
+      opacity: .5;
+    }
+  }
+
 </style>
 <template>
 
   <div class="appointer-container">
-    <header>
+    <header ref="banner">
       <img class="bg" src='@/assets/img/appointer.png' />
       <ul class="list-items">
         <li class="lists">
           <span>成员列表</span>
         </li>
-        <li  v-for="(item,index) in navs" :key="index">
-          <span >{{item.name}}</span>
+        <li v-for="(item,index) in navs" :key="index">
+          <span>{{item.name}}</span>
         </li>
+        <li></li>
       </ul>
       <img @touchstart='inviteOthers' class="invite" src="@/assets/img/icon-menu.png">
       <share :showShare='showShare'>
         <ul class="share-items">
           <div class="arrow"></div>
-          <li><img src="@/assets/img/01.png"/>微信分发</li>
-          <li><img src="@/assets/img/02.png"/>面对面发</li>
+          <li><img src="@/assets/img/01.png" />微信分发</li>
+          <li><img src="@/assets/img/02.png" />面对面发</li>
         </ul>
       </share>
     </header>
-    <div class="editDeadTime">
-      <scroll>
+    <div class="editDeadTime" ref="lisItem">
+      <scroll :listenScroll='listenScroll'>
         <ul>
-          <li v-for="(item,index) in taskExecutor" :key="index">
-            <div class="user">
-              <div @touchstart='selected(index,item.isSelected)' class="select">
-                <img src="@/assets/img/sign-selected.png" v-show="item.isSelected" />
+          <div v-for="(item,index) in taskExecutors" :key="index">
+            <li v-for="(item_,index_) in item" :key="index_">
+              <div class="user">
+                <div @touchstart='selected(index_,item_.isSelected)' class="select">
+                  <img src="@/assets/img/sign-selected.png" v-show="item_.isSelected" />
+                </div>
+                <div class="icon">
+                  <img v-lazy="item_.userIcon">
+                </div>
+                <div class="name">{{item_.executor}}</div>
               </div>
-              <div class="icon">
-                <img v-lazy="item.userIcon">
+              <div class="update">{{item_.updated}}</div>
+              <div class="comments">{{item_.comments}}</div>
+              <div class="progress">{{progress(item_)}}</div>
+              <div class="arrow" @touchstart='extend'>
+                <img v-if="!isExtend" src="@/assets/img/04.png" />
+                <img v-else src="@/assets/img/05.png" />
               </div>
-              <div class="name">{{item.nickname}}</div>
-            </div>
-            <div class="update">{{item.updated}}</div>
-            <div class="comments">{{item.comments}}</div>
-            <div class="progress">{{progress(item.progress)}}</div>
-          </li>
+            </li>
+            <li class="sub-item" v-for="(item_,index_) in item" >
+              <!--下拉可见-->
+              <div class="user">
+                <div @touchstart='selected(index,item.isSelected)' class="select">
+                  <img src="@/assets/img/sign-selected.png" v-show="item.isSelected" />
+                </div>
+                <div class="name">{{item_.nickname}}</div>
+              </div>
+              <div class="update">{{item_.updated}}</div>
+              <div class="comments">{{item_.comments}}</div>
+              <div class="progress">{{progress(item_)}}</div>
+              <div class="arrow" @touchstart='extend'>
+                <div v-if="showSub">
+                  <img v-if="!isExtend" src="@/assets/img/04.png" />
+                  <img v-else src="@/assets/img/05.png" />
+                </div>
+              </div>
+            </li>
+          </div>
         </ul>
       </scroll>
     </div>
@@ -301,11 +363,15 @@
   export default {
     data() {
       return {
-        showShare:false,
+        listenScroll: true,
+        showSub: false,
+        showShare: false,
+        isExtend: false,
         showBtntype: false, //默认显示添加成员按钮
         flag: false, //第一次进入添加成员界面
         type: "updated",
         showInvite: false,
+        scale: 0,
         navs: [{
             name: "更新",
             type: "update"
@@ -324,7 +390,7 @@
       };
     },
     computed: {
-      ...mapGetters(["taskExecutor"])
+      ...mapGetters(['taskExecutors']),
     },
     watch: {
       showBtntype(newVal, oldVal) {
@@ -337,9 +403,16 @@
       }
     },
     methods: {
+      progress(item) {
+        console.log(item)
+        return '100%'
+      },
+      extend() {
+        this.isExtend = !this.isExtend;
+        console.log(this.isExtend)
+      },
       inviteOthers() {
         //分享
-        console.log(12)
         this.showInvite = !this.showInvite;
         this.showShare = !this.showShare;
       },
@@ -383,9 +456,6 @@
             placeholder: "选择要删除的成员"
           });
         }
-      },
-      progress(val) {
-        return val * 100 + "%";
       },
       ...mapMutations({
         SET_TASK_EXECUTOR: "SET_TASK_EXECUTOR",
@@ -442,7 +512,7 @@
       init() {
         document.querySelector('.deleteBtn').addEventListener('touchstart', this.deleteExcutor)
         this.showInvite = true;
-        console.log(this.taskExecutor)
+        console.log(this.taskExecutors);
       }
     },
     components: {
@@ -450,9 +520,7 @@
       invites,
       share
     },
-    created() {
-      this.SORT_TASK_EXECUTOR(this.type);
-    },
+    created() {},
     mounted() {
       this.init();
     }
