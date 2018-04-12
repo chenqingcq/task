@@ -12,21 +12,11 @@ const state = {
     headImage: '',
     userId: ''
   },
-  pojects: {
-    'all': [],
-    'recieved': [],
-    'published': [
-      [{},
-        {}
-      ],
-      [{}]
-    ]
-  },
   taskTheme: '',
   taskExecutors: [
     [{
         isSelected: false,
-        executor: 'jack',
+        executor: '李秋',
         startTime: '2018/4/10',
         endTime: '2018/4/30',
         updated: 15,
@@ -38,7 +28,7 @@ const state = {
       },
       {
         isSelected: false,
-        executor: 'jack',
+        executor: '李秋',
         startTime: '2018/4/12',
         endTime: '2018/4/30',
         updated: 15,
@@ -50,7 +40,7 @@ const state = {
     ],
     [{
       isSelected: false,
-      executor: 'jim',
+      executor: '吉姆',
       startTime: '2018/4/11',
       endTime: '2018/4/30',
       updated: 15,
@@ -61,7 +51,7 @@ const state = {
     }],
     [{
       isSelected: false,
-      executor: '陈庆',
+      executor: '山姆',
       startTime: '2018/4/11',
       endTime: '2018/4/30',
       updated: 15,

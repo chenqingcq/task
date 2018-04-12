@@ -295,43 +295,39 @@
       </share>
     </header>
     <div class="editDeadTime" ref="lisItem">
-      <scroll :listenScroll='listenScroll'>
+      <scroll>
         <ul>
           <div v-for="(item,index) in taskExecutors" :key="index">
-            <li v-for="(item_,index_) in item" :key="index_">
+            <li>
               <div class="user">
-                <div @touchstart='selected(index_,item_.isSelected)' class="select">
-                  <img src="@/assets/img/sign-selected.png" v-show="item_.isSelected" />
+                <div @touchstart='selected(index_,item[0].isSelected)' class="select">
+                  <img src="@/assets/img/sign-selected.png" v-show="item[0].isSelected" />
                 </div>
                 <div class="icon">
-                  <img v-lazy="item_.userIcon">
+                  <img v-lazy="item[0].userIcon">
+                </div>
+                <div class="name">{{item[0].executor}}</div>
+              </div>
+              <div class="update">{{item[0].updated}}</div>
+              <div class="comments">{{item[0].comments}}</div>
+              <div class="progress">{{progress(item[0])}}</div>
+              <div class="arrow" @touchstart='showSub(index)'>
+                <img v-if="!isExtend" src="@/assets/img/05.png" />
+                <img v-else src="@/assets/img/04.png" />
+              </div>
+            </li>
+            <li class="sub-item" v-for="(item_,index_) in item" v-show="isExtend && currentIndex == index ">
+              <!--下拉可见-->
+              <div class="user">
+                <div @touchstart='selected(index,item.isSelected)' class="select">
+                  <img src="@/assets/img/sign-selected.png" v-show="item.isSelected" />
                 </div>
                 <div class="name">{{item_.executor}}</div>
               </div>
               <div class="update">{{item_.updated}}</div>
               <div class="comments">{{item_.comments}}</div>
               <div class="progress">{{progress(item_)}}</div>
-              <div class="arrow" @touchstart='extend'>
-                <img v-if="!isExtend" src="@/assets/img/04.png" />
-                <img v-else src="@/assets/img/05.png" />
-              </div>
-            </li>
-            <li class="sub-item" v-for="(item_,index_) in item" >
-              <!--下拉可见-->
-              <div class="user">
-                <div @touchstart='selected(index,item.isSelected)' class="select">
-                  <img src="@/assets/img/sign-selected.png" v-show="item.isSelected" />
-                </div>
-                <div class="name">{{item_.nickname}}</div>
-              </div>
-              <div class="update">{{item_.updated}}</div>
-              <div class="comments">{{item_.comments}}</div>
-              <div class="progress">{{progress(item_)}}</div>
-              <div class="arrow" @touchstart='extend'>
-                <div v-if="showSub">
-                  <img v-if="!isExtend" src="@/assets/img/04.png" />
-                  <img v-else src="@/assets/img/05.png" />
-                </div>
+              <div class="arrow">
               </div>
             </li>
           </div>
@@ -363,8 +359,6 @@
   export default {
     data() {
       return {
-        listenScroll: true,
-        showSub: false,
         showShare: false,
         isExtend: false,
         showBtntype: false, //默认显示添加成员按钮
@@ -385,7 +379,7 @@
             type: "progress"
           }
         ],
-        currentIndex: 0,
+        currentIndex: -1,
         nowIndex: 0
       };
     },
@@ -404,12 +398,13 @@
     },
     methods: {
       progress(item) {
-        console.log(item)
-        return '100%'
+        return '200%'
       },
-      extend() {
+
+      showSub(index) {
+        this.currentIndex = index;
+        console.log(index);
         this.isExtend = !this.isExtend;
-        console.log(this.isExtend)
       },
       inviteOthers() {
         //分享
