@@ -12,22 +12,126 @@ const state = {
     headImage: '',
     userId: ''
   },
-  taskTheme:'',
-  taskExecutor: [{
-    isSelected: false,
-    nickname: 'jack',
-    updated: 15,
-    comments: 10,
-    progress: .7,
-    userId: '013161',
-    userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
+  pojects: {
+    'all': [],
+    'recieved': [],
+    'published': [{//已发布的任务
+      projectTheme: '',
+      id: 0,
+      tasks: {
+        taskExecutor: [{
+            isSelected: false,
+            nickname: 'jack',
+            updated: 15,
+            comments: 10,
+            progress: .7,
+            userId: '013161',
+            userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
+          },
+          {
+            isSelected: false,
+            nickname: 'jack',
+            updated: 15,
+            comments: 10,
+            progress: .5,
+            userId: '013161',
+            userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
+          },
+          {
+            isSelected: false,
+            nickname: 'sam',
+            updated: 10,
+            comments: 20,
+            progress: .5,
+            userId: '212344',
+            userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
+          },
+          {
+            isSelected: false,
+            nickname: 'smith',
+            updated: 10,
+            comments: 20,
+            progress: .5,
+            userId: '212344',
+            userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
+          },
+          {
+            isSelected: false,
+            nickname: 'jordon',
+            updated: 10,
+            comments: 20,
+            progress: .9,
+            userId: '212344',
+            userIcon: "http://img4.duitang.com/uploads/item/201605/29/20160529093324_mZPCi.jpeg"
+          },
+          {
+            isSelected: false,
+            nickname: 'mike',
+            updated: 10,
+            comments: 20,
+            progress: .5,
+            userId: '212344',
+            userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpgg"
+          },
+          {
+            isSelected: false,
+            nickname: 'simon',
+            updated: 30,
+            comments: 30,
+            progress: .4,
+            userId: '212344',
+            userIcon: 'http://img4.duitang.com/uploads/item/201605/29/20160529093324_mZPCi.jpeg'
+          },
+          {
+            isSelected: false,
+            nickname: 'ashe',
+            updated: 60,
+            comments: 50,
+            progress: .2,
+            userId: '212344',
+            userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
+          },
+          {
+            isSelected: false,
+            nickname: 'james',
+            updated: 10,
+            comments: 20,
+            progress: .8,
+            userId: '212344',
+            userIcon: "http://img4.duitang.com/uploads/item/201605/29/20160529093324_mZPCi.jpeg"
+          }
+        ]
+      }
+    }]
   },
+  taskTheme: '',
+  taskExecutor: [{// 已经结束的任务不放回 ，只放回未完成的任务
+      isSelected: false,
+      nickname: 'jack',
+      updated: 15,
+      comments: 10,
+      progress: .7,
+      userId: '013161',
+      endDate:'2018/4/26',      
+      userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
+    },
+    {
+      isSelected: false,
+      nickname: 'jack',
+      updated: 15,
+      comments: 10,
+      progress: .5,
+      endDate:'2018/4/20',
+      userId: '013161',
+      userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
+    },
     {
       isSelected: false,
       nickname: 'sam',
       updated: 10,
       comments: 20,
       progress: .5,
+      endDate:'2018/4/29',      
       userId: '212344',
       userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
     },
@@ -38,6 +142,7 @@ const state = {
       comments: 20,
       progress: .5,
       userId: '212344',
+      endDate:'2018/4/30',      
       userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
     },
     {
@@ -47,6 +152,7 @@ const state = {
       comments: 20,
       progress: .9,
       userId: '212344',
+      endDate:'2018/3/20',            
       userIcon: "http://img4.duitang.com/uploads/item/201605/29/20160529093324_mZPCi.jpeg"
     },
     {
@@ -56,6 +162,7 @@ const state = {
       comments: 20,
       progress: .5,
       userId: '212344',
+      endDate:'2018/3/20',                  
       userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpgg"
     },
     {
@@ -65,7 +172,8 @@ const state = {
       comments: 30,
       progress: .4,
       userId: '212344',
-      userIcon:'http://img4.duitang.com/uploads/item/201605/29/20160529093324_mZPCi.jpeg'
+      endDate:'2018/3/20',                  
+      userIcon: 'http://img4.duitang.com/uploads/item/201605/29/20160529093324_mZPCi.jpeg'
     },
     {
       isSelected: false,
@@ -74,6 +182,7 @@ const state = {
       comments: 50,
       progress: .2,
       userId: '212344',
+      endDate:'2018/3/20',                        
       userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
     },
     {
@@ -82,6 +191,7 @@ const state = {
       updated: 10,
       comments: 20,
       progress: .8,
+      endDate:'2018/3/20',                  
       userId: '212344',
       userIcon: "http://img4.duitang.com/uploads/item/201605/29/20160529093324_mZPCi.jpeg"
     }
@@ -114,7 +224,7 @@ const mutations = {
     state.user.token = data.token;
     state.user.userId = data.userId;
   },
-  [types.SET_TASKTHEME](state,value){
+  [types.SET_TASKTHEME](state, value) {
     state.taskTheme = value;
   },
   [types.SET_TASK_EXECUTOR](state, val) {
@@ -132,7 +242,7 @@ const mutations = {
       return b[type] - a[type];
     });
   },
-  [types.ADD_TASK_EXECUTOR](state, member) {//添加执行人成员
+  [types.ADD_TASK_EXECUTOR](state, member) { //添加执行人成员
     let _member = {
       isSelected: false,
       nickname: member,
@@ -140,13 +250,12 @@ const mutations = {
       comments: 0,
       progress: 0,
       userId: "212344",
-      userIcon:
-        "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+      userIcon: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
     };
     state.taskExecutor.push(_member);
   },
-  [types.DELETE_TASK_EXECUTOR](state,index){
-    state.taskExecutor.splice(index,1);
+  [types.DELETE_TASK_EXECUTOR](state, index) {
+    state.taskExecutor.splice(index, 1);
   },
   [types.SET_TASK](state, val) {
     let {
@@ -162,7 +271,7 @@ const mutations = {
       ispublic,
       membersCanSee,
       othersCanSee
-      } = val;
+    } = val;
     state.taskSetting.push({
       id,
       taskTheme,
@@ -181,6 +290,6 @@ const mutations = {
 };
 
 export default {
-  state ,
+  state,
   mutations
 }
