@@ -15,9 +15,12 @@ Vue.use(VueLazyLoad,{
 // 项目组件
 import '../src/common/base/dialog'
 import Load from '@/common/base/loading'
+// 通用组件
 import AppCom from '../src/common/index.js'
 
-import './assets/css/animate.less'
+//services
+import '@/services/ajax/netaxios.js'
+import axios from 'axios'
 
 Vue.use(AppCom);
 Vue.use(Load)

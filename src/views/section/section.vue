@@ -180,9 +180,12 @@
           <!------- begin status ------->
           <div class="edit-section b_d-flex b_flex-center">
             <div class="timer-shaft">
-              <div class="c_white-bg c_7 b_FS-18 b_font-PFR text-center">
-                {{ todayDate }}
-              </div>
+              <v-datetime  v-if="mode =='edit'" v-model="todayDate" format="MM-DD"  >
+                <div class="c_white-bg c_7 b_FS-18 b_font-PFR text-center">
+                  {{ todayDate.replace('-','/') }}
+                </div>
+              </v-datetime>
+
               <div class="light doing"></div>
               <div class="link-dot"></div>
               <div class="link-dot"></div>
@@ -268,18 +271,20 @@
         components:{
 
         },
+      created(){
+        this.todayDate = this.initDate()
+      },
         mounted(){
           const mode = this.$route.query.mode
           this.mode = mode == 'edit' ? 'edit' : 'look'
-          this.todayDate = this.initDate()
         },
-        methods:{
+        methods: {
           initDate(){
             var d = new Date()
-            var m = d.getMonth()+1
+            var m = d.getMonth() + 1
             var day = d.getDate()
-            console.log(( m <10 ? ('0'+ m ): m )+ '/' + (day < 10 ? ('0' + day) : day))
-            return ( m <10 ? ('0'+ m ): m )+ '/' + (day < 10 ? ('0' + day) : day)
+            console.log(( m < 10 ? ('0' + m ) : m ) + '/' + (day < 10 ? ('0' + day) : day))
+            return ( m < 10 ? ('0' + m ) : m ) + '-' + (day < 10 ? ('0' + day) : day)
           },
           deleteSect(key){
 

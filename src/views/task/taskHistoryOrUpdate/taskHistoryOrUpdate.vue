@@ -8,11 +8,14 @@
       <div class="task-main">
         <div class="edit-section b_d-flex b_flex-center" v-if="mode=='edit'">
           <div class="timer-shaft">
-            <div class="c_white-bg c_primary b_FS-18 b_font-PFM text-center">
-              {{ todayTime }}
-            </div>
-            <div class="b_FS-14 c_7 b_font-PFR text-center">{{ todayDate }}</div>
+            <!--<div class="c_white-bg c_primary b_FS-18 b_font-PFM text-center">-->
+              <!--{{ todayTime }}-->
+            <!--</div>-->
+            <div class="b_FS-18 c_7 b_font-PFR text-center">{{ todayDate }}</div>
             <div class="light doing"></div>
+            <div class="link-dot"></div>
+            <div class="link-dot"></div>
+            <div class="link-dot"></div>
             <div class="link-dot"></div>
             <div class="link-dot"></div>
             <div class="link-dot"></div>

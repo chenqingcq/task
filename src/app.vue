@@ -10,8 +10,11 @@
   </div>
 </template>
 
-<script>
+<script type="text/babel">
 
+  import {Demo} from '@/services'
+
+  import userModel from '@/common/js/model/userModel'
   export default {
     name: "App",
     data() {
@@ -23,11 +26,25 @@
           backgroundColor : '#f4f4f4',
           minHeight: '100%'
         },
-
         transitionName: 'slide-right'  // 默认动态路由变化为slide-right
-
-
       };
+    },
+    created(){
+      this.getToken()
+    },
+    methods:{
+      getToken(){
+        userModel.userid='0f4b68b07b9e4bab9c6cbe639b148358';
+        userModel.channelcode='7dc26571d9ff4';
+        // 获取token
+        userModel.getToken().then((data) => {
+        er
+          this.$store.commit('setToken', data.token)
+        this.$store.commit('user', userModel)
+      }).catch(() => {
+
+        })
+      }
     },
     watch: {
       '$route'(to, from){
@@ -63,12 +80,11 @@
     min-height: 629*2px;
   }
 
-
+/*路由过渡效果*/
   .Router {
     /*position: absolute;*/
     width: 100%;
     transition: all .8s ease;
-    /*top: 40px;*/
   }
 
   .slide-left-enter,

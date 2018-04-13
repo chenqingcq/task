@@ -86,11 +86,21 @@
     </div>
 </template>
 <script>
+
+
+    import { Demo } from '@/services'
+
     export default{
         data(){
             return{
               isOpen : false ,
             }
+        },
+        mounted(){
+          Demo.devUserLogin({
+            userId : '21212'
+          },true).then(()=>{})
+
         },
         components:{
 
