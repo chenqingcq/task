@@ -271,7 +271,7 @@
       font-size: 14*2px;
       color: #666666;
       text-align: right;
-      margin-right: 13*2px;
+      margin-right: 10*2px;
     }
     span.arrow {
       margin-top: 50%;
@@ -320,10 +320,10 @@
           />
         </li>
         <ul class="editDeadTime">
-          <li v-if="role == 'creator'" @touchstart='editSection' >
+          <li v-if="role == 'creator'" @touchstart='editSection'>
             <img class="editpng" src="@/assets/img/icon-edit.png" />
             <div class="editProgress">编辑项目节点</div>
-            <div class="editmore" >
+            <div class="editmore">
               <img class="editmore" src="@/assets/img/icon-right-slide03.png">
             </div>
           </li>
@@ -366,7 +366,8 @@
             </div>
             <div  ref="endDate" class="task-setting">结束时间 <img class="time-logo" src="@/assets/img/icon-right-slide03.png"/></div>
           </label>
-          <v-datetime  ref="endTime" class="userInput selectEndTime " v-model="endTime" format="YYYY.MM.DD" @on-change="endDate_change" placeholder="结束时间">
+          <v-datetime ref="endTime" class="userInput selectEndTime " v-model="endTime" format="YYYY.MM.DD" @on-change="endDate_change"
+            placeholder="结束时间">
           </v-datetime>
         </li>
         <li class="task-item">
@@ -383,11 +384,11 @@
             <div class="icon">
               <img src="@/assets/img/icon-nominee.png" />
             </div>
-            <div class="task-setting" ref="excutor">指定执行人</div>
+            <div class="task-setting" ref="exe">指定执行人</div>
           </label>
           <div id="appointer" @touchstart='appointerManager'>
-            <span class="name">{{executor}}</span>
-          <span class="arrow">
+            <span class="name" ref="executor">{{executor}}</span>
+            <span class="arrow">
             <img src="@/assets/img/icon-right-slide03.png" />
           </span>
           </div>
@@ -410,7 +411,7 @@
   </div>
 
 </template>
-<script type="text/babel">
+<script>
   import {
     mapMutations,
     mapGetters
@@ -454,7 +455,11 @@
       }
     },
     computed: {
-      ...mapGetters(['taskExecutor', 'getTaskSetting', 'getTaskTheme']),
+      ...mapGetters({
+        getTaskExecutor: 'getTaskExecutor',
+        getTaskSetting: 'getTaskSetting',
+        getTaskTheme: 'getTaskTheme'
+      }),
       isTaskTheme() {
         return this.taskTheme.length ? true : false;
       },
@@ -470,28 +475,79 @@
       _tasksetting() {
         return 'task-setting'
       },
-      role(){
+      role() {
         return this.$store.state.permission.project.role
 
       },
-      themeName (){
+      themeName() {
         return this.$store.state.permission.project.themeName
       }
     },
     watch: {
-      taskExecutor(newVal, oldVal) {
-        console.log(newVal, oldVal)
+      taskTheme(val) {
+        if (!!val) {
+          window.sessionStorage.setItem('taskTheme', val)
+        }
+      },
+      taskname(val) {
+        if (!!val) {
+          window.sessionStorage.setItem('taskname', val)
+        }
+      },
+      taskdesc(val) {
+        if (!!val) {
+          window.sessionStorage.setItem('taskdesc', val)
+        }
+      },
+      startTime(val) {
+        if (!!val) {
+          window.sessionStorage.setItem('startTime', val)
+        }
+      },
+      endTime(val) {
+        if (!!val) {
+          window.sessionStorage.setItem('endTime', val)
+        }
+      },
+      standard(val) {
+        if (!!val) {
+          window.sessionStorage.setItem('standard', val)
+        }
+      },
+      executor(val) {
+        if (!!val) {
+          window.sessionStorage.setItem('executor', val)
+        }
+      },
+      isPublic(val) {
+        if (!!val) {
+          window.sessionStorage.setItem('isPublic', val)
+        }
+      },
+      allowedLook(val) {
+        if (!!val) {
+          window.sessionStorage.setItem('allowedLook', val)
+        }
       }
     },
     beforeRouteEnter: (to, from, next) => {
       if (from.path == "/appointMessager" && to.path == '/addTaskSetting') {;
         next((vm) => {
           console.log(vm.taskExecutor) //过滤选中的执行人
-          vm.$refs.excutor.classList.add('active_')
-          vm.getExcutors(vm.taskExecutor)
+          vm.$refs.exe.classList.add('active_')
+          console.log(
+            vm.executor = vm.getTaskExecutor.username
+          )
         })
       } else {
-        next()
+        next((vm => {
+          let executor = window.sessionStorage.getItem('executor');
+          console.log(executor)
+          if (executor) {
+            vm.$refs.exe.classList.add('active_');
+            vm.$refs.executor.textContent = executor;
+          }
+        }))
       }
     },
     methods: {
@@ -506,12 +562,6 @@
           this.allowedLook = true;
         }
       },
-      getExcutors(members) {
-        let selected = members.filter((item, i) => {
-          return item.isSelected == true
-        });
-        this.executor = selected[0] && selected[0].nickname
-      },
       ...mapMutations({
         'SET_TASK': "SET_TASK"
       }),
@@ -520,7 +570,7 @@
           path: 'taskHistoryOrUpdate'
         }) //编辑项目节点
       },
-      editSection(){
+      editSection() {
         this.$router.push({
           path: '/section?mode=edit'
         }) //编辑项目节点
@@ -548,6 +598,7 @@
       validate() {
         let k;
         for (k in reflect_to_task) {
+          console.log(this.$data[k])
           if (this.$data.hasOwnProperty(k) && (this.$data[k].length === 0)) {
             console.log(k)
             this.$dialog.message({
@@ -593,32 +644,45 @@
       },
       startDate_change(val) {
         this.$refs.startDate.classList.add('active_');
+        document.querySelector('.selectStartTime>.vux-datetime-value').style.color = '#666'
         this.startTime = val;
       },
       endDate_change(val) {
-        this.$refs.endDate.classList.add('active_')
+        this.$refs.endDate.classList.add('active_');
+        document.querySelector('.selectEndTime>.vux-datetime-value').style.color = '#666'
         this.endTime = val;
       },
       setTaskTheme() {
         this.$refs.taskTheme.setAttribute('disabled', true);
         //this.taskTheme = this.getTaskTheme;
-
       },
       init() {
         //this.role != 'creator' ? this.setTaskTheme() : '';
-        this.taskTheme = this.themeName
+        this.taskTheme = window.sessionStorage.getItem('taskTheme');
+        this.taskname = window.sessionStorage.getItem('taskname');
+        this.taskdesc = window.sessionStorage.getItem('taskdesc');
+        this.startTime = window.sessionStorage.getItem('startTime');
+        console.log(this.startTime);
+        if (this.startTime) {
+          this.$refs.startDate.classList.add('active_');
+          document.querySelector('.selectStartTime>.vux-datetime-value').style.color = '#666'
+          document.querySelector('.selectStartTime>.vux-datetime-value').textContent = this.startTime;
+        }
+        this.endTime = window.sessionStorage.getItem('endTime');
+        this.standard = window.sessionStorage.getItem('standard');
+        this.isPublic = window.sessionStorage.getItem('isPublic');
+        this.allowedLook = window.sessionStorage.getItem(' allowedLook');
       }
     },
     created() {
       // this.role = 'taskManager'; //邀约他人可见
       //this.role = 'creator' //项目发起人编辑节点
-      console.log(this.taskExecutor)
-    },
-    mounted() {
+      // console.log(this.taskExecutor);
       this.$nextTick(() => {
         this.init()
       })
-    }
+    },
+    mounted() {}
   }
 
 </script>

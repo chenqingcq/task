@@ -1,5 +1,6 @@
 export const user = state => state.user
 export const taskExecutors = state => state.task.taskExecutors
+export const getTaskExecutor = state => state.task.taskExecutor
 export const getTaskSetting = state => state.task.taskSetting
 export const getTaskTheme = state => state.task.taskTheme
 

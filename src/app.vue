@@ -1,10 +1,10 @@
 <template>
   <div  :style = '[appContainerCss]'  >
-    <!--<keep-alive>-->
+    <keep-alive>
       <transition :name="transitionName">
         <router-view class="wrapper Router" />
      </transition>
-    <!--</keep-alive>-->
+    </keep-alive>
     <!--底部 会展 logo - 会管家-展会应用商店-->
     <v-bottom-sign v-if="isShowBottomSign"></v-bottom-sign>
   </div>

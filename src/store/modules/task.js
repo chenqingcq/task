@@ -3,7 +3,7 @@
  */
 import * as types from "../mutation-types";
 
-const state = {
+let state = {
   user: {
     username: "",
     nickname: "",
@@ -13,6 +13,7 @@ const state = {
     userId: ''
   },
   taskTheme: '',
+  taskExecutor: '',
   taskExecutors: [
     [{
         isSelected: false,
@@ -22,9 +23,11 @@ const state = {
         updated: 15,
         comments: 10,
         progress: .5,
-        userId: '013161',
+        taskname: '展台基础工作',
+        id: '0',
+        userId: '001',
         endDate: '2018/4/26',
-        userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
+        userIcon: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
       },
       {
         isSelected: false,
@@ -33,9 +36,11 @@ const state = {
         endTime: '2018/4/30',
         updated: 15,
         comments: 10,
-        userId: '013161',
+        taskname: '车展基础工作',
+        id: '1',
+        userId: '002',
         endDate: '2018/4/26',
-        userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
+        userIcon: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
       }
     ],
     [{
@@ -45,20 +50,91 @@ const state = {
       endTime: '2018/4/30',
       updated: 15,
       comments: 10,
-      userId: '013161',
+      taskname: '舞台基础工作',
+      id: '0',
+      userId: '003',
       endDate: '2018/4/26',
-      userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
+      userIcon: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
     }],
     [{
+        isSelected: false,
+        executor: '山姆',
+        startTime: '2018/4/11',
+        endTime: '2018/4/30',
+        updated: 15,
+        taskname: '车展基础工作',
+        comments: 10,
+        id: '0',
+        userId: '004',
+        endDate: '2018/4/26',
+        userIcon: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+      },
+      {
+        isSelected: false,
+        executor: '山姆',
+        startTime: '2018/4/11',
+        endTime: '2018/4/30',
+        updated: 15,
+        comments: 10,
+        taskname: '车展基础工作',
+        id: '1',
+        userId: '005',
+        endDate: '2018/4/26',
+        userIcon: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+
+      }
+    ],
+    [{
       isSelected: false,
-      executor: '山姆',
+      executor: '安迪',
       startTime: '2018/4/11',
       endTime: '2018/4/30',
       updated: 15,
       comments: 10,
-      userId: '013161',
+      taskname: '车展基础工作',
+      id: '0',
+      userId: '006',
       endDate: '2018/4/26',
-      userIcon: "http://img3.imgtn.bdimg.com/it/u=16550438,2220103346&fm=214&gp=0.jpg"
+      userIcon: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+    }],
+    [{
+      isSelected: false,
+      executor: '比伯',
+      startTime: '2018/4/11',
+      endTime: '2018/4/30',
+      updated: 15,
+      comments: 10,
+      taskname: '车展基础工作',
+      id: '1',
+      userId: '008',
+      endDate: '2018/4/26',
+      userIcon: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+    }],
+    [{
+      isSelected: false,
+      executor: '刘观',
+      startTime: '2018/4/11',
+      endTime: '2018/4/30',
+      updated: 15,
+      comments: 10,
+      taskname: '车展基础工作',
+      id: '1',
+      userId: '008',
+      endDate: '2018/4/26',
+      userIcon: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+    }],
+    [{
+      isSelected: false,
+      executor: '李明',
+      startTime: '2018/4/11',
+      endTime: '2018/4/30',
+      updated: 15,
+      comments: 10,
+      taskname: '车展基础工作',
+      id: '1',
+      userId: '008',
+      endDate: '2018/4/26',
+      userIcon: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
     }],
   ],
 
@@ -94,14 +170,8 @@ const mutations = {
     state.taskTheme = value;
   },
   [types.SET_TASK_EXECUTOR](state, val) {
-    console.log(arguments);
-    let i = 0;
-    for (i; i < state.taskExecutor.length; i++) {
-      if (i != val.index) {
-        state.taskExecutor[i].isSelected = false;
-      }
-    }
-    state.taskExecutor[val.index].isSelected = !val.isSelected;
+    console.log(val);
+    state.taskExecutor= {"username":val[0].executor,userId:val[0].userId};
   },
   [types.SORT_TASK_EXECUTOR](state, type) {
     state.taskExecutor.sort((a, b) => {
@@ -124,20 +194,7 @@ const mutations = {
     state.taskExecutor.splice(index, 1);
   },
   [types.SET_TASK](state, val) {
-    let {
-      id,
-      taskTheme,
-      taskName,
-      taskDesc,
-      startTime,
-      endTime,
-      standard,
-      taskExecutor,
-      allowedCreate,
-      ispublic,
-      membersCanSee,
-      othersCanSee
-    } = val;
+
     state.taskSetting.push({
       id,
       taskTheme,

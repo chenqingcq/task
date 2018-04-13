@@ -75,6 +75,7 @@
         background: #fff;
         border-bottom: 2px solid rgba(151, 151, 151, 0.21);
         &.sub-item {
+          font-size: 16*2px !important;
           .select {
             position: absolute;
             left: 45*2px !important;
@@ -111,7 +112,7 @@
             left: 75*2px;
             transform: translateY(-50%);
             margin-left: 10*2px;
-            width: 32*2px;
+            width: auto;
             font-family: PingFangSC-Regular;
             font-size: 16px*2;
             color: #333333;
@@ -270,6 +271,11 @@
     }
   }
 
+  #name {
+    font-size: 12*2px;
+    width: auto;
+  }
+
 </style>
 <template>
 
@@ -294,14 +300,14 @@
         </ul>
       </share>
     </header>
-    <div class="editDeadTime" ref="lisItem">
+    <div class="editDeadTime" ref="lisItem" :style='styleObj'>
       <scroll>
         <ul>
           <div v-for="(item,index) in taskExecutors" :key="index">
             <li>
               <div class="user">
-                <div @touchstart='selected(index,item[0].isSelected)' class="select">
-                  <img src="@/assets/img/sign-selected.png" v-show="item[0].isSelected" />
+                <div @touchstart='select(index,item)' class="select">
+                  <img src="@/assets/img/sign-selected.png" v-show="isSelectedShow[index]&&isSelectedShow[index][0]" />
                 </div>
                 <div class="icon">
                   <img v-lazy="item[0].userIcon">
@@ -312,16 +318,16 @@
               <div class="comments">{{item[0].comments}}</div>
               <div class="progress">{{progress(item[0])}}</div>
               <div class="arrow" @touchstart='showSub(index)'>
-                <img :src="imgUrl(index)" />
+                <img :src="imgUrl(index)" v-show="item.length>1" />
               </div>
             </li>
-            <li class="sub-item" v-for="(item_,index_) in item" v-show="isSubShow[index]">
+            <li class="sub-item" v-for="(item_,index_) in item" v-show="isSubShow[index] && item.length>1">
               <!--下拉可见-->
               <div class="user">
-                <div @touchstart='selected(index,item.isSelected)' class="select">
-                  <img src="@/assets/img/sign-selected.png" v-show="item.isSelected" />
+                <div @touchstart='selectedSub(index,index_,item_)' class="select">
+                  <img src="@/assets/img/sign-selected.png" v-show="item_.isSelected" />
                 </div>
-                <div class="name">{{item_.executor}}</div>
+                <div class="name" id="name">{{item_.taskname}}</div>
               </div>
               <div class="update">{{item_.updated}}</div>
               <div class="comments">{{item_.comments}}</div>
@@ -358,14 +364,14 @@
   export default {
     data() {
       return {
-        showShare: false,
-        isExtend: false,
+        showShare: false, //分享
+        isExtend: false, //点击显示下拉
         isSubShow: '',
+        isSelectedShow: '',
         showBtntype: false, //默认显示添加成员按钮
         flag: false, //第一次进入添加成员界面
         type: "updated",
         showInvite: false,
-        scale: 0,
         navs: [{
             name: "更新",
             type: "update"
@@ -384,7 +390,21 @@
       };
     },
     computed: {
-      ...mapGetters(['taskExecutors']),
+      ...mapGetters({
+        taskExecutors: 'taskExecutors',
+        getTaskExecutor: 'getTaskExecutor'
+      }),
+      styleObj() {
+        if (this.taskExecutors.length >= 6) {
+          return {
+            background: `linear-gradient(to bottom, rgba(105, 198, 254, .6), rgba(105, 198, 254, .6))`
+          }
+        } else {
+          return {
+            background: ` rgb(244, 244, 244)`
+          }
+        }
+      }
     },
     watch: {
       showBtntype(newVal, oldVal) {
@@ -397,8 +417,23 @@
       }
     },
     methods: {
+      selectedSub(preIndex, selfIndex, item) {
+        console.log(preIndex, selfIndex, item);
+      },
+      select(selfIndex, item) {
+        console.log(selfIndex, item);
+        this.showBtntype = !this.showBtntype;
+        if (this.showBtntype) {
+          this.SET_TASK_EXECUTOR(item);
+        }
+        this.isSelectedShow[selfIndex][0] = !this.isSelectedShow[selfIndex][0];
+        console.log(
+          this.isSelectedShow[selfIndex]
+        )
+        console.log(this.getTaskExecutor);
+      },
       progress(item) {
-        return '200%'
+        return '100%'
       },
       imgUrl(index) {
         if (this.isExtend && this.currentIndex === index) {
@@ -465,19 +500,9 @@
         ADD_TASK_EXECUTOR: "ADD_TASK_EXECUTOR",
         DELETE_TASK_EXECUTOR: "DELETE_TASK_EXECUTOR"
       }),
-      selected(index, isSelected) {
-        return;
-        this.SET_TASK_EXECUTOR({
-          index,
-          isSelected
-        });
-        this.nowIndex = index;
-        //决定显示 指派人员还是添加人员
-        let status = this.taskExecutor.filter((item, index) => {
-          return item.isSelected;
-        });
-        this.showBtntype = status.length ? true : false;
-        console.log(this.showBtntype)
+      selected(index, item) {
+        console.log(index, item);
+
       },
       changeIndex(i, type) {
         this.type = type;
@@ -512,11 +537,22 @@
         this.SORT_TASK_EXECUTOR(type);
         console.log(type, this.taskExecutor);
       },
+      initSelectedShow() {
+        let arr = new Array(this.taskExecutors.length).fill([]),
+          i = 0,
+          data = this.taskExecutors;
+        for (i; i < data.length; i++) {
+          arr[i] = data[i].map((val, index) => {
+            return false
+          })
+        }
+        this.isSelectedShow = arr;
+      },
       init() {
-        document.querySelector('.deleteBtn').addEventListener('touchstart', this.deleteExcutor)
+        document.querySelector('.deleteBtn').addEventListener('touchstart', this.deleteExcutor);
         this.showInvite = true;
         this.isSubShow = new Array(this.taskExecutors.length).fill(false);
-        console.log(this.taskExecutors, this.isSubShow);
+        console.log(this.taskExecutors);
       }
     },
     components: {
@@ -527,6 +563,7 @@
     created() {},
     mounted() {
       this.init();
+      this.initSelectedShow();
     }
   };
 
