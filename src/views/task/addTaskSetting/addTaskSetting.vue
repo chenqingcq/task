@@ -676,7 +676,7 @@
         if (!!this.endTime) {
           console.log(1111)
           this.$refs.endDate_.classList.add('active_');
-          document.querySelector('#selectEndTime').style.color = '#666'
+          document.querySelector('.selectEndTime>.vux-datetime-value').style.color = '#666'
           document.querySelector('.selectEndTime>.vux-datetime-value').textContent = this.endTime;
         } else {
           console.log(
