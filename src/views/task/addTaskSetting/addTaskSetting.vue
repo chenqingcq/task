@@ -662,25 +662,9 @@
         this.taskname = window.sessionStorage.getItem('taskname');
         this.taskdesc = window.sessionStorage.getItem('taskdesc');
         this.startTime = window.sessionStorage.getItem('startTime');
-        // console.log(this.startTime);
-        if (this.startTime) {
-          this.$refs.startDate.classList.add('active_');
-          document.querySelector('.selectStartTime>.vux-datetime-value').style.color = '#666'
-          document.querySelector('.selectStartTime>.vux-datetime-value').textContent = this.startTime;
-        } else {
-          document.querySelector('.selectStartTime>.vux-datetime-value').style.color = '#B6B6B6'
-          this.$refs.startDate.classList.remove('active_');
-        }
+        console.log(this.startTime);
         this.endTime = window.sessionStorage.getItem('endTime');
         console.log(this.endTime)
-        if (this.endTime) {
-          this.$refs.endDate.classList.add('active_');
-          document.querySelector('.selectEndTime>.vux-datetime-value').style.color = '#666'
-          document.querySelector('.selectEndTime>.vux-datetime-value').textContent = this.endTime;
-        } else {
-          document.querySelector('.selectEndTime>.vux-datetime-value').style.color = '#B6B6B6'
-          this.$refs.endDate.classList.remove('active_');
-        }
         this.standard = window.sessionStorage.getItem('standard');
         this.isPublic = window.sessionStorage.getItem('isPublic');
         this.allowedLook = window.sessionStorage.getItem(' allowedLook');
