@@ -354,9 +354,9 @@
             <div ref="startDate" class="task-setting">开始时间<img class="time-logo" src="@/assets/img/icon-right-slide03.png"/></div>
           </label>
 
-          <v-datetime ref="startTime" class="userInput selectStartTime " format="YYYY.MM.DD" @on-change="startDate_change" placeholder="开始时间">
+          <v-datetime ref="startTime" id="selectStartTime" class="userInput selectStartTime " format="YYYY.MM.DD" @on-change="startDate_change" placeholder="开始时间">
             <!-- 开始时间 -->
-          </v-datetime>
+          </v-datetime> 
 
         </li>
         <li class="task-item time-logo-container">
@@ -364,9 +364,9 @@
             <div class="icon">
               <img src="@/assets/img/icon-end time.png" />
             </div>
-            <div  ref="endDate" class="task-setting">结束时间 <img class="time-logo" src="@/assets/img/icon-right-slide03.png"/></div>
+            <div class="task-setting"  ref="endDate_">结束时间 <img class="time-logo" src="@/assets/img/icon-right-slide03.png"/></div>
           </label>
-          <v-datetime ref="endTime" class="userInput selectEndTime " v-model="endTime" format="YYYY.MM.DD" @on-change="endDate_change"
+          <v-datetime ref="endTime" id="selectEndTime" class="userInput selectEndTime " v-model="endTime" format="YYYY.MM.DD" @on-change="endDate_change"
             placeholder="结束时间">
           </v-datetime>
         </li>
@@ -643,12 +643,12 @@
         this.allowedLook = status;
       },
       startDate_change(val) {
-        this.$refs.startDate.classList.add('active_');
+        this.$refs.startDate_.classList.add('active_');
         document.querySelector('.selectStartTime>.vux-datetime-value').style.color = '#666'
         this.startTime = val;
       },
       endDate_change(val) {
-        this.$refs.endDate.classList.add('active_');
+        // this.$refs.endDate_.classList.add('active_');
         document.querySelector('.selectEndTime>.vux-datetime-value').style.color = '#666'
         this.endTime = val;
       },
@@ -662,9 +662,30 @@
         this.taskname = window.sessionStorage.getItem('taskname');
         this.taskdesc = window.sessionStorage.getItem('taskdesc');
         this.startTime = window.sessionStorage.getItem('startTime');
-        console.log(this.startTime);
+        // console.log(this.startTime);
+        if (this.startTime) {
+          this.$refs.startDate.classList.add('active_');
+          document.querySelector('.selectStartTime>.vux-datetime-value').style.color = '#666'
+          document.querySelector('.selectStartTime>.vux-datetime-value').textContent = this.startTime;
+        } else {
+          document.querySelector('.selectStartTime>.vux-datetime-value').style.color = '#B6B6B6'
+          this.$refs.startDate.classList.remove('active_');
+        }
         this.endTime = window.sessionStorage.getItem('endTime');
         console.log(this.endTime)
+        if (!!this.endTime) {
+          console.log(1111)
+          this.$refs.endDate_.classList.add('active_');
+          document.querySelector('#selectEndTime').style.color = '#666'
+          document.querySelector('.selectEndTime>.vux-datetime-value').textContent = this.endTime;
+        } else {
+          console.log(
+          document.querySelector('.selectEndTime>.vux-datetime-value').style.color = 'green'
+            
+          )
+          this.$refs.endDate_.classList.remove('active_');
+        }
+        
         this.standard = window.sessionStorage.getItem('standard');
         this.isPublic = window.sessionStorage.getItem('isPublic');
         this.allowedLook = window.sessionStorage.getItem(' allowedLook');

@@ -7,6 +7,7 @@
     right: 0;
     bottom: 0;
     top: 0;
+    height: 100vh;
     header {
       width: 100%;
       height: 205*2px;
@@ -173,7 +174,7 @@
       addTask() {
         if (!this.taskName.length) {
           this.$dialog.message({
-            message: '填写项目主题名称!'
+            message: '填写项目主题名称'
           })
         } else {
           this.SET_TASKTHEME(this.taskName);
