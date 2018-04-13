@@ -461,16 +461,16 @@
         getTaskTheme: 'getTaskTheme'
       }),
       isTaskTheme() {
-        return this.taskTheme.length ? true : false;
+        return this.taskTheme && this.taskTheme.length ? true : false;
       },
       isTaskName() {
-        return this.taskname.length ? true : false;
+        return this.taskname && this.taskname.length ? true : false;
       },
       isTaskDesc() {
-        return this.taskdesc.length ? true : false;
+        return this.taskdesc && this.taskdesc.length ? true : false;
       },
       isTaskStandard() {
-        return this.standard.length ? true : false;
+        return this.standard && this.standard.length ? true : false;
       },
       _tasksetting() {
         return 'task-setting'
@@ -539,7 +539,7 @@
             vm.executor = vm.getTaskExecutor.username
           )
         })
-      } else {
+      } else if (from.path !== "/appointMessager" && to.path == '/addTaskSetting') {
         next((vm => {
           let executor = window.sessionStorage.getItem('executor');
           console.log(executor)
@@ -662,13 +662,25 @@
         this.taskname = window.sessionStorage.getItem('taskname');
         this.taskdesc = window.sessionStorage.getItem('taskdesc');
         this.startTime = window.sessionStorage.getItem('startTime');
-        console.log(this.startTime);
+        // console.log(this.startTime);
         if (this.startTime) {
           this.$refs.startDate.classList.add('active_');
           document.querySelector('.selectStartTime>.vux-datetime-value').style.color = '#666'
           document.querySelector('.selectStartTime>.vux-datetime-value').textContent = this.startTime;
+        } else {
+          document.querySelector('.selectStartTime>.vux-datetime-value').style.color = '#B6B6B6'
+          this.$refs.startDate.classList.remove('active_');
         }
         this.endTime = window.sessionStorage.getItem('endTime');
+        console.log(this.endTime)
+        if (this.endTime) {
+          this.$refs.endDate.classList.add('active_');
+          document.querySelector('.selectEndTime>.vux-datetime-value').style.color = '#666'
+          document.querySelector('.selectEndTime>.vux-datetime-value').textContent = this.endTime;
+        } else {
+          document.querySelector('.selectEndTime>.vux-datetime-value').style.color = '#B6B6B6'
+          this.$refs.endDate.classList.remove('active_');
+        }
         this.standard = window.sessionStorage.getItem('standard');
         this.isPublic = window.sessionStorage.getItem('isPublic');
         this.allowedLook = window.sessionStorage.getItem(' allowedLook');
