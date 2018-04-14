@@ -1,10 +1,10 @@
 <template>
-  <transition name="fade" v-if="show">
+  <transition  v-if="show">
     <div class="container" v-if="type !=='message'">
       <template v-if="type==='info'">
         <div class="panel-info">
           <img class="close" @touchstart='close' src="../../../assets/img/icon-close.png" />
-          <input  id="userIpt" class="b_FS-16" type="text" ref='input' v-model="text" :placeholder="placeholder" maxlength="20">
+          <input id="userIpt" class="b_FS-16" type="text" ref='input' v-model="text" :placeholder="placeholder" maxlength="20">
           <label for="userIpt" v-show="btnName=='add'">
             <!--<img class="icon-edit" v-show="btnName=='add'" src="@/assets/img/icon-edit01.png" />            -->
          </label>
@@ -72,6 +72,7 @@
     },
 
     methods: {
+
       close() {
         this.show = false;
       },
@@ -107,6 +108,25 @@
 
 </script>
 <style lang='less' scoped>
+  .fade-enter-active {
+    animation: zoom 1s ease;
+  }
+
+  .fade-leave-active {
+    animation: zoom 1s ease reverse;
+  }
+
+  @keyframes zoom {
+    from {
+      transform: scale(0.5, 0.5);
+      opacity: .5;
+    }
+    to {
+      transform: scale(1, 1);
+      opacity: 1;
+    }
+  }
+
   @keyframes scale {
     0% {
       transform: scale(.8, .8);

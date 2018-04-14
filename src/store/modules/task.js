@@ -148,7 +148,7 @@ let state = {
     standard: '',
     taskExecutor: "",
     allowedCreate: true,
-    ispublic: false,
+    isPublic: false,
     membersCanSee: true,
     othersCanSee: []
   }],
@@ -171,7 +171,10 @@ const mutations = {
   },
   [types.SET_TASK_EXECUTOR](state, val) {
     console.log(val);
-    state.taskExecutor= {"username":val[0].executor,userId:val[0].userId};
+    state.taskExecutor = {
+      "username": val[0].executor,
+      userId: val[0].userId
+    };
   },
   [types.SORT_TASK_EXECUTOR](state, type) {
     state.taskExecutor.sort((a, b) => {
@@ -194,9 +197,7 @@ const mutations = {
     state.taskExecutor.splice(index, 1);
   },
   [types.SET_TASK](state, val) {
-
-    state.taskSetting.push({
-      id,
+    let {
       taskTheme,
       taskName,
       taskDesc,
@@ -205,9 +206,18 @@ const mutations = {
       standard,
       taskExecutor,
       allowedCreate,
-      ispublic,
-      membersCanSee,
-      othersCanSee
+      isPublic,
+    } = val;
+    state.taskSetting.push({
+      taskTheme,
+      taskName,
+      taskDesc,
+      startTime,
+      endTime,
+      standard,
+      taskExecutor,
+      allowedCreate,
+      isPublic
     });
   }
 };

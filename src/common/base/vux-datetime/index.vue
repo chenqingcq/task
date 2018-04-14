@@ -1,18 +1,14 @@
 <template>
-  <a
-  class="vux-datetime weui-cell"
-  :class="{'weui-cell_access': !readonly}"
-  data-cancel-text="取消"
-  data-confirm-text="确认"
-  href="javascript:">
+  <a class="vux-datetime weui-cell" :class="{'weui-cell_access': !readonly}" data-cancel-text="取消" data-confirm-text="确认" href="javascript:">
     <slot>
       <div>
         <slot name="title">
-          <p :style="{width: $parent.labelWidth, textAlign: $parent.labelAlign, marginRight: $parent.labelMarginRight}" :class="labelClass" v-html="title"></p>
+          <p :style="{width: $parent.labelWidth, textAlign: $parent.labelAlign, marginRight: $parent.labelMarginRight}" :class="labelClass"
+            v-html="title"></p>
         </slot>
         <!-- <inline-desc v-if="inlineDesc">{{inlineDesc}}</inline-desc> -->
       </div>
-      <div class="weui-cell__ft vux-cell-primary vux-datetime-value" :style="{textAlign: valueTextAlign}">
+      <div class="weui-cell__ft test vux-cell-primary vux-datetime-value" :style='test'>
         {{ _value }}
         <!-- <icon class="vux-input-icon" type="warn" v-show="!valid" :title="firstError"></icon> -->
       </div>
@@ -22,250 +18,259 @@
 
 
 <script>
-//import Icon from '../icon'
-import Picker from './datetimepicker'
-//import Group from '../group'
-// import InlineDesc from '../inline-desc'
-//import Uuid from '../../mixins/uuid'
-import format from './date/format'
+  //import Icon from '../icon'
+  import Picker from './datetimepicker'
+  //import Group from '../group'
+  // import InlineDesc from '../inline-desc'
+  //import Uuid from '../../mixins/uuid'
+  import format from './date/format'
 
-export default {
-  name: 'VDatetime',
-  components: {
-    // Group,
-    // InlineDesc,
-    // Icon
-  },
-  props: {
-    format: {
-      type: String,
-      default: 'YYYY-MM-DD'
+  export default {
+    name: 'VDatetime',
+    components: {
+      // Group,
+      // InlineDesc,
+      // Icon
     },
-    title: String,
-    value: {
-      type: String,
-      default: ''
+    props: {
+      format: {
+        type: String,
+        default: 'YYYY-MM-DD'
+      },
+      title: String,
+      value: {
+        type: String,
+        default: ''
+      },
+      inlineDesc: String,
+      placeholder: String,
+      minYear: Number,
+      maxYear: Number,
+      confirmText: String,
+      cancelText: String,
+      clearText: String,
+      yearRow: {
+        type: String,
+        default: '{value}'
+      },
+      monthRow: {
+        type: String,
+        default: '{value}'
+      },
+      dayRow: {
+        type: String,
+        default: '{value}'
+      },
+      hourRow: {
+        type: String,
+        default: '{value}'
+      },
+      minuteRow: {
+        type: String,
+        default: '{value}'
+      },
+      required: {
+        type: Boolean,
+        default: false
+      },
+      minHour: {
+        type: Number,
+        default: 0
+      },
+      maxHour: {
+        type: Number,
+        default: 23
+      },
+      startDate: String,
+      endDate: String,
+      valueTextAlign: String,
+      displayFormat: Function,
+      readonly: Boolean,
+      hourList: Array,
+      minuteList: Array,
+      show: Boolean,
+      defaultSelectedValue: String,
+      computeHoursFunction: Function
     },
-    inlineDesc: String,
-    placeholder: String,
-    minYear: Number,
-    maxYear: Number,
-    confirmText: String,
-    cancelText: String,
-    clearText: String,
-    yearRow: {
-      type: String,
-      default: '{value}'
+    created() {
+      this.isFirstSetValue = false
+      this.currentValue = this.value
     },
-    monthRow: {
-      type: String,
-      default: '{value}'
-    },
-    dayRow: {
-      type: String,
-      default: '{value}'
-    },
-    hourRow: {
-      type: String,
-      default: '{value}'
-    },
-    minuteRow: {
-      type: String,
-      default: '{value}'
-    },
-    required: {
-      type: Boolean,
-      default: false
-    },
-    minHour: {
-      type: Number,
-      default: 0
-    },
-    maxHour: {
-      type: Number,
-      default: 23
-    },
-    startDate: String,
-    endDate: String,
-    valueTextAlign: String,
-    displayFormat: Function,
-    readonly: Boolean,
-    hourList: Array,
-    minuteList: Array,
-    show: Boolean,
-    defaultSelectedValue: String,
-    computeHoursFunction: Function
-  },
-  created () {
-    this.isFirstSetValue = false
-    this.currentValue = this.value
-  },
-  data () {
-    return {
-      currentValue: null,
-      valid: true,
-      errors: {},
-      uuid:""
-    }
-  },
-  mounted () {
-    const uuid = this.uuid = Math.random().toString(36).substring(3, 8)
-    this.$el.setAttribute('id', `vux-datetime-${uuid}`)
-    if (!this.readonly) {
-      this.$nextTick(() => {
-        this.render()
-      })
-    }
-  },
-  computed: {
-    _value () {
-      if (!this.currentValue) {
-        return this.placeholder || ''
-      } else {
-        return this.displayFormat ? this.displayFormat(this.currentValue) : this.currentValue
+    data() {
+      return {
+        currentValue: null,
+        valid: true,
+        errors: {},
+        uuid: ""
       }
     },
-    pickerOptions () {
-      const _this = this
-      const options = {
-        trigger: '#vux-datetime-' + this.uuid,
-        format: this.format,
-        value: this.currentValue,
-        output: '.vux-datetime-value',
-        confirmText: _this.getButtonText('confirm'),
-        cancelText: _this.getButtonText('cancel'),
-        clearText: _this.clearText,
-        yearRow: this.yearRow,
-        monthRow: this.monthRow,
-        dayRow: this.dayRow,
-        hourRow: this.hourRow,
-        minuteRow: this.minuteRow,
-        minHour: this.minHour,
-        maxHour: this.maxHour,
-        startDate: this.startDate,
-        endDate: this.endDate,
-        hourList: this.hourList,
-        minuteList: this.minuteList,
-        defaultSelectedValue: this.defaultSelectedValue,
-        computeHoursFunction: this.computeHoursFunction,
-        onSelect (type, val, wholeValue) {
-          if (_this.picker && _this.picker.config.renderInline) {
-            _this.$emit('input', wholeValue)
-            _this.$emit('on-change', wholeValue)
+    mounted() {
+      const uuid = this.uuid = Math.random().toString(36).substring(3, 8)
+      this.$el.setAttribute('id', `vux-datetime-${uuid}`)
+      if (!this.readonly) {
+        this.$nextTick(() => {
+          this.render()
+        })
+      }
+    },
+    computed: {
+      test() {
+        return {
+          color:'#d8d8d8'
+        }
+      },
+      _value() {
+        if (!this.currentValue) {
+          return this.placeholder || ''
+        } else {
+          return this.displayFormat ? this.displayFormat(this.currentValue) : this.currentValue
+        }
+      },
+      pickerOptions() {
+        const _this = this
+        const options = {
+          trigger: '#vux-datetime-' + this.uuid,
+          format: this.format,
+          value: this.currentValue,
+          output: '.vux-datetime-value',
+          confirmText: _this.getButtonText('confirm'),
+          cancelText: _this.getButtonText('cancel'),
+          clearText: _this.clearText,
+          yearRow: this.yearRow,
+          monthRow: this.monthRow,
+          dayRow: this.dayRow,
+          hourRow: this.hourRow,
+          minuteRow: this.minuteRow,
+          minHour: this.minHour,
+          maxHour: this.maxHour,
+          startDate: this.startDate,
+          endDate: this.endDate,
+          hourList: this.hourList,
+          minuteList: this.minuteList,
+          defaultSelectedValue: this.defaultSelectedValue,
+          computeHoursFunction: this.computeHoursFunction,
+          // onSelect(type, val, wholeValue) {
+          //   if (_this.picker && _this.picker.config.renderInline) {
+          //     _this.$emit('input', wholeValue)
+          //     _this.$emit('on-change', {
+
+          //     })
+          //   }
+          // },
+          onConfirm(value) {
+            _this.currentValue = value
+          },
+          onClear(value) {
+            _this.$emit('on-clear', value)
+          },
+          onHide() {
+            _this.$emit('update:show', false)
+            _this.validate()
+            _this.$emit('on-hide')
+          },
+          onShow() {
+            _this.$emit('update:show', true)
+            _this.$emit('on-show')
           }
-        },
-        onConfirm (value) {
-          _this.currentValue = value
-        },
-        onClear (value) {
-          _this.$emit('on-clear', value)
-        },
-        onHide () {
-          _this.$emit('update:show', false)
-          _this.validate()
-          _this.$emit('on-hide')
-        },
-        onShow () {
-          _this.$emit('update:show', true)
-          _this.$emit('on-show')
+        }
+        if (this.minYear) {
+          options.minYear = this.minYear
+        }
+        if (this.maxYear) {
+          options.maxYear = this.maxYear
+        }
+        return options
+      },
+      firstError() {
+        let key = Object.keys(this.errors)[0]
+        return this.errors[key]
+      },
+      labelClass() {
+        return {
+          'vux-cell-justify': this.$parent.labelAlign === 'justify' || this.$parent.$parent.labelAlign === 'justify'
         }
       }
-      if (this.minYear) {
-        options.minYear = this.minYear
-      }
-      if (this.maxYear) {
-        options.maxYear = this.maxYear
-      }
-      return options
     },
-    firstError () {
-      let key = Object.keys(this.errors)[0]
-      return this.errors[key]
-    },
-    labelClass () {
-      return {
-        'vux-cell-justify': this.$parent.labelAlign === 'justify' || this.$parent.$parent.labelAlign === 'justify'
+    methods: {
+      getButtonText(type) {
+        if (type === 'cancel' && this.cancelText) {
+          return this.cancelText
+        } else if (type === 'confirm' && this.confirmText) {
+          return this.confirmText
+        }
+        return this.$el.getAttribute(`data-${type}-text`)
+      },
+      render() {
+        this.$nextTick(() => {
+          this.picker && this.picker.destroy()
+          this.picker = new Picker(this.pickerOptions)
+        })
+      },
+      validate() {
+        if (!this.currentValue && this.required) {
+          this.valid = false
+          this.errors.required = '必填'
+          return
+        }
+        this.valid = true
+        this.errors = {}
       }
-    }
-  },
-  methods: {
-    getButtonText (type) {
-      if (type === 'cancel' && this.cancelText) {
-        return this.cancelText
-      } else if (type === 'confirm' && this.confirmText) {
-        return this.confirmText
-      }
-      return this.$el.getAttribute(`data-${type}-text`)
     },
-    render () {
-      this.$nextTick(() => {
-        this.picker && this.picker.destroy()
-        this.picker = new Picker(this.pickerOptions)
-      })
-    },
-    validate () {
-      if (!this.currentValue && this.required) {
-        this.valid = false
-        this.errors.required = '必填'
-        return
-      }
-      this.valid = true
-      this.errors = {}
-    }
-  },
-  watch: {
-    readonly (val) {
-      if (val) {
-        this.picker && this.picker.destroy()
-      } else {
+    watch: {
+      readonly(val) {
+        if (val) {
+          this.picker && this.picker.destroy()
+        } else {
+          this.render()
+        }
+      },
+      show(val) {
+        if (val) {
+          this.picker && this.picker.show(this.currentValue)
+        }
+      },
+      currentValue(val, oldVal) {
+        this.$emit('input', val)
+        if (!this.isFirstSetValue) {
+          this.isFirstSetValue = true
+          oldVal && this.$emit('on-change', val)
+        } else {
+          this.$emit('on-change', val)
+        }
+        this.validate()
+      },
+      startDate() {
         this.render()
-      }
-    },
-    show (val) {
-      if (val) {
-        this.picker && this.picker.show(this.currentValue)
-      }
-    },
-    currentValue (val, oldVal) {
-      this.$emit('input', val)
-      if (!this.isFirstSetValue) {
-        this.isFirstSetValue = true
-        oldVal && this.$emit('on-change', val)
-      } else {
-        this.$emit('on-change', val)
-      }
-      this.validate()
-    },
-    startDate () {
-      this.render()
-    },
-    endDate () {
-      this.render()
-    },
-    format (val) {
-      if (this.currentValue) {
-        this.currentValue = format(this.currentValue, val)
-      }
-      this.render()
-    },
-    value (val) {
-      // do not force render when renderInline is true
-      if (this.picker && this.picker.config.renderInline) {
-        this.currentValue = val
-        return
-      }
-      if (this.currentValue !== val) {
-        this.currentValue = val
+      },
+      endDate() {
         this.render()
+      },
+      format(val) {
+        if (this.currentValue) {
+          this.currentValue = format(this.currentValue, val)
+        }
+        this.render()
+      },
+      value(val) {
+        // do not force render when renderInline is true
+        if (this.picker && this.picker.config.renderInline) {
+          this.currentValue = val
+          return
+        }
+        if (this.currentValue !== val) {
+          this.currentValue = val
+          this.render()
+        }
       }
+    },
+    beforeDestroy() {
+      this.picker && this.picker.destroy()
     }
-  },
-  beforeDestroy () {
-    this.picker && this.picker.destroy()
   }
-}
+
 </script>
 
 <style lang="less">
-@import './style.less';
+  @import './style.less';
+
 </style>

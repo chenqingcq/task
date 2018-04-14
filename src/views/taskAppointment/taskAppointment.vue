@@ -7,7 +7,7 @@
     right: 0;
     bottom: 0;
     top: 0;
-    height: 100vh;
+    height: 100vh !important;
     header {
       width: 100%;
       height: 205*2px;

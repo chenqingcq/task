@@ -124,8 +124,8 @@
   .selectStartTime {
     margin-right: 52px !important;
     display: flex !important;
-    align-items: center !important;
-    color: rgba(102, 102, 102, 0.5) !important;
+    justify-content: flex-end;
+    align-items: center;
   }
 
   .editDeadTime {
@@ -335,7 +335,7 @@
             </div>
             <div :class="[_tasksetting,{active_:isTaskName}]"> 任务名称</div>
           </label>
-          <input class="userInput" type="text" id="item0" v-model.trim="taskname" maxlength="20" placeholder="添加任务名称" />
+          <input class="userInput" type="text" id="item0" v-model.trim="taskName" maxlength="20" placeholder="添加任务名称" />
         </li>
         <li class="task-item">
           <label class="task-desc" for="item1">
@@ -344,7 +344,7 @@
             </div>
             <div :class="[_tasksetting,{active_:isTaskDesc}]"> 任务描述</div>
           </label>
-          <input class="userInput" type="text" id="item1" v-model.trim="taskdesc" maxlength="20" placeholder="添加任务描述" />
+          <input class="userInput" type="text" id="item1" v-model.trim="taskDesc" maxlength="20" placeholder="添加任务描述" />
         </li>
         <li class="task-item time-logo-container">
           <label class="task-desc" for="item2">
@@ -354,9 +354,11 @@
             <div ref="startDate" class="task-setting">开始时间<img class="time-logo" src="@/assets/img/icon-right-slide03.png"/></div>
           </label>
 
-          <v-datetime ref="startTime" id="selectStartTime" class="userInput selectStartTime " format="YYYY.MM.DD" @on-change="startDate_change" placeholder="开始时间">
+          <v-datetime ref="startTime" id="selectStartTime" class="userInput selectStartTime " format="YYYY.MM.DD" @on-change="startDate_change"
+            placeholder="开始时间">
             <!-- 开始时间 -->
-          </v-datetime> 
+            <span :style='styleStart'>{{startTime}}</span>
+          </v-datetime>
 
         </li>
         <li class="task-item time-logo-container">
@@ -364,10 +366,13 @@
             <div class="icon">
               <img src="@/assets/img/icon-end time.png" />
             </div>
-            <div class="task-setting"  ref="endDate_">结束时间 <img class="time-logo" src="@/assets/img/icon-right-slide03.png"/></div>
+            <div  ref="endDate" class="task-setting" >结束时间 <img class="time-logo" src="@/assets/img/icon-right-slide03.png"/></div>
           </label>
-          <v-datetime ref="endTime" id="selectEndTime" class="userInput selectEndTime " v-model="endTime" format="YYYY.MM.DD" @on-change="endDate_change"
+          <v-datetime ref="endTime" id="selectEndTime" class="userInput selectEndTime " v-model="endTime" format="YYYY.MM.DD" @on-change="endDatechange"
             placeholder="结束时间">
+            <span :style='styleEnd'>
+            {{endTime}}              
+            </span>
           </v-datetime>
         </li>
         <li class="task-item">
@@ -398,7 +403,7 @@
       <div class="permit-setting"><span>权限设置</span></div>
       <ul class="task-panel permission-setting">
         <li class="task-item">
-          <div v-for="(item,index) in setting" :key="index" @touchstart='changeIndex(index)'>
+          <div v-for="(item,index) in setting" :key="index" @touchstart='changeIndex(index,item)'>
             <p :class="{active_:currentIndex == index}">{{item.title}} </p>
             <p>
               <span :class='{active :currentIndex == index}'>{{item.detail}}</span>
@@ -418,32 +423,34 @@
   } from 'vuex';
   let reflect_to_task = {
     taskTheme: '项目主题',
-    taskname: '任务名称',
-    taskdesc: '任务描述',
+    taskName: '任务名称',
+    taskDesc: '任务描述',
     startTime: '开始时间',
     endTime: '结束时间',
     standard: ' 验收标准',
     executor: '执行人',
-    projectDeadLine: '项目节点'
   };
   export default {
     data() {
       return {
         setting: [{
             title: '公开',
-            detail: '所有成员可见'
+            detail: '所有成员可见',
+            isPublic: true,
           },
           {
             title: '项目成员可见',
-            detail: '该项目的成员可见'
+            detail: '该项目的成员可见',
+            isMembersCanSee: false
           }
         ],
+        flag: false,
         currentIndex: 0,
         taskTheme: '',
-        taskname: '',
-        taskdesc: '',
-        startTime: '',
-        endTime: '',
+        taskName: '',
+        taskDesc: '',
+        startTime: '开始时间',
+        endTime: '结束时间',
         standard: '',
         executor: '',
         allowCreate: false,
@@ -460,14 +467,36 @@
         getTaskSetting: 'getTaskSetting',
         getTaskTheme: 'getTaskTheme'
       }),
+      styleStart() {
+        if (!!this.startTime && window.sessionStorage.getItem('flag')) {
+          return {
+            color: '#666'
+          }
+        } else {
+          return {
+            color: '#ACACAC'
+          }
+        }
+      },
+      styleEnd() {
+        if (!!this.endTime && window.sessionStorage.getItem('flag')) {
+          return {
+            color: '#666'
+          }
+        } else {
+          return {
+            color: '#ACACAC'
+          }
+        }
+      },
       isTaskTheme() {
         return this.taskTheme && this.taskTheme.length ? true : false;
       },
       isTaskName() {
-        return this.taskname && this.taskname.length ? true : false;
+        return this.taskName && this.taskName.length ? true : false;
       },
       isTaskDesc() {
-        return this.taskdesc && this.taskdesc.length ? true : false;
+        return this.taskDesc && this.taskDesc.length ? true : false;
       },
       isTaskStandard() {
         return this.standard && this.standard.length ? true : false;
@@ -489,24 +518,35 @@
           window.sessionStorage.setItem('taskTheme', val)
         }
       },
-      taskname(val) {
+      taskName(val) {
         if (!!val) {
-          window.sessionStorage.setItem('taskname', val)
+          window.sessionStorage.setItem('taskName', val)
         }
       },
-      taskdesc(val) {
+      taskDesc(val) {
         if (!!val) {
-          window.sessionStorage.setItem('taskdesc', val)
+          window.sessionStorage.setItem('taskDesc', val)
         }
       },
       startTime(val) {
+        console.log(val);
         if (!!val) {
-          window.sessionStorage.setItem('startTime', val)
+          window.sessionStorage.setItem('startTime', val);
+          this.$refs.startDate.classList.add('active_');
+          this.startTime = val;
+        } else {
+          this.$refs.startDate.classList.remove('active_');
         }
       },
       endTime(val) {
+        console.log(val);
         if (!!val) {
-          window.sessionStorage.setItem('endTime', val)
+          this.endTime = val;
+          this.$refs.endDate.classList.add('active_');
+          window.sessionStorage.setItem('endTime', val);
+        } else {
+          this.$refs.endDate.classList.remove('active_');
+          console.log(document.querySelector('.selectEndTime>.vux-cell-primary'))
         }
       },
       standard(val) {
@@ -519,25 +559,24 @@
           window.sessionStorage.setItem('executor', val)
         }
       },
-      isPublic(val) {
-        if (!!val) {
-          window.sessionStorage.setItem('isPublic', val)
-        }
-      },
-      allowedLook(val) {
-        if (!!val) {
-          window.sessionStorage.setItem('allowedLook', val)
-        }
-      }
+      // isPublic(val) {
+      //   if (!!val) {
+      //     window.sessionStorage.setItem('isPublic', val)
+      //   }
+      // },
+      // allowedLook(val) {
+      //   if (!!val) {
+      //     window.sessionStorage.setItem('allowedLook', val)
+      //   }
+      // }
     },
     beforeRouteEnter: (to, from, next) => {
       if (from.path == "/appointMessager" && to.path == '/addTaskSetting') {;
         next((vm) => {
-          console.log(vm.taskExecutor) //过滤选中的执行人
-          vm.$refs.exe.classList.add('active_')
-          console.log(
-            vm.executor = vm.getTaskExecutor.username
-          )
+          console.log(vm.getTaskExecutor) //过滤选中的执行人;
+          vm.$refs.exe.classList.add('active_');
+          vm.executor = vm.getTaskExecutor.username;
+          window.sessionStorage.setItem('executor', vm.executor)
         })
       } else if (from.path !== "/appointMessager" && to.path == '/addTaskSetting') {
         next((vm => {
@@ -551,14 +590,19 @@
       }
     },
     methods: {
-      changeIndex(index) {
+      changeIndex(index, item) {
+        console.log(item)
         this.currentIndex = index;
         if (this.currentIndex == 0) {
           this.isPublic = true;
+          window.sessionStorage.setItem('isPublic', true)
+          window.sessionStorage.setItem('allowedLook', false)
           this.allowedLook = false;
         }
         if (this.currentIndex == 1) {
           this.isPublic = false;
+          window.sessionStorage.setItem('allowedLook', true)
+          window.sessionStorage.setItem('isPublic', false)
           this.allowedLook = true;
         }
       },
@@ -573,24 +617,22 @@
       editSection() {
         this.$router.push({
           path: '/section?mode=edit'
-        }) //编辑项目节点
+        }) //编辑项目节点 
       },
       confirm() {
         this.validate()
         if (this.check_pass) {
+          console.log(this.getTaskExecutor)
           this.SET_TASK({ //需要后台给个id
-            id: 1, //先模拟id
             taskTheme: this.taskTheme,
-            taskName: this.taskname,
-            taskDesc: this.taskdesc,
+            taskName: this.taskName,
+            taskDesc: this.taskDesc,
             startTime: this.startTime,
             endTime: this.endTime,
             standard: this.standard,
             taskExecutor: this.executor,
-            allowedCreate: this.allowCreate,
-            ispublic: this.isPublic,
-            membersCanSee: this.showMembers,
-            othersCanSee: this.members
+            isPublic: this.isPublic||true,
+            allowedLook: this.allowedLook
           });
           this.$router.push('conventEntry') //项目创建完毕
         }
@@ -599,15 +641,16 @@
         let k;
         for (k in reflect_to_task) {
           console.log(this.$data[k])
-          if (this.$data.hasOwnProperty(k) && (this.$data[k].length === 0)) {
+
+          if (this.$data.hasOwnProperty(k) && this.$data[k] && this.$data[k].length) {
+            this.check_pass = true;
+          } else {
             console.log(k)
             this.$dialog.message({
               message: `请添加${reflect_to_task[k]}`
             });
             this.check_pass = false;
-            return
-          } else {
-            this.check_pass = true;
+            return;
           };
           // if (this.role === 'creator' && k === 'projectDeadLine') {//项目创建人可见
           //   if (!this.getProjectDeadLine) {
@@ -643,13 +686,9 @@
         this.allowedLook = status;
       },
       startDate_change(val) {
-        this.$refs.startDate_.classList.add('active_');
-        document.querySelector('.selectStartTime>.vux-datetime-value').style.color = '#666'
         this.startTime = val;
       },
-      endDate_change(val) {
-        // this.$refs.endDate_.classList.add('active_');
-        document.querySelector('.selectEndTime>.vux-datetime-value').style.color = '#666'
+      endDatechange(val) {
         this.endTime = val;
       },
       setTaskTheme() {
@@ -657,35 +696,13 @@
         //this.taskTheme = this.getTaskTheme;
       },
       init() {
+        this.flag
         //this.role != 'creator' ? this.setTaskTheme() : '';
         this.taskTheme = window.sessionStorage.getItem('taskTheme');
-        this.taskname = window.sessionStorage.getItem('taskname');
-        this.taskdesc = window.sessionStorage.getItem('taskdesc');
+        this.taskName = window.sessionStorage.getItem('taskName');
+        this.taskDesc = window.sessionStorage.getItem('taskDesc');
         this.startTime = window.sessionStorage.getItem('startTime');
-        // console.log(this.startTime);
-        if (this.startTime) {
-          this.$refs.startDate.classList.add('active_');
-          document.querySelector('.selectStartTime>.vux-datetime-value').style.color = '#666'
-          document.querySelector('.selectStartTime>.vux-datetime-value').textContent = this.startTime;
-        } else {
-          document.querySelector('.selectStartTime>.vux-datetime-value').style.color = '#B6B6B6'
-          this.$refs.startDate.classList.remove('active_');
-        }
         this.endTime = window.sessionStorage.getItem('endTime');
-        console.log(this.endTime)
-        if (!!this.endTime) {
-          console.log(1111)
-          this.$refs.endDate_.classList.add('active_');
-          document.querySelector('.selectEndTime>.vux-datetime-value').style.color = '#666'
-          document.querySelector('.selectEndTime>.vux-datetime-value').textContent = this.endTime;
-        } else {
-          console.log(
-          document.querySelector('.selectEndTime>.vux-datetime-value').style.color = 'green'
-            
-          )
-          this.$refs.endDate_.classList.remove('active_');
-        }
-        
         this.standard = window.sessionStorage.getItem('standard');
         this.isPublic = window.sessionStorage.getItem('isPublic');
         this.allowedLook = window.sessionStorage.getItem(' allowedLook');
@@ -695,11 +712,13 @@
       // this.role = 'taskManager'; //邀约他人可见
       //this.role = 'creator' //项目发起人编辑节点
       // console.log(this.taskExecutor);
-      this.$nextTick(() => {
-        this.init()
-      })
+      if (window.sessionStorage.getItem('flag')) {
+        this.init();
+      }
     },
-    mounted() {}
+    mounted() {
+      window.sessionStorage.setItem('flag', true);
+    }
   }
 
 </script>
