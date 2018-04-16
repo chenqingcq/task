@@ -62,7 +62,24 @@ export default function getInstance(options) {
       }
     })
   };
+  if (options.type === 'confirm') {
+    dialog = new DialogConstructor({
+      data() {
+        return {
+          type: options.type,
+          message: options.message || '',
+          showBottom: options.showBottom || true,
+          show: true,
+          confirm: options.confirm || function () {
 
+          },
+          concel: options.concel || function () {
+
+          }
+        }
+      }
+    })
+  }
   const instance = dialog.$mount();
   document.body.appendChild(instance.$el);
 }
