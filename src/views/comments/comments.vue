@@ -1,14 +1,15 @@
 <template>
   <div class="b-LR-10 comment-container">
     <div class="panel b-MT-10 " style="background:#fff">
-      <div class="b-LR-10 b-T-5 between banner">
+      <div class="b-LR-10 b-T-5 between " ref="banner">
         <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 c_6 b_FS-14">审批留言</span></p>
         <div class=" b_FS-10 c_7 commenthint">
           评论<img class="comments-icon" :src='commentImgUrl' />
         </div>
       </div>
       <div class="comments-container_" v-if="members.length<=0">暂无留言</div>
-      <scroll class="comments-container" :height='height' v-if="members.length>1">
+      <scroll class="comments-container" :listenScroll='listenScroll' @scroll='scrolling' @scrollEnd='scrollEnd' :height='height'
+        v-if="members.length>1">
         <ul class="comment-panel">
           <li v-for="(item,index) in members" :key="index" class="lisItem">
             <div class="left">
@@ -38,7 +39,8 @@
     name: 'comments',
     data() {
       return {
-        height: 140 * 2 + "px"
+        height: 140 * 2 + "px",
+        listenScroll: true
       }
     },
     props: {
@@ -58,14 +60,21 @@
       }
     },
     methods: {
-
+      scrolling() {
+        console.log(' listenScroll');
+        this.$refs.banner.classList.add('banner')
+      },
+      scrollEnd() {
+        console.log('scrollEnd');
+        this.$refs.banner.classList.remove('banner')
+      }
     }
   }
 
 </script>
 <style lang="less" scoped>
   .banner {
-    box-shadow: 0 5px  20px rgba(177, 177, 177, 0.6);
+    box-shadow: 0 5px 20px rgba(177, 177, 177, 0.6);
   }
 
   .commenthint {

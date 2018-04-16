@@ -41,7 +41,7 @@
           <!--<img class="close" @touchstart='close' src="../../../assets/img/icon-close.png" />-->
           <div class="top">
             <div class="noticeIcon">
-              <img class="noticeImg" :src="imgUrl" />
+              <img class="noticeImg" src="@/assets/img/image-pass.png" />
             </div>
             <p class="title b_FS-18">{{notice.title}}</p>
             <p class="task b_FS-14">{{notice.task}}</p>
