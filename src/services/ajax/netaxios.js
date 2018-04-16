@@ -88,7 +88,7 @@ export const get = function(url, params = {}, isShowFullLoading) {
 }
 
 // 注册自定义deleter请求(不需要的传token, 自动生成token)
-export const deleter = function(url, id) {
+export const deleter = function(url, {id}) {
     const authorization = UserModel.getSendToken()
     return new Promise((resolve, reject) => {
         axiosInstance.delete(url + '/' + id, {
@@ -136,6 +136,29 @@ export const post = function(url, params = {}) {
     })
 }
 
+// 注册自定义PATCH请求(不需要的传token, 自动生成token)
+export const patch = function(url, params = {}) {
+  const authorization = UserModel.getSendToken()
+  return new Promise((resolve, reject) => {
+    axiosInstance.patch(url, params, {
+      headers: {
+        'Authorization': authorization
+      },
+    }).then((res) => {
+      // 成功回调
+      if (successCode.has(res.yb_code)) {
+        // 已经处理过状态，所以不用管状态，直接返回数据
+        resolve(res.yb_data)
+      } else {
+        // 服务状态出现问题
+        reject(res)
+      }
+    }).catch((err) => {
+      // 状态不是200
+      reject(err.response ? err.response.data : ErrorMessage.timeOut)
+    })
+  })
+}
 
 // 注册自定义PUT请求(不需要的传token, 自动生成token)
 /**

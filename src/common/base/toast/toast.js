@@ -50,9 +50,9 @@ ToastConstructor.prototype.close = function() {
   instance.iconClass = options.iconClass || '';
 
   console.log(instance,2222)
-  const _instance = instance.$mount();
-  console.log(_instance)
-  document.body.appendChild(_instance.$el);
+  //const _instance = instance.$mount();
+  //console.log(_instance)
+  document.body.appendChild(instance.$el);
   Vue.nextTick(function() {
     instance.visible = true;
     instance.$el.removeEventListener('transitionend', removeDom);
