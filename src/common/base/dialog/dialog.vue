@@ -1,6 +1,24 @@
 <template>
-  <transition  v-if="show">
-    <div class="container" v-if="type !=='message'">
+  <transition v-if="show">
+    <div class="container" style="position:fixed;z-index:1111111" v-if="type !=='message'">
+      <template v-if="type ==='confirm'">
+        <div class="confirm-container">
+          <ul>
+            <li>
+              <div>
+                <img src="@/assets/img/image-notice01.png" />
+              </div>
+              <div>
+                {{message}}
+              </div>
+            </li>
+            <li v-show="showBottom">
+              <div @touchstart='_concel'>取消</div>
+              <div @touchstart='_confirm'>确定</div>
+            </li>
+          </ul>
+        </div>
+      </template>
       <template v-if="type==='info'">
         <div class="panel-info">
           <img class="close" @touchstart='close' src="../../../assets/img/icon-close.png" />
@@ -72,7 +90,6 @@
     },
 
     methods: {
-
       close() {
         this.show = false;
       },
@@ -88,8 +105,10 @@
           this.btnName === "add" ?
           "添加" :
           this.btnName === "delete" ? "删除" : "";
-        if (this.btnName == 'delete') {
-          this.$refs.btn.style['background-image'] = `linear-gradient(-180deg, #f1baaf 0%, #ea6e5d 100%)`
+        if (this.btnName == "delete") {
+          this.$refs.btn.style[
+            "background-image"
+          ] = `linear-gradient(-180deg, #f1baaf 0%, #ea6e5d 100%)`;
         }
       },
       fadeOut() {
@@ -97,17 +116,92 @@
           document.querySelector(".messageBox").parentNode.removeChild(this.$el);
           this.show = false;
         }, 1500);
+      },
+      initConfirm() {},
+      _confirm() {
+        this.show = false;
+        if (!!this.confirm) {
+          this.confirm();
+        }
+      },
+      _concel() {
+        if (!!this.concel) {
+          this.concel();
+        }
+        this.show = false;
       }
     },
     mounted() {
       this.type === "notice" ? this.initPartIn() : "";
       this.type === "info" ? this.judgeBtn() : "";
       this.type === "message" ? this.fadeOut() : "";
+      console.log(this.showBtn);
     }
   };
-
 </script>
+
 <style lang='less' scoped>
+  .confirm-container {
+    position: absolute;
+    font-family: PingFangSC-Regula;
+    z-index: 99999999;
+    width: 200*2px;
+    height: auto;
+    background-color: #fff;
+    border-radius: 5*2px;
+    font-size: 14*2px;
+    overflow: hidden;
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      height: auto;
+      li {
+        &:first-of-type {
+          height: 59*2px;
+          width: 100%;
+          border-bottom: 1px solid #999;
+          display: flex;
+          align-items: center;
+          div:nth-child(1) {
+            width: 120*2px;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            img {
+              display: inline-block;
+              height: 60%;
+            }
+          }
+          div:nth-child(2) {
+            width: 100%;
+            text-align: center;
+            font-family: PingFangSC-Regula;
+          }
+        }
+        &:last-of-type {
+          display: flex;
+          height: 30*2px;
+          width: 100%;
+          div {
+            width: 50%;
+            height: 100%;
+            justify-content: center;
+            display: flex;
+            align-items: center;
+            &:first-of-type {
+              border-right: 1px solid #999;
+            }
+            &:last-of-type {
+              color: #6ba7f3;
+            }
+          }
+        }
+      }
+    }
+  }
+
   .fade-enter-active {
     animation: zoom 1s ease;
   }
@@ -119,7 +213,7 @@
   @keyframes zoom {
     from {
       transform: scale(0.5, 0.5);
-      opacity: .5;
+      opacity: 0.5;
     }
     to {
       transform: scale(1, 1);
@@ -129,16 +223,16 @@
 
   @keyframes scale {
     0% {
-      transform: scale(.8, .8);
+      transform: scale(0.8, 0.8);
       opacity: 0;
     }
     50% {
       transform: scale(1.2, 1.2);
-      opacity: .8;
+      opacity: 0.8;
     }
     100% {
       transform: scale(1, 1);
-      opacity: 1
+      opacity: 1;
     }
   }
 
@@ -163,7 +257,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background: rgba(99, 99, 99, 0.8);
+    background: rgba(99, 99, 99, 0.6);
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -229,7 +323,7 @@
     justify-content: center;
     align-items: center;
     .panel-notice {
-      animation: scale .5s ease;
+      animation: scale 0.5s ease;
       min-width: 252*2px;
       min-height: 252*2px;
       background-color: #fff;
@@ -361,5 +455,4 @@
       }
     }
   }
-
 </style>
