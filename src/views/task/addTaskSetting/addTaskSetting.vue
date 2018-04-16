@@ -371,7 +371,7 @@
           <v-datetime ref="endTime" id="selectEndTime" class="userInput selectEndTime " v-model="endTime" format="YYYY.MM.DD" @on-change="endDatechange"
             placeholder="结束时间">
             <span :style='styleEnd'>
-            {{endTime}}              
+            {{endTime}}
             </span>
           </v-datetime>
         </li>
@@ -617,7 +617,7 @@
       editSection() {
         this.$router.push({
           path: '/section?mode=edit'
-        }) //编辑项目节点 
+        }) //编辑项目节点
       },
       confirm() {
         this.validate()
