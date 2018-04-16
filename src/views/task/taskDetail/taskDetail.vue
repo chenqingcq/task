@@ -446,7 +446,7 @@ img.partyLogo {
   box-shadow: 0px 0px 20*2px rgba(177, 177, 177, 0.6);
 }
 .taskProgress {
-  position: relative;
+  position: absolute;
   overflow: hidden;
   bottom: -6*2px;
   left: 50%;
@@ -458,6 +458,7 @@ img.partyLogo {
   background: rgba(255, 255, 255, 1);
   box-shadow: 0px 0px 20*2px rgba(177, 177, 177, 0.6);
 }
+
 .bounceIn-enter-active{
   animation: bounceIn .5s ease;
 }
@@ -480,7 +481,7 @@ img.partyLogo {
                 <span class="task-detail-content">
                   {{taskDesc}}
                 </span>
-                <img src="@/assets/img/04.png"  />
+                <img src="@/assets/img/icon-slide downward.png"  />
               </div>
               <transition name="bounceIn">
                 <div class="taskDesc-container"  v-if="showDetail">
@@ -555,7 +556,7 @@ img.partyLogo {
     <div class="project-party">
       <div class="b-LR-10">
         <div class="panel b-MT-10 c_white-bg">
-          <div class="b-LR-10 b-T-5 between">
+          <div class="b-LR-10 b-T-5 between ">
             <p class="middle b_FS-14 c_6 "><span class="dot success"></span><span class="b-L-4">进入项目群</span></p>
             <div class="entry-project-party">
               <img class="partyLogo" :src="item.partyImg" v-for="item in parties" :key="item.id" />

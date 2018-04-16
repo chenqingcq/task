@@ -11,6 +11,7 @@ Loading.install = function (Vue) {
     instance.$mount(document.createElement("div"));
     document.body.appendChild(instance.$el);
     instance.show = true;
+    instance.visible = true;
     instance.title = options.title || ""
     const timer = options.duration || 0
     if(timer > 0)

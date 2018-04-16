@@ -1,7 +1,7 @@
 <template>
   <div class="b-LR-10 comment-container">
     <div class="panel b-MT-10 " style="background:#fff">
-      <div class="b-LR-10 b-T-5 between">
+      <div class="b-LR-10 b-T-5 between banner">
         <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 c_6 b_FS-14">审批留言</span></p>
         <div class=" b_FS-10 c_7 commenthint">
           评论<img class="comments-icon" :src='commentImgUrl' />
@@ -24,7 +24,7 @@
                 <div class="time-panel"><span>{{item.date}}</span><span>{{item.time}}</span></div>
               </div>
               <div class="comments-item">{{item.comments}}</div>
-            </div> 
+            </div>
             <i class="footbar"></i>
           </li>
         </ul>
@@ -64,6 +64,10 @@
 
 </script>
 <style lang="less" scoped>
+  .banner {
+    box-shadow: 0 5px  20px rgba(177, 177, 177, 0.6);
+  }
+
   .commenthint {
     display: flex;
     align-items: center;
@@ -86,7 +90,7 @@
   }
 
   .comments-container {
-    overflow:auto;
+    overflow: auto;
     .lisItem {
       width: 100%;
       height: auto;

@@ -11,7 +11,7 @@
   word-break: break-all;
   padding: 7*2px;
   line-height:14px*2;
-  position: relative;
+  position: absolute;
   z-index: 111111;
   .arrow {
     position: absolute;
@@ -34,7 +34,7 @@
   <div class="taskDetailContainer">
     {{taskDesc}}
     <div class=" towardsUp arrow " @touchstart='close'>
-      <img src="@/assets/img/04.png" />
+      <img src="@/assets/img/icon-slide downward.png" />
     </div>
   </div>
 </template>

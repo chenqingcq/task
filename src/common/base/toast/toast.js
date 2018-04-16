@@ -2,8 +2,8 @@
  * Created by hejiahui on 2018/4/13.
  */
 import Vue from 'vue';
-
-const ToastConstructor = Vue.extend(require('./toast.vue'));
+import toast from './toast.vue';
+const ToastConstructor = Vue.extend(toast);
 let toastPool = [];
 
 let getAnInstance = () => {
@@ -36,10 +36,11 @@ ToastConstructor.prototype.close = function() {
   returnAnInstance(this);
 };
 
-let Toast = (options = {}) => {
+ let  Toast = (options = {}) => {
   let duration = options.duration || 3000;
 
   let instance = getAnInstance();
+  console.log(instance)
   //instance.$mount(document.createElement('div'))
   instance.closed = false;
   clearTimeout(instance.timer);

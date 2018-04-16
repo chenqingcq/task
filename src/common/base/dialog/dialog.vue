@@ -8,7 +8,7 @@
               <div>
                 <img src="@/assets/img/image-notice01.png" />
               </div>
-              <div>
+              <div >
                 {{message}}
               </div>
             </li>
