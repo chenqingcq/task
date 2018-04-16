@@ -41,6 +41,11 @@
           打开popUp
         </div>
       </div>
+      <div class="btn-warp b-MT-10">
+        <div @click="showToast" class="btn-small-primary">
+          toast
+        </div>
+      </div>
       <div class="b-LR-10 b-MT-10">
         <div class="panel c-1 c_white-bg">
           asdfasfdas
@@ -102,11 +107,11 @@
             userId : '21212'
           },true).then(()=>{})
 
-
-          Toast({
-            message: '操作成功',
-            position: 'bottom'
-          });
+          this.$toast.show('操作成功')
+//          Toast({
+//            message: '操作成功',
+//            position: 'bottom'
+//          });
 
         },
         components:{
@@ -125,8 +130,10 @@
           },
           hideCb(){
             console.log('do sthing..')
+          },
+          showToast(){
+            this.$toast.show('操作成功')
           }
-
         },
     }
 </script>

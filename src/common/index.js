@@ -1,6 +1,9 @@
 /**
  * Created by hejiahui on 2018/3/27.
  */
+import Vue from 'vue'
+// loading
+import Load from '@/common/base/loading'
 // 开关
 import Switch from './base/switch/switch.vue'
 // 底部 会展logo--应用商店
@@ -15,6 +18,12 @@ import dateTimer from './base/vux-datetime/index.vue' // 时间选择器
 // 自定义弹层
 import pop from './base/pop/index.vue' //
 
+// 项目组件 vue.prototype 扩展
+import '@/common/base/dialog'
+import '@/common/base/toast/extend.js'
+
+Vue.use(Load)
+
 const install = Vue => {
   // 开关
   Vue.component(Switch.name, Switch) // 页面结构的占位组件
@@ -26,6 +35,8 @@ const install = Vue => {
   Vue.component(dateTimer.name, dateTimer)
   //
   Vue.component( pop.name, pop )
+  //
 }
+
 
 export default install

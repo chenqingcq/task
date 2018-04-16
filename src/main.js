@@ -12,9 +12,6 @@ Vue.use(VueLazyLoad,{
     loading:'@/assets/img/icon-nominee.png'
 })
 
-// 项目组件
-import '../src/common/base/dialog'
-import Load from '@/common/base/loading'
 // 通用组件
 import AppCom from '../src/common/index.js'
 
@@ -23,7 +20,6 @@ import '@/services/ajax/netaxios.js'
 import axios from 'axios'
 
 Vue.use(AppCom);
-Vue.use(Load)
 
 Vue.config.productionTip = false
 
