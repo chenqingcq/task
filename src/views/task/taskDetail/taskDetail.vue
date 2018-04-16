@@ -132,6 +132,10 @@
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+          span{
+            display: inline-block;
+            width:100%;
+          }
         }
         .detail-btn {
           width: 124*2px;
