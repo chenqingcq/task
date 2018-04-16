@@ -1,7 +1,7 @@
 import { User } from '@/services'
 import {wx} from '@/services'
 import BaseModel from './BaseModel'
-//import HUD from '../Extension/YBProgressHUD'
+import HUD from '../Extension/YBProgressHUD'
 const FOO_KEY = Symbol.for('userModel');
 
 
@@ -71,12 +71,13 @@ class UserModel extends BaseModel{
       this.setData(data)
       this.getWxCode()
     }).catch((err) => {
-      //HUD.showError('获取用户数据失败')
+      HUD.showError('获取用户数据失败')
     })
   }
 
   // 获取token
   getToken () {
+    HUD.showSuccess('获取用户数据失败')
     return new Promise((resolve, reject) => {
       User.getToken({
         userid: this.userid,
@@ -85,6 +86,7 @@ class UserModel extends BaseModel{
         this.token = data.token
         this.nickname = data.user.nickname
         this.headImage = data.user.headImage
+
         resolve(data)
       }).catch((err) => {
         reject(err)

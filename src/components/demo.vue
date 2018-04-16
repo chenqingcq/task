@@ -82,14 +82,15 @@
           121adl;kfskjflasjklfjlkasdjfljsad
         </div>
       </v-pop>
-
+      <!--<Toast></Toast>-->
     </div>
 </template>
 <script>
 
 
     import { Demo } from '@/services'
-
+    //import Toast from '@/common/base/toast/toast.vue'
+    import Toast from '@/common/base/toast/toast.js'
     export default{
         data(){
             return{
@@ -101,9 +102,15 @@
             userId : '21212'
           },true).then(()=>{})
 
+
+          Toast({
+            message: '操作成功',
+            position: 'bottom'
+          });
+
         },
         components:{
-
+          //Toast
         },
         methods:{
           statusChange(status){

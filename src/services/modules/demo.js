@@ -10,7 +10,6 @@ class Demo {
    * 用于本地的登陆
    * */
   devUserLogin(opt, isShowFullLoading = true) {
-    debugger
     const url = '/v1/user/login-test'
     const params = opt || {}
     return post(

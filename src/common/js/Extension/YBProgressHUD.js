@@ -1,10 +1,11 @@
-import {Toast, Indicator} from 'mint-ui'
+import Toast from '@/common/base/toast/toast.js'
 
+console.log(Toast)
 // 显示的时间
 const showTime = 1500
 
 export default {
-  
+
   // 显示提示信息 ==========================================
   showToast(message, type = '', duration = showTime, position = 'middle') {
     let iconClass = ''
@@ -24,25 +25,25 @@ export default {
       position,
       duration,
       iconClass,
-      className: 'yb-hud'
     });
   },
-  
+
   // 显示成功提示
   showSuccess(msg, type = 'success') {
+
     this.showToast(msg, type)
   },
-  
+
   // 显示成功提示
   showInfo(msg, type = 'info') {
     this.showToast(msg, type)
   },
-  
+
   // 显示成功提示
   showError(msg, type = 'error') {
     this.showToast(msg, type)
   },
-  
+
   // 显示加载圈圈 ============================================
   showIndicator(text = '', type = 0) {
     let spinnerType = 'snake'
@@ -62,7 +63,7 @@ export default {
       spinnerType
     })
   },
-  
+
   // 关闭进度
   closeIndicator () {
     Indicator.close();
