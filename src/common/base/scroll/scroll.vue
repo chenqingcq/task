@@ -71,12 +71,15 @@
 
         if (this.listenScroll) {
           let me = this
-          this.scroll.on('scroll', (pos) => {
-            me.$emit('scroll', pos)
+          this.$nextTick(() => {
+            this.scroll.on('scroll', (pos) => {
+              me.$emit('scroll', pos)
+            });
+            this.scroll.on('scrollEnd', (pos) => {
+              me.$emit('scrollEnd', pos)
+            });
           });
-          this.scroll.on('scrollEnd', (pos) => {
-            me.$emit('scrollEnd', pos)
-          });
+          this.refresh()
         }
 
         if (this.pullup) {

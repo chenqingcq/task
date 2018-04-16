@@ -8,7 +8,7 @@
               <div>
                 <img src="@/assets/img/image-notice01.png" />
               </div>
-              <div >
+              <div class="message">
                 {{message}}
               </div>
             </li>
@@ -138,6 +138,7 @@
       console.log(this.showBtn);
     }
   };
+
 </script>
 
 <style lang='less' scoped>
@@ -176,7 +177,8 @@
           }
           div:nth-child(2) {
             width: 100%;
-            text-align: center;
+            text-align: left;
+            font-weight: 500;
             font-family: PingFangSC-Regula;
           }
         }
@@ -190,6 +192,7 @@
             justify-content: center;
             display: flex;
             align-items: center;
+            font-weight: 500;
             &:first-of-type {
               border-right: 1px solid #999;
             }
@@ -455,4 +458,5 @@
       }
     }
   }
+
 </style>
