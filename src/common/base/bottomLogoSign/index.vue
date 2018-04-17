@@ -17,7 +17,7 @@
 <template>
     <div class="b-TB-10 container" >
       <img @click="skipToStore" src="../../../assets/img/image-logo.png" alt="">
-      <span @click="skipToStore" class="text" >会管家-展会应用商店</span>
+      <span @click="skipToStore" class="text c_7 b_FS-10" >会管家-展会应用商店</span>
     </div>
 </template>
 <script>
