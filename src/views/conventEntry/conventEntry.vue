@@ -68,7 +68,7 @@
                           <label class="status-text b_FS-8 text-center c_white">60%</label>
                           <img class="status-bg" src="../../assets/img/sign-remind03.png" alt="">
                         </template>
-                        <span class="week-in-chinese b_FS-6 c_7" :class="[dayItem.week == 6 ||dayItem.week == 0  ? 'c_12': 'c_6' ]">
+                        <span class="week-in-chinese b_FS-5 c_7" :class="[dayItem.week == 6 ||dayItem.week == 0  ? 'c_12': 'c_6' ]">
                           {{ weekStrArr[dayItem.week] }}
                         </span>
                       </p>
@@ -77,7 +77,7 @@
                          v-if="computedIsMonthWeekEndTime(list, dayItem)"
                         :class="[computedMonthWeekEndTimeClass(list)]"
                       >
-                        <span class="week-in-chinese b_FS-6 c_7" :class="[dayItem.week == 6 ||dayItem.week == 0  ? 'c_12': 'c_6' ]">
+                        <span class="week-in-chinese b_FS-5 c_7" :class="[dayItem.week == 6 ||dayItem.week == 0  ? 'c_12': 'c_6' ]">
                           {{ weekStrArr[dayItem.week] }}
                         </span>
                         <template v-if="list.status == 'outDate'">
@@ -94,7 +94,7 @@
                          v-if=" computedIsOutDateAfterEndTime(list, dayItem) "
                          :class="[list.status == 'outDate' && 'outDate']"
                       >
-                        <span class="week-in-chinese b_FS-6 c_7" :class="[dayItem.week == 6 ||dayItem.week == 0  ? 'c_12': 'c_6' ]">
+                        <span class="week-in-chinese b_FS-5 c_7" :class="[dayItem.week == 6 ||dayItem.week == 0  ? 'c_12': 'c_6' ]">
                           {{ weekStrArr[dayItem.week] }}
                         </span>
                       </p>
@@ -103,7 +103,7 @@
                          v-if="computedIsOutDateAfterEnding( list, dayItem )"
                          :class="[list.status == 'outDate' && 'outDate']"
                       >
-                        <span class="week-in-chinese b_FS-6 c_7" :class="[dayItem.week == 6 ||dayItem.week == 0  ? 'c_12': 'c_6' ]">
+                        <span class="week-in-chinese b_FS-5 c_7" :class="[dayItem.week == 6 ||dayItem.week == 0  ? 'c_12': 'c_6' ]">
                           {{ weekStrArr[dayItem.week] }}
                         </span>
                         <label class="status-text b_FS-8 text-center c_white b_font-PFR">超时</label>
@@ -127,7 +127,7 @@
 
                         <!-- 待确定 第一天就提前完成-->
                         <template v-if="list.status == 'aheadCompleted' && computedIsSameDay(list.completeDate,week.date) ">
-                          <label class="status-text b_FS-6 text-center c_white b_font-PFR">60%</label>
+                            <label class="status-text b_FS-6 text-center c_white b_font-PFR">60%</label>
                           <img class="status-bg" src="../../assets/img/sign-remind01.png" alt="">
                           <img class="end-sign-logo" style='right: -31px' src="../../assets/img/image-car.png"/>
                         </template>

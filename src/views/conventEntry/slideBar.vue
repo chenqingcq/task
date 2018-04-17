@@ -79,7 +79,7 @@
         z-index: 1;
       }
       .panel{
-        height: 850px;
+        height: 780px;
         overflow-y: scroll;
         position:relative;
 

@@ -64,7 +64,7 @@ export default {
         id: 3 ,
         // 超时
         startTime : +new Date('2018-04-01') ,
-        endTime : +new Date('2018-04-7'),
+        endTime : +new Date('2018-04-07'),
         status : 'outDate' ,
         text : '超时五天',
         process : 100,
@@ -75,7 +75,7 @@ export default {
           id: 3 ,
           // 超时
           startTime : +new Date('2018-04-01') ,
-          endTime : +new Date('2018-04-9'),
+          endTime : +new Date('2018-04-09'),
           status : 'outDate' ,
           text : '超时五天',
           process : 100,
@@ -86,7 +86,7 @@ export default {
         id: 4 ,
         // 关闭
         startTime : +new Date('2018-04-01') ,
-        endTime : +new Date('2018-04-7'),
+        endTime : +new Date('2018-04-07'),
         status : 'closed' ,
         text : '已关闭',
         process : 100,
