@@ -49,6 +49,7 @@
       .userInput {
         margin-right: 15*2px;
         height: 100%;
+        padding: 20px 0;
         display: block;
         height: 100%;
         font-size: 14*2px;
