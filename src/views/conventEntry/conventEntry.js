@@ -45,7 +45,7 @@ export default {
         completeDate: +new Date('2018-04-03'),
         status : 'aheadCompleted' ,
         process : 90,
-        text : '提前一天完成',
+        text : '提前一天通过',
         isSaw : true ,
         isLike : true
       },
