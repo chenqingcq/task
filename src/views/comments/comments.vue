@@ -13,7 +13,7 @@
         <img src="@/assets/img/cry.png" />        
         <i></i>
       </div>
-      <scroll class="comments-container" :listenScroll='listenScroll' @scroll='scrolling' @scrollEnd='scrollEnd' v-if="members.length>1">
+      <scroll class="comments-container" ref="scroll" :listenScroll='listenScroll' @scroll='scrolling' @scrollEnd='scrollEnd' v-if="members.length>1">
         <ul class="comment-panel">
           <li v-for="(item,index) in members" :key="index" class="lisItem">
             <div class="left">
@@ -65,7 +65,8 @@
     methods: {
       scrolling() {
         console.log(' listenScroll');
-        this.$refs.banner.classList.add('banner')
+        this.$refs.banner.classList.add('banner');
+        this.$refs.scroll.refresh()
       },
       scrollEnd() {
         console.log('scrollEnd');
