@@ -66,7 +66,7 @@
       scrolling() {
         console.log(' listenScroll');
         this.$refs.banner.classList.add('banner');
-        this.$refs.scroll.refresh()
+        // this.$refs.scroll.refresh()
       },
       scrollEnd() {
         console.log('scrollEnd');
@@ -108,7 +108,8 @@
 
   .comments-container {
     min-height: 280px;
-    max-height: 576px;
+    max-height: 432px;
+    /*72*3*2*/
     overflow: auto;
     .lisItem {
       width: 100%;
