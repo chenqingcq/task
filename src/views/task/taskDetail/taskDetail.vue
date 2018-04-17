@@ -531,8 +531,8 @@
                 <img src="@/assets/img/icon-set up.png" />
               </div>
               <transition name="zoomInDown">
-                <div v-if='isLike' @touchstart="toggleLike" class="focus-star "  >
-                  <img class="focus-star" src="@/assets/img/icon-collection-highlight.png"   />
+                <div v-if='isLike' @touchstart="toggleLike" class="focus-star ">
+                  <img class="focus-star" src="@/assets/img/icon-collection-highlight.png" />
                 </div>
               </transition>
               <transition name="canelLike">
@@ -613,9 +613,12 @@
       </div>
     </div>
     <!-- 执行者 -->
-    <div v-if="role == 'operator'" class="btn-warp b-LR-8">
-      <div @touchstart="rejectTask" class="btn-full-warn b-MT-10 ">
+    <div v-if="role == 'operator'" class="btn-warp b-LR-8 clearfix">
+      <div @touchstart="rejectTask" class="btn-normal-warn b_left b-MT-10 ">
         拒绝任务
+      </div>
+      <div @touchstart='recieveTask' class="btn-normal-success b_right b-MT-10">
+        接受任务
       </div>
     </div>
 
@@ -723,7 +726,7 @@
       }),
       styleTaskFocus() {
         return {
-          float:'right'
+          float: 'right'
         }
       },
       common() {
@@ -746,6 +749,24 @@
       Detail
     },
     methods: {
+      recieveTask() {
+        let self = this;
+        this.$dialog.confirm({
+          message: "确定接受该任务?",
+          confirm() {
+            self.passer = setTimeout(() => {
+              self.$dialog.notice({
+                state: "pass",
+                title: "该任务已接受",
+                task: "展台基础工作"
+              });
+            }, 200);
+            self.timer = setTimeout(() => {
+              self.$router.push("conventEntry");
+            }, 1500);
+          }
+        });
+      },
       taskDescActive() {
         console.log(11111);
         animati
@@ -807,14 +828,23 @@
         });
       },
       rejectTask() {
-        this.$dialog.notice({
-          state: "pass",
-          title: "任务已拒绝",
-          task: "展台基础工作"
+        let self = this;
+        this.$dialog.confirm({
+          message: "确定拒绝该任务?",
+          showBottom: false,
+          confirm() {
+            self.passer = setTimeout(() => {
+              self.$dialog.notice({
+                state: "pass",
+                title: "该任务已拒绝",
+                task: "展台基础工作"
+              });
+            }, 200);
+            self.timer = setTimeout(() => {
+              self.$router.push("conventEntry");
+            }, 1500);
+          }
         });
-        this.timer = setTimeout(() => {
-          this.$router.push("conventEntry");
-        }, 1500);
       },
       towardsUpdateHistory() {
         //查看历史上传
