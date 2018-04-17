@@ -92,13 +92,16 @@
             }
           }
           .task-focus {
-            width: 80*2px;
+            width: 120*2px;
             height: 32*2px;
             padding-left: 100px;
             .focus-star {
               height: 100%;
               width: 74ox;
               display: inline-block;
+              &:nth-child(1){
+                float: left;
+              }
               &:nth-child(2) {
                 float: right;
               }
@@ -523,9 +526,9 @@
               </div>
             </div>
             <div class="task-focus">
-              <!--<div @touchstart='link_to_taskSetting' style="visibility: hidden" class="focus-star">-->
-              <!--<img src="@/assets/img/icon-set up.png" />-->
-              <!--</div>-->
+              <div @touchstart='link_to_taskSetting' class="focus-star">
+                <img src="@/assets/img/icon-set up.png" />
+              </div>
               <transition name="zoomInDown">
                 <div v-if='isLike' @touchstart="toggleLike" class="focus-star ">
                   <img class="focus-star" src="@/assets/img/icon-collection-highlight.png" />
