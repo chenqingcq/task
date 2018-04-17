@@ -99,7 +99,7 @@
               height: 100%;
               width: 74ox;
               display: inline-block;
-              &:nth-child(1){
+              &:nth-child(1) {
                 float: left;
               }
               &:nth-child(2) {
@@ -220,7 +220,7 @@
       display: block;
       height: 100%;
       width: 100%;
-      padding:2px;
+      padding: 2px;
     }
   }
 
@@ -527,17 +527,17 @@
               </div>
             </div>
             <div class="task-focus">
-              <div @touchstart='link_to_taskSetting' class="focus-star">
+              <div @touchstart='link_to_taskSetting' class="focus-star" v-show="role=='creator'">
                 <img src="@/assets/img/icon-set up.png" />
               </div>
               <transition name="zoomInDown">
-                <div v-if='isLike' @touchstart="toggleLike" class="focus-star ">
-                  <img class="focus-star" src="@/assets/img/icon-collection-highlight.png" />
+                <div v-if='isLike' @touchstart="toggleLike" class="focus-star "  >
+                  <img class="focus-star" src="@/assets/img/icon-collection-highlight.png"   />
                 </div>
               </transition>
               <transition name="canelLike">
                 <div v-if="!isLike" @touchstart="toggleLike" class="focus-star">
-                  <img class="focus-star" src="@/assets/img/icon-collection-normal.png" />
+                  <img class="focus-star" src="@/assets/img/icon-collection-normal.png" :style="styleTaskFocus" />
                 </div>
               </transition>
 
@@ -659,7 +659,7 @@
             id: 2
           }
         ],
-          members: [{
+        members: [{
             //审批留言
             name: "张三",
             role: "发布者",
@@ -721,6 +721,11 @@
       ...mapGetters({
         role: "getProjectRole"
       }),
+      styleTaskFocus() {
+        return {
+          float:'right'
+        }
+      },
       common() {
         return "common";
       },
