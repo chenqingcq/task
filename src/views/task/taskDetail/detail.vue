@@ -14,7 +14,6 @@
     position: absolute;
     background: rgba(255, 255, 255, 1);
     box-shadow: 0px 0px 20*2px rgba(177, 177, 177, 0.6);
-    opacity: 1 !important;
     z-index: 11111;
     .arrow {
       position: absolute;
@@ -36,11 +35,8 @@
 </style>
 
 <template>
-  <div class="taskDetailContainer">
+  <div class="taskDetailContainer" @touchstart='close'>
     {{taskDesc}}
-    <div class=" towardsUp arrow " @touchstart='close'>
-      <img src="@/assets/img/icon-slide downward.png" />
-    </div>
   </div>
 </template>
 <script>
