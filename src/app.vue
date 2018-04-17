@@ -81,31 +81,44 @@
   }
 
 /*路由过渡效果*/
-  .Router {
+  /*.Router {*/
+    /*!*position: absolute;*!*/
+    /*width: 100%;*/
+    /*transition: all .8s ease;*/
+  /*}*/
+
+  /*.slide-left-enter,*/
+  /*.slide-right-leave-active {*/
     /*position: absolute;*/
+    /*opacity: 0;*/
+    /*-webkit-transform: translate3d(100%, 0,0);*/
+    /*transform: translate3d(100%, 0,0);*/
+  /*}*/
+
+  /*.slide-left-leave-active,*/
+  /*.slide-right-enter {*/
+    /*position: absolute;*/
+    /*opacity: 0;*/
+    /*-webkit-transform: translate3d(-100%, 0,0);*/
+    /*transform: translate3d(-100% 0,0);*/
+  /*}*/
+  /*.slide-left-enter-to,.slide-right-enter-to{*/
+    /*position: relative!important;*/
+  /*}*/
+
+  .Router {
+    margin: 0 auto;
+    /*background-color: #f0f0f0;*/
     width: 100%;
-    transition: all .8s ease;
+    height: 100%;
   }
-
-  .slide-left-enter,
-  .slide-right-leave-active {
-    position: absolute;
-    opacity: 0;
-    -webkit-transform: translate3d(100%, 0,0);
-    transform: translate3d(100%, 0,0);
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .25s
   }
-
-  .slide-left-leave-active,
-  .slide-right-enter {
-    position: absolute;
-    opacity: 0;
-    -webkit-transform: translate3d(-100%, 0,0);
-    transform: translate3d(-100% 0,0);
+  .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */
+  {
+    opacity: 0
   }
-  .slide-left-enter-to,.slide-right-enter-to{
-    position: relative!important;
-  }
-
 
 
 </style>

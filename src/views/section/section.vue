@@ -4,18 +4,20 @@
   .b_lineH-28{
     line-height: 28px;
   }
+  .bottom-bg{
+    display: block;
+    height: 224px;
+    width: 100%;
+  }
   .section{
-    min-height: 994px;
+    min-height: 1100px;
     position:relative;
     .header{
       height: 12px;
       width: 100%;
       background: #0BAFFE;
     }
-    .bottom-bg{
-      display: block;
-      width: 100%;
-    }
+
     position:relative ;
     .left{
       position: absolute;

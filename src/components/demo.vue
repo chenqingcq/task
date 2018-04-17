@@ -82,6 +82,7 @@
       <div class="b_status pending">进行中</div>
       <div class="b_status out-date">已超时</div>
 
+      <input type="file" @change.native ="uploadImage" multiple="multiple"  >
       <v-pop ref="popup" animate="left" @onHide="hideCb" >
         <div class="bottom c_white-bg">
           121adl;kfskjflasjklfjlkasdjfljsad
@@ -133,6 +134,32 @@
           },
           showToast(){
             this.$toast.show('操作成功')
+          },
+          uploadImage(e){
+            //上传图片
+            // this.option.img
+            let file = e.target.files[0]
+            console.log(file)
+            if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
+              this.$toast.show('图片类型必须是.gif,jpeg,jpg,png,bmp中的一种')
+              return false
+            }
+            let reader = new FileReader()
+            reader.onload = (e) => {
+              let data
+              if (typeof e.target.result === 'object') {
+                // 把Array Buffer转化为blob 如果是base64不需要
+                data = new Blob([e.target.result], {type: file.type})
+              }
+              debugger
+//              this.addImageCell({
+//                text: "",
+//                imgData: data,
+//                imgUrl: window.URL.createObjectURL(data)
+//              })
+            }
+            // 转化为blob
+            reader.readAsArrayBuffer(file)
           }
         },
     }

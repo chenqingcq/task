@@ -128,7 +128,6 @@
           },
           close(){
             this.isShow = false
-            console.log(this)
             this.closeCb()
           },
           closeCb(){
