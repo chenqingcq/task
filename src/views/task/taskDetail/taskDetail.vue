@@ -83,8 +83,8 @@
                 display: inline-block;
                 height: 12px;
                 position: absolute;
-                bottom: 10px;
-                left: 115*2px;
+                bottom: 6px;
+                left: 110*2px;
               }
             }
             .progress {
@@ -129,12 +129,12 @@
           height: 18*2px;
           font-family: PingFangSC-Light;
           color: rgba(102, 102, 102, 1);
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          span{
+          span {
             display: inline-block;
-            width:100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 100%;
           }
         }
         .detail-btn {
@@ -257,33 +257,38 @@
     }
   }
 
-  .current-progress {
-    padding: 4*2px 10*2px 8*2px 10*2px;
-    font-family: PingFangSC-Medium;
-    display: flex;
-    color: #525252;
-    justify-content: space-between;
-    .left {
-      font-size: 22*2px;
-      color: #333;
-      height: 34*2px;
-      margin-left: 12*2px;
-      margin-right: 30*2px;
-    }
-    .right {
-      font-size: 12px*2;
-      width: 233*2px;
-      height: 34*2px;
-      color: #333;
-      line-height: 34px;
+  .progress-container {
+    height: auto;
+    .current-progress {
+      padding: 4*2px 10*2px 8*2px 10*2px;
       font-family: PingFangSC-Medium;
-      font-size: 12*2px;
-      text-overflow: -o-ellipsis-lastline;
-      overflow: hidden;
+      height: auto;
+      display: flex;
+      font-weight: 100;
+      color: #525252;
+      justify-content: space-between;
+      .left {
+        font-size: 22*2px;
+        color: #333;
+        height: 34*2px;
+        margin-left: 12*2px;
+        margin-right: 30*2px;
+      }
+      .right {
+        font-size: 12px*2;
+        width: 233*2px;
+        height: auto;
+        color: rgba(51, 51, 51, 1);
+        line-height: 34px;
+        font-family: PingFangSC-Medium;
+        font-size: 12*2px;
+        /*text-overflow: -o-ellipsis-lastline;*/
+        /*overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
       -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
+      -webkit-box-orient: vertical;*/
+      }
     }
   }
 
@@ -549,7 +554,7 @@
         </div>
         <div class="task-progress">
           <div class="task-desc" @touchstart='toggleTaskProgress'>
-            <span>展台基础已布置完毕展台基础已布置完毕</span>
+            <span>展台基础已布置完毕展台基础已布置完毕台基础已布置完毕</span>
             <img src="@/assets/img/icon-slide downward.png" />
           </div>
           <div class="detail-btn" @touchstart='towardsUpdateHistory'>
@@ -567,15 +572,17 @@
     <div class="b-LR-10">
       <div class="panel b-MT-10 c_white-bg">
         <div class="b-LR-10 b-T-5 between">
-          <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 b_FS-14 c_6 ">主体节点</span></p>
+          <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 b_FS-14 c_6 ">主题节点</span></p>
           <div @touchstart='linkToSection' class="more b_FS-10  c_7">
             更多项目节点<img src="@/assets/img/icon-right-slide03.png" />
           </div>
         </div>
-        <div class="current-progress">
-          <div class="left">01/30</div>
-          <div class="right">
-            展台基础已布置完毕
+        <div class="progress-container">
+          <div class="current-progress">
+            <div class="left">01/30</div>
+            <div class="right">
+              展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕
+            </div>
           </div>
         </div>
       </div>
@@ -648,7 +655,7 @@
             id: 2
           }
         ],
-        members: [{
+          members: [{
             //审批留言
             name: "张三",
             role: "发布者",

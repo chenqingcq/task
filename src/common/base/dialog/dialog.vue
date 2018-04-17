@@ -6,7 +6,7 @@
           <ul>
             <li>
               <div>
-                <img src="@/assets/img/image-notice01.png" />
+                <img src="@/assets/img/image-notice.png" />
               </div>
               <div class="message">
                 {{message}}
@@ -146,45 +146,48 @@
     position: absolute;
     font-family: PingFangSC-Regula;
     z-index: 99999999;
-    width: 200*2px;
-    height: auto;
+    width: 208*2px;
+    height: 115*2px;
     background-color: #fff;
-    border-radius: 5*2px;
+    border-radius: 9*2px;
     font-size: 14*2px;
     overflow: hidden;
     ul {
       display: flex;
       flex-wrap: wrap;
       width: 100%;
-      height: auto;
+      height: 100%;
+      flex-direction: column;
       li {
         &:first-of-type {
-          height: 59*2px;
+          height: 77*2px;
           width: 100%;
           border-bottom: 1px solid #999;
           display: flex;
           align-items: center;
           div:nth-child(1) {
-            width: 120*2px;
+            width: 80*2px;
             height: 100%;
             display: flex;
-            justify-content: center;
+            justify-content: flex-end;
             align-items: center;
             img {
               display: inline-block;
-              height: 60%;
+              height: 40*2px;
             }
           }
           div:nth-child(2) {
-            width: 100%;
-            text-align: left;
+            flex: 1;
+            text-align: center;
             font-weight: 500;
-            font-family: PingFangSC-Regula;
+            font-size: 14*2px;
+            color: rgba(153, 153, 153, 1);
+            line-height: 20px;
           }
         }
         &:last-of-type {
           display: flex;
-          height: 30*2px;
+          flex: 1;
           width: 100%;
           div {
             width: 50%;
@@ -193,11 +196,14 @@
             display: flex;
             align-items: center;
             font-weight: 500;
+            font-size: 16*2px;
+            line-height: 22px;
             &:first-of-type {
-              border-right: 1px solid #999;
+              border-right: 1px solid rgba(153, 153, 153, 1);
+              color: rgba(102, 102, 102, 1);
             }
             &:last-of-type {
-              color: #6ba7f3;
+              color:rgba(107,167,243,1);
             }
           }
         }

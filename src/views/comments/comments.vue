@@ -7,9 +7,13 @@
           评论<img class="comments-icon" :src='commentImgUrl' />
         </div>
       </div>
-      <div class="comments-container_" v-if="members.length<=0">暂无留言</div>
-      <scroll class="comments-container" :listenScroll='listenScroll' @scroll='scrolling' @scrollEnd='scrollEnd' :height='height'
-        v-if="members.length>1">
+      <div class="comments-container_" v-if="members.length<=0">
+        <i></i>
+        <span>暂无留言,赶快评论吧~</span>
+        <img src="@/assets/img/cry.png" />        
+        <i></i>
+      </div>
+      <scroll class="comments-container" :listenScroll='listenScroll' @scroll='scrolling' @scrollEnd='scrollEnd' v-if="members.length>1">
         <ul class="comment-panel">
           <li v-for="(item,index) in members" :key="index" class="lisItem">
             <div class="left">
@@ -39,7 +43,6 @@
     name: 'comments',
     data() {
       return {
-        height: 140 * 2 + "px",
         listenScroll: true
       }
     },
@@ -73,10 +76,6 @@
 
 </script>
 <style lang="less" scoped>
-  .banner {
-    box-shadow: 0 5px 20px rgba(177, 177, 177, 0.6);
-  }
-
   .commenthint {
     display: flex;
     align-items: center;
@@ -96,9 +95,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    color: #999;
+    span{
+      font-size: 24px;
+    }
+    img{
+      display: inline-block;
+      height: 40px;
+    }
   }
 
   .comments-container {
+    min-height: 280px;
+    max-height: 576px;
     overflow: auto;
     .lisItem {
       width: 100%;
@@ -118,8 +127,9 @@
         width: 64*2px;
         height: auto;
         display: flex;
+        margin-top: 20*2px;
         justify-content: center;
-        align-items: center;
+        /*align-items: center;*/
         .icon {
           background: #D8D8D8;
           display: inline-block;
@@ -155,7 +165,7 @@
             height: 100%;
             color: #666;
             float: right;
-            font-size: 16px;
+            font-size: 15px;
             min-width: 94*2px;
             display: inline-block;
             font-family: PingFangSC-Regular;
@@ -168,10 +178,11 @@
           font-family: PingFangSC-Medium;
           word-break: break-all;
           text-align: left;
-          color: rgba(51, 51, 51, 1);
-          font-size: 20px;
+          color: #666;
+          font-size: 24px;
           height: auto;
           padding: 0 10*2px 10px 0;
+          line-height: 34px;
         }
       }
     }

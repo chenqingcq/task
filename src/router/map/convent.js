@@ -20,7 +20,7 @@ const section = resolve => require(['@/views/section/section'], resolve) // é¡¹ç
 
 export default [{
     path: '/',
-    redirect: '/login'
+    redirect: '/convententry'
   },
   {
     path: '/appointment',
