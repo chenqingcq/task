@@ -342,7 +342,7 @@
               </div>
             </li>
             <transition name='scale'>
-              <li class="sub-item" v-for="(item_,index_) in item" v-show="isSubShow[index] && item.length>1">
+              <li class="sub-item" v-for="(item_,index_) in item" v-if="isSubShow[index] && item.length>1">
                 <!--下拉可见-->
                 <div class="user">
                   <div @touchstart='selectedSub(index,index_,item_)' class="select">
