@@ -266,6 +266,21 @@
 
   .progress-container {
     height: auto;
+    .current-no-progress{
+      text-align: center;
+      height:40px*2;
+      line-height:80px;
+      color:rgba(51,51,51,1);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-size:24px;
+      img{
+        display: inline-block;
+        height: 60px;
+        line-height: 80px;
+      }
+    };
     .current-progress {
       padding: 4*2px 10*2px 8*2px 10*2px;
       font-family: PingFangSC-Medium;
@@ -579,11 +594,18 @@
           </div>
         </div>
         <div class="progress-container">
-          <div class="current-progress">
+          <div class="current-progress" style="display:none"> m
             <div class="left">01/30</div>
             <div class="right">
               展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕
             </div>
+          </div>
+          <div class="current-no-progress" v-if="role=='creator'">
+             添加项目节点~
+             <img src="@/assets/img/toRight.png" />
+          </div>
+          <div class="current-no-progress" v-if="role!=='creator'">
+             暂未设置项目节点~
           </div>
         </div>
       </div>
