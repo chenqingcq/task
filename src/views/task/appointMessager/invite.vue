@@ -51,11 +51,29 @@
   }
 
   .active {
-    animation: scale 1s ease;
+    animation: rotateInDownLeft 1s ease;
   }
 
   .active_ {
-    animation: scale 1s ease reverse;
+    animation: rotateInDownLeft 1s ease reverse;
+  }
+
+  @keyframes rotateInDownLeft {
+    from {
+      -webkit-transform-origin: left bottom;
+      transform-origin: left bottom;
+      -webkit-transform: rotate3d(0, 0, 1, -45deg);
+      transform: scale(.6, .6) rotate3d(0, 0, 1, -45deg);
+      opacity: 0;
+    }
+
+    to {
+      -webkit-transform-origin: left bottom;
+      transform-origin: left bottom;
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: scale(1, 1) translate3d(0, 0, 0);
+      opacity: 1;
+    }
   }
 
   @keyframes scale {
@@ -83,7 +101,7 @@
     }
 
     100% {
-      opacity: 1;  
+      opacity: 1;
     }
   }
 
@@ -97,7 +115,7 @@
     <div class="invite-container" v-show="!show">
       <div class="invite-panel">
         <div class="invite-img" ref="invite">
-          <img @touchstart='close' ref="close"  class="close-img" src="@/assets/img/icon-close01.png" />
+          <img @touchstart='close' ref="close" class="close-img" src="@/assets/img/icon-close01.png" />
           <img src="@/assets/img/image-popup.png" />
           <div ref="invitemore" class="invite-more">点击邀请更多好友</div>
           <div class="invite-fast">还不是好友赶快邀请</div>

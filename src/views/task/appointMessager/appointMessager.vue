@@ -258,7 +258,12 @@
   .active_zoom {
     animation: zoom .5s ease;
   }
-
+  .scale-enter-active{
+    animation: scale .5s ease;
+  }
+  .scale-leave-active{
+    animation: scale .5s ease
+  }
   @keyframes zoom {
     0% {
       opacity: 1;
@@ -268,6 +273,21 @@
     }
     100% {
       opacity: .5;
+    }
+  }
+
+  @keyframes scale {
+    0% {
+      transform: scale(1, 1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(.9, .9);
+      opacity: .8;
+    }
+    100% {
+      transform: scale(1, 1);
+      opacity: 1;
     }
   }
 
@@ -321,20 +341,22 @@
                 <img :src="imgUrl(index)" v-show="item.length>1" />
               </div>
             </li>
-            <li class="sub-item" v-for="(item_,index_) in item" v-show="isSubShow[index] && item.length>1">
-              <!--下拉可见-->
-              <div class="user">
-                <div @touchstart='selectedSub(index,index_,item_)' class="select">
-                  <img src="@/assets/img/sign-selected.png" v-show="item_.isSelected" />
+            <transition name='scale'>
+              <li class="sub-item" v-for="(item_,index_) in item" v-show="isSubShow[index] && item.length>1">
+                <!--下拉可见-->
+                <div class="user">
+                  <div @touchstart='selectedSub(index,index_,item_)' class="select">
+                    <img src="@/assets/img/sign-selected.png" v-show="item_.isSelected" />
+                  </div>
+                  <div class="name" id="name">{{item_.taskname}}</div>
                 </div>
-                <div class="name" id="name">{{item_.taskname}}</div>
-              </div>
-              <div class="update">{{item_.updated}}</div>
-              <div class="comments">{{item_.comments}}</div>
-              <div class="progress">{{progress(item_)}}</div>
-              <div class="arrow">
-              </div>
-            </li>
+                <div class="update">{{item_.updated}}</div>
+                <div class="comments">{{item_.comments}}</div>
+                <div class="progress">{{progress(item_)}}</div>
+                <div class="arrow">
+                </div>
+              </li>
+            </transition>
           </div>
         </ul>
       </scroll>
