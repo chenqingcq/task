@@ -57,7 +57,7 @@
       <div class="messageBox">
         <div class="box">
           <div class="icon">
-            <img src='@/assets/img/image-notice01.png' />
+            <img src='@/assets/img/image-notice.png' />
           </div>
           <div class="message">{{message}}</div>
         </div>
@@ -87,14 +87,14 @@
           return require("@/assets/img/image-notice.png");
         }
       },
-      styleTitle(){
-        if(this.notice.state ==='pass'){
+      styleTitle() {
+        if (this.notice.state === 'pass') {
           return {
-            color:'rgba(90,222,82,1)'
+            color: 'rgba(90,222,82,1)'
           }
-        }else{
+        } else {
           return {
-            color:'rgba(255,115,100,1)'
+            color: 'rgba(255,115,100,1)'
           }
         }
       }
@@ -214,7 +214,7 @@
               color: rgba(102, 102, 102, 1);
             }
             &:last-of-type {
-              color:rgba(107,167,243,1);
+              color: rgba(107, 167, 243, 1);
             }
           }
         }
@@ -283,26 +283,24 @@
     justify-content: center;
     align-items: center;
     .box {
-      width: 192*2px;
-      height: 59*2px;
+      width: 208*2px;
+      height: 80*2px;
       background: #ffffff;
       box-shadow: 0 1px 5px 0 rgba(177, 177, 177, 0.6),
       inset 0 -1px 2px 0 rgba(135, 135, 135, 0.5);
-      border-radius: 3px;
+      border-radius: 12px;
       display: flex;
       flex-wrap: nowrap;
       .icon {
-        width: 50*2px;
+        width: 80*2px;
         height: 100%;
         position: relative;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
         img {
-          position: absolute;
-          width: 27*2px;
-          height: 27*2px;
-          top: 16*2px;
-          right: 7*2px;
-          bottom: 16*2px;
-          left: 16*2px;
+          display:inline-block;
+          width: 55*2px;        
         }
       }
       .message {
@@ -313,7 +311,7 @@
         justify-content: center;
         font-family: PingFangSC-Regular;
         font-size: 14*2px;
-        color: #333;
+        color: #666;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -372,7 +370,7 @@
         p.title {
           position: absolute;
           bottom: 30px*2;
-          margin-top:14px;
+          margin-top: 14px;
           color: #5ade52;
         }
         p.task {
