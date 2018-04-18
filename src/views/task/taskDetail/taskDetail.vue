@@ -203,6 +203,7 @@
 
   .more {
     height: 12*2px;
+    min-width:140px;
     display: flex;
     align-items: center;
     font-family: PingFangSC-Medium;

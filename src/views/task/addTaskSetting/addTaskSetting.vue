@@ -56,6 +56,7 @@
         color: #666666;
         text-align: right;
         width: 112px*2;
+        overflow-x: scroll;
 
       }
       .switch-contaiener {
