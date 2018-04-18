@@ -92,23 +92,26 @@
             }
           }
           .task-focus {
-            width: 120*2px;
+            width: 80*2px;
             height: 32*2px;
-            padding-left: 100px;
-            .focus-star {
-              height: 100%;
-              width: 74ox;
+            position: relative;
+            margin-right: 9*2px;
+            img {
               display: inline-block;
-              &:nth-child(1) {
-                float: left;
-              }
-              &:nth-child(2) {
-                float: right;
-              }
-              img {
-                display: inline-block;
-                height: 100%;
-              }
+              height: 100%;
+            }
+            img:nth-child(1) {
+              height: 100%;
+              position: absolute;
+              top: 0;
+              left: 0
+            }
+            img:nth-child(2) {
+              height: 100%;
+              position: absolute;
+              z-index: 66666666;
+              right: 0;
+              top: 0;
             }
           }
         }
@@ -448,12 +451,12 @@
   }
 
   .zoomInDown-enter-active {
-    .zoomInDown;
+    .fadeIn;
     .animated;
   }
 
   .zoomInDown-leave-active {
-    .zoomOut;
+    .fadeOut;
     .animated(0.1s);
   }
 
@@ -527,20 +530,14 @@
               </div>
             </div>
             <div class="task-focus">
-              <div @touchstart='link_to_taskSetting' class="focus-star" v-show="role=='creator'">
-                <img src="@/assets/img/icon-set up.png" />
-              </div>
+              <img @touchstart='link_to_taskSetting' class="focus-star" v-show="role=='creator'" src="@/assets/img/icon-set up.png" />
               <transition name="zoomInDown">
-                <div v-if='isLike' @touchstart="toggleLike" class="focus-star ">
-                  <img class="focus-star" src="@/assets/img/icon-collection-highlight.png" />
-                </div>
+                <img v-show='isLike' @touchstart="toggleLike" class="focus-star " src="@/assets/img/icon-collection-highlight.png" />
               </transition>
               <transition name="canelLike">
-                <div v-if="!isLike" @touchstart="toggleLike" class="focus-star">
-                  <img class="focus-star" src="@/assets/img/icon-collection-normal.png" :style="styleTaskFocus" />
-                </div>
+                <img v-if="!isLike" @touchstart="toggleLike" class="focus-star" src="@/assets/img/icon-collection-normal.png" :style="styleTaskFocus"
+                />
               </transition>
-
             </div>
           </div>
         </div>
