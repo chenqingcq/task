@@ -110,7 +110,7 @@
     min-height: 280px;
     max-height: 432px;
     /*72*3*2*/
-    overflow: auto;
+    overflow: scroll;
     .lisItem {
       width: 100%;
       height: auto;
