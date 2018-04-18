@@ -41,9 +41,9 @@
           <!--<img class="close" @touchstart='close' src="../../../assets/img/icon-close.png" />-->
           <div class="top">
             <div class="noticeIcon">
-              <img class="noticeImg" src="@/assets/img/image-pass.png" />
+              <img class="noticeImg" :src="imgUrl" />
             </div>
-            <p class="title b_FS-18">{{notice.title}}</p>
+            <p class="title b_FS-18" :style='styleTitle'>{{notice.title}}</p>
             <p class="task b_FS-14">{{notice.task}}</p>
           </div>
           <!--<div class="bottom  b_FS-12">
@@ -81,10 +81,21 @@
           return require("@/assets/img/image-pass.png");
         }
         if (this.notice.state === "fail") {
-          return require("@/assets/img/image-not through.png");
+          return require("@/assets/img/image-notice.png");
         }
         if (this.notice.state === "warn") {
           return require("@/assets/img/image-notice.png");
+        }
+      },
+      styleTitle(){
+        if(this.notice.state ==='pass'){
+          return {
+            color:'rgba(90,222,82,1)'
+          }
+        }else{
+          return {
+            color:'rgba(255,115,100,1)'
+          }
         }
       }
     },
@@ -326,15 +337,15 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background: rgba(99, 99, 99, 0.8);
+    background: rgba(99, 99, 99, 0.5);
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     .panel-notice {
       animation: scale 0.5s ease;
-      min-width: 252*2px;
-      min-height: 252*2px;
+      min-width: 212*2px;
+      min-height: 201*2px;
       background-color: #fff;
       border-radius: 18px;
       position: relative;
@@ -361,6 +372,7 @@
         p.title {
           position: absolute;
           bottom: 30px*2;
+          margin-top:14px;
           color: #5ade52;
         }
         p.task {

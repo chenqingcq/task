@@ -835,7 +835,7 @@
           confirm() {
             self.passer = setTimeout(() => {
               self.$dialog.notice({
-                state: "pass",
+                state: "fail",
                 title: "该任务已拒绝",
                 task: "展台基础工作"
               });
