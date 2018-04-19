@@ -610,8 +610,8 @@ export default {
     },
     throttle(delay) {
       return new Promise((resovle, reject) => {
+        this.$toast.show("任务创建完成!", 500);
         setTimeout(() => {
-          this.$toast.show("任务创建完成!", 500);
           resovle("compelete");
         }, delay);
       });
