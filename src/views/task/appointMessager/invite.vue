@@ -70,14 +70,14 @@
     opacity: 0.5;
   }
   50% {
-    -webkit-transform: rotate3d(0, 0, 1, -90deg);
-    transform: scale(0.7, 0.7) rotate3d(0, 0, 1,-90deg);
-    opacity: 0.7;
+    -webkit-transform: rotate3d(0, 0, 1, 0deg);
+    transform: scale(1, 1) rotate3d(0, 0, 1,0deg);
+    opacity: 1;
   }
   75% {
-    -webkit-transform: rotate3d(0, 0, 1, -45deg);
-    transform: scale(0.8, 0.8) rotate3d(0, 0, 1, -45deg);
-    opacity: 0.9;
+    -webkit-transform: rotate3d(0, 0, 1, 0deg);
+    transform: scale(1, 1.2) rotate3d(0, 0, 1, 0deg);
+    opacity: 1;
   }
   100% {
     -webkit-transform: translate3d(0, 0, 0);
@@ -149,6 +149,7 @@ export default {
   methods: {
     close() {
       this.show = !this.show;
+      this.$refs.invite.classList.add("active_");     
     },
     init() {
       this.$refs.invite.classList.add("active");
