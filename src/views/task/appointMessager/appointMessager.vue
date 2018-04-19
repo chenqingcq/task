@@ -26,12 +26,11 @@
         height: 14*2px;
         width: 100%;
         display: flex;
-        flex-wrap: nowrap;
         li {
           color: #fff;
           height: 20*2px;
           min-width: 24*2px;
-          font-size: 12*2px;
+          font-size: 14*2px;
           text-align: center;
           span {
             display: inline-block;
@@ -341,8 +340,8 @@
                 <img :src="imgUrl(index)" v-show="item.length>1" />
               </div>
             </li>
-            <transition name='scale'>
-              <li class="sub-item" v-for="(item_,index_) in item" v-if="isSubShow[index] && item.length>1">
+            <transition-group name='scale'>
+              <li class="sub-item" v-for="(item_,index_) in item" v-if="isSubShow[index] && item.length>1" :key="index_">
                 <!--下拉可见-->
                 <div class="user">
                   <div @touchstart='selectedSub(index,index_,item_)' class="select">
@@ -356,7 +355,7 @@
                 <div class="arrow">
                 </div>
               </li>
-            </transition>
+            </transition-group>
           </div>
         </ul>
       </scroll>
