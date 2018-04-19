@@ -24,6 +24,8 @@ export default {
       todayTime : new Date() , // 今天的时间
 
       weekStrArr : ['日', '一', '二', '三', '四', '五', '六'] ,
+      // 左滑开关 索引
+      swipeOutIndex : -1 ,
 
       taskList : [{
         id: 0 ,
@@ -123,7 +125,6 @@ export default {
     })
   },
   methods:{
-
     // 周／月
     statusChange(status){
       this.isMonthMode = status
@@ -166,6 +167,13 @@ export default {
     changeProject(){
       console.log('change', this.projectId)
 
+    },
+    watchOpenSwipe(index){
+      console.log('index' , index)
+      this.swipeOutIndex = index
+    },
+    watchCloseSwipe(index){
+      this.swipeOutIndex = -1
     }
   }
 }

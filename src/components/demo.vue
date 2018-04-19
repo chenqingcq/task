@@ -1,4 +1,4 @@
-<style>
+<style lang="less" scoped>
 
 </style>
 <template>
@@ -82,33 +82,64 @@
       <div class="b_status pending">进行中</div>
       <div class="b_status out-date">已超时</div>
 
-      <input type="file" @change.native ="uploadImage" multiple="multiple"  >
+      <input type="file" @change ="uploadImage" multiple="multiple">
       <v-pop ref="popup" animate="left" @onHide="hideCb" >
         <div class="bottom c_white-bg">
           121adl;kfskjflasjklfjlkasdjfljsad
         </div>
       </v-pop>
+      <v-swipeout>
+        <div slot="content" style = 'width : 200px;padding: 20px'>
+          http://0.0.0.0:8080/#/conventEntry
+        </div>
+        <div slot = 'right-menu' class="b_FS-14">
+          <v-swipe-btn type="warn" >
+            删除
+          </v-swipe-btn>
+        </div>
+      </v-swipeout>
       <!--<Toast></Toast>-->
     </div>
 </template>
-<script>
+<script type="text/babel">
 
 
     import { Demo } from '@/services'
     //import Toast from '@/common/base/toast/toast.vue'
     import Toast from '@/common/base/toast/toast.js'
     export default{
+
         data(){
             return{
               isOpen : false ,
+              title : 0
             }
         },
         mounted(){
-          Demo.devUserLogin({
-            userId : '21212'
-          },true).then(()=>{})
+//          Demo.devUserLogin({
+//            userId : '21212'
+//          },true).then(()=>{})
+//
+//          var timer = setInterval(()=>{
+//            console.log( this.title )
+//
+//            if( this.title++ > 10 ){
+//              console.log( this.title )
+//              this.$loadingClose()
+//              clearInterval( timer )
+//            }
+//            else{
+//              this.$loading({
+//                title : `${this.title}` ,
+//              })
+//            }
+//
+//          },1000)
 
-          this.$toast.show('操作成功')
+
+
+
+          //this.$toast.show('操作成功')
 //          Toast({
 //            message: '操作成功',
 //            position: 'bottom'
@@ -137,6 +168,7 @@
           },
           uploadImage(e){
             //上传图片
+            console.log(e)
             // this.option.img
             let file = e.target.files[0]
             console.log(file)

@@ -13,10 +13,14 @@ import bottomLogoSign from './base/bottomLogoSign'
 import calendar from './base/calendar'
 
 // 时间选择器
-import dateTimer from './base/vux-datetime/index.vue' // 时间选择器
+import dateTimer from './base/vux-datetime/index.vue'
 
 // 自定义弹层
 import pop from './base/pop/index.vue' //
+// 左滑删除
+import swipeout from './base/swipeout/swipeout.vue'
+// 滑动按钮
+import swipeBtn from './base/swipeout/swipe-btn.vue'
 
 // 项目组件 vue.prototype 扩展
 import '@/common/base/dialog'
@@ -36,6 +40,9 @@ const install = Vue => {
   //
   Vue.component( pop.name, pop )
   //
+  Vue.component( swipeout.name, swipeout )
+  // swipeBtn
+  Vue.component( swipeBtn.name, swipeBtn )
 }
 
 

@@ -76,7 +76,7 @@
         position: absolute;
         right: 30px ;
         top: 76px ;
-        z-index: 1;
+        z-index: 10;
       }
       .panel{
         height: 780px;
@@ -87,6 +87,7 @@
           padding:20px 22px;
           display: flex ;
           align-items: center;
+          background:#fff ;
           .left-photo{
             position: relative;
             margin-right: 28px;
@@ -177,14 +178,32 @@
             <div class="panel c_white-bg">
 
               <template v-for="(project, key) in projectList">
-                <div class="item" @click = "selectProject(project)" >
-                  <p class="left-photo"  >
-                    <img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">
-                  </p>
-                  <p class="c_11 b_FS-14">
-                    {{ project.themeName }}
-                  </p>
-                </div>
+                <!--<v-swipeout>-->
+                  <!--<div slot="content" style = 'width : 200px;padding: 20px'>-->
+                    <!--http://0.0.0.0:8080/#/conventEntry-->
+                  <!--</div>-->
+                  <!--<div slot = 'right-menu' class="b_FS-14">-->
+                    <!--<v-swipe-btn type="warn" >-->
+                      <!--删除-->
+                    <!--</v-swipe-btn>-->
+                  <!--</div>-->
+                <!--</v-swipeout>-->
+                <v-swipeout>
+                  <div slot="content" class="item" @click = "selectProject(project)" >
+                    <p class="left-photo"  >
+                      <img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">
+                    </p>
+                    <p class="c_11 b_FS-14">
+                      {{ project.themeName }}
+                    </p>
+                  </div>
+                  <div slot = 'right-menu' class="b_FS-14">
+                    <v-swipe-btn type="warn" >
+                      删除
+                    </v-swipe-btn>
+                  </div>
+                </v-swipeout>
+
                 <div class="bar"></div>
               </template>
             </div>
