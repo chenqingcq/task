@@ -84,6 +84,9 @@
         position:relative;
 
         .item{
+          &.is-radius{
+            border-radius: 0 40px 0 0 ;
+          }
           padding:20px 22px;
           display: flex ;
           align-items: center;
@@ -188,8 +191,16 @@
                     <!--</v-swipe-btn>-->
                   <!--</div>-->
                 <!--</v-swipeout>-->
-                <v-swipeout>
-                  <div slot="content" class="item" @click = "selectProject(project)" >
+                <!--<div  class="item" @click = "selectProject(project)" >-->
+                  <!--<p class="left-photo"  >-->
+                    <!--<img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">-->
+                  <!--</p>-->
+                  <!--<p class="c_11 b_FS-14">-->
+                    <!--{{ project.themeName }}-->
+                  <!--</p>-->
+                <!--</div>-->
+                <v-swipeout contentBg="#f4f4f4" >
+                  <div slot="content" class="item" :class="[ key == 0 && 'is-radius']" @click = "selectProject(project)" >
                     <p class="left-photo"  >
                       <img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">
                     </p>
@@ -198,7 +209,7 @@
                     </p>
                   </div>
                   <div slot = 'right-menu' class="b_FS-14">
-                    <v-swipe-btn type="warn" >
+                    <v-swipe-btn :width="70" type="warn" >
                       删除
                     </v-swipe-btn>
                   </div>

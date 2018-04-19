@@ -82,7 +82,7 @@
       <div class="b_status pending">进行中</div>
       <div class="b_status out-date">已超时</div>
 
-      <input type="file" @change ="uploadImage" multiple="multiple">
+      <input type="file"  accept=".png,.jpg,.gif,.jpeg" @change ="uploadImage" multiple="multiple">
       <v-pop ref="popup" animate="left" @onHide="hideCb" >
         <div class="bottom c_white-bg">
           121adl;kfskjflasjklfjlkasdjfljsad

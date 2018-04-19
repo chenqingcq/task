@@ -213,12 +213,12 @@
 
             </div>
             <div slot = 'right-menu'>
-              <v-swipe-btn :width="100" >
+              <v-swipe-btn :width="50" >
                 置顶
               </v-swipe-btn><v-swipe-btn
-                :width="100"  >
+                :width="50"  >
                 置底
-              </v-swipe-btn ><v-swipe-btn  :width="100" type="warn" >
+              </v-swipe-btn ><v-swipe-btn  :width="50" type="warn" >
               删除
             </v-swipe-btn>
             </div>
