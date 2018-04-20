@@ -153,7 +153,7 @@ export default {
   },
   methods: {
     refresh(){
-      console.log('下拉刷新')
+      console.log('下拉加载')
     },
     _look_all_reply() {
       this.$router.push({
