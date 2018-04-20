@@ -4,21 +4,29 @@
           <div class="close" @touchstart='close'>
               <img src="@/assets/img/icon-close.png" />
           </div>
-          <textarea name="userIpt" id="userIpt" placeholder="说点什么吧..." >
+          <textarea name="userIpt" id="userIpt" placeholder="说点什么吧..." v-model.trim="usreInput" >
               
           </textarea>
-          <div class="comment-btn">评论</div>
+          <div @touchstart='sendComments' class="comment-btn">评论</div>
       </div>
   </div>
 </template>
 <script>
 export default {
   data() {
-    return {};
+    return {
+      usreInput: ""
+    };
   },
   methods: {
     close() {
       this.$emit("close");
+    },
+    sendComments() {
+      if (!!this.usreInput) {
+        console.log(this.usreInput);
+        this.usreInput = ''
+      }
     }
   }
 };
@@ -34,7 +42,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10;
+  z-index: 999999;
   .comment-panel {
     width: 290px*2;
     height: 247px*2;

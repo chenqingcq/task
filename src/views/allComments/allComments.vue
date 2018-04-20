@@ -1,7 +1,7 @@
 <template>
     <div class="comments-container">
          <div class="b-LR-10 comment-container">
-            <div class="panel b-MT-10 " style="background:#fff">
+            <div class="panel b-P-10 " style="background:#fff">
             <scroll class="comments-container" ref="scroll" :listenScroll='listenScroll' v-if="members.length>1">
                 <ul class="comment-panel">
                 <li v-for="(item,index) in members" :key="index" class="lisItem">
@@ -19,7 +19,7 @@
                     </div>
                     <div class="comments-item">{{item.comments}}</div>
                     <div class="comments-callback">
-                        <span >2条回复</span> 
+                        <span @touchstart='_look_all_reply'>2条回复</span> 
                         <div>
                         <img @touchstart='add_praise(index)' :src="imgUrl"/>
                         <span ref="goods">50</span>
@@ -107,6 +107,16 @@ export default {
     }
   },
   methods: {
+    _look_all_reply(){
+      this.$router.push({
+        path:'/comment',
+        query:{
+          taskId:0,
+          userId:0,
+          commentsClass:2
+        }
+      })
+    },
     sendComment() {
       console.log(this.comments);
       this.$dialog.message({
@@ -129,6 +139,9 @@ export default {
         ].parentNode.children[0].src = require("@/assets/img/iocn-good.png");
       }
     }
+  },
+  created(){
+    console.log('comment')
   }
 };
 </script>

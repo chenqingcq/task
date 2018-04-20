@@ -307,7 +307,7 @@
         align-items: center;
         img {
           display:inline-block;
-          width: 55*2px;        
+          width: 45*2px;        
         }
       }
       .message {

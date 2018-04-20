@@ -44,19 +44,13 @@ export default function getInstance(options) {
       }
     })
   };
-  // if (dialog && options.type === 'message') {
-  //   vue.set(dialog, 'type', options.type);
-  //   vue.set(dialog, 'message', options.message);
-  //   vue.set(dialog, 'icon', options.icon);
-  //   vue.set(dialog, 'show', true);
-  // }
   if (options.type === 'message') {
     dialog = new DialogConstructor({
       data() {
         return {
           type: options.type,
           message: options.message || "", //定义信息
-          icon: options.icon, //确认图标类型
+          icon: options.icon || 'pass', //确认图标类型
           show: true,
         }
       }

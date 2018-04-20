@@ -9,8 +9,7 @@
       </div>
       <div class="comments-container_" v-if="members.length<=0">
         <i></i>
-        <span>暂无留言,赶快评论吧~</span>
-        <img src="@/assets/img/cry.png" />        
+        <span>暂无留言</span>      
         <i></i>
       </div>
       <scroll class="comments-container" ref="scroll" :listenScroll='listenScroll' @scroll='scrolling' @scrollEnd='scrollEnd' v-if="members.length>1">
@@ -32,7 +31,7 @@
               <div class="comments-callback">
                 <span @touchstart='_link_to_secondary_comments'>2条回复</span>
                 <div>
-                  <img @touchstart='add_comment(index)' :src="imgUrl"/>
+                  <img @touchstart='add_praise(index)' :src="imgUrl"/>
                   <span ref="goods">50</span>
                 </div>
               </div>
@@ -105,14 +104,13 @@ export default {
     userInput() {
       this.showUserInput = true;
     },
-    add_comment(index) {
+    add_praise(index) {
       console.log(index, this.$refs.goods[index]);
       if (!this.$refs.goods[index].getAttribute("class")) {
         this.$refs.goods[index].classList.add("active");
         this.$refs.goods[
           index
         ].parentNode.children[0].src = require("@/assets/img/iocn-good2.png");
-        console.log(this.$refs.goods[index].parentNode.children[0]);
       } else {
         this.$refs.goods[index].classList.remove("active");
         this.$refs.goods[
