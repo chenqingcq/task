@@ -19,9 +19,9 @@
                     </div>
                     <div class="comments-item">{{item.comments}}</div>
                     <div class="comments-callback">
-                        <span>2条回复</span>
+                        <span >2条回复</span> 
                         <div>
-                        <img @touchstart='add_comment(index)' :src="imgUrl"/>
+                        <img @touchstart='add_praise(index)' :src="imgUrl"/>
                         <span ref="goods">50</span>
                         </div>
                     </div>
@@ -114,7 +114,7 @@ export default {
           icon:'pass'
       })
     },
-    add_comment(index) {
+    add_praise(index) {
       console.log(index, this.$refs.goods[index]);
       if (!this.$refs.goods[index].getAttribute("class")) {
         this.$refs.goods[index].classList.add("active");

@@ -30,7 +30,7 @@
               </div>
               <div class="comments-item">{{item.comments}}</div>
               <div class="comments-callback">
-                <span>2条回复</span>
+                <span @touchstart='_link_to_secondary_comments'>2条回复</span>
                 <div>
                   <img @touchstart='add_comment(index)' :src="imgUrl"/>
                   <span ref="goods">50</span>
@@ -87,6 +87,15 @@ export default {
     }
   },
   methods: {
+    _link_to_secondary_comments(){
+      this.$router.push({
+        path:'/comment',
+        query:{
+          taskId:0,
+          userId:0
+        }
+      });      
+    },
     link_to_allComments(){
       this.$router.push('comment');
     },
