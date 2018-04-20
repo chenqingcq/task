@@ -4,7 +4,7 @@
       <div class="b-LR-10 b-T-5 between " ref="banner">
         <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 c_6 b_FS-14">审批留言</span></p>
         <div class=" b_FS-10 c_7 commenthint">
-          评论<img class="comments-icon" :src='commentImgUrl' />
+          查看全部<img class="comments-icon" :src='commentImgUrl' />
         </div>
       </div>
       <div class="comments-container_" v-if="members.length<=0">
@@ -29,165 +29,276 @@
                 <div class="time-panel"><span>{{item.date}}</span><span>{{item.time}}</span></div>
               </div>
               <div class="comments-item">{{item.comments}}</div>
+              <div class="comments-callback">
+                <span>2条回复</span>
+                <div>
+                  <img @touchstart='add_comment(index)' :src="imgUrl"/>
+                  <span ref="goods">50</span>
+                </div>
+              </div>
             </div>
             <i class="footbar"></i>
           </li>
         </ul>
       </scroll>
+      <div class="user-input">
+          <input @focus="userInput" type="text" placeholder="赶快评论吧~" class="comment_input">
+          <img class="icon-input" src="@/assets/img/iocn-pen.png" />
+      </div>
     </div>
+    <user-input v-show="showUserInput" @close='closeUserInput'></user-input>
   </div>
 </template>
 <script>
-  import scroll from '@/common/base/scroll/scroll'
-  export default {
-    name: 'comments',
-    data() {
-      return {
-        listenScroll: true
-      }
-    },
-    props: {
-      members: {
-        type: Array,
-        default () {
-          return []
-        }
-      }
-    },
-    components: {
-      scroll
-    },
-    computed: {
-      commentImgUrl() {
-        return require('@/assets/img/icon-comment.png')
-      }
-    },
-    methods: {
-      scrolling() {
-        console.log(' listenScroll');
-        this.$refs.banner.classList.add('banner');
-        // this.$refs.scroll.refresh()
-      },
-      scrollEnd() {
-        console.log('scrollEnd');
-        this.$refs.banner.classList.remove('banner')
+import scroll from "@/common/base/scroll/scroll";
+import userInput from "@/views/task/taskDetail/commentInput.vue";
+export default {
+  name: "comments",
+  data() {
+    return {
+      listenScroll: true,
+      state: false,
+      showUserInput: false,
+      currentState: {}
+    };
+  },
+  props: {
+    members: {
+      type: Array,
+      default() {
+        return [];
       }
     }
+  },
+  components: {
+    scroll,
+    userInput
+  },
+  computed: {
+    commentImgUrl() {
+      return require("@/assets/img/icon-comment.png");
+    },
+    imgUrl(currentState) {
+      if (currentState) {
+        return require("@/assets/img/iocn-good.png");
+      } else {
+        return require("@/assets/img/iocn-good2.png");
+      }
+    }
+  },
+  methods: {
+    closeUserInput() {
+      this.showUserInput = !this.showUserInput;
+    },
+    userInput() {
+      this.showUserInput = !this.showUserInput;
+    },
+    add_comment(index) {
+      console.log(index, this.$refs.goods[index]);
+      if (!this.$refs.goods[index].getAttribute("class")) {
+        this.$refs.goods[index].classList.add("active");
+        this.$refs.goods[
+          index
+        ].parentNode.children[0].src = require("@/assets/img/iocn-good2.png");
+        console.log(this.$refs.goods[index].parentNode.children[0]);
+      } else {
+        this.$refs.goods[index].classList.remove("active");
+        this.$refs.goods[
+          index
+        ].parentNode.children[0].src = require("@/assets/img/iocn-good.png");
+      }
+    },
+    scrolling() {
+      console.log(" listenScroll");
+      this.$refs.banner.classList.add("banner");
+      // this.$refs.scroll.refresh()
+    },
+    scrollEnd() {
+      console.log("scrollEnd");
+      this.$refs.banner.classList.remove("banner");
+    }
   }
-
+};
 </script>
 <style lang="less" scoped>
-  .commenthint {
-    display: flex;
-    align-items: center;
-    ont-family: PingFangSC-Medium;
-    font-size: 10*2px;
-    color: #999999;
-    .comments-icon {
-      display: inline-block;
-      width: 12*2px;
-      /*height: 12px*2;*/
-      margin-left: 4px;
-    }
+.user-input {
+  width: 100%;
+  height: 44*2px+18px;
+  padding: 0 15*2px 14*2px 14*2px;
+  position: relative;
+  .comment_input {
+    display: inline-block;
+    height: 30*2px;
+    width: 100%;
+    margin-top: 18px;
+    padding-left: 16*2px+19*2px;
+    background: rgba(244, 244, 244, 1);
+    border-radius: 19px*2;
+    color: rgba(186, 186, 186, 1);
   }
-
-  .comments-container_ {
-    height: 50px*2px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #999;
-    span{
-      font-size: 24px;
-    }
-    img{
-      display: inline-block;
-      height: 40px;
-    }
+  .icon-input {
+    display: inline-block;
+    height: 15*2px;
+    position: absolute;
+    top: 18px+15px;
+    left: 31*2px;
+    z-index: 9;
   }
+}
 
-  .comments-container {
-    min-height: 280px;
-    max-height: 432px;
-    /*72*3*2*/
-    overflow: scroll;
-    .lisItem {
-      width: 100%;
+.active {
+  color: rgba(255, 0, 0, 1);
+}
+.commenthint {
+  display: flex;
+  align-items: center;
+  ont-family: PingFangSC-Medium;
+  font-size: 10*2px;
+  color: #999999;
+  .comments-icon {
+    display: inline-block;
+    width: 12*2px;
+    /*height: 12px*2;*/
+    margin-left: 4px;
+  }
+}
+
+.comments-container_ {
+  height: 50px*2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #999;
+  span {
+    font-size: 24px;
+  }
+  img {
+    display: inline-block;
+    height: 40px;
+  }
+}
+
+.comments-container {
+  min-height: 280px;
+  max-height: 465px;
+  /*72*3*2*/
+  overflow: scroll;
+  .lisItem {
+    width: 100%;
+    height: auto;
+    display: flex;
+    position: relative;
+    .footbar {
+      display: inline-block;
+      position: absolute;
+      left: 22*2px;
+      right: 21*2px;
+      bottom: 0;
+      height: 2px;
+      background: rgba(151, 151, 151, 0.21);
+    }
+    .left {
+      width: 64*2px;
       height: auto;
       display: flex;
-      position: relative;
-      .footbar {
+      margin-top: 20*2px;
+      justify-content: center;
+      /*align-items: center;*/
+      .icon {
+        background: #d8d8d8;
         display: inline-block;
-        position: absolute;
-        left: 22*2px;
-        right: 21*2px;
-        bottom: 0;
-        height: 2px;
-        background: rgba(151, 151, 151, .21);
-      }
-      .left {
-        width: 64*2px;
-        height: auto;
+        width: 43px*2;
+        height: 43px*2;
+        border-radius: 50%;
         display: flex;
-        margin-top: 20*2px;
+        border: 1*2px solid #14c9fe;
         justify-content: center;
-        /*align-items: center;*/
-        .icon {
-          background: #D8D8D8;
-          display: inline-block;
-          width: 43px*2;
-          height: 43px*2;
-          border-radius: 50%;
+        align-items: center;
+      }
+      img {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
+    }
+    .right {
+      flex: 1;
+      min-height: 100*2px;
+      .head {
+        margin-top: 19*2px;
+        height: 17*2px;
+        .role {
+          color: #07a5ff;
           display: flex;
-          border: 1*2px solid #14C9FE;
-          justify-content: center;
+          font-size: 24px;
           align-items: center;
-        }
-        img {
           display: inline-block;
-          width: 100%;
+        }
+        .time-panel {
           height: 100%;
-          border-radius: 50%;
+          color: #666;
+          float: right;
+          font-size: 15px;
+          min-width: 94*2px;
+          display: inline-block;
+          margin-right: 10*2px;
+          font-family: PingFangSC-Regular;
+          span {
+            margin-left: 5px;
+          }
         }
       }
-      .right {
-        flex: 1;
-        min-height: 72*2px;
-        .head {
-          margin-top: 19*2px;
-          height: 17*2px;
-          .role {
-            color: #07A5FF;
-            display: flex;
-            font-size: 24px;
-            align-items: center;
-            display: inline-block;
-          }
-          .time-panel {
-            height: 100%;
-            color: #666;
-            float: right;
-            font-size: 15px;
-            min-width: 94*2px;
-            display: inline-block;
-            font-family: PingFangSC-Regular;
-            span {
-              margin-left: 5px;
-            }
-          }
+      .comments-item {
+        font-family: PingFangSC-Medium;
+        word-break: break-all;
+        text-align: left;
+        color: #666;
+        font-size: 24px;
+        height: auto;
+        padding: 0 10*2px 10px 0;
+        line-height: 34px;
+      }
+      .comments-callback {
+        height: 50px;
+        font-size: 12px*2;
+        font-family: PingFangSC-Regular;
+        color: rgba(153, 153, 153, 1);
+        line-height: 17px*2;
+        margin-top: 8px;
+        margin-bottom: 20px;
+        z-index: -1;
+        > span {
+          width: 150px;
+          height: 50px;
+          background: rgba(244, 244, 244, 1);
+          border-radius: 13px*2;
+          display: inline-block;
+          text-align: center;
+          line-height: 50px;
         }
-        .comments-item {
-          font-family: PingFangSC-Medium;
-          word-break: break-all;
-          text-align: left;
-          color: #666;
-          font-size: 24px;
-          height: auto;
-          padding: 0 10*2px 10px 0;
-          line-height: 34px;
+        div {
+          display: inline-block;
+          float: right;
+          margin-right: 20px;
+          > img {
+            display: inline-block;
+            height: 25*2px;
+            padding: 12px 0 13px 0;
+            vertical-align: middle;
+          }
+          > span {
+            font-size: 12px*2;
+            font-family: PingFangSC-Regular;
+            display: inline-block;
+            height: 25*2px;
+            line-height: 50px;
+            margin-left: 2px;
+            vertical-align: middle;
+          }
         }
       }
     }
   }
-
+}
 </style>
