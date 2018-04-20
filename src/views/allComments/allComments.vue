@@ -1,8 +1,8 @@
 <template>
-    <div class="comments-container">
+    <div class="_comments-container">
          <div class="b-LR-10 comment-container">
             <div class="panel b-P-10 " style="background:#fff">
-            <scroll class="comments-container" ref="scroll" :listenScroll='listenScroll' v-if="members.length>1">
+            <scroll class="comments-container" ref="scroll" :listenScroll='listenScroll' @scrollEnd="refresh" v-if="members.length>1">
                 <ul class="comment-panel">
                 <li v-for="(item,index) in members" :key="index" class="lisItem">
                     <div class="left">
@@ -86,6 +86,51 @@ export default {
           comments: "会管家",
           imgUrl:
             "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+        },
+        {
+          name: "小六",
+          role: "观察者",
+          date: "x年x月x日",
+          time: "2018.10.25",
+          comments: "会管家",
+          imgUrl:
+            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+        },
+        {
+          name: "小六",
+          role: "观察者",
+          date: "x年x月x日",
+          time: "2018.10.25",
+          comments: "会管家",
+          imgUrl:
+            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+        },
+        {
+          name: "小六",
+          role: "观察者",
+          date: "x年x月x日",
+          time: "2018.10.25",
+          comments: "会管家",
+          imgUrl:
+            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+        },
+        {
+          name: "小六",
+          role: "观察者",
+          date: "x年x月x日",
+          time: "2018.10.25",
+          comments: "会管家",
+          imgUrl:
+            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+        },
+        {
+          name: "小eee",
+          role: "观察者",
+          date: "x年x月x日",
+          time: "2018.10.25",
+          comments: "会管家",
+          imgUrl:
+            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
         }
       ]
     };
@@ -107,22 +152,25 @@ export default {
     }
   },
   methods: {
-    _look_all_reply(){
+    refresh(){
+      console.log('下拉刷新')
+    },
+    _look_all_reply() {
       this.$router.push({
-        path:'/comment',
-        query:{
-          taskId:0,
-          userId:0,
-          commentsClass:2
+        path: "/comment",
+        query: {
+          taskId: 0,
+          userId: 0,
+          commentsClass: 2
         }
-      })
+      });
     },
     sendComment() {
       console.log(this.comments);
       this.$dialog.message({
-          message:'评论成功!',
-          icon:'pass'
-      })
+        message: "评论成功!",
+        icon: "pass"
+      });
     },
     add_praise(index) {
       console.log(index, this.$refs.goods[index]);
@@ -140,13 +188,13 @@ export default {
       }
     }
   },
-  created(){
-    console.log('comment')
+  created() {
+    console.log("comment");
   }
 };
 </script>
 <style lang="less" scoped>
-.comments-container {
+._comments-container {
   width: 100%;
   height: 100vh;
   position: relative;
@@ -157,12 +205,13 @@ export default {
   }
   .comment-panel {
     overflow: hidden;
+    background: #07a5ff;
   }
   .user-input {
     width: 100%;
     height: 54*2px;
     padding: 10*2px 20*2px;
-    overflow: hidden;
+    // overflow: hidden;
     position: absolute;
     bottom: 0;
     z-index: 9;
@@ -206,7 +255,7 @@ export default {
   }
 
   .comments-container_ {
-    height: 50px*2px;
+    height: auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -222,7 +271,7 @@ export default {
 
   .comments-container {
     min-height: 280px;
-    max-height: 465px;
+    max-height: 667*2px-54px*2;
     /*72*3*2*/
     overflow: hidden;
     .lisItem {
@@ -230,6 +279,7 @@ export default {
       height: auto;
       display: flex;
       position: relative;
+      background: #fff;
       .footbar {
         display: inline-block;
         position: absolute;
