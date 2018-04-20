@@ -651,7 +651,8 @@ export default {
         } else {
           console.log(k);
           this.$dialog.message({
-            message: `请添加${reflect_to_task[k]}`
+            message: `请添加${reflect_to_task[k]}`,
+            icon:'fail'
           });
           this.check_pass = false;
           return;

@@ -137,7 +137,6 @@
           this.show = false;
         }, 1500);
       },
-      initConfirm() {},
       _confirm() {
         this.show = false;
         if (!!this.confirm) {
