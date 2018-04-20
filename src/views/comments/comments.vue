@@ -45,7 +45,9 @@
           <img class="icon-input" src="@/assets/img/iocn-pen.png" />
       </div>
     </div> 
-    <user-input v-show="showUserInput" @close='closeUserInput'></user-input>
+    <transition name="zoom">
+      <user-input v-show="showUserInput" @close='closeUserInput'></user-input>    
+    </transition>
   </div>
 </template>
 <script>
@@ -86,17 +88,17 @@ export default {
     }
   },
   methods: {
-    _link_to_secondary_comments(){
+    _link_to_secondary_comments() {
       this.$router.push({
-        path:'/comment',
-        query:{
-          taskId:0,
-          userId:0
+        path: "/comment",
+        query: {
+          taskId: 0,
+          userId: 0
         }
-      });      
+      });
     },
-    link_to_allComments(){
-      this.$router.push('comment');
+    link_to_allComments() {
+      this.$router.push("comment");
     },
     closeUserInput() {
       this.showUserInput = false;
@@ -131,6 +133,23 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.zoom-enter-active{
+  animation: zoom .5s ease;
+}
+.zooom-leave-active{
+  animation: zoom .5s ease reverse;
+}
+@keyframes zoom {
+  from{
+    transform: scale(.9,.9);
+  }
+  50%{
+    transform: scale(1.1,1.1);
+  }
+  to{
+    transform: scale(1,1)
+  }
+}
 .user-input {
   width: 100%;
   height: 44*2px+18px;
@@ -156,7 +175,6 @@ export default {
     z-index: 9;
   }
 }
-
 .active {
   color: rgba(255, 0, 0, 1);
 }
