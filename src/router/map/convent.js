@@ -18,6 +18,8 @@ const msgTips = resolve => require(['@/views/msgTips/msgTips'], resolve) // 项�
 
 const section = resolve => require(['@/views/section/section'], resolve) // 项目- 节点查看或者添加
 
+const Comment = resolve => require(['@/views/allComments/allComments'], resolve) // 项目- 全部评论
+
 export default [{
     path: '/',
     redirect: '/convententry'
@@ -34,6 +36,13 @@ export default [{
     component: Login,
     meta: {
       title: '任务约定'
+    }
+  },
+  {
+    path: '/comment',
+    component: Comment,
+    meta: {
+      title: '全部评论'
     }
   },
   {

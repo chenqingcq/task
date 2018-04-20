@@ -3,7 +3,7 @@
     <div class="panel b-MT-10 " style="background:#fff">
       <div class="b-LR-10 b-T-5 between " ref="banner">
         <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 c_6 b_FS-14">审批留言</span></p>
-        <div class=" b_FS-10 c_7 commenthint">
+        <div class=" b_FS-10 c_7 commenthint" @touchstart='link_to_allComments'>
           查看全部<img class="comments-icon" :src='commentImgUrl' />
         </div>
       </div>
@@ -45,7 +45,7 @@
           <input @focus="userInput" type="text" placeholder="赶快评论吧~" class="comment_input">
           <img class="icon-input" src="@/assets/img/iocn-pen.png" />
       </div>
-    </div>
+    </div> 
     <user-input v-show="showUserInput" @close='closeUserInput'></user-input>
   </div>
 </template>
@@ -87,11 +87,14 @@ export default {
     }
   },
   methods: {
+    link_to_allComments(){
+      this.$router.push('comment');
+    },
     closeUserInput() {
-      this.showUserInput = !this.showUserInput;
+      this.showUserInput = false;
     },
     userInput() {
-      this.showUserInput = !this.showUserInput;
+      this.showUserInput = true;
     },
     add_comment(index) {
       console.log(index, this.$refs.goods[index]);
@@ -126,6 +129,7 @@ export default {
   height: 44*2px+18px;
   padding: 0 15*2px 14*2px 14*2px;
   position: relative;
+  z-index: 9;
   .comment_input {
     display: inline-block;
     height: 30*2px;
@@ -182,7 +186,7 @@ export default {
   min-height: 280px;
   max-height: 465px;
   /*72*3*2*/
-  overflow: scroll;
+  overflow: hidden;
   .lisItem {
     width: 100%;
     height: auto;

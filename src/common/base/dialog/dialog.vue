@@ -57,7 +57,7 @@
       <div class="messageBox">
         <div class="box">
           <div class="icon">
-            <img src='@/assets/img/image-notice.png' />
+            <img :src='messageIcon' />
           </div>
           <div class="message">{{message}}</div>
         </div>
@@ -85,6 +85,14 @@
         }
         if (this.notice.state === "warn") {
           return require("@/assets/img/image-notice.png");
+        }
+      },
+      messageIcon(){
+        if(this.icon =='fail'){
+          return require('@/assets/img/image-notice.png')
+        }
+        if(this.icon == 'pass'){
+          return require('@/assets/img/success.png')
         }
       },
       styleTitle() {
@@ -123,6 +131,7 @@
         }
       },
       fadeOut() {
+        console.log(this.icon)
         setTimeout(() => {
           document.querySelector(".messageBox").parentNode.removeChild(this.$el);
           this.show = false;
@@ -146,7 +155,6 @@
       this.type === "notice" ? this.initPartIn() : "";
       this.type === "info" ? this.judgeBtn() : "";
       this.type === "message" ? this.fadeOut() : "";
-      console.log(this.showBtn);
     }
   };
 
