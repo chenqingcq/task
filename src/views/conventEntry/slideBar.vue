@@ -35,6 +35,7 @@
     .nav-container{
       top: 172px;
       position: absolute;
+      z-index: 1;
       left: 50% ;
       transform: translateX(-50%);
       width: 490px;
@@ -87,7 +88,12 @@
           &.is-radius{
             border-radius: 0 40px 0 0 ;
           }
-          padding:20px 22px;
+          &.is-first{
+            margin-top: 45px;
+          }
+           /*padding: 20px 22px;*/
+          padding:20px 20px;
+          margin: 0 2px;
           display: flex ;
           align-items: center;
           background:#fff ;
@@ -130,6 +136,9 @@
       }
     }
   }
+  .new-project-btn{
+    width: 36px;height: 34px;padding-right:4px;
+  }
   .content-enter-active, {
     .animate-slideInLeft ;
 
@@ -157,16 +166,16 @@
           <img class="banner" src="../../assets/img/image-background01.png" alt="">
           <img @click="skipToHelp" class="help" src="../../assets/img/icon-help.png" alt="">
           <div class="nav-container b_d-flex c_white-bg" >
-            <div @click="navTab = 0" class="nav" :class="[navTab == 0 ? 'active' : 'default c_7' ]"  >
+            <div @touchstart="navTab = 0" class="nav" :class="[navTab == 0 ? 'active' : 'default c_7' ]"  >
               <p class="b_FS-12" >全部</p>
               <div class="line" ></div>
             </div>
-            <div @click="navTab = 1" class="nav" :class="[navTab == 1 ? 'active' : 'default c_7' ]" >
-              <p class="b_FS-12" >我发布</p>
+            <div @touchstart="navTab = 1" class="nav" :class="[navTab == 1 ? 'active' : 'default c_7' ]" >
+              <p  class="b_FS-12" >我发布</p>
               <div class="line" ></div>
             </div>
-            <div @click="navTab = 2" class="nav" :class="[navTab == 2 ? 'active' : 'default c_7' ]"  >
-              <p class="b_FS-12" >我执行</p>
+            <div @touchstart="navTab = 2" class="nav" :class="[navTab == 2 ? 'active' : 'default c_7' ]"  >
+              <p  class="b_FS-12" >我执行</p>
               <div class="line" ></div>
             </div>
           </div>
@@ -200,7 +209,7 @@
                   <!--</p>-->
                 <!--</div>-->
                 <v-swipeout contentBg="#f4f4f4" >
-                  <div slot="content" class="item" :class="[ key == 0 && 'is-radius']" @click = "selectProject(project)" >
+                  <div slot="content" class="item" :class="[ key == 0 && 'is-first']" @click = "selectProject(project)" >
                     <p class="left-photo"  >
                       <img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">
                     </p>
@@ -221,7 +230,7 @@
             <div class="btn-warp m-t-64">
               <div class="btn-small-success b_FS-28  ">
                 <div class="b_d-flex b_flex-center-col b_flex-center-row" @touchstart = 'newAproject' >
-                  <img style="width: 36px;height: 34px;padding-right:4px" src="../../assets/img/icon-add02.png" alt=""> 新增项目
+                  <img class="new-project-btn" src="../../assets/img/icon-add02.png" alt=""> 新增项目
                 </div>
               </div>
             </div>

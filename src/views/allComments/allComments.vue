@@ -19,7 +19,7 @@
                     </div>
                     <div class="comments-item">{{item.comments}}</div>
                     <div class="comments-callback">
-                        <span @touchstart='_look_all_reply'>2条回复</span> 
+                        <span @touchstart='_look_all_reply'>2条回复</span>
                         <div>
                         <img @touchstart='add_praise(index)' :src="imgUrl"/>
                         <span ref="goods">50</span>
@@ -30,18 +30,30 @@
                 </li>
                 </ul>
             </scroll>
-            </div> 
+            </div>
         </div>
-        <div class="user-input">
-          <input  type="text" placeholder="赶快评论吧~" class="comment_input" v-model="comments">
+      <div v-if="isFocus"
+           class="user-input-mask"
+           @touchmove.prevent
+           @scroll.prevent
+           @touchstart.prevent="blurInput">
+      </div>
+        <div class="user-input" :class="[ !isFocus? 'is-fixed' : 'no-fixed']">
+          <input  type="text" placeholder="赶快评论吧~" class="comment_input" v-model="comments"
+          ref="text"
+          @focus = 'setPageToBottom'
+          @blur="clearIpt, blurInput"
+          >
           <img @touchstart='sendComment' class="send-comment" src="@/assets/img/iocn.png" />
       </div>
     </div>
 </template>
 <script>
 import scroll from "@/common/base/scroll/scroll";
+import  boardfix from '@/mixins/keyboardfix'
 export default {
   name: "allComments",
+  mixins : [boardfix],
   data() {
     return {
       listenScroll: true,
@@ -145,7 +157,7 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="less" scoped type="text/css">
 .comments-container {
   width: 100%;
   height: 100vh;
@@ -158,12 +170,27 @@ export default {
   .comment-panel {
     overflow: hidden;
   }
+  .user-input-mask {
+    position: fixed ;
+    top: 0 ;
+    background-color: transparent;
+    width: 100vw;
+    height: 100vh ;
+    z-index : 8;
+  }
   .user-input {
+    &.is-fixed{
+       bottom: 0;
+       position: fixed;
+     }
+    &.no-fixed{
+       position: absolute;
+       bottom: 0px;
+    }
     width: 100%;
     height: 54*2px;
     padding: 10*2px 20*2px;
     overflow: hidden;
-    position: absolute;
     bottom: 0;
     z-index: 9;
     background: #fff;

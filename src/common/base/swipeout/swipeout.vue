@@ -73,9 +73,6 @@
     })
     },
     methods: {
-      closeSwipe(){
-        debugger
-      },
       render () {
         this.target = this.$refs.content
         if (this.$slots['left-menu']) {

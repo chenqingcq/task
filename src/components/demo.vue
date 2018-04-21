@@ -1,8 +1,38 @@
 <style lang="less" scoped>
-
+    .comment-box{
+        &.is-fixed{
+           bottom: 0;
+           position: fixed;
+        }
+        // 弹起键盘后 改成absolute ,不然scrollIntoView失效
+        &.no-fixed{
+           position: absolute;
+           //bottom: 0;
+           bottom: -76px;
+        }
+        width: 100%;
+        /*top: auto ;*/
+        z-index: 3000;
+        .comment-input-wrap{
+          border: 1px solid red;
+          .comment-input{
+            border:none ;
+            padding: 10px ;
+            color: yellow;
+          }
+        }
+    }
+    .comment-mask{
+      position: fixed ;
+      top: 0 ;
+      background-color: transparent;
+      width: 100vw;
+      height: 100vh ;
+      z-index : 2999;
+    }
 </style>
 <template>
-    <div>
+    <div style="position: relative">
       <div class="b-LR-10 b-T-10">
         <v-switch :status="isOpen" @getStatus="statusChange" ></v-switch>
       </div>
@@ -53,11 +83,7 @@
           fasdf
         </div>
       </div>
-      <!--<div class="b-LR-10 b-MT-10">-->
-        <!--<div class="panel-dot">-->
-          <!--dasfd12121-->
-        <!--</div>-->
-      <!--</div>-->
+
       <div class="b-LR-10">
          <div class="panel b-MT-10 c_white-bg">
            <div class="b-LR-10 b-T-5 between">
@@ -69,6 +95,7 @@
            </div>
          </div>
       </div>
+
 
       <!--信号灯-->
 
@@ -98,6 +125,22 @@
           </v-swipe-btn>
         </div>
       </v-swipeout>
+
+      <div v-if="isFocus" class="comment-mask"
+           @touchmove.prevent
+           @scroll.prevent
+           @touchstart.prevent="blurInput">
+      </div>
+      <div class="comment-box" :class="[ !isFocus? 'is-fixed' : 'no-fixed']">
+        <div class="comment-input-wrap" >
+          <input
+            ref="text"
+            @focus = 'setPageToBottom'
+            @blur="clearIpt" class="comment-input" type="text" >
+        </div>
+      </div>
+
+
       <!--<Toast></Toast>-->
     </div>
 </template>
@@ -105,6 +148,8 @@
 
 
     import { Demo } from '@/services'
+    import  boardfix from '@/mixins/keyboardfix'
+
     //import Toast from '@/common/base/toast/toast.vue'
     import Toast from '@/common/base/toast/toast.js'
     export default{
@@ -115,6 +160,7 @@
               title : 0
             }
         },
+        mixins:[boardfix],
         mounted(){
 //          Demo.devUserLogin({
 //            userId : '21212'

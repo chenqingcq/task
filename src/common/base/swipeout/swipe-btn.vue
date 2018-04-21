@@ -61,7 +61,10 @@
     props: {
       text: String,
       backgroundColor: String,
-      type: String,
+      type: {
+        type: String,
+        default: 'default'
+      },
       width: {
         type: Number,
         default: 80
