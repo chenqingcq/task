@@ -595,19 +595,15 @@
           </div>
         </div>
         <div class="progress-container">
-          <div class="current-progress" style="display:none"> m
+          <div class="current-progress"> 
             <div class="left">01/30</div>
             <div class="right">
               展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕
             </div>
           </div>
-          <div class="current-no-progress" v-if="role=='creator'">
-             添加项目节点~
-             <img src="@/assets/img/toRight.png" />
-          </div>
-          <div class="current-no-progress" v-if="role!=='creator'">
-             暂未设置项目节点~
-          </div>
+          <!-- <div class="current-no-progress" >
+             暂未设置项目节点
+          </div> -->
         </div>
       </div>
     </div>

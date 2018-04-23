@@ -9,7 +9,7 @@
       </div>
       <div class="comments-container_" v-if="members.length<=0">
         <i></i>
-        <span>暂无留言</span>      
+        <span>暂无评论,点击抢沙发</span>
         <i></i>
       </div>
       <scroll class="comments-container" ref="scroll" :listenScroll='listenScroll' @scroll='scrolling' @scrollEnd='scrollEnd' v-if="members.length>1">
@@ -38,15 +38,18 @@
             </div>
             <i class="footbar"></i>
           </li>
+          <li class="all-comment">
+            <div class="comment-content">已显示全部留言</div>
+          </li>
         </ul>
       </scroll>
       <div class="user-input">
           <input @focus="userInput" type="text" placeholder="赶快评论吧~" class="comment_input">
           <img class="icon-input" src="@/assets/img/iocn-pen.png" />
       </div>
-    </div> 
+    </div>
     <transition name="zoom">
-      <user-input v-show="showUserInput" @close='closeUserInput'></user-input>    
+      <user-input v-show="showUserInput" @close='closeUserInput'></user-input>
     </transition>
   </div>
 </template>
@@ -133,6 +136,17 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.all-comment{
+  color: #999;
+  height: 40*2px;
+  text-align: left;
+  .comment-content{
+    margin-left: 22*2px;
+    line-height: 80px;
+    height: 100%;
+    width: 100%;
+  }
+}
 .zoom-enter-active{
   animation: zoom .5s ease;
 }

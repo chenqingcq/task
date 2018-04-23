@@ -25,8 +25,29 @@ export default {
     sendComments() {
       if (!!this.usreInput) {
         console.log(this.usreInput);
-        this.usreInput = ''
+        //提示上传成功刷新页面
+        this.setComment()
+          .then(() => {
+            this.$dialog.message({
+              message: "评论成功!",
+              icon: "pass"
+            });
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        this.usreInput = "";
       }
+    },
+    setComment() {
+      let me = this;
+      return new Promise((resolve, reject) => {
+        //上传评论
+        if (true) {
+          me.$emit("close"); //关闭评论框
+          resolve();
+        }
+      });
     }
   }
 };

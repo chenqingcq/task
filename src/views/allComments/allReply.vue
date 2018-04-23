@@ -19,17 +19,16 @@
                     </div>
                     <div class="comments-item">{{item.comments}}</div>
                     <div class="comments-callback">
-                        <span @touchstart='_look_all_reply'>2条回复</span> 
+                        <span @touchstart='_look_all_reply'>回复6</span> 
                         <div>
-                        <img @touchstart='add_praise(index)' :src="imgUrl"/>
-                        <span ref="goods">50</span>
+                        <span ref="goods">赞50</span>
                         </div>
                     </div>
                     </div>
                     <i class="footbar"></i>
                 </li>
                 <li class="lisItem _all-comments">
-                     <div class="comment-content">已显示全部留言</div>
+                     <div class="comment-content">已显示全部回复</div>
                 </li>
                 </ul>
             </scroll>
@@ -160,10 +159,11 @@ export default {
     },
     _look_all_reply() {
       this.$router.push({
-        path: "/allReply",
-        query:{
-          userId:0,
-          taskId:0
+        path: "/comment",
+        query: {
+          taskId: 0,
+          userId: 0,
+          commentsClass: 2
         }
       });
     },
@@ -196,14 +196,14 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-._all-comments{
+._all-comments {
   height: 44*2px !important;
   color: #999;
   font-size: 8*2px;
   width: 100%;
-  .comment-content{
+  .comment-content {
     text-indent: 22*2px;
-    width:100%;
+    width: 100%;
     height: 100%;
     line-height: 88px;
   }
@@ -370,36 +370,26 @@ export default {
           height: 50px;
           font-size: 12px*2;
           font-family: PingFangSC-Regular;
-          color: rgba(153, 153, 153, 1);
+          color:rgba(153,153,153,1);
           line-height: 17px*2;
           margin-top: 8px;
           margin-bottom: 20px;
           z-index: -1;
           > span {
-            width: 150px;
+           min-width: 40*2px;
             height: 50px;
-            background: rgba(244, 244, 244, 1);
-            border-radius: 13px*2;
             display: inline-block;
-            text-align: center;
-            line-height: 50px;
+            line-height: 40px;
           }
           div {
             display: inline-block;
-            float: right;
-            margin-right: 20px;
-            > img {
-              display: inline-block;
-              height: 25*2px;
-              padding: 12px 0 13px 0;
-              vertical-align: middle;
-            }
+            margin-left: 18*2px;
             > span {
               font-size: 12px*2;
               font-family: PingFangSC-Regular;
               display: inline-block;
-              height: 25*2px;
-              line-height: 50px;
+              height: 20*2px;
+              line-height: 40px;
               margin-left: 2px;
               vertical-align: middle;
             }
