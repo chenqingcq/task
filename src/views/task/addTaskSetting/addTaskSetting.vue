@@ -415,7 +415,7 @@ input:disabled {
 </template>
 <script>
 import { mapMutations, mapGetters } from "vuex";
-import { AddTask } from "@/services";
+import { Convent } from "@/services";
 let reflect_to_task = {
   taskTheme: "项目主题",
   taskName: "任务名称",
@@ -526,7 +526,7 @@ export default {
       }
     },
     startTime(val) {
-      console.log(val);
+      // console.log(val);
       if (!!val) {
         window.sessionStorage.setItem("startTime", val);
         this.$refs.startDate.classList.add("active_");
@@ -536,14 +536,14 @@ export default {
       }
     },
     endTime(val) {
-      console.log(val);
+      // console.log(val);
       if (!!val) {
         this.endTime = val;
         this.$refs.endDate.classList.add("active_");
         window.sessionStorage.setItem("endTime", val);
       } else {
         this.$refs.endDate.classList.remove("active_");
-        console.log(document.querySelector(".selectEndTime>.vux-cell-primary"));
+        // console.log(document.querySelector(".selectEndTime>.vux-cell-primary"));
       }
     },
     standard(val) {
@@ -560,7 +560,7 @@ export default {
   beforeRouteEnter: (to, from, next) => {
     if (from.path == "/appointMessager" && to.path == "/addTaskSetting") {
       next(vm => {
-        console.log(vm.getTaskExecutor); //过滤选中的执行人;
+        // console.log(vm.getTaskExecutor); //过滤选中的执行人;
         vm.$refs.exe.classList.add("active_");
         vm.executor = vm.getTaskExecutor.username;
         window.sessionStorage.setItem("executor", vm.executor);
@@ -571,7 +571,7 @@ export default {
     ) {
       next(vm => {
         let executor = window.sessionStorage.getItem("executor");
-        console.log(executor);
+        // console.log(executor);
         if (executor) {
           vm.$refs.exe.classList.add("active_");
           vm.$refs.executor.textContent = executor;
@@ -581,7 +581,7 @@ export default {
   },
   methods: {
     changeIndex(index, item) {
-      console.log(item);
+      // console.log(item);
       this.currentIndex = index;
       if (this.currentIndex == 0) {
         this.isPublic = true;
@@ -611,7 +611,7 @@ export default {
     },
     throttle(delay) {
       return new Promise((resovle, reject) => {
-        AddTask.addTask({
+        Convent.createTask({
           taskTheme: this.taskTheme,
           taskName: this.taskName,
           taskDesc: this.taskDesc,
@@ -623,10 +623,10 @@ export default {
           allowedLook: this.allowedLook
         })
           .then(data => {
-            console.log(data)
+            // console.log(data)
           })
           .catch(err => {
-            console.log(err)
+            // console.log(err)
           });
         this.$toast.show("任务创建完成!", 500);
         setTimeout(() => {
@@ -659,7 +659,7 @@ export default {
     validate() {
       let k;
       for (k in reflect_to_task) {
-        console.log(this.$data[k]);
+        // console.log(this.$data[k]);
 
         if (
           this.$data.hasOwnProperty(k) &&
@@ -668,7 +668,7 @@ export default {
         ) {
           this.check_pass = true;
         } else {
-          console.log(k);
+          // console.log(k);
           this.$dialog.message({
             message: `请添加${reflect_to_task[k]}`,
             icon: "fail"
