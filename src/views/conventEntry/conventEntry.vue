@@ -7,7 +7,7 @@
       <!--头部日历导航栏-->
       <div class="header-wrapper c_1-bg">
         <div class="header-main">
-          <img class="user-photo" src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">
+          <img class="user-photo"  :src="user.headImage" alt="">
           <img class="menu" @click="showSlideBar" src="../../assets/img/icon-menu.png" alt="">
           <span class="project-name c_white b_FS-18 text-center">{{ themeName }}</span>
           <!--<img style="visibility: hidden" class="share" src="../../assets/img/icon-share.png" alt="">-->

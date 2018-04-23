@@ -119,6 +119,7 @@ export default {
   },
   computed:{
     ...mapGetters({
+      'user': 'user',
       role : 'getProjectRole',
       themeName : 'getProjectThemeName',
       projectId : 'getProjectId'

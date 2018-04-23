@@ -47,6 +47,7 @@
 
         User.getUserInfo({}).then(res=>{
           console.log(res)
+          this.$store.commit('user', res)
         })
 //        userModel.userid='0f4b68b07b9e4bab9c6cbe639b148358';
 //        userModel.channelcode='7dc26571d9ff4';

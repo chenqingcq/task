@@ -5,7 +5,7 @@ const matutaions = {
   [types.SET_USER_TYPE](state, type) {
     state.user.type = type
   },
-  user (state, data) {
+  user(state, data) {
     state.user.headImage = data.headImage
     state.user.username = data.nickname
     state.user.token = data.token
