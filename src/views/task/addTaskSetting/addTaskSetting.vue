@@ -611,8 +611,7 @@ export default {
         path: "/section?mode=edit"
       }); //编辑项目节点
     },
-    throttle(delay) {
-      let me = this;
+    getTaskId() {
       return new Promise((resovle, reject) => {
         // console.log(window.location.hash);
         Convent.createTask({
@@ -627,33 +626,28 @@ export default {
           isOpen: this.isPublic ? 1 : 0
         })
           .then(res => {
-            console.log(res,111);
-            if (res.code == 1) {
-              me.taskId = res.data;
-              me.$toast.show("任务创建完成!", 500);
-            }
+            this.taskId = res;
+            this.$toast.show("任务创建完成!", 500);
+            resovle();
           })
           .catch(err => {
-            // console.log(err)
+            console.log(err);
           });
-        setTimeout(() => {
-          resovle("compelete");
-        }, delay);
       });
     },
     confirm() {
       this.validate();
       //防抖和节流
       if (this.check_pass) {
-        this.throttle(500).then(() => {});
-
-        this.$router.push({
-          path: "conventEntry",
-          query: {
-            projectId: window.localStorage.getItem("projectId"),
-            taskId: this.taskId
-          }
-        }); //项目创建完毕
+        this.getTaskId().then(() => {
+          this.$router.push({
+            path: "conventEntry",
+            query: {
+              projectId: window.localStorage.getItem("projectId"),
+              taskId: this.taskId
+            }
+          }); //项目创建完毕
+        });
       }
     },
     validate() {
