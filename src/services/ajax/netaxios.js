@@ -48,8 +48,8 @@ axiosInstance.interceptors.response.use((res) => {
     status : res.data.status,
     request : res.data.request
   }
-    res = { res, ...response }
-    return res
+
+    return response
 })
 
 // ======================== 注册 axios 原生 GET POST请求 =============================
