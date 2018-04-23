@@ -4,9 +4,11 @@
 import Demo from './modules/demo'
 import wx from './modules/wx'
 import User from './modules/user'
+import Convent from './modules/convention'
 
 export {
   Demo ,
   wx ,
-  User
+  User ,
+  Convent
 }

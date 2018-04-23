@@ -243,6 +243,8 @@
 
 </template>
 <script type="text/babel">
+    // ajax
+    import { Convent } from '@/services'
     // 引入vuex操作
     import { mapGetters, mapActions } from 'vuex'
     export default{
@@ -323,16 +325,22 @@
                 message: `项目名称不能为空`
               })
             else{
-              setTimeout(()=>{
-                const project = {
-                  id : '2',
-                  themeName : text ,
-                  role : 'creator'
-                }
+
+              Convent.createProject({
+                themeName : text
+              })
+              .then(res=>{
                 // update state
                 this.setCurrentProject(project)
                 this.$router.push('/addTaskSetting')
-              },100)
+              })
+//              setTimeout(()=>{
+//                const project = {
+//                  id : '2',
+//                  themeName : text ,
+//                  role : 'creator'
+//                }
+//              },100)
             }
 
           },

@@ -15,7 +15,8 @@ const axiosInstance = axios.create({
     // baseURL: '//rk4k3z.natappfree.cc/v1/', //微信测试,
     // baseURL: '//192.168.0.126:8087/v1/', //测试服务器
     // baseURL: '//bf4c5e.natappfree.cc/v1/', //测试服务器
-    baseURL: '//share.s1.natapp.cc/v1/', //测试服务器
+    baseURL: '//192.168.0.116:3006/v1/',
+    //baseURL: '//share.s1.natapp.cc/v1/', //测试服务器
     timeout: 15000
 })
 
@@ -39,10 +40,10 @@ axiosInstance.interceptors.response.use((res) => {
     yb_print('================= responce ==================')
     yb_print(res.data)
         // 将数据提前一个位置，便于获取
-    res.yb_data = res.data.data
-    res.yb_code = res.data.code
-    res.yb_msg = res.data.message
-    res.yb_status = res.data.status
+    res.data = res.data.data
+    res.code = res.data.code
+    res.msg = res.data.message
+    res.status = res.data.status
     res.yb_request = res.data.request
     return res
 })
@@ -72,9 +73,9 @@ export const get = function(url, params = {}, isShowFullLoading) {
             },
         }).then((res) => {
             // 成功回调
-            if (successCode.has(res.yb_code)) {
+            if (successCode.has(res.code)) {
                 // 已经处理过状态，所以不用管状态，直接返回数据
-                resolve(res.yb_data)
+                resolve(res.data)
             } else {
                 // 服务状态出现问题
                 reject(res)
@@ -98,9 +99,9 @@ export const deleter = function(url, {id}) {
             },
         }).then((res) => {
             // 成功回调
-            if (successCode.has(res.yb_code)) {
+            if (successCode.has(res.code)) {
                 // 已经处理过状态，所以不用管状态，直接返回数据
-                resolve(res.yb_data)
+                resolve(res.data)
             } else {
                 // 服务状态出现问题
                 reject(res)
@@ -122,9 +123,9 @@ export const post = function(url, params = {}) {
             },
         }).then((res) => {
             // 成功回调
-            if (successCode.has(res.yb_code)) {
+            if (successCode.has(res.code)) {
                 // 已经处理过状态，所以不用管状态，直接返回数据
-                resolve(res.yb_data)
+                resolve(res.data)
             } else {
                 // 服务状态出现问题
                 reject(res)
@@ -146,9 +147,9 @@ export const patch = function(url, params = {}) {
       },
     }).then((res) => {
       // 成功回调
-      if (successCode.has(res.yb_code)) {
+      if (successCode.has(res.code)) {
         // 已经处理过状态，所以不用管状态，直接返回数据
-        resolve(res.yb_data)
+        resolve(res.data)
       } else {
         // 服务状态出现问题
         reject(res)
@@ -179,9 +180,9 @@ export const put = function(url, { id, params = {} }) {
                 },
             }).then((res) => {
                 // 成功回调
-                if (successCode.has(res.yb_code)) {
+                if (successCode.has(res.code)) {
                     // 已经处理过状态，所以不用管状态，直接返回数据
-                    resolve(res.yb_data)
+                    resolve(res.data)
                 } else {
                     // 服务状态出现问题
                     reject(res)
@@ -229,9 +230,9 @@ export const upImage = function(url, { name, e }) {
                 }
             }).then((res) => {
                 // 成功回调
-                if (res.yb_code == 1) {
+                if (res.code == 1) {
                     // 已经处理过状态，所以不用管状态，直接返回数据
-                    resolve(res.yb_data)
+                    resolve(res.data)
                 } else {
                     // 服务状态出现问题
                     reject(res)
@@ -260,9 +261,9 @@ export const upFileBlobData = function(url, { name, blob }) {
                 }
             }).then((res) => {
                 // 成功回调
-                if (successCode.has(res.yb_code)) {
+                if (successCode.has(res.code)) {
                     // 已经处理过状态，所以不用管状态，直接返回数据
-                    resolve(res.yb_data)
+                    resolve(res.data)
                 } else {
                     // 服务状态出现问题
                     reject(res)

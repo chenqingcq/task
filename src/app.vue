@@ -14,7 +14,7 @@
 
 <script type="text/babel">
 
-  import {Demo} from '@/services'
+  import { User } from '@/services'
 
   import userModel from '@/common/js/model/userModel'
   export default {
@@ -36,16 +36,23 @@
     },
     methods:{
       getToken(){
-        userModel.userid='0f4b68b07b9e4bab9c6cbe639b148358';
-        userModel.channelcode='7dc26571d9ff4';
-        // 获取token
-        userModel.getToken().then((data) => {
-        er
-          this.$store.commit('setToken', data.token)
-        this.$store.commit('user', userModel)
-      }).catch(() => {
-
+        // 在url 上面截取token
+        const token = location.hash.split('?')[1].replace('token=','')
+        // set token
+        this.$store.commit('setToken', token)
+        User.getUserInfo({}).then(res=>{
+          console.log(res)
         })
+//        userModel.userid='0f4b68b07b9e4bab9c6cbe639b148358';
+//        userModel.channelcode='7dc26571d9ff4';
+//        // 获取token
+//        userModel.getToken().then((data) => {
+//        er
+//          this.$store.commit('setToken', data.token)
+//        this.$store.commit('user', userModel)
+//      }).catch(() => {
+//
+//        })
       }
     },
     watch: {

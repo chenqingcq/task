@@ -73,6 +73,21 @@ class User{
   getToken(p) {
     return get(publicLogin, p, true)
   }
+
+
+
+  /*
+   * 添加进度
+   * */
+  getUserInfo (opt, isShowFullLoading = true) {
+    debugger
+    const url = '/api/user'
+    const params = opt || {}
+    return get(
+      url, params, isShowFullLoading
+    )
+  }
+
 }
 
 export default new User()

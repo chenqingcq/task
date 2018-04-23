@@ -194,4 +194,4 @@ class Convent {
 
 }
 
-export default new Demo()
+export default new Convent()
