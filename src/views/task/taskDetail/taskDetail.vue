@@ -644,6 +644,7 @@
   import comments from "@/views/comments/comments";
   import Slide from "@/common/base/slide/slide.vue";
   import Detail from "./detail";
+  import {Convent} from '@/services'
   import {
     mapGetters,
     mapMutations
@@ -882,6 +883,13 @@
         this.$router.push("taskHistoryOrUpdate");
       },
       init() {
+        Convent.taskDetail({
+          id:'988354927714025474'
+        }).then((res)=>{
+          console.log(res)
+        }).catch((err)=>{
+
+        })
         console.log(this.getTaskHistoryOrUpdate); //获取历史上传图片
         if (!this.getTaskHistoryOrUpdate) {
           // this.showSlide = false;
