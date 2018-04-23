@@ -37,9 +37,14 @@
     methods:{
       getToken(){
         // 在url 上面截取token
-        const token = location.hash.split('?')[1].replace('token=','')
-        // set token
-        this.$store.commit('setToken', token)
+        if( location.hash.indexOf('?token=') > -1 ){
+          const token = location.hash.split('?')[1].replace('token=','')
+          // set token
+          this.$store.commit('setToken', token)
+        }
+
+
+
         User.getUserInfo({}).then(res=>{
           console.log(res)
         })

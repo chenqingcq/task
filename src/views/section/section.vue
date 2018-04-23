@@ -198,7 +198,7 @@
             <div class="panel panel-conf edit">
               <textarea class="input" v-model="newSectionVal" name="" placeholder="这里填写节点" id="" cols="30" ></textarea>
               <img v-if="newSectionVal.length ==0" class="placeholder-icon" src="../../assets/img/icon-edit02.png" alt="">
-              <div class="btn-small-primary b-MT-5">提交</div>
+              <div @click="newSection" class="btn-small-primary b-MT-5">提交</div>
             </div>
           </div>
           <div class="timer-shaft">
@@ -216,7 +216,7 @@
                 <div v-if="key != (sectionDataLook.length -1)" class="light" :class="[section.isDoing? 'doing': 'pass']"></div>
               </div>
               <div class="panel panel-conf">
-                <img @click="deleteSect( key )" class = "delete"  src="../../assets/img/icon-close.png" alt="">
+                <img @click="deleteSect( key, section.id )" class = "delete"  src="../../assets/img/icon-close.png" alt="">
                 <div class="text c_11">
                   建筑的修饰布置工作，建筑的修饰布置工作。
                 </div>
@@ -237,6 +237,9 @@
 
 </template>
 <script>
+  // ajax
+    import { Convent } from '@/services'
+
     export default{
         data(){
             return{
@@ -245,16 +248,19 @@
               todayDate: '',
               sectionDataLook :[{
                 date: '03/20',
+                id : 0,
                 isDoing : false ,
                 content: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
               },
               {
                 date: '03/20',
+                id : 1,
                 isDoing : false ,
                 content: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
               },
               {
                 date: '03/20',
+                id : 3,
                 isDoing : true ,
                 content: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
               }],
@@ -276,22 +282,44 @@
       created(){
         this.todayDate = this.initDate()
       },
-        mounted(){
-          const mode = this.$route.query.mode
-          this.mode = mode == 'edit' ? 'edit' : 'look'
+      mounted(){
+        const mode = this.$route.query.mode
+        this.mode = mode == 'edit' ? 'edit' : 'look'
+      },
+      methods: {
+        initDate(){
+          var d = new Date()
+          var m = d.getMonth() + 1
+          var day = d.getDate()
+          console.log(( m < 10 ? ('0' + m ) : m ) + '/' + (day < 10 ? ('0' + day) : day))
+          return ( m < 10 ? ('0' + m ) : m ) + '-' + (day < 10 ? ('0' + day) : day)
         },
-        methods: {
-          initDate(){
-            var d = new Date()
-            var m = d.getMonth() + 1
-            var day = d.getDate()
-            console.log(( m < 10 ? ('0' + m ) : m ) + '/' + (day < 10 ? ('0' + day) : day))
-            return ( m < 10 ? ('0' + m ) : m ) + '-' + (day < 10 ? ('0' + day) : day)
-          },
-          deleteSect(key){
+        deleteSect(key, pointId){
+          Convent.sectionDelete({
+            id:pointId
+          })
+          .then(res=>{
+            this.sectionDataLook.splice(key, 1)
+          })
+        },
+        // 新建项目节点
+        newSection(){
+          const projectId = this.$route.query.projectId
+          const pointDesc = this.newSectionVal
+          const createTime = todayDate
+          Convent.createSection({
+            projectId,pointDesc
+          })
+          .then(res=>{
+            this.sectionDataLook.unshift({
+              date,
+              content : pointDesc,
+              id : res.data.pointId
+            })
+          })
 
-          }
         }
+      }
 
     }
 </script>

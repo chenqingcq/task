@@ -4,6 +4,7 @@ import BaseModel from './BaseModel'
 import HUD from '../Extension/YBProgressHUD'
 const FOO_KEY = Symbol.for('userModel');
 
+import store from '@/store'
 
 class UserModel extends BaseModel{
 
@@ -46,7 +47,9 @@ class UserModel extends BaseModel{
 
   // 获取发送数据的的token
   getSendToken () {
-    return 'Bearer ' + this.token
+
+    console.log(store.getters.getToken)
+    return 'Bearer ' + store.getters.getToken
   }
 
   // 获取用户信息

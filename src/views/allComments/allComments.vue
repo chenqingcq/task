@@ -2,7 +2,7 @@
     <div class="_comments-container">
          <div class="b-LR-10 comment-container">
             <div class="panel b-P-10 " style="background:#fff">
-            <scroll class="comments-container" ref="scroll" :listenScroll='listenScroll' @scrollEnd="refresh" v-if="members.length>1">
+            <scroll class="comments-container" ref="scroll" :listenScroll='listenScroll'  @scrollEnd="refresh" v-if="members.length>1">
                 <ul class="comment-panel">
                 <li v-for="(item,index) in members" :key="index" class="lisItem">
                     <div class="left">
@@ -19,7 +19,7 @@
                     </div>
                     <div class="comments-item">{{item.comments}}</div>
                     <div class="comments-callback">
-                        <span @touchstart='_look_all_reply'>2条回复</span> 
+                        <span @touchstart='_look_all_reply'>2条回复</span>
                         <div>
                         <img @touchstart='add_praise(index)' :src="imgUrl"/>
                         <span ref="goods">50</span>
@@ -33,7 +33,7 @@
                 </li>
                 </ul>
             </scroll>
-            </div> 
+            </div>
         </div>
         <div class="user-input">
           <input  type="text" placeholder="赶快评论吧~" class="comment_input" v-model="comments">

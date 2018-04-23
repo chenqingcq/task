@@ -61,7 +61,7 @@ class Convent {
   /*
    * 添加项目节点
    * */
-  sectionUpdate (opt, isShowFullLoading = true) {
+  createSection (opt, isShowFullLoading = true) {
     const url = '/api/project/point'
     const params = opt || {}
     return post(

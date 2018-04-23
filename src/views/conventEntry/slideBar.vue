@@ -253,7 +253,7 @@
         },
         data(){
             return{
-                navTab : 0,// 12
+                navTab : 0,//  全部. 0:全部 1: 我创建 2: 我执行
                 isShow : false,
                 isPositive: false , // 顺序
                 projectList: [{
@@ -285,8 +285,9 @@
           ...mapActions([
             'setCurrentProject'
           ]),
+          getProjectList(){
 
-
+          },
           open(){
             this.$refs.slide.open()
             this.isShow = true
@@ -320,14 +321,17 @@
           },
           doSubmitNewAproject(text){
             console.log(22222, text)
-
             if(!text)  this.$dialog.message({
                 message: `项目名称不能为空`
+            })
+            else if( text && text.length  > 10 ) {
+              this.$dialog.message({
+                message: `项目名称不能超过10个字符`
               })
+            }
             else{
-
               Convent.createProject({
-                themeName : text
+                  projectName : text
               })
               .then(res=>{
                 // update state
