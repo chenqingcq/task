@@ -444,8 +444,8 @@ export default {
       toastDom: null,
       showToast: true,
       currentIndex: 0,
-      projectId :'',
-      taskId:'',
+      projectId: "",
+      taskId: "",
       taskTheme: "",
       taskName: "",
       taskDesc: "",
@@ -612,10 +612,11 @@ export default {
       }); //编辑项目节点
     },
     throttle(delay) {
+      let me = this;
       return new Promise((resovle, reject) => {
-        console.log(window.location.hash);
+        // console.log(window.location.hash);
         Convent.createTask({
-          projectId: this.projectId,
+          projectId: window.localStorage.getItem("projectId"),
           projectName: this.taskTheme,
           taskName: this.taskName,
           taskDesc: this.taskDesc,
@@ -626,10 +627,10 @@ export default {
           isOpen: this.isPublic ? 1 : 0
         })
           .then(res => {
-            // console.log(data);
-            if (res.code == 1 && res.status == 200) {
-              this.taskId = res.data;
-              this.$toast.show("任务创建完成!", 500);
+            console.log(res,111);
+            if (res.code == 1) {
+              me.taskId = res.data;
+              me.$toast.show("任务创建完成!", 500);
             }
           })
           .catch(err => {
@@ -647,10 +648,10 @@ export default {
         this.throttle(500).then(() => {});
 
         this.$router.push({
-          path:"conventEntry",
-          query:{
-            projectId :this.projectId,
-            taskId:this.taskId
+          path: "conventEntry",
+          query: {
+            projectId: window.localStorage.getItem("projectId"),
+            taskId: this.taskId
           }
         }); //项目创建完毕
       }
@@ -740,7 +741,8 @@ export default {
         });
         this.$router.push("conventEntry");
       } else {
-        this.projectId = window.location.hash.split("?")[1].split("=")[1];
+        let projectId = window.location.hash.split("?")[1].split("=")[1];
+        window.localStorage.setItem("projectId", projectId);
       }
     }
   },
