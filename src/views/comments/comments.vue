@@ -3,13 +3,13 @@
     <div class="panel b-MT-10 " style="background:#fff">
       <div class="b-LR-10 b-T-5 between " ref="banner">
         <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 c_6 b_FS-14">审批留言</span></p>
-        <div class=" b_FS-10 c_7 commenthint" @touchstart='link_to_allComments'>
+        <div class=" b_FS-10 c_7 commenthint" @click='link_to_allComments'>
           查看全部<img class="comments-icon" :src='commentImgUrl' />
         </div>
       </div>
       <div class="comments-container_" v-if="members.length<=0">
         <i></i>
-        <span>暂无留言</span>      
+        <span>暂无评论,点击抢沙发</span>
         <i></i>
       </div>
       <scroll class="comments-container" ref="scroll" :listenScroll='listenScroll' @scroll='scrolling' @scrollEnd='scrollEnd' v-if="members.length>1">
@@ -29,14 +29,17 @@
               </div>
               <div class="comments-item">{{item.comments}}</div>
               <div class="comments-callback">
-                <span @touchstart='_link_to_secondary_comments'>2条回复</span>
+                <span @click='_link_to_secondary_comments'>2条回复</span>
                 <div>
-                  <img @touchstart='add_praise(index)' :src="imgUrl"/>
+                  <img @click='add_praise(index)' :src="imgUrl"/>
                   <span ref="goods">50</span>
                 </div>
               </div>
             </div>
             <i class="footbar"></i>
+          </li>
+          <li class="all-comment">
+            <div class="comment-content">已显示全部留言</div>
           </li>
         </ul>
       </scroll>
@@ -44,9 +47,9 @@
           <input @focus="userInput" type="text" placeholder="赶快评论吧~" class="comment_input">
           <img class="icon-input" src="@/assets/img/iocn-pen.png" />
       </div>
-    </div> 
+    </div>
     <transition name="zoom">
-      <user-input v-show="showUserInput" @close='closeUserInput'></user-input>    
+      <user-input v-show="showUserInput" @close='closeUserInput'></user-input>
     </transition>
   </div>
 </template>
@@ -133,6 +136,17 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.all-comment{
+  color: #999;
+  height: 40*2px;
+  text-align: left;
+  .comment-content{
+    margin-left: 22*2px;
+    line-height: 80px;
+    height: 100%;
+    width: 100%;
+  }
+}
 .zoom-enter-active{
   animation: zoom .5s ease;
 }

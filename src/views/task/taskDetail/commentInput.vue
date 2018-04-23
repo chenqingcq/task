@@ -1,13 +1,13 @@
 <template>
   <div class="allComments-container">
       <div class="comment-panel">
-          <div class="close" @touchstart='close'>
+          <div class="close" @click='close'>
               <img src="@/assets/img/icon-close.png" />
           </div>
           <textarea name="userIpt" id="userIpt" placeholder="说点什么吧..." v-model.trim="usreInput" >
               
           </textarea>
-          <div @touchstart='sendComments' class="comment-btn">评论</div>
+          <div @click='sendComments' class="comment-btn">评论</div>
       </div>
   </div>
 </template>
@@ -25,8 +25,29 @@ export default {
     sendComments() {
       if (!!this.usreInput) {
         console.log(this.usreInput);
-        this.usreInput = ''
+        //提示上传成功刷新页面
+        this.setComment()
+          .then(() => {
+            this.$dialog.message({
+              message: "评论成功!",
+              icon: "pass"
+            });
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        this.usreInput = "";
       }
+    },
+    setComment() {
+      let me = this;
+      return new Promise((resolve, reject) => {
+        //上传评论
+        if (true) {
+          me.$emit("close"); //关闭评论框
+          resolve();
+        }
+      });
     }
   }
 };

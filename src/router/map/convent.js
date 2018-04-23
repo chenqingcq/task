@@ -20,6 +20,8 @@ const section = resolve => require(['@/views/section/section'], resolve) // 项�
 
 const Comment = resolve => require(['@/views/allComments/allComments'], resolve) // 项目- 全部评论
 
+const allReply = resolve => require(['@/views/allComments/allReply'], resolve) // 项目- 所有回复
+
 export default [{
     path: '/',
     redirect: '/convententry'
@@ -29,6 +31,13 @@ export default [{
     component: Appointment,
     meta: {
       title: '任务约定'
+    }
+  },
+  {
+    path: '/allReply',
+    component:allReply,
+    meta: {
+      title: '所有评论'
     }
   },
   {
