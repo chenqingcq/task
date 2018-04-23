@@ -415,6 +415,7 @@ input:disabled {
 </template>
 <script>
 import { mapMutations, mapGetters } from "vuex";
+import { AddTask } from "@/services";
 let reflect_to_task = {
   taskTheme: "项目主题",
   taskName: "任务名称",
@@ -610,6 +611,23 @@ export default {
     },
     throttle(delay) {
       return new Promise((resovle, reject) => {
+        AddTask.addTask({
+          taskTheme: this.taskTheme,
+          taskName: this.taskName,
+          taskDesc: this.taskDesc,
+          startTime: this.startTime,
+          endTime: this.endTime,
+          standard: this.standard,
+          taskExecutor: this.executor,
+          isPublic: this.isPublic || true,
+          allowedLook: this.allowedLook
+        })
+          .then(data => {
+            console.log(data)
+          })
+          .catch(err => {
+            console.log(err)
+          });
         this.$toast.show("任务创建完成!", 500);
         setTimeout(() => {
           resovle("compelete");
@@ -634,6 +652,7 @@ export default {
             allowedLook: this.allowedLook
           });
         });
+
         this.$router.push("conventEntry"); //项目创建完毕
       }
     },
@@ -652,7 +671,7 @@ export default {
           console.log(k);
           this.$dialog.message({
             message: `请添加${reflect_to_task[k]}`,
-            icon:'fail'
+            icon: "fail"
           });
           this.check_pass = false;
           return;
