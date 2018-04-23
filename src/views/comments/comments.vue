@@ -3,7 +3,7 @@
     <div class="panel b-MT-10 " style="background:#fff">
       <div class="b-LR-10 b-T-5 between " ref="banner">
         <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 c_6 b_FS-14">审批留言</span></p>
-        <div class=" b_FS-10 c_7 commenthint" @click='link_to_allComments'>
+        <div class=" b_FS-10 c_7 commenthint" @touchstart='link_to_allComments'>
           查看全部<img class="comments-icon" :src='commentImgUrl' />
         </div>
       </div>
@@ -29,9 +29,9 @@
               </div>
               <div class="comments-item">{{item.comments}}</div>
               <div class="comments-callback">
-                <span @click='_link_to_secondary_comments'>2条回复</span>
+                <span @touchstart='_link_to_secondary_comments'>2条回复</span>
                 <div>
-                  <img @click='add_praise(index)' :src="imgUrl"/>
+                  <img @touchstart='add_praise(index)' :src="imgUrl"/>
                   <span ref="goods">50</span>
                 </div>
               </div>

@@ -529,7 +529,7 @@
           <div class="right">
             <div class="show-task-detail">
               <div class="task-name">任务名名称</div>
-              <div class="task-detail" @click='showMoreTaskDesc'>
+              <div class="task-detail" @touchstart='showMoreTaskDesc'>
                 <span class="task-detail-content">
                   {{taskDesc}}
                 </span>
@@ -546,12 +546,12 @@
               </div>
             </div>
             <div class="task-focus">
-              <img @click='link_to_taskSetting' class="focus-star" v-show="role=='creator'" src="@/assets/img/icon-set up.png" />
+              <img @touchstart='link_to_taskSetting' class="focus-star" v-show="role=='creator'" src="@/assets/img/icon-set up.png" />
               <transition name="zoomInDown">
-                <img v-show='isLike' @click="toggleLike" class="focus-star " src="@/assets/img/icon-collection-highlight.png" />
+                <img v-show='isLike' @touchstart="toggleLike" class="focus-star " src="@/assets/img/icon-collection-highlight.png" />
               </transition>
               <transition name="canelLike">
-                <img v-if="!isLike" @click="toggleLike" class="focus-star" src="@/assets/img/icon-collection-normal.png" :style="styleTaskFocus"
+                <img v-if="!isLike" @touchstart="toggleLike" class="focus-star" src="@/assets/img/icon-collection-normal.png" :style="styleTaskFocus"
                 />
               </transition>
             </div>
@@ -570,11 +570,11 @@
           </div>
         </div>
         <div class="task-progress">
-          <div class="task-desc" @click='toggleTaskProgress'>
+          <div class="task-desc" @touchstart='toggleTaskProgress'>
             <span>展台基础已布置完毕展台基础已布置完毕台基础已布置完毕</span>
             <img src="@/assets/img/icon-slide downward.png" />
           </div>
-          <div class="detail-btn" @click='towardsUpdateHistory'>
+          <div class="detail-btn" @touchstart='towardsUpdateHistory'>
             查看上传历史
           </div>
         </div>
@@ -590,7 +590,7 @@
       <div class="panel b-MT-10 c_white-bg">
         <div class="b-LR-10 b-T-5 between">
           <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 b_FS-14 c_6 ">主题节点</span></p>
-          <div @click='linkToSection' class="more b_FS-10  c_7">
+          <div @touchstart='linkToSection' class="more b_FS-10  c_7">
             更多项目节点<img src="@/assets/img/icon-right-slide03.png" />
           </div>
         </div>
@@ -621,19 +621,19 @@
     </div>
     <comments :members='members'></comments>
     <div v-if="role == 'creator'" class="btn-warp b-LR-8 clearfix">
-      <div @click='closeTask' class="btn-normal-warn b_left b-MT-10">
+      <div @touchstart='closeTask' class="btn-normal-warn b_left b-MT-10">
         关闭任务
       </div>
-      <div @click='passTask' class="btn-normal-success b_right b-MT-10">
+      <div @touchstart='passTask' class="btn-normal-success b_right b-MT-10">
         验收通过
       </div>
     </div>
     <!-- 执行者 -->
     <div v-if="role == 'operator'" class="btn-warp b-LR-8 clearfix">
-      <div @click="rejectTask" class="btn-normal-warn b_left b-MT-10 ">
+      <div @touchstart="rejectTask" class="btn-normal-warn b_left b-MT-10 ">
         拒绝任务
       </div>
-      <div @click='recieveTask' class="btn-normal-success b_right b-MT-10">
+      <div @touchstart='recieveTask' class="btn-normal-success b_right b-MT-10">
         接受任务
       </div>
     </div>

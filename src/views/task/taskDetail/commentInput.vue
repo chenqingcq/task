@@ -1,13 +1,13 @@
 <template>
   <div class="allComments-container">
       <div class="comment-panel">
-          <div class="close" @click='close'>
+          <div class="close" @touchstart='close'>
               <img src="@/assets/img/icon-close.png" />
           </div>
           <textarea name="userIpt" id="userIpt" placeholder="说点什么吧..." v-model.trim="usreInput" >
               
           </textarea>
-          <div @click='sendComments' class="comment-btn">评论</div>
+          <div @touchstart='sendComments' class="comment-btn">评论</div>
       </div>
   </div>
 </template>
