@@ -68,7 +68,13 @@ export default{
     },
     computedMonthWeekEndTimeClass( list ){
       const status = list.status
-      return status == 'completed' ? 'complete' : status
+      let className = ''
+      switch(status){
+        case 'completed': className = 'complete';break;
+        case 'aheadCompleted' : className = 'pending';break ;
+        default : className = status;
+      }
+      return className
 
     },
     computedIsOutDateAfterEndTime(list, dayItem){

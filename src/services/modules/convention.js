@@ -191,7 +191,6 @@ class Convent {
     )
   }
 
-
 }
 
 export default new Convent()

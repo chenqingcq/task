@@ -33,19 +33,19 @@
               slot="content"
               @click="linkToTaskDetail(list)"
               class="panel b-MT-10"
-              :class="[list.isLike ? 'isLike-bg' : 'c_white-bg', swipeOutIndex == index && 'on-open-Swipe' ]">
+              :class="[list.isStar ? 'isLike-bg' : 'c_white-bg', swipeOutIndex == index && 'on-open-Swipe' ]">
 
               <div
 
                 class="b-LR-10 b-T-5"
                 style="height: 140px">
-                <span class="left-dot dot " :class="[list.isSaw ? 'info': 'warn']" ></span>
+                <span class="left-dot dot " :class="[list.isBrowse	 ? 'info': 'warn']" ></span>
                 <p class="left-photo">
-                  <img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">
+                  <img :src="list.headImage" alt="">
                 </p>
                 <div class="right-content" >
                   <div class="line1">
-                    <p class="b_FS-14 c_11 b_font-PFM middle">名字<img
+                    <p class="b_FS-14 c_11 b_font-PFM middle">{{ list.nickname }}<img
                       v-if="list.status == 'completed'"
                       :src="completeLogo" />
                       <img
@@ -57,7 +57,7 @@
                     <p v-else class="status c_7 b_FS-10">{{ list.text }}</p>
                   </div>
                   <div class="b_FS-12 b_font-PFR c_6">
-                    展台搭建新方案
+                    {{ list.taskName }}
                   </div>
                 </div>
 

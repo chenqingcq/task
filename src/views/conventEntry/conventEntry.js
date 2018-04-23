@@ -28,83 +28,104 @@ export default {
       swipeOutIndex : -1 ,
 
       taskList : [{
-        id: 0 ,
+        taskId: 0 ,
+        nickname : 'paul' ,
+        headImage : 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
         // 进行中
         startTime : +new Date('2018-04-01') , // 开始时间
-        endTime : +new Date('2018-04-13'),  // 结束时间
-        completeDate : +new Date('2018-04-13'),  // 结束时间
+        endTime : +new Date('2018-04-24'),  // 结束时间
+        completeDate : +new Date('2018-04-24'),  // 结束时间
         status : 'pending' , // 状态
         process : 30,   // 进度
+        taskName : '会展任务一',
         text : '正在进行',  // 文案
-        isSaw : false ,  // 是否已经查看
-        isLike : true , // 是否已经关注
+        isBrowse	 : false ,  // 是否已经查看
+        isStar : true , // 是否已经关注 isStar	Integer	是否关注任务 0:否 1:是
       },
       {
-        id: 1 ,
+        taskId: 1 ,
+        nickname : 'paul' ,
+        headImage : 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
         // 提前完成
         startTime : +new Date('2018-04-02') ,
         endTime : +new Date('2018-04-13'),
         completeDate: +new Date('2018-04-03'),
         status : 'aheadCompleted' ,
         process : 90,
+        taskName : '会展任务一',
         text : '提前一天通过',
-        isSaw : true ,
-        isLike : true
+        isBrowse	 : true ,
+        isStar : true
       },
       {
-        id: 2 ,
+        taskId: 2 ,
+        nickname : 'paul' ,
+        headImage : 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
         // 超时
         startTime : +new Date('2018-04-03') ,
         endTime : +new Date('2018-04-13'),
         status : 'outDate' ,
         text : '超时一天',
         process : 100,
-        isSaw : false ,
-        isLike : false , // 是否已经关注
+        taskName : '会展任务一',
+        isBrowse	 : false ,
+        isStar : false , // 是否已经关注
       },
       {
-        id: 3 ,
+        taskId: 3 ,
+        nickname : 'paul' ,
+        headImage : 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
         // 超时
         startTime : +new Date('2018-04-01') ,
         endTime : +new Date('2018-04-07'),
         status : 'outDate' ,
         text : '超时五天',
         process : 100,
-        isSaw : false ,
-        isLike : false , // 是否已经关注
+        taskName : '会展任务一',
+        isBrowse	 : false ,
+        isStar : false , // 是否已经关注
       },
         {
-          id: 3 ,
+          taskId: 3 ,
+          nickname : 'paul' ,
+          headImage : 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
           // 超时
           startTime : +new Date('2018-04-01') ,
           endTime : +new Date('2018-04-09'),
           status : 'outDate' ,
           text : '超时五天',
           process : 100,
-          isSaw : false ,
-          isLike : false , // 是否已经关注
+          taskName : '会展任务一',
+          isBrowse	 : false ,
+          isStar : false , // 是否已经关注
         },
       {
-        id: 4 ,
+        taskId: 4 ,
+        nickname : 'paul' ,
+        headImage : 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
         // 关闭
         startTime : +new Date('2018-04-01') ,
         endTime : +new Date('2018-04-07'),
         status : 'closed' ,
         text : '已关闭',
         process : 100,
-        isSaw : false ,
-        isLike : false , // 是否已经关注
+        taskName : '会展任务一',
+        isBrowse	 : false ,
+        isStar : false , // 是否已经关注
       },
 
       {
-        id: 5 ,
+        taskId: 5 ,
+        nickname : 'paul' ,
+        headImage : 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
         // 按时完成
         startTime : +new Date('2018-04-06') ,
         endTime : +new Date('2018-04-13'),
         status : 'completed' ,
         process : 100,
-        isSaw : true ,
-        isLike : false , // 是否已经关注
+        taskName : '会展任务一',
+        isBrowse	 : true ,
+        isStar : false , // 是否已经关注
       }] ,
       weekdays: [],
       monthDates : [],
@@ -157,7 +178,7 @@ export default {
       })
     },
     linkToTaskDetail( item ){
-      this.$router.push(`/taskDetail?taskId=${item.id}`)
+      this.$router.push(`/taskDetail?taskId=${item.taskId}`)
     },
     showSlideBar(){
       this.$refs.slide.open()

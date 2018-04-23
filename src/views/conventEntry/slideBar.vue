@@ -330,6 +330,8 @@
               })
             }
             else{
+//              this.$router.push(`/addTaskSetting?projectId=adsf&projectName=${text}`)
+//              return
               Convent.createProject({
                   projectName : text
               })
@@ -337,7 +339,7 @@
                 // update state
                 // string
                 this.setCurrentProject(res.data)
-                this.$router.push(`/addTaskSetting?projectId=${res}`)
+                this.$router.push(`/addTaskSetting?projectId=${res}&projectName=${text}`)
               })
 //              setTimeout(()=>{
 //                const project = {
