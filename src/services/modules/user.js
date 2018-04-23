@@ -80,7 +80,7 @@ class User{
    * 添加进度
    * */
   getUserInfo (opt, isShowFullLoading = true) {
-    debugger
+
     const url = '/api/user'
     const params = opt || {}
     return get(
