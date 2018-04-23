@@ -415,7 +415,7 @@ input:disabled {
 </template>
 <script>
 import { mapMutations, mapGetters } from "vuex";
-import { AddTask } from "@/services";
+import { Convent } from "@/services";
 let reflect_to_task = {
   taskTheme: "项目主题",
   taskName: "任务名称",
@@ -444,6 +444,8 @@ export default {
       toastDom: null,
       showToast: true,
       currentIndex: 0,
+      projectId: "",
+      taskId: "",
       taskTheme: "",
       taskName: "",
       taskDesc: "",
@@ -526,7 +528,7 @@ export default {
       }
     },
     startTime(val) {
-      console.log(val);
+      // console.log(val);
       if (!!val) {
         window.sessionStorage.setItem("startTime", val);
         this.$refs.startDate.classList.add("active_");
@@ -536,14 +538,14 @@ export default {
       }
     },
     endTime(val) {
-      console.log(val);
+      // console.log(val);
       if (!!val) {
         this.endTime = val;
         this.$refs.endDate.classList.add("active_");
         window.sessionStorage.setItem("endTime", val);
       } else {
         this.$refs.endDate.classList.remove("active_");
-        console.log(document.querySelector(".selectEndTime>.vux-cell-primary"));
+        // console.log(document.querySelector(".selectEndTime>.vux-cell-primary"));
       }
     },
     standard(val) {
@@ -560,7 +562,7 @@ export default {
   beforeRouteEnter: (to, from, next) => {
     if (from.path == "/appointMessager" && to.path == "/addTaskSetting") {
       next(vm => {
-        console.log(vm.getTaskExecutor); //过滤选中的执行人;
+        // console.log(vm.getTaskExecutor); //过滤选中的执行人;
         vm.$refs.exe.classList.add("active_");
         vm.executor = vm.getTaskExecutor.username;
         window.sessionStorage.setItem("executor", vm.executor);
@@ -571,7 +573,7 @@ export default {
     ) {
       next(vm => {
         let executor = window.sessionStorage.getItem("executor");
-        console.log(executor);
+        // console.log(executor);
         if (executor) {
           vm.$refs.exe.classList.add("active_");
           vm.$refs.executor.textContent = executor;
@@ -581,7 +583,7 @@ export default {
   },
   methods: {
     changeIndex(index, item) {
-      console.log(item);
+      // console.log(item);
       this.currentIndex = index;
       if (this.currentIndex == 0) {
         this.isPublic = true;
@@ -610,25 +612,30 @@ export default {
       }); //编辑项目节点
     },
     throttle(delay) {
+      let me = this;
       return new Promise((resovle, reject) => {
-        AddTask.addTask({
-          taskTheme: this.taskTheme,
+        // console.log(window.location.hash);
+        Convent.createTask({
+          projectId: window.localStorage.getItem("projectId"),
+          projectName: this.taskTheme,
           taskName: this.taskName,
           taskDesc: this.taskDesc,
-          startTime: this.startTime,
-          endTime: this.endTime,
-          standard: this.standard,
+          startTime: new Date(this.startTime).getTime(),
+          endTime: new Date(this.endTime).getTime(),
+          checkStandard: this.standard,
           taskExecutor: this.executor,
-          isPublic: this.isPublic || true,
-          allowedLook: this.allowedLook
+          isOpen: this.isPublic ? 1 : 0
         })
-          .then(data => {
-            console.log(data)
+          .then(res => {
+            console.log(res,111);
+            if (res.code == 1) {
+              me.taskId = res.data;
+              me.$toast.show("任务创建完成!", 500);
+            }
           })
           .catch(err => {
-            console.log(err)
+            // console.log(err)
           });
-        this.$toast.show("任务创建完成!", 500);
         setTimeout(() => {
           resovle("compelete");
         }, delay);
@@ -638,28 +645,21 @@ export default {
       this.validate();
       //防抖和节流
       if (this.check_pass) {
-        this.throttle(500).then(() => {
-          this.SET_TASK({
-            //需要后台给个id
-            taskTheme: this.taskTheme,
-            taskName: this.taskName,
-            taskDesc: this.taskDesc,
-            startTime: this.startTime,
-            endTime: this.endTime,
-            standard: this.standard,
-            taskExecutor: this.executor,
-            isPublic: this.isPublic || true,
-            allowedLook: this.allowedLook
-          });
-        });
+        this.throttle(500).then(() => {});
 
-        this.$router.push("conventEntry"); //项目创建完毕
+        this.$router.push({
+          path: "conventEntry",
+          query: {
+            projectId: window.localStorage.getItem("projectId"),
+            taskId: this.taskId
+          }
+        }); //项目创建完毕
       }
     },
     validate() {
       let k;
       for (k in reflect_to_task) {
-        console.log(this.$data[k]);
+        // console.log(this.$data[k]);
 
         if (
           this.$data.hasOwnProperty(k) &&
@@ -668,7 +668,7 @@ export default {
         ) {
           this.check_pass = true;
         } else {
-          console.log(k);
+          // console.log(k);
           this.$dialog.message({
             message: `请添加${reflect_to_task[k]}`,
             icon: "fail"
@@ -732,6 +732,18 @@ export default {
       this.standard = window.sessionStorage.getItem("standard");
       this.isPublic = window.sessionStorage.getItem("isPublic");
       this.allowedLook = window.sessionStorage.getItem(" allowedLook");
+    },
+    setProjectId() {
+      if (!window.location.hash.includes("projectId")) {
+        this.$dialog.message({
+          message: "请先创建项目!",
+          icon: "fail"
+        });
+        this.$router.push("conventEntry");
+      } else {
+        let projectId = window.location.hash.split("?")[1].split("=")[1];
+        window.localStorage.setItem("projectId", projectId);
+      }
     }
   },
   created() {
@@ -744,6 +756,7 @@ export default {
   },
   mounted() {
     window.sessionStorage.setItem("flag", true);
+    this.setProjectId();
   }
 };
 </script>
