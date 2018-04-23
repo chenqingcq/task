@@ -444,6 +444,8 @@ export default {
       toastDom: null,
       showToast: true,
       currentIndex: 0,
+      projectId :'',
+      taskId:'',
       taskTheme: "",
       taskName: "",
       taskDesc: "",
@@ -611,24 +613,28 @@ export default {
     },
     throttle(delay) {
       return new Promise((resovle, reject) => {
+        console.log(window.location.hash);
         Convent.createTask({
-          taskTheme: this.taskTheme,
+          projectId: this.projectId,
+          projectName: this.taskTheme,
           taskName: this.taskName,
           taskDesc: this.taskDesc,
-          startTime: this.startTime,
-          endTime: this.endTime,
-          standard: this.standard,
+          startTime: new Date(this.startTime).getTime(),
+          endTime: new Date(this.endTime).getTime(),
+          checkStandard: this.standard,
           taskExecutor: this.executor,
-          isPublic: this.isPublic || true,
-          allowedLook: this.allowedLook
+          isOpen: this.isPublic ? 1 : 0
         })
-          .then(data => {
-            // console.log(data)
+          .then(res => {
+            // console.log(data);
+            if (res.code == 1 && res.status == 200) {
+              this.taskId = res.data;
+              this.$toast.show("任务创建完成!", 500);
+            }
           })
           .catch(err => {
             // console.log(err)
           });
-        this.$toast.show("任务创建完成!", 500);
         setTimeout(() => {
           resovle("compelete");
         }, delay);
@@ -638,22 +644,15 @@ export default {
       this.validate();
       //防抖和节流
       if (this.check_pass) {
-        this.throttle(500).then(() => {
-          this.SET_TASK({
-            //需要后台给个id
-            taskTheme: this.taskTheme,
-            taskName: this.taskName,
-            taskDesc: this.taskDesc,
-            startTime: this.startTime,
-            endTime: this.endTime,
-            standard: this.standard,
-            taskExecutor: this.executor,
-            isPublic: this.isPublic || true,
-            allowedLook: this.allowedLook
-          });
-        });
+        this.throttle(500).then(() => {});
 
-        this.$router.push("conventEntry"); //项目创建完毕
+        this.$router.push({
+          path:"conventEntry",
+          query:{
+            projectId :this.projectId,
+            taskId:this.taskId
+          }
+        }); //项目创建完毕
       }
     },
     validate() {
@@ -732,6 +731,17 @@ export default {
       this.standard = window.sessionStorage.getItem("standard");
       this.isPublic = window.sessionStorage.getItem("isPublic");
       this.allowedLook = window.sessionStorage.getItem(" allowedLook");
+    },
+    setProjectId() {
+      if (!window.location.hash.includes("projectId")) {
+        this.$dialog.message({
+          message: "请先创建项目!",
+          icon: "fail"
+        });
+        this.$router.push("conventEntry");
+      } else {
+        this.projectId = window.location.hash.split("?")[1].split("=")[1];
+      }
     }
   },
   created() {
@@ -744,6 +754,7 @@ export default {
   },
   mounted() {
     window.sessionStorage.setItem("flag", true);
+    this.setProjectId();
   }
 };
 </script>
