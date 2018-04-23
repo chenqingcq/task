@@ -127,7 +127,6 @@ export const post = function(url, params = {}) {
                 'Authorization': authorization
             },
         }).then((res) => {
-          debugger
             // 成功回调
             if (successCode.has(res.code)) {
                 // 已经处理过状态，所以不用管状态，直接返回数据
