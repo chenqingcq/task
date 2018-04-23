@@ -4,9 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import wx from '@/utils/wx'
 import router from './router'
+import '@/filters' // 过滤器
 import 'lib-flexible/flexible.js'
 import store from './store'
-
 import VueLazyLoad from 'vue-lazyload'//图片懒加载
 
 // 通用组件

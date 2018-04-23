@@ -13,6 +13,8 @@ export default {
   mixins:[proccesComputed],
   data(){
     return{
+      testNum: 21,
+
       isShowSlideBar : false ,
       // 是否月模式
       isMonthMode :true ,
@@ -166,7 +168,7 @@ export default {
           this.$refs.slide.newAproject()
         }
         else {
-          this.$router.push('/addTaskSetting')
+          this.$router.push(`/addTaskSetting`)
         }
       }
     },

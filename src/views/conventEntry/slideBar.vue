@@ -338,8 +338,13 @@
               .then(res=>{
                 // update state
                 // string
-                this.setCurrentProject(res.data)
-                this.$router.push(`/addTaskSetting?projectId=${res}&projectName=${text}`)
+                this.setCurrentProject({
+
+
+                  id : res ,
+                  themeName : text
+                })
+                this.$router.push('/addTaskSetting')
               })
 //              setTimeout(()=>{
 //                const project = {

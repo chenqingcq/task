@@ -1,5 +1,7 @@
 /**
  * Created by hejiahui on 2018/4/9.
+ *
+ * className 计算
  */
 
 export default{
