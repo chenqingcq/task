@@ -37,14 +37,18 @@ axiosInstance.interceptors.request.use((config) => {
 
 // 拦截器（响应拦截）
 axiosInstance.interceptors.response.use((res) => {
+
     yb_print('================= responce ==================')
     yb_print(res.data)
         // 将数据提前一个位置，便于获取
-    res.data = res.data.data
-    res.code = res.data.code
-    res.msg = res.data.message
-    res.status = res.data.status
-    res.yb_request = res.data.request
+  const response = {
+    data: res.data.data ,
+    code: res.data.code ,
+    msg : res.data.message ,
+    status : res.data.status,
+    request : res.data.request
+  }
+    res = { res, ...response }
     return res
 })
 
@@ -73,6 +77,7 @@ export const get = function(url, params = {}, isShowFullLoading) {
             },
         }).then((res) => {
             // 成功回调
+
             if (successCode.has(res.code)) {
                 // 已经处理过状态，所以不用管状态，直接返回数据
                 resolve(res.data)
@@ -122,6 +127,7 @@ export const post = function(url, params = {}) {
                 'Authorization': authorization
             },
         }).then((res) => {
+          debugger
             // 成功回调
             if (successCode.has(res.code)) {
                 // 已经处理过状态，所以不用管状态，直接返回数据

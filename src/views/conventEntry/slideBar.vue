@@ -335,7 +335,8 @@
               })
               .then(res=>{
                 // update state
-                this.setCurrentProject(project)
+                // string
+                this.setCurrentProject(res.data)
                 this.$router.push('/addTaskSetting')
               })
 //              setTimeout(()=>{
