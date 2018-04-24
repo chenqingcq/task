@@ -9,7 +9,7 @@
         <div class="header-main">
           <img class="user-photo"  :src="user.headImage" alt="">
           <img class="menu" @click="showSlideBar" src="../../assets/img/icon-menu.png" alt="">
-          <span class="project-name c_white b_FS-18 text-center">{{ themeName }} {{ testNum |numToChinese  }} </span>
+          <span class="project-name c_white b_FS-18 text-center">{{ themeName }} </span>
           <!--<img style="visibility: hidden" class="share" src="../../assets/img/icon-share.png" alt="">-->
 
           <img v-if = "role == 'operator'" class="add" @click="addTask" src="../../assets/img/icon-setting.png" alt="">
@@ -23,6 +23,9 @@
       </div><!--头部日历导航栏 end-->
       <!--任务列表-->
       <div class="task-list-wrapper b-LR-10">
+        <div v-if="taskList.length == 0" class="text-center b_FS-14 c_7 " style="padding-top: 280px">
+          暂无任务
+        </div>
         <template v-for="(list,index) in taskList" >
 
           <v-swipeout contentBg="#f4f4f4"

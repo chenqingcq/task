@@ -11,7 +11,7 @@ export default {
     project:{
       role : 'creator' ,// creator 创建者 、operator 执行者 、visitor 访问者
       id : '0', // 项目id
-      themeName : '测试项目',
+      projectName : '测试项目',
 
     }
   },

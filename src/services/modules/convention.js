@@ -20,7 +20,7 @@ class Convent {
   * 选择项目列表
   * */
   projectList (opt, isShowFullLoading = true) {
-    const url = '/api/project/list'
+    const url = '/api/project/slidlist'
     const params = opt || {}
     return get(
       url, params, isShowFullLoading

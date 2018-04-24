@@ -15,7 +15,7 @@ const axiosInstance = axios.create({
     // baseURL: '//rk4k3z.natappfree.cc/v1/', //微信测试,
     // baseURL: '//192.168.0.126:8087/v1/', //测试服务器
     // baseURL: '//bf4c5e.natappfree.cc/v1/', //测试服务器
-    baseURL: '//192.168.0.112:3010/taskapi/v1/',
+    baseURL: '//192.168.0.113:3010/taskapi/v1/',
     //baseURL: '//share.s1.natapp.cc/v1/', //测试服务器
     timeout: 15000
 })
@@ -48,8 +48,8 @@ axiosInstance.interceptors.response.use((res) => {
     status : res.data.status,
     request : res.data.request
   }
-
-    return response
+    res = { res, ...response }
+    return res
 })
 
 // ======================== 注册 axios 原生 GET POST请求 =============================
@@ -127,6 +127,7 @@ export const post = function(url, params = {}) {
                 'Authorization': authorization
             },
         }).then((res) => {
+
             // 成功回调
             if (successCode.has(res.code)) {
                 // 已经处理过状态，所以不用管状态，直接返回数据

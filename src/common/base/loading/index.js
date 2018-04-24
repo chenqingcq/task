@@ -21,7 +21,12 @@ Loading.install = function (Vue) {
   };
   Vue.prototype.$loadingClose = () => {
     if (instance) {
-      document.body.removeChild(instance.$el);
+      try{
+        document.body.removeChild(instance.$el);
+      }
+      catch (err){
+
+      }
     }
   };
 };

@@ -189,40 +189,40 @@
 
             <div class="panel c_white-bg">
 
-              <template v-for="(project, key) in projectList">
-                <!--<v-swipeout>-->
-                  <!--<div slot="content" style = 'width : 200px;padding: 20px'>-->
-                    <!--http://0.0.0.0:8080/#/conventEntry-->
+                <template v-for="(project, key) in projectList">
+                  <!--<v-swipeout>-->
+                    <!--<div slot="content" style = 'width : 200px;padding: 20px'>-->
+                      <!--http://0.0.0.0:8080/#/conventEntry-->
+                    <!--</div>-->
+                    <!--<div slot = 'right-menu' class="b_FS-14">-->
+                      <!--<v-swipe-btn type="warn" >-->
+                        <!--删除-->
+                      <!--</v-swipe-btn>-->
+                    <!--</div>-->
+                  <!--</v-swipeout>-->
+                  <!--<div  class="item" @click = "selectProject(project)" >-->
+                    <!--<p class="left-photo"  >-->
+                      <!--<img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">-->
+                    <!--</p>-->
+                    <!--<p class="c_11 b_FS-14">-->
+                      <!--{{ project.themeName }}-->
+                    <!--</p>-->
                   <!--</div>-->
-                  <!--<div slot = 'right-menu' class="b_FS-14">-->
-                    <!--<v-swipe-btn type="warn" >-->
-                      <!--删除-->
-                    <!--</v-swipe-btn>-->
-                  <!--</div>-->
-                <!--</v-swipeout>-->
-                <!--<div  class="item" @click = "selectProject(project)" >-->
-                  <!--<p class="left-photo"  >-->
-                    <!--<img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">-->
-                  <!--</p>-->
-                  <!--<p class="c_11 b_FS-14">-->
-                    <!--{{ project.themeName }}-->
-                  <!--</p>-->
-                <!--</div>-->
-                <v-swipeout contentBg="#f4f4f4" >
-                  <div slot="content" class="item" :class="[ key == 0 && 'is-first']" @click = "selectProject(project)" >
-                    <p class="left-photo"  >
-                      <img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">
-                    </p>
-                    <p class="c_11 b_FS-14">
-                      {{ project.themeName }}
-                    </p>
-                  </div>
-                  <div slot = 'right-menu' class="b_FS-14">
-                    <v-swipe-btn :width="70" type="warn" >
-                      删除
-                    </v-swipe-btn>
-                  </div>
-                </v-swipeout>
+                  <v-swipeout contentBg="#f4f4f4" >
+                    <div slot="content" class="item" :class="[ key == 0 && 'is-first']" @click = "selectProject(project)" >
+                      <p class="left-photo"  >
+                        <img :src="project.headImage" alt="">
+                      </p>
+                      <p class="c_11 b_FS-14">
+                        {{ project.projectName }}
+                      </p>
+                    </div>
+                    <div slot = 'right-menu' class="b_FS-14">
+                      <v-swipe-btn :width="70" type="warn" >
+                        删除
+                      </v-swipe-btn>
+                    </div>
+                  </v-swipeout>
 
                 <div class="bar"></div>
               </template>
@@ -256,7 +256,7 @@
                 navTab : 0,//  全部. 0:全部 1: 我创建 2: 我执行
                 isShow : false,
                 isPositive: false , // 顺序
-                projectList: [{
+                allList: [{
                   themeName : '我是创建者' ,
                   id: '1' ,
                   role : 'creator'
@@ -270,16 +270,26 @@
                   themeName : '我是访问者' ,
                   id: '3' ,
                   role : 'visitor'
-                }]
+                }],
+                myCreateList: [] ,
+                myActionList: [] ,
+                // scroll 分页
+                listenScroll: true ,
+
             }
         },
+        computed:{
+          projectList(){
+            const type = this.navTab
+            if(type == 0 ) return  this.allList
+            if(type == 1 ) return  this.myCreateList
+            if(type == 2 ) return  this.myActionList
+          }
+        },
         components:{
-          ...mapGetters({
-
-          })
         },
         mounted(){
-
+          this.getProjectList()
         },
         methods:{
           ...mapActions([
@@ -330,8 +340,6 @@
               })
             }
             else{
-//              this.$router.push(`/addTaskSetting?projectId=adsf&projectName=${text}`)
-//              return
               Convent.createProject({
                   projectName : text
               })
@@ -339,20 +347,11 @@
                 // update state
                 // string
                 this.setCurrentProject({
-
-
                   id : res ,
-                  themeName : text
+                  projectName : text
                 })
                 this.$router.push('/addTaskSetting')
               })
-//              setTimeout(()=>{
-//                const project = {
-//                  id : '2',
-//                  themeName : text ,
-//                  role : 'creator'
-//                }
-//              },100)
             }
 
           },
