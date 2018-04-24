@@ -80,8 +80,9 @@
         z-index: 10;
       }
       .panel{
-        height: 780px;
-        overflow-y: scroll;
+        /*height: 780px;*/
+        height: 800px;
+        overflow-y: auto;
         position:relative;
 
         .item{
@@ -161,8 +162,9 @@
       <!--<div v-if="isShow" class="mask" @touchstart="isShow = false" ></div>-->
     <!--</transition>-->
     <!--<transition name="content" >-->
-    <v-pop ref="slide" animate ="left" >
-        <div  v-if="isShow"  class="slide-wrap c_white-bg">
+    <!--<div v-show="isShow" >-->
+      <v-pop ref="slide" animate ="left" >
+        <div v-show="isShow" class="slide-wrap c_white-bg" >
           <img class="banner" src="../../assets/img/image-background01.png" alt="">
           <img @click="skipToHelp" class="help" src="../../assets/img/icon-help.png" alt="">
           <div class="nav-container b_d-flex c_white-bg" >
@@ -187,42 +189,24 @@
                     <i :class="[ isPositive ? 'c_primary' : '']">↓</i><i :class="[ !isPositive ? 'c_primary' : '']">↑</i>
                   </span>
 
-            <div class="panel c_white-bg">
+            <div class="panel c_white-bg"  v-infinite-scroll="loadMore" infinite-scroll-disabled="false" infinite-scroll-distance="70"  >
 
-                <template v-for="(project, key) in projectList">
-                  <!--<v-swipeout>-->
-                    <!--<div slot="content" style = 'width : 200px;padding: 20px'>-->
-                      <!--http://0.0.0.0:8080/#/conventEntry-->
-                    <!--</div>-->
-                    <!--<div slot = 'right-menu' class="b_FS-14">-->
-                      <!--<v-swipe-btn type="warn" >-->
-                        <!--删除-->
-                      <!--</v-swipe-btn>-->
-                    <!--</div>-->
-                  <!--</v-swipeout>-->
-                  <!--<div  class="item" @click = "selectProject(project)" >-->
-                    <!--<p class="left-photo"  >-->
-                      <!--<img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">-->
-                    <!--</p>-->
-                    <!--<p class="c_11 b_FS-14">-->
-                      <!--{{ project.themeName }}-->
-                    <!--</p>-->
-                  <!--</div>-->
-                  <v-swipeout contentBg="#f4f4f4" >
-                    <div slot="content" class="item" :class="[ key == 0 && 'is-first']" @click = "selectProject(project)" >
-                      <p class="left-photo"  >
-                        <img :src="project.headImage" alt="">
-                      </p>
-                      <p class="c_11 b_FS-14">
-                        {{ project.projectName }}
-                      </p>
-                    </div>
-                    <div slot = 'right-menu' class="b_FS-14">
-                      <v-swipe-btn :width="70" type="warn" >
-                        删除
-                      </v-swipe-btn>
-                    </div>
-                  </v-swipeout>
+              <template v-for="(project, key) in projectList">
+                <v-swipeout contentBg="#f4f4f4" >
+                  <div slot="content" class="item" :class="[ key == 0 && 'is-first']" @click = "selectProject(project)" >
+                    <p class="left-photo"  >
+                      <img :src="project.headImage" alt="">
+                    </p>
+                    <p class="c_11 b_FS-14">
+                      {{ project.projectName }}
+                    </p>
+                  </div>
+                  <div slot = 'right-menu' class="b_FS-14">
+                    <v-swipe-btn :width="70" type="warn" >
+                      删除
+                    </v-swipe-btn>
+                  </div>
+                </v-swipeout>
 
                 <div class="bar"></div>
               </template>
@@ -236,7 +220,9 @@
             </div>
           </div>
         </div>
-    </v-pop>
+      </v-pop>
+    <!--</div>-->
+
     <!--</transition>-->
 
   </div>
@@ -279,6 +265,9 @@
             }
         },
         computed:{
+          hasMore(){
+            return false
+          },
           projectList(){
             const type = this.navTab
             if(type == 0 ) return  this.allList
@@ -295,8 +284,19 @@
           ...mapActions([
             'setCurrentProject'
           ]),
+          loadMore(){
+            console.log('loadMore')
+          },
           getProjectList(){
-
+            Convent.projectList({
+              type : this.navTab ,
+              pageNum : 1 ,
+              projectName : 10
+            }).then((res)=>{
+              if(this.navTab == 0 ) this.allList = res
+              if(this.navTab == 1 ) this.myCreateList = res
+              if(this.navTab == 0 ) this.myActionList = res
+            })
           },
           open(){
             this.$refs.slide.open()
@@ -304,7 +304,7 @@
           },
           close(){
             this.$refs.slide.close()
-
+            this.isShow = false
             console.log(this)
           },
           closeCb(){
@@ -347,7 +347,7 @@
                 // update state
                 // string
                 this.setCurrentProject({
-                  id : res ,
+                  projectId : res ,
                   projectName : text
                 })
                 this.$router.push('/addTaskSetting')

@@ -12,7 +12,7 @@
         <span>暂无评论,点击抢沙发</span>
         <i></i>
       </div>
-      <scroll class="comments-container" ref="scroll" :listenScroll='listenScroll' @scroll='scrolling' @scrollEnd='scrollEnd' v-if="members.length>1">
+      <div class="comments-container" ref="scroll" :listenScroll='listenScroll' @scroll='scrolling' @scrollEnd='scrollEnd' v-if="members.length>1">
         <ul class="comment-panel">
           <li v-for="(item,index) in members" :key="index" class="lisItem">
             <div class="left">
@@ -42,7 +42,7 @@
             <div class="comment-content">已显示全部留言</div>
           </li>
         </ul>
-      </scroll>
+      </div>
       <div class="user-input">
           <input @focus="userInput" type="text" placeholder="赶快评论吧~" class="comment_input">
           <img class="icon-input" src="@/assets/img/iocn-pen.png" />
@@ -54,7 +54,7 @@
   </div>
 </template>
 <script>
-import scroll from "@/common/base/scroll/scroll";
+//import scroll from "@/common/base/scroll/scroll";
 import userInput from "@/views/task/taskDetail/commentInput.vue";
 export default {
   name: "comments",
@@ -75,7 +75,7 @@ export default {
     }
   },
   components: {
-    scroll,
+//    scroll,
     userInput
   },
   computed: {

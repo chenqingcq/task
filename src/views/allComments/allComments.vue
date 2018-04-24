@@ -2,7 +2,10 @@
     <div class="_comments-container">
          <div class="b-LR-10 comment-container">
             <div class="panel b-P-10 " style="background:#fff">
-            <scroll class="comments-container" ref="scroll" :listenScroll='listenScroll'  @scrollEnd="refresh" v-if="members.length>1">
+              <!--scroll-->
+            <div class="comments-container"
+                 v-infinite-scroll="refresh" infinite-scroll-disabled="false" infinite-scroll-distance="60"
+                 ref="scroll"  v-if="members.length>1">
                 <ul class="comment-panel">
                 <li v-for="(item,index) in members" :key="index" class="lisItem">
                     <div class="left">
@@ -32,19 +35,32 @@
                      <div class="comment-content">已显示全部留言</div>
                 </li>
                 </ul>
-            </scroll>
+              <!--scroll-->
+            </div>
             </div>
         </div>
-        <div class="user-input">
-          <input  type="text" placeholder="赶快评论吧~" class="comment_input" v-model="comments">
-          <img @touchstart='sendComment' class="send-comment" src="@/assets/img/iocn.png" />
+      <div v-if="isFocus"
+           class="user-input-mask"
+           @touchmove.prevent
+           @scroll.prevent
+           @touchstart.prevent="blurInput">
+      </div>
+      <div class="user-input" :class="[ !isFocus? 'is-fixed' : 'no-fixed']">
+        <input  type="text" placeholder="赶快评论吧~" class="comment_input" v-model="comments"
+                ref="text"
+                @focus = 'setPageToBottom'
+                @blur="clearIpt, blurInput"
+        >
+        <img @touchstart='sendComment' class="send-comment" src="@/assets/img/iocn.png" />
       </div>
     </div>
 </template>
 <script>
 import scroll from "@/common/base/scroll/scroll";
+import  boardfix from '@/mixins/keyboardfix'
 export default {
   name: "allComments",
+  mixins : [boardfix],
   data() {
     return {
       listenScroll: true,
@@ -140,9 +156,11 @@ export default {
   },
   props: {},
   components: {
-    scroll
   },
   computed: {
+    hasMore(){
+      return this.listenScroll
+    },
     commentImgUrl() {
       return require("@/assets/img/icon-comment.png");
     },
@@ -210,17 +228,34 @@ export default {
 }
 ._comments-container {
   width: 100%;
-  height: 100vh;
+  /*height: 100vh;*/
   position: relative;
-  top: 0;
+  /*top: 0;*/
   .comment-container {
     position: relative;
     top: 20px;
   }
   .comment-panel {
     overflow: hidden;
+    background: #07a5ff;
+  }
+  .user-input-mask {
+    position: fixed ;
+    top: 0 ;
+    background-color: transparent;
+    width: 100vw;
+    height: 100vh ;
+    z-index : 8;
   }
   .user-input {
+    &.is-fixed{
+       bottom: 0;
+       position: fixed;
+     }
+    &.no-fixed{
+       position: absolute;
+       bottom: 0px;
+    }
     width: 100%;
     height: 54*2px;
     padding: 10*2px 20*2px;
@@ -287,7 +322,7 @@ export default {
     max-height: 667*2px-60px*2;
     background: rgb(244, 244, 244);
     /*72*3*2*/
-    overflow: hidden;
+    overflow-y: auto;
     border-top-right-radius: 10*2px;
     .lisItem {
       width: 100%;

@@ -2,7 +2,7 @@
     <div class="_comments-container">
          <div class="b-LR-10 comment-container">
             <div class="panel b-P-10 " style="background:#fff">
-            <scroll class="comments-container" ref="scroll" :listenScroll='listenScroll' @scrollEnd="refresh" v-if="members.length>1">
+            <div class="comments-container" ref="scroll" :listenScroll='listenScroll' @scrollEnd="refresh" v-if="members.length>1">
                 <ul class="comment-panel">
                 <li v-for="(item,index) in members" :key="index" class="lisItem">
                     <div class="left">
@@ -19,7 +19,7 @@
                     </div>
                     <div class="comments-item">{{item.comments}}</div>
                     <div class="comments-callback">
-                        <span @touchstart='_look_all_reply'>回复6</span> 
+                        <span @touchstart='_look_all_reply'>回复6</span>
                         <div>
                         <span ref="goods">赞50</span>
                         </div>
@@ -31,8 +31,8 @@
                      <div class="comment-content">已显示全部回复</div>
                 </li>
                 </ul>
-            </scroll>
-            </div> 
+            </div>
+            </div>
         </div>
         <div class="user-input">
           <input  type="text" placeholder="赶快评论吧~" class="comment_input" v-model="comments">
@@ -41,7 +41,7 @@
     </div>
 </template>
 <script>
-import scroll from "@/common/base/scroll/scroll";
+//import scroll from "@/common/base/scroll/scroll";
 export default {
   name: "allComments",
   data() {
@@ -139,7 +139,7 @@ export default {
   },
   props: {},
   components: {
-    scroll
+//    scroll
   },
   computed: {
     commentImgUrl() {

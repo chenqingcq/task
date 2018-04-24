@@ -9,6 +9,8 @@ import proccesComputed from './mixis/processComputed'
 import { numberTransformChinese } from '@/utils/transform'
 //vuex
 import { mapGetters } from 'vuex'
+// services
+import { Convent } from '@/services'
 
 export default {
   mixins:[proccesComputed],
@@ -50,6 +52,9 @@ export default {
     })
   },
   methods:{
+    loadMore(){
+      console.log('loadMore');
+    },
     // 周／月
     statusChange(status){
       this.isMonthMode = status

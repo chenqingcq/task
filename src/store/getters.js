@@ -8,4 +8,4 @@ export const getToken = state => state.token
 
 export const getProjectRole = state => state.permission.project.role
 export const getProjectThemeName = state => state.permission.project.projectName
-export const getProjectId = state => state.permission.project.id
+export const getProjectId = state => state.permission.project.projectId

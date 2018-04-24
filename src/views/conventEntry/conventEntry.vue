@@ -22,7 +22,7 @@
         </div>
       </div><!--头部日历导航栏 end-->
       <!--任务列表-->
-      <div class="task-list-wrapper b-LR-10">
+      <div class="task-list-wrapper b-LR-10" >
         <div v-if="taskList.length == 0" class="text-center b_FS-14 c_7 " style="padding-top: 280px">
           暂无任务
         </div>

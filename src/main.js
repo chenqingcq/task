@@ -2,12 +2,15 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import wx from '@/utils/wx'
+
 import router from './router'
+import infiniteScroll from '@/directive'
+import VueLazyLoad from 'vue-lazyload'//图片懒加载
+import wx from '@/utils/wx'
 import '@/filters' // 过滤器
 import 'lib-flexible/flexible.js'
 import store from './store'
-import VueLazyLoad from 'vue-lazyload'//图片懒加载
+
 
 // 通用组件
 import AppCom from '../src/common/index.js'
@@ -22,7 +25,8 @@ Vue.use(VueLazyLoad,{
   // error:'./static/error.png',
   loading:'@/assets/img/icon-nominee.png'
 })
-Vue.use(AppCom);
+Vue.use(AppCom)
+
 
 Vue.config.productionTip = false
 
@@ -34,7 +38,7 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
-
+Vue.use(infiniteScroll)
 
 /**
  * 输入框自动获得焦点事件

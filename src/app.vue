@@ -2,9 +2,9 @@
   <div  :style = '[appContainerCss]'  >
 
       <transition name="fade">
-        <keep-alive>
+
           <router-view class="wrapper Router" />
-        </keep-alive>
+
      </transition>
 
     <!--底部 会展 logo - 会管家-展会应用商店-->
