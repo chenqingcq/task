@@ -313,7 +313,7 @@ input:disabled {
             </div>
             <div :class="[_tasksetting,{active_:isTaskTheme}]">项目主题</div>
           </label>
-          <input class="userInput" ref="taskTheme" type="text" id="taskTheme" v-model.trim="taskTheme" maxlength="20" placeholder="添加项目主题"
+          <input class="userInput" ref="taskTheme" type="text" id="taskTheme" v-model.trim="taskTheme" maxlength="10" placeholder="添加项目主题"
           />
         </li>
         <ul class="editDeadTime">
@@ -332,7 +332,7 @@ input:disabled {
             </div>
             <div :class="[_tasksetting,{active_:isTaskName}]"> 任务名称</div>
           </label>
-          <input class="userInput" type="text" id="item0" v-model.trim="taskName" maxlength="20" placeholder="添加任务名称" />
+          <input class="userInput" type="text" id="item0" v-model.trim="taskName" maxlength="10" placeholder="添加任务名称" />
         </li>
         <li class="task-item">
           <label class="task-desc" for="item1">
@@ -341,7 +341,7 @@ input:disabled {
             </div>
             <div :class="[_tasksetting,{active_:isTaskDesc}]"> 任务描述</div>
           </label>
-          <input class="userInput" type="text" id="item1" v-model.trim="taskDesc" maxlength="20" placeholder="添加任务描述" />
+          <input class="userInput" type="text" id="item1" v-model.trim="taskDesc" maxlength="120" placeholder="添加任务描述" />
         </li>
         <li class="task-item time-logo-container">
           <label class="task-desc" for="item2">
@@ -379,7 +379,7 @@ input:disabled {
             </div>
             <div :class="[_tasksetting,{active_:isTaskStandard}]">验收标准</div>
           </label>
-          <input class="userInput" type="text" id="item4" v-model.trim="standard" maxlength="20" placeholder="添加验收标准" />
+          <input class="userInput" type="text" id="item4" v-model.trim="standard" maxlength="120" placeholder="添加验收标准" />
         </li>
         <li class="task-item">
           <label class="task-desc" for="item5">
@@ -465,7 +465,7 @@ export default {
     ...mapGetters({
       getTaskExecutor: "getTaskExecutor",
       getTaskSetting: "getTaskSetting",
-      getTaskTheme: "getTaskTheme"
+      getTaskTheme: "getTaskTheme",
     }),
     styleStart() {
       if (!!this.startTime && window.sessionStorage.getItem("flag")) {
@@ -611,8 +611,7 @@ export default {
         path: "/section?mode=edit"
       }); //编辑项目节点
     },
-    throttle(delay) {
-      let me = this;
+    getTaskId() {
       return new Promise((resovle, reject) => {
         // console.log(window.location.hash);
         Convent.createTask({
@@ -627,33 +626,28 @@ export default {
           isOpen: this.isPublic ? 1 : 0
         })
           .then(res => {
-            console.log(res,111);
-            if (res.code == 1) {
-              me.taskId = res.data;
-              me.$toast.show("任务创建完成!", 500);
-            }
+            this.taskId = res;
+            this.$toast.show("任务创建完成!", 500);
+            resovle();
           })
           .catch(err => {
-            // console.log(err)
+            console.log(err);
           });
-        setTimeout(() => {
-          resovle("compelete");
-        }, delay);
       });
     },
     confirm() {
       this.validate();
       //防抖和节流
       if (this.check_pass) {
-        this.throttle(500).then(() => {});
-
-        this.$router.push({
-          path: "conventEntry",
-          query: {
-            projectId: window.localStorage.getItem("projectId"),
-            taskId: this.taskId
-          }
-        }); //项目创建完毕
+        this.getTaskId().then(() => {
+          this.$router.push({
+            path: "conventEntry",
+            query: {
+              projectId: window.localStorage.getItem("projectId"),
+              taskId: this.taskId
+            }
+          }); //项目创建完毕
+        });
       }
     },
     validate() {
