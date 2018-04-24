@@ -15,7 +15,7 @@ const axiosInstance = axios.create({
     // baseURL: '//rk4k3z.natappfree.cc/v1/', //微信测试,
     // baseURL: '//192.168.0.126:8087/v1/', //测试服务器
     // baseURL: '//bf4c5e.natappfree.cc/v1/', //测试服务器
-    baseURL: '//192.168.0.113:3010/taskapi/v1/',
+    baseURL: '//192.168.0.114:3010/taskapi/v1/',
     //baseURL: '//share.s1.natapp.cc/v1/', //测试服务器
     timeout: 15000
 })
@@ -46,7 +46,12 @@ axiosInstance.interceptors.response.use((res) => {
     code: res.data.code ,
     msg : res.data.message ,
     status : res.data.status,
-    request : res.data.request
+    request : res.data.request ,
+    page: {
+      pageNum :res.data.pageNum || 0 ,
+      pageSize : res.data.pageSize || 0 ,
+      isLoaded : res.data.isLoaded || true
+    }
   }
     res = { res, ...response }
     return res

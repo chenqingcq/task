@@ -143,14 +143,14 @@
             <div class=" b_d-flex b_flex-center" :class="[ section.isDoing ? 'doing-section' : 'complete-section' ]">
               <div class="timer-shaft">
                 <div class="c_white-bg  b_FS-18 b_font-PFR text-center" :class="[section.isDoing ? 'c_primary' : 'c_7']">
-                  {{ section.date }}
+                  {{ section.pointTime }}
                 </div>
                 <div class="b_FS-10 c_7 b_font-PFR text-center b_lineH-28" v-if="section.isDoing">运行中</div>
                 <div class="light" :class="[section.isDoing? 'doing': 'pass']"></div>
               </div>
               <div class="panel panel-conf">
                 <div class="text c_11">
-                  建筑的修饰布置工作，建筑的修饰布置工作。
+                  {{ section.pointDesc }}
                 </div>
               </div>
             </div>
@@ -210,15 +210,15 @@
             <div class=" b_d-flex b_flex-center" :class="[ section.isDoing ? 'doing-section' : 'complete-section' ]">
               <div class="timer-shaft">
                 <div class="c_white-bg c_7 b_FS-18 b_font-PFR text-center" >
-                  {{ section.date }}
+                  {{ section.pointTime }}
                 </div>
                 <!--<div class="b_FS-10 c_7 b_font-PFR text-center b_lineH-28" v-if="section.isDoing">运行中</div>-->
                 <div v-if="key != (sectionDataLook.length -1)" class="light" :class="[section.isDoing? 'doing': 'pass']"></div>
               </div>
               <div class="panel panel-conf">
-                <img @click="deleteSect( key, section.id )" class = "delete"  src="../../assets/img/icon-close.png" alt="">
+                <img @click="deleteSect( key, section.pointId )" class = "delete"  src="../../assets/img/icon-close.png" alt="">
                 <div class="text c_11">
-                  建筑的修饰布置工作，建筑的修饰布置工作。
+                  {{ section.pointDesc }}
                 </div>
               </div>
             </div>
@@ -236,9 +236,11 @@
     </div>
 
 </template>
-<script>
+<script type="text/babel">
   // ajax
     import { Convent } from '@/services'
+  // vuex
+    import { mapGetters } from 'vuex'
 
     export default{
         data(){
@@ -246,28 +248,29 @@
               mode: 'edit', // look/edit
               newSectionVal : '' ,
               todayDate: '',
-              sectionDataLook :[{
-                date: '03/20',
-                id : 0,
-                isDoing : false ,
-                content: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
-              },
-              {
-                date: '03/20',
-                id : 1,
-                isDoing : false ,
-                content: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
-              },
-              {
-                date: '03/20',
-                id : 3,
-                isDoing : true ,
-                content: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
-              }],
+              sectionDataLook: [],
+//              sectionDataLook :[{
+//                pointTime: '03/20',
+//                id : 0,
+//                isDoing : false ,
+//                pointDesc: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
+//              },
+//              {
+//                pointTime: '03/20',
+//                id : 1,
+//                isDoing : false ,
+//                pointDesc: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
+//              },
+//              {
+//                pointTime: '03/20',
+//                id : 3,
+//                isDoing : true ,
+//                pointDesc: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
+//              }],
               processData:[{
-                date: '03/20',
+                pointTime: '03/20',
                 time: '12:30',
-                content: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
+                pointDesc: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
                 imgs:[
                   'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
                   'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
@@ -276,50 +279,79 @@
               }]
             }
         },
-        components:{
-
-        },
-      created(){
-        this.todayDate = this.initDate()
-      },
-      mounted(){
-        const mode = this.$route.query.mode
-        this.mode = mode == 'edit' ? 'edit' : 'look'
-      },
-      methods: {
-        initDate(){
-          var d = new Date()
-          var m = d.getMonth() + 1
-          var day = d.getDate()
-          console.log(( m < 10 ? ('0' + m ) : m ) + '/' + (day < 10 ? ('0' + day) : day))
-          return ( m < 10 ? ('0' + m ) : m ) + '-' + (day < 10 ? ('0' + day) : day)
-        },
-        deleteSect(key, pointId){
-          Convent.sectionDelete({
-            id:pointId
-          })
-          .then(res=>{
-            this.sectionDataLook.splice(key, 1)
+        computed:{
+          ...mapGetters({
+            projectId : 'getProjectId'
           })
         },
-        // 新建项目节点
-        newSection(){
-          const projectId = this.$route.query.projectId
-          const pointDesc = this.newSectionVal
-          const createTime = todayDate
-          Convent.createSection({
-            projectId,pointDesc
-          })
-          .then(res=>{
-            this.sectionDataLook.unshift({
-              date,
-              content : pointDesc,
-              id : res.data.pointId
+        created(){
+          this.todayDate = this.initDate()
+        },
+        mounted(){
+          const mode = this.$route.query.mode
+          this.mode = mode == 'edit' ? 'edit' : 'look'
+          this.getSectionList()
+        },
+        methods: {
+          getSectionList(){
+            const projectId = this.projectId
+            Convent.sectionList({
+              projectId: projectId
             })
-          })
+            .then(res=>{
+              if( !res.data.length ){
+                this.mode = 'edit'
+                return
+              }
+              this.sectionDataLook = res.data
 
+            })
+            //sectionDataLook
+          },
+          initDate(){
+            var d = new Date()
+            var m = d.getMonth() + 1
+            var day = d.getDate()
+            console.log(( m < 10 ? ('0' + m ) : m ) + '/' + (day < 10 ? ('0' + day) : day))
+            return ( m < 10 ? ('0' + m ) : m ) + '-' + (day < 10 ? ('0' + day) : day)
+          },
+          deleteSect(key, pointId){
+            Convent.sectionDelete({
+              pointId : pointId
+            })
+            .then(res=>{
+              this.sectionDataLook.splice(key, 1)
+            })
+          },
+          // 新建项目节点
+          newSection(){
+            const projectId = this.projectId
+            const pointDesc = this.newSectionVal
+            const pointTime = this.todayDate
+            if( !pointDesc ){
+              this.$dialog.message({
+                message: '请添加文字',
+                icon: "fail"
+              });
+              return
+            }
+            else{
+              this.newSectionVal = ''
+            }
+            Convent.createSection({
+              projectId,pointDesc,pointTime
+            })
+            .then(res=>{
+              this.sectionDataLook.unshift({
+                pointTime,
+                isDoing: false,
+                pointDesc : pointDesc,
+                id : res.data.pointId
+              })
+            })
+
+          }
         }
-      }
 
     }
 </script>

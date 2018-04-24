@@ -22,7 +22,7 @@
         </div>
       </div><!--头部日历导航栏 end-->
       <!--任务列表-->
-      <div class="task-list-wrapper b-LR-10" >
+      <div class="task-list-wrapper b-LR-10" v-infinite-scroll="loadMore" infinite-scroll-disabled="hasMore" infinite-scroll-distance="60">
         <div v-if="taskList.length == 0" class="text-center b_FS-14 c_7 " style="padding-top: 280px">
           暂无任务
         </div>
@@ -79,11 +79,11 @@
                            :class="computedInMonthRangeClass(list, dayItem)"
                         >
                           <template v-if="list.status == 'aheadCompleted' && computedIsSameDay(list.completeDate,dayItem.date)" >
-                            <label class="status-text b_FS-8 text-center c_white">100%</label>
+                            <label class="status-text b_FS-8 text-center c_white">{{ list.progress }}</label>
                             <img class="status-bg" src="../../assets/img/sign-remind03.png" alt="">
                           </template>
                           <template  v-if="list.status == 'pending' && computedIsSameDay(todayTime, dayItem.date)">
-                            <label class="status-text b_FS-8 text-center c_white">60%</label>
+                            <label class="status-text b_FS-8 text-center c_white">{{ list.progress }}</label>
                             <img class="status-bg" src="../../assets/img/sign-remind03.png" alt="">
                           </template>
                           <span class="week-in-chinese b_FS-5 c_7" :class="[dayItem.week == 6 ||dayItem.week == 0  ? 'c_12': 'c_6' ]">
@@ -103,7 +103,7 @@
                             <img class="status-bg" src="../../assets/img/sign-remind04.png" alt="">
                           </template>
                           <template v-if="list.status == 'completed'">
-                            <label class="status-text b_FS-8 text-center c_white">100%</label>
+                            <label class="status-text b_FS-8 text-center c_white">{{ list.progress }}</label>
                             <img class="status-bg" src="../../assets/img/sign-remind03.png" alt="">
                           </template>
                         </p>
@@ -145,7 +145,7 @@
 
                           <!-- 待确定 第一天就提前完成-->
                           <template v-if="list.status == 'aheadCompleted' && computedIsSameDay(list.completeDate,week.date) ">
-                              <label class="status-text b_FS-6 text-center c_white b_font-PFR">60%</label>
+                              <label class="status-text b_FS-6 text-center c_white b_font-PFR">{{ list.progress }}</label>
                             <img class="status-bg" src="../../assets/img/sign-remind01.png" alt="">
                             <img class="end-sign-logo" style='right: -31px' src="../../assets/img/image-car.png"/>
                           </template>
@@ -165,14 +165,14 @@
 
                         <!-- 提前完成-->
                         <template v-if="list.status == 'aheadCompleted' && computedIsSameDay(list.completeDate,week.date) ">
-                          <label class="status-text b_FS-6 text-center c_white b_font-PFR">100%</label>
+                          <label class="status-text b_FS-6 text-center c_white b_font-PFR">{{ list.progress }}</label>
                           <img class="status-bg" src="../../assets/img/sign-remind01.png" alt="">
 
                             <img class="end-sign-logo" src="../../assets/img/image-car.png"/>
 
                         </template>
                         <template v-if="list.status == 'pending' && computedIsSameDay(todayTime, week.date)" >
-                          <label class="status-text b_FS-6 text-center c_white b_font-PFR">{{ list.process + '%' }}</label>
+                          <label class="status-text b_FS-6 text-center c_white b_font-PFR">{{ list.process }}</label>
                           <img class="status-bg" src="../../assets/img/sign-remind01.png" alt="">
                           <img class="end-sign-logo" src="../../assets/img/image-car02.png"/>
                         </template>
@@ -221,7 +221,7 @@
               </v-swipe-btn><v-swipe-btn
                 :width="50"  >
                 置底
-              </v-swipe-btn ><v-swipe-btn  :width="50" type="warn" >
+              </v-swipe-btn ><v-swipe-btn v-if="role== 'creator' " :width="50" type="warn" >
               删除
             </v-swipe-btn>
             </div>

@@ -34,11 +34,16 @@ export default {
       taskList : [] ,
       weekdays: [],
       monthDates : [],
-
+      page: {
+        pageNum : 1 ,
+        pageSize : 10 ,
+        hasMore : true
+      }
     }
   },
   mounted(){
-    this.taskList = this.dealWithTaskList()
+    this.getTasksList()
+    //this.taskList = this.dealWithTaskList()
   },
   components:{
     slideBar
@@ -49,7 +54,10 @@ export default {
       role : 'getProjectRole',
       themeName : 'getProjectThemeName',
       projectId : 'getProjectId'
-    })
+    }),
+    hasMore(){
+      return !this.page.hasMore
+    }
   },
   methods:{
     loadMore(){
@@ -60,17 +68,13 @@ export default {
       this.isMonthMode = status
     },
     addTask(){
-      if( this.taskList.length == 0 ){
+      if( !this.projectId  ){
         this.$dialog.info({
           placeholder : '请填写项目名称',
         })
       }
       else{
-        //this.$loading()
-        //setTimeout(()=>{
-        //  this.$loadingClose()
-        //},1000)
-        if( this.role == 'visitor'){
+        if( this.role != 'creator'){
           this.$refs.slide.newAproject()
         }
         else {
@@ -94,12 +98,39 @@ export default {
     onHideSlideBar(){
       console.log('hello slidebar')
     },
+    getTasksList(){
+      const { pageNum, pageSize } = this.page
+      if( !this.page.hasMore ){
+        return
+      }
+      this.page.hasMore = false
+      Convent.tasksOfProject({
+        projectId : this.projectId ,
+        pageNum ,
+        pageSize
+      }).then(res=>{
+        let oldList = this.taskList , newList = []
+
+        if(res.data.length){
+          newList = oldList.concat( this.dealWithTaskList(res.data) )
+          this.taskList = newList
+          this.todayTime = newList[0].serverTime
+        }
+
+        this.page.hasMore = res.page.isLoaded
+        if( this.page.hasMore ){
+          this.page.pageNum++
+        }
+      })
+    },
     changeProject(){
       console.log('change', this.projectId)
       Convent.tasksOfProject({
-        projectId : this.projectId ,
+        projectId : this.projectId
 
-      }).then()
+      }).then(res=>{
+
+      })
     },
     watchOpenSwipe(index){
       console.log('index' , index)
@@ -216,10 +247,9 @@ export default {
           isBrowse	 : true ,
           isStar : false , // 是否已经关注
         }]
-      //if(taskList.length === 0){
-      //  return []
-      //}
-      return data.map((val,key)=>{
+
+      const target = taskList
+      return target.map((val,key)=>{
         const status = val.taskStatus
         let resStatus = '',
             text = '' ,
@@ -243,6 +273,10 @@ export default {
           dateStr = numberTransformChinese( parseInt(( (+new Date()) - val.startTime )/86400000 ))
           text = `超时${dateStr}天`
         }
+        val.completeDate = val.passTime
+        val.startTime = Number( val.startTime )
+        val.endTime = Number( val.startTime )
+        val.passTime = Number( val.passTime )
         val.text = text
         return val
       })

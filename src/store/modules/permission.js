@@ -10,7 +10,7 @@ export default {
     userInfo : {} ,
     project:{
       role : 'creator' ,// creator 创建者 、operator 执行者 、visitor 访问者
-      id : '0', // 项目id
+      projectId : '', // 项目id
       projectName : '测试项目',
 
     }

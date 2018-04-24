@@ -62,7 +62,7 @@ class Convent {
    * 添加项目节点
    * */
   createSection (opt, isShowFullLoading = true) {
-    const url = '/api/project/point'
+    const url = '/api/project/point/insert'
     const params = opt || {}
     return post(
       url, params, isShowFullLoading
@@ -74,9 +74,9 @@ class Convent {
    * */
   sectionDelete (opt, isShowFullLoading = true) {
     // /api/project/point/:pointId
-    const url = '/api/project/point'
+    const url = '/api/project/point/remove'
     const params = opt || {}
-    return deleter(
+    return get(
       url, params, isShowFullLoading
     )
   }
@@ -85,7 +85,7 @@ class Convent {
    * */
   sectionList (opt, isShowFullLoading = true) {
     // /api/project/point/:pointId
-    const url = '/api/project/points'
+    const url = '/api/project/point/list'
     const params = opt || {}
     return get(
       url, params, isShowFullLoading

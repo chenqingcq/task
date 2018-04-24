@@ -443,7 +443,7 @@ export default {
       toastDom: null,
       showToast: true,
       currentIndex: 0,
-      projectId: "",
+
       taskId: "",
       taskTheme: "",
       taskName: "",
@@ -466,7 +466,7 @@ export default {
       getTaskExecutor: "getTaskExecutor",
       getTaskSetting: "getTaskSetting",
       getTaskTheme: "getTaskTheme",
-      getProjectId: "getProjectId"
+      projectId : 'getProjectId'
     }),
     styleStart() {
       if (!!this.startTime && window.sessionStorage.getItem("flag")) {
@@ -615,7 +615,7 @@ export default {
       return new Promise((resovle, reject) => {
         // console.log(window.location.hash);
         Convent.createTask({
-          projectId: this.getProjectId,
+          projectId: this.projectId,
           projectName: this.taskTheme,
           taskName: this.taskName,
           taskDesc: this.taskDesc,
@@ -656,6 +656,7 @@ export default {
       let k;
       for (k in reflect_to_task) {
         // console.log(this.$data[k]);
+
         if (
           this.$data.hasOwnProperty(k) &&
           this.$data[k] &&
@@ -733,17 +734,18 @@ export default {
     // this.role = 'taskManager'; //邀约他人可见
     //this.role = 'creator' //项目发起人编辑节点
     // console.log(this.taskExecutor);
-    if (this.getProjectId && this.getProjectId.length) {
-      this.init();
-    } else {
-      this.$dialog.message({
-        message: "请创建项目名称",
-        icon: "fail"
-      });
-      this.$router.push("conventEntry");
-    }
+
   },
   mounted() {
+  if (this.projectId && this.getProjectId.length) {
+    this.init();
+  } else {
+    this.$dialog.message({
+      message: "请创建项目名称",
+      icon: "fail"
+    });
+    this.$router.push("conventEntry");
+  }
     window.sessionStorage.setItem("flag", true);
   }
 };

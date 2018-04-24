@@ -189,7 +189,7 @@
                     <i :class="[ isPositive ? 'c_primary' : '']">↓</i><i :class="[ !isPositive ? 'c_primary' : '']">↑</i>
                   </span>
 
-            <div class="panel c_white-bg"  v-infinite-scroll="loadMore" infinite-scroll-disabled="false" infinite-scroll-distance="70"  infinite-scroll-throttle-delay="1000" >
+            <div class="panel c_white-bg"  v-infinite-scroll="getProjectList" infinite-scroll-disabled="hasMore" infinite-scroll-distance="50"   >
 
               <template v-for="(project, key) in projectList">
                 <v-swipeout contentBg="#f4f4f4" >
@@ -263,7 +263,7 @@
                   list: [],
                   page: {
                     pageNum : 1 ,
-                    projectName : 10 ,
+                    pageSize : 10 ,
                     isLoaded : true
                   }
                 },
@@ -271,7 +271,7 @@
                   list: [],
                   page: {
                     pageNum : 1 ,
-                    projectName : 10 ,
+                    pageSize : 10 ,
                     isLoaded : true
                   }
                 },
@@ -279,20 +279,20 @@
                   list: [],
                   page: {
                     pageNum : 1 ,
-                    projectName : 10 ,
+                    pageSize : 10 ,
                     isLoaded : true
                   }
                 },
                 // scroll 分页
-                listenScroll: true ,
+                listenScroll: false ,
 
             }
         },
         computed:{
           hasMore(){
-            if(this.navTab == 0 ) return !this.all.page.isLoaded
-            if(this.navTab == 1 ) return !this.myCreate.page.isLoaded
-            if(this.navTab == 0 ) return !this.myAction.page.isLoaded
+            if(this.navTab == 0 ) return !this.all.page.isLoaded || this.listenScroll
+            if(this.navTab == 1 ) return !this.myCreate.page.isLoaded || this.listenScroll
+            if(this.navTab == 0 ) return !this.myAction.page.isLoaded || this.listenScroll
           },
           projectList(){
             const type = this.navTab
@@ -315,20 +315,37 @@
           },
           getProjectList(){
 
-            if(this.navTab == 0 ) var { pageNum ,projectName } = this.all.page
-            if(this.navTab == 1 ) var { pageNum ,projectName } = this.myCreate.page
-            if(this.navTab == 0 ) var { pageNum ,projectName } = this.myAction.page
-
-            console.log(pageNum, projectName)
+            if(this.navTab == 0 ) var { pageNum ,pageSize } = this.all.page
+            if(this.navTab == 1 ) var { pageNum ,pageSize } = this.myCreate.page
+            if(this.navTab == 0 ) var { pageNum ,pageSize } = this.myAction.page
+            this.listenScroll = true
+            console.log(pageNum ,pageSize)
             Convent.projectList({
               type : this.navTab ,
               pageNum : pageNum ,
-              projectName : projectName
+              pageSize : pageSize
             }).then((res)=>{
+              const oldList = this.projectList
+              console.log(res)
+              const arr = res.data
+              const page = res.page
+              var  newList = []
+              if( page.isLoaded ){
+                // 还有下一页
+                page.pageNum++
+              }
+              if(res.data.length){
+                newList = oldList.concat(arr)
+              }
+              else{
+                newList = oldList
+              }
+              if( this.navTab == 0 ){ this.all.list = newList ;this.all.page = page }
+              if( this.navTab == 1 ){ this.myCreate.list = newList ;this.myCreate.page = page }
+              if( this.navTab == 0 ){ this.myAction.list = newList ;this.myAction.page = page }
 
-              if(this.navTab == 0 ){ this.all.list = res.data ;this.all.page.this.all.page.pageNum++ }
-              if(this.navTab == 1 ){ this.myCreate.list = res.data ;this.myCreate.page.pageNum++ }
-              if(this.navTab == 0 ){ this.myAction.list = res.data ;this.myAction.page.pageNum++ }
+              this.listenScroll = false
+
             })
           },
           open(){
@@ -350,6 +367,7 @@
           // 选择项目
           selectProject(project = {}){
             console.log(project)
+            project.role = project.isCreate ? 'creator': 'visitor'
             this.setCurrentProject( project )
             this.close()
             this.$emit( 'changeProject' )
@@ -381,7 +399,8 @@
                 // string
                 this.setCurrentProject({
                   projectId : res.data , // id
-                  projectName : text
+                  projectName : text ,
+                  role : 'creator'
                 })
                 this.$router.push('/addTaskSetting')
               })

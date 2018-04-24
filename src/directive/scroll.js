@@ -174,8 +174,7 @@ var doCheck = function (force) {
 
     shouldTrigger = viewportBottom + distance >= elementBottom;
   }
-
-  if (shouldTrigger && this.expression) {
+  if (shouldTrigger && this.expression && !this.disabled) {
     this.expression();
   }
 };
