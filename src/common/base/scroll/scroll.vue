@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  //import BScroll from 'better-scroll'
+  import BScroll from 'better-scroll'
 
 
   export default {

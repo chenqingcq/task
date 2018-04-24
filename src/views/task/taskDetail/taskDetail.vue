@@ -1,522 +1,521 @@
 <style lang="less" scoped>
-  @import "../../../assets/css/animate.less";
-  @keyframes scale {
-    0% {
-      transform: scale(1.5, 1.5);
-      opacity: 0.5;
-    }
-    50% {
-      transform: scale(0.8, 0.8);
-      opacity: 0.8;
-    }
-
-    100% {
-      transform: scale(1, 1);
-      opacity: 1;
-    }
+@import "../../../assets/css/animate.less";
+@keyframes scale {
+  0% {
+    transform: scale(1.5, 1.5);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(0.8, 0.8);
+    opacity: 0.8;
   }
 
-  .task-detail-slide {
-    padding: 4*2px 10*2px 0 10*2px;
-    .panel {
-      height: 340*2px;
-      padding: 10*2px;
-      position: relative;
-      .task-slide {
-        margin-top: 17*2px;
-      }
-      .task-slide-top {
-        height: 57*2px;
-        display: flex;
-        .user-icon {
-          width: 57*2px;
-          height: 57*2px;
-          background: gray;
-          border-radius: 50%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border: 2px solid #0093ff;
-          img {
-            display: inline-block;
-            width: 56*2px;
-            height: 56*2px;
-            border-radius: 50%;
-          }
-        }
-        .right {
-          flex: 1;
-          margin-left: 15*2px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          .show-task-detail {
-            flex: 1;
-            height: 100%;
-            text-align: left;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            .task-name {
-              font-size: 14*2px;
-              color: #333;
-              margin-top: 2*2px;
-              overflow: hidden;
-              text-overflow: ellipsis;
-            }
-            .task-detail {
-              margin-top: 2*2px;
-              font-size: 12px*2;
-              text-overflow: ellipsis;
-              position: relative;
-              .task-detail-content {
-                overflow: hidden;
-                width: 109*2px;
-                display: inline-block;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                color: #666666;
-                letter-spacing: 0;
-                overflow: hidden;
-              }
-              img {
-                display: inline-block;
-                height: 12px;
-                position: absolute;
-                bottom: 6px;
-                left: 110*2px;
-              }
-            }
-            .progress {
-              margin-top: 2*2px;
-            }
-          }
-          .task-focus {
-            width: 80*2px;
-            height: 32*2px;
-            position: relative;
-            margin-right: 9*2px;
-            img {
-              display: inline-block;
-              height: 100%;
-            }
-            img:nth-child(1) {
-              height: 100%;
-              position: absolute;
-              top: 0;
-              left: 0
-            }
-            img:nth-child(2) {
-              height: 100%;
-              position: absolute;
-              z-index: 66666666;
-              right: 0;
-              top: 0;
-            }
-          }
-        }
-      }
-      .task-progress {
-        margin-top: 8*2px;
-        position: absolute;
-        bottom: 0;
-        right: 10*2px;
-        height: 50*2px;
-        bottom: 10*2px;
-        left: 10*2px;
-        justify-content: center;
-        .task-desc {
-          display: block;
-          width: 146*2px;
-          margin: 0 auto;
-          text-align: center;
-          font-size: 12px*2;
-          line-height: 18*2px;
-          height: 18*2px;
-          font-family: PingFangSC-Light;
-          color: rgba(102, 102, 102, 1);
-          span {
-            display: inline-block;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            width: 100%;
-          }
-        }
-        .detail-btn {
-          width: 124*2px;
-          height: 28*2px;
-          text-align: center;
-          line-height: 28*2px;
-          background-image: linear-gradient(0deg, #0093ff 0%, #1de0fd 100%);
-          box-shadow: 0 2px 4px 0 rgba(23, 209, 254, 0.46);
-          border-radius: 28*2px;
-          color: #fff;
-          font-family: PingFangSC-Regular;
-          font-size: 14*2px;
-          margin: 0 auto;
-          margin-top: 5*2px;
-        }
-        img {
-          position: absolute;
-          display: block;
-          top: 8*2px;
-          left: 244*2px;
-          height: 10px;
-        }
-      }
-    }
+  100% {
+    transform: scale(1, 1);
+    opacity: 1;
   }
+}
 
-  .task-slide {
+.task-detail-slide {
+  padding: 4*2px 10*2px 0 10*2px;
+  .panel {
+    height: 340*2px;
+    padding: 10*2px;
     position: relative;
-    .arrow {
-      position: absolute;
-      height: 21*2px;
-      top: 50%;
-      z-index: 0;
-      transform: translateY(-50%);
-      width: 100%;
-      /*background: red;*/
-      .left-arrow {
-        float: left;
-        height: 21*2px;
-        width: 21*2px;
+    .task-slide {
+      margin-top: 17*2px;
+    }
+    .task-slide-top {
+      height: 57*2px;
+      display: flex;
+      .user-icon {
+        width: 57*2px;
+        height: 57*2px;
+        background: gray;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid #0093ff;
         img {
           display: inline-block;
-          height: 100%;
-          transform: rotate(-180deg);
+          width: 56*2px;
+          height: 56*2px;
+          border-radius: 50%;
         }
-      }
-      .right-arrow {
-        float: right;
-        height: 21*2px;
-        width: 21*2px;
-        img {
-          display: inline-block;
-          height: 100%;
-          float: right;
-        }
-      }
-    }
-  }
-
-  .more {
-    height: 12*2px;
-    min-width:140px;
-    display: flex;
-    align-items: center;
-    font-family: PingFangSC-Medium;
-    color: #999;
-    font-size: 10*2px;
-    img {
-      display: inline-block;
-      height: 8px*2;
-      margin-left: 4*2px;
-    }
-  }
-
-  .slider-item {
-    width: 608px;
-    height: 382px;
-    float: left;
-    img {
-      display: block;
-      height: 100%;
-      width: 100%;
-      padding: 2px;
-    }
-  }
-
-  .judge-btn {
-    height: 34*2px;
-    width: 100%;
-    /*background: red;*/
-    padding: 0 10*2px;
-    margin-top: 8*2px;
-    display: flex;
-    .pass {
-      font-family: PingFangSC-Regular;
-      font-size: 16px*2;
-      color: #ffffff;
-      height: 100%;
-      background-image: linear-gradient(-180deg, #f1baaf 0%, #ea6e5d 100%);
-      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.38);
-      border-radius: 2px;
-      width: 172*2px;
-      /*line-height:172*2px;*/
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 11*2px;
-    }
-    .failed {
-      font-family: PingFangSC-Regular;
-      font-size: 16px*2;
-      color: #ffffff;
-      height: 100%;
-      width: 172*2px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-image: linear-gradient(-180deg, #86c0f8 0%, #4e8cee 100%);
-      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.38);
-      border-radius: 2px;
-    }
-  }
-
-  .progress-container {
-    height: auto;
-    .current-no-progress{
-      text-align: center;
-      height:40px*2;
-      line-height:80px;
-      color:rgba(51,51,51,1);
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      font-size:24px;
-      img{
-        display: inline-block;
-        height: 60px;
-        line-height: 80px;
-      }
-    };
-    .current-progress {
-      padding: 4*2px 10*2px 8*2px 10*2px;
-      font-family: PingFangSC-Medium;
-      height: auto;
-      display: flex;
-      font-weight: 100;
-      color: #525252;
-      justify-content: space-between;
-      .left {
-        font-size: 22*2px;
-        color: #333;
-        height: 34*2px;
-        margin-left: 12*2px;
-        margin-right: 30*2px;
       }
       .right {
+        flex: 1;
+        margin-left: 15*2px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .show-task-detail {
+          flex: 1;
+          height: 100%;
+          text-align: left;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          .task-name {
+            font-size: 14*2px;
+            color: #333;
+            margin-top: 2*2px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          .task-detail {
+            margin-top: 2*2px;
+            font-size: 12px*2;
+            text-overflow: ellipsis;
+            position: relative;
+            .task-detail-content {
+              overflow: hidden;
+              width: 109*2px;
+              display: inline-block;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              color: #666666;
+              letter-spacing: 0;
+              overflow: hidden;
+            }
+            img {
+              display: inline-block;
+              height: 12px;
+              position: absolute;
+              bottom: 6px;
+              left: 110*2px;
+            }
+          }
+          .progress {
+            margin-top: 2*2px;
+          }
+        }
+        .task-focus {
+          width: 80*2px;
+          height: 32*2px;
+          position: relative;
+          margin-right: 9*2px;
+          img {
+            display: inline-block;
+            height: 100%;
+          }
+          img:nth-child(1) {
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+          }
+          img:nth-child(2) {
+            height: 100%;
+            position: absolute;
+            z-index: 66666666;
+            right: 0;
+            top: 0;
+          }
+        }
+      }
+    }
+    .task-progress {
+      margin-top: 8*2px;
+      position: absolute;
+      bottom: 0;
+      right: 10*2px;
+      height: 50*2px;
+      bottom: 10*2px;
+      left: 10*2px;
+      justify-content: center;
+      .task-desc {
+        display: block;
+        width: 146*2px;
+        margin: 0 auto;
+        text-align: center;
         font-size: 12px*2;
-        width: 233*2px;
-        height: auto;
-        color: rgba(51, 51, 51, 1);
-        line-height: 34px;
-        font-family: PingFangSC-Medium;
-        font-size: 12*2px;
-        /*text-overflow: -o-ellipsis-lastline;*/
-        /*overflow: hidden;
+        line-height: 18*2px;
+        height: 18*2px;
+        font-family: PingFangSC-Light;
+        color: rgba(102, 102, 102, 1);
+        span {
+          display: inline-block;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          width: 100%;
+        }
+      }
+      .detail-btn {
+        width: 124*2px;
+        height: 28*2px;
+        text-align: center;
+        line-height: 28*2px;
+        background-image: linear-gradient(0deg, #0093ff 0%, #1de0fd 100%);
+        box-shadow: 0 2px 4px 0 rgba(23, 209, 254, 0.46);
+        border-radius: 28*2px;
+        color: #fff;
+        font-family: PingFangSC-Regular;
+        font-size: 14*2px;
+        margin: 0 auto;
+        margin-top: 5*2px;
+      }
+      img {
+        position: absolute;
+        display: block;
+        top: 8*2px;
+        left: 244*2px;
+        height: 10px;
+      }
+    }
+  }
+}
+
+.task-slide {
+  position: relative;
+  .arrow {
+    position: absolute;
+    height: 21*2px;
+    top: 50%;
+    z-index: 0;
+    transform: translateY(-50%);
+    width: 100%;
+    /*background: red;*/
+    .left-arrow {
+      float: left;
+      height: 21*2px;
+      width: 21*2px;
+      img {
+        display: inline-block;
+        height: 100%;
+        transform: rotate(-180deg);
+      }
+    }
+    .right-arrow {
+      float: right;
+      height: 21*2px;
+      width: 21*2px;
+      img {
+        display: inline-block;
+        height: 100%;
+        float: right;
+      }
+    }
+  }
+}
+
+.more {
+  height: 12*2px;
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  font-family: PingFangSC-Medium;
+  color: #999;
+  font-size: 10*2px;
+  img {
+    display: inline-block;
+    height: 8px*2;
+    margin-left: 4*2px;
+  }
+}
+
+.slider-item {
+  width: 608px;
+  height: 382px;
+  float: left;
+  img {
+    display: block;
+    height: 100%;
+    width: 100%;
+    padding: 2px;
+  }
+}
+
+.judge-btn {
+  height: 34*2px;
+  width: 100%;
+  /*background: red;*/
+  padding: 0 10*2px;
+  margin-top: 8*2px;
+  display: flex;
+  .pass {
+    font-family: PingFangSC-Regular;
+    font-size: 16px*2;
+    color: #ffffff;
+    height: 100%;
+    background-image: linear-gradient(-180deg, #f1baaf 0%, #ea6e5d 100%);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.38);
+    border-radius: 2px;
+    width: 172*2px;
+    /*line-height:172*2px;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 11*2px;
+  }
+  .failed {
+    font-family: PingFangSC-Regular;
+    font-size: 16px*2;
+    color: #ffffff;
+    height: 100%;
+    width: 172*2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: linear-gradient(-180deg, #86c0f8 0%, #4e8cee 100%);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.38);
+    border-radius: 2px;
+  }
+}
+
+.progress-container {
+  height: auto;
+  .current-no-progress {
+    text-align: center;
+    height: 40px*2;
+    line-height: 80px;
+    color: rgba(51, 51, 51, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    img {
+      display: inline-block;
+      height: 60px;
+      line-height: 80px;
+    }
+  }
+  .current-progress {
+    padding: 4*2px 10*2px 8*2px 10*2px;
+    font-family: PingFangSC-Medium;
+    height: auto;
+    display: flex;
+    font-weight: 100;
+    color: #525252;
+    justify-content: space-between;
+    .left {
+      font-size: 22*2px;
+      color: #333;
+      height: 34*2px;
+      margin-left: 12*2px;
+      margin-right: 30*2px;
+    }
+    .right {
+      font-size: 12px*2;
+      width: 233*2px;
+      height: auto;
+      color: rgba(51, 51, 51, 1);
+      line-height: 34px;
+      font-family: PingFangSC-Medium;
+      font-size: 12*2px;
+      /*text-overflow: -o-ellipsis-lastline;*/
+      /*overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;*/
-      }
     }
   }
+}
 
-  .between {
-    padding-top: 16px !important;
-  }
+.between {
+  padding-top: 16px !important;
+}
 
-  img.partyLogo {
-    display: inline-block;
-    width: 16*2px;
-    height: 16*2px;
-    border-radius: 50%;
-    background: #999;
-    margin-left: 5*2px;
-    border: 2px solid #0093ff;
-  }
+img.partyLogo {
+  display: inline-block;
+  width: 16*2px;
+  height: 16*2px;
+  border-radius: 50%;
+  background: #999;
+  margin-left: 5*2px;
+  border: 2px solid #0093ff;
+}
 
-  .common {
-    display: inline-block;
-    font-size: 10px*2;
-    font-family: PingFangSC-Regular;
-    color: rgba(255, 255, 255, 1);
-    border-radius: 9*2px;
-    width: 55*2px;
-    height: 16*2px;
-    text-align: center;
-    line-height: 16*2px;
-  }
+.common {
+  display: inline-block;
+  font-size: 10px*2;
+  font-family: PingFangSC-Regular;
+  color: rgba(255, 255, 255, 1);
+  border-radius: 9*2px;
+  width: 55*2px;
+  height: 16*2px;
+  text-align: center;
+  line-height: 16*2px;
+}
 
-  .isCompleted {
-    background-image: linear-gradient(-180deg, #c1fe7f 0%, #74c126 100%);
-  }
+.isCompleted {
+  background-image: linear-gradient(-180deg, #c1fe7f 0%, #74c126 100%);
+}
 
-  .isInProgress {
-    background-image: linear-gradient(-180deg, #feea7f 0%, #fbcc52 100%);
-  }
+.isInProgress {
+  background-image: linear-gradient(-180deg, #feea7f 0%, #fbcc52 100%);
+}
 
-  .overDeadLined {
-    background-image: linear-gradient(-180deg, #fec37f 0%, #ec584b 100%);
-  }
+.overDeadLined {
+  background-image: linear-gradient(-180deg, #fec37f 0%, #ec584b 100%);
+}
 
-  .deadline {
-    font-size: 10*2px;
-    font-family: PingFangSC-Regular;
-    color: rgba(102, 102, 102, 1);
-    margin-left: 4*2px;
-  }
+.deadline {
+  font-size: 10*2px;
+  font-family: PingFangSC-Regular;
+  color: rgba(102, 102, 102, 1);
+  margin-left: 4*2px;
+}
 
-  .no-historyUpdate {
-    overflow: hidden;
-    margin: 0 auto;
-    width: 608px;
-    height: 382px;
-    margin-top: 17*2px;
-    .logo {
-      width: auto;
-      height: 100%;
-      margin-top: 40*2px;
-      img {
-        margin: 0 auto;
-        display: block;
-        width: 145*2px;
-        animation: scale 0.5s ease;
-      }
-      span {
-        display: block;
-        margin: 0 auto;
-        margin-top: 4*2px;
-        font-size: 18*2px;
-        font-family: PingFangSC-Regular;
-        color: rgba(255, 115, 100, 1);
-        text-align: center;
-      }
+.no-historyUpdate {
+  overflow: hidden;
+  margin: 0 auto;
+  width: 608px;
+  height: 382px;
+  margin-top: 17*2px;
+  .logo {
+    width: auto;
+    height: 100%;
+    margin-top: 40*2px;
+    img {
+      margin: 0 auto;
+      display: block;
+      width: 145*2px;
+      animation: scale 0.5s ease;
+    }
+    span {
+      display: block;
+      margin: 0 auto;
+      margin-top: 4*2px;
+      font-size: 18*2px;
+      font-family: PingFangSC-Regular;
+      color: rgba(255, 115, 100, 1);
+      text-align: center;
     }
   }
+}
 
-  @-webkit-keyframes zoomInDown {
-    from {
-      opacity: 0;
-      -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
-      transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
-      -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
-      animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
-    }
-
-    60% {
-      opacity: 1;
-      -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
-      transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
-      -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
-      animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
-    }
+@-webkit-keyframes zoomInDown {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
   }
 
-  @keyframes zoomInDown {
-    from {
-      opacity: 0;
-      -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
-      transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
-      -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
-      animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
-    }
+  60% {
+    opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+  }
+}
 
-    60% {
-      opacity: 1;
-      -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
-      transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
-      -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
-      animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
-    }
+@keyframes zoomInDown {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
   }
 
-  .zoomInDown {
-    -webkit-animation-name: zoomInDown;
-    animation-name: zoomInDown;
+  60% {
+    opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+  }
+}
+
+.zoomInDown {
+  -webkit-animation-name: zoomInDown;
+  animation-name: zoomInDown;
+}
+
+@-webkit-keyframes zoomOut {
+  from {
+    opacity: 1;
   }
 
-  @-webkit-keyframes zoomOut {
-    from {
-      opacity: 1;
-    }
-
-    50% {
-      opacity: 0;
-      -webkit-transform: scale3d(0.3, 0.3, 0.3);
-      transform: scale3d(0.3, 0.3, 0.3);
-    }
-
-    to {
-      opacity: 0;
-    }
+  50% {
+    opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
   }
 
-  @keyframes zoomOut {
-    from {
-      opacity: 1;
-    }
+  to {
+    opacity: 0;
+  }
+}
 
-    50% {
-      opacity: 0;
-      -webkit-transform: scale3d(0.3, 0.3, 0.3);
-      transform: scale3d(0.3, 0.3, 0.3);
-    }
-
-    to {
-      opacity: 0;
-    }
+@keyframes zoomOut {
+  from {
+    opacity: 1;
   }
 
-  .zoomOut {
-    -webkit-animation-name: zoomOut;
-    animation-name: zoomOut;
+  50% {
+    opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
   }
 
-  .zoomInDown-enter-active {
-    .fadeIn;
-    .animated;
+  to {
+    opacity: 0;
   }
+}
 
-  .zoomInDown-leave-active {
-    .fadeOut;
-    .animated(0.1s);
-  }
+.zoomOut {
+  -webkit-animation-name: zoomOut;
+  animation-name: zoomOut;
+}
 
-  .canelLike-leave-active {
-    .fadeOut;
-    .animated(0.1s);
-  }
+.zoomInDown-enter-active {
+  .fadeIn;
+  .animated;
+}
 
-  .canelLike-enter-active {
-    .fadeIn;
-    .animated;
-  }
+.zoomInDown-leave-active {
+  .fadeOut;
+  .animated(0.1s);
+}
 
-  .taskDesc-container {
-    position: absolute;
-    top: 32*2px;
-    width: 194*2px;
-    background: rgb(255, 255, 255);
-    /*min-height: 64*2px;*/
-    z-index: 111111;
-    height: auto;
-    border-radius: 5px;
-  }
+.canelLike-leave-active {
+  .fadeOut;
+  .animated(0.1s);
+}
 
-  .taskProgress {
-    position: absolute;
-    overflow: hidden;
-    bottom: -6*2px;
-    left: 81*2px;
-    width: 194*2px;
-    min-height: 64*2px;
-    z-index: 111111;
-    border-radius: 5px;
-    box-shadow: 0px 0px 20*2px rgba(177, 177, 177, 0.6);
-  }
+.canelLike-enter-active {
+  .fadeIn;
+  .animated;
+}
 
-  .bounceIn-enter-active {
-    animation: bounceIn .5s ease;
-  }
+.taskDesc-container {
+  position: absolute;
+  top: 32*2px;
+  width: 194*2px;
+  background: rgb(255, 255, 255);
+  /*min-height: 64*2px;*/
+  z-index: 111111;
+  height: auto;
+  border-radius: 5px;
+}
 
-  .bounceIn-leave-active {
-    animation: bounceOut .5s ease;
-  }
+.taskProgress {
+  position: absolute;
+  overflow: hidden;
+  bottom: -6*2px;
+  left: 81*2px;
+  width: 194*2px;
+  min-height: 64*2px;
+  z-index: 111111;
+  border-radius: 5px;
+  box-shadow: 0px 0px 20*2px rgba(177, 177, 177, 0.6);
+}
 
+.bounceIn-enter-active {
+  animation: bounceIn 0.5s ease;
+}
+
+.bounceIn-leave-active {
+  animation: bounceOut 0.5s ease;
+}
 </style>
 <template>
   <div class="task-detail-container">
@@ -528,7 +527,7 @@
           </div>
           <div class="right">
             <div class="show-task-detail">
-              <div class="task-name">任务名名称</div>
+              <div class="task-name">{{taskName}}</div>
               <div class="task-detail" @touchstart='showMoreTaskDesc'>
                 <span class="task-detail-content">
                   {{taskDesc}}
@@ -542,7 +541,7 @@
               </transition>
               <div class="progress">
                 <span :class="[common,active]">{{activeFont}}</span>
-                <span class="deadline">01/20-02/21</span>
+                <span class="deadline">{{deadLine}}</span>
               </div>
             </div>
             <div class="task-focus">
@@ -641,268 +640,354 @@
   </div>
 </template>
 <script>
-  import comments from "@/views/comments/comments";
-  import Slide from "@/common/base/slide/slide.vue";
-  import Detail from "./detail";
-  import {Convent} from '@/services'
-  import {
-    mapGetters,
-    mapMutations
-  } from "vuex";
-  export default {
-    data() {
+import comments from "@/views/comments/comments";
+import Slide from "@/common/base/slide/slide.vue";
+import Detail from "./detail";
+import { Convent } from "@/services";
+import { mapGetters, mapMutations } from "vuex";
+export default {
+  data() {
+    return {
+      taskDesc: "",
+      endTime: "",
+      startTime: "",
+      checkStandard: "",
+      isBrowse: "",
+      isOpen: "",
+      isPass: "",
+      position: "",
+      role: 0,
+      taskStatus: "",
+      loop: true,
+      showSlide: true,
+      currentIndex: 0,
+      autoPlay: false,
+      height: 382,
+      width: 608,
+      isLike: false,
+      showDetail: false,
+      showTaskProgress: false,
+      taskName: "",
+      taskDesc: "",
+      deadLine :'暂未设置起止时间',
+      taskProgressContent: `任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情`,
+      //项目群
+      parties: [
+        {
+          partyImg:
+            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
+          id: 0
+        },
+        {
+          partyImg:
+            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
+          id: 1
+        },
+        {
+          partyImg:
+            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
+          id: 2
+        }
+      ],
+      members: [
+        {
+          //审批留言
+          name: "张三",
+          role: "发布者",
+          date: "x年x月x日",
+          time: "2018.10.25",
+          comments: `关注“失控奔驰车”事件的最新进展。上周，央视新闻频道《法治在线》栏目连续两天播出了针对这一事件调查。`,
+          imgUrl:
+            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+        },
+        {
+          name: "李四",
+          role: "执行者",
+          date: "x年x月x日",
+          time: "2018.10.25",
+          comments: "会管家",
+          imgUrl:
+            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+        },
+        {
+          name: "王五",
+          role: "观察者",
+          date: "x年x月x日",
+          time: "2018.10.25",
+          comments: "会管家",
+          imgUrl:
+            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+        },
+        {
+          name: "小六",
+          role: "观察者",
+          date: "x年x月x日",
+          time: "2018.10.25",
+          comments: "会管家",
+          imgUrl:
+            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+        }
+      ],
+      items: [
+        {
+          //轮播图处理时   51 234 51遵守这个有原则
+          imgUrl:
+            "http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650"
+        },
+        {
+          imgUrl:
+            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg"
+        },
+        {
+          imgUrl:
+            "http://bpic.588ku.com/element_origin_min_pic/16/06/20/165767ab7a315bd.jpg"
+        },
+        {
+          imgUrl:
+            "http://bpic.588ku.com/element_origin_min_pic/18/03/24/494a50847f3dbef27c31355f35d0393d.jpg"
+        },
+        {
+          imgUrl:
+            "http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650"
+        },
+        {
+          imgUrl:
+            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg"
+        }
+      ]
+    };
+  },
+  computed: {
+    // ...mapGetters(['getTaskHistoryOrUpdate']),//获取上传的轮播图图片
+    ...mapGetters({
+      
+    }),
+    styleTaskFocus() {
       return {
-        loop: true,
-        showSlide: true,
-        currentIndex: 0,
-        autoPlay: false,
-        height: 382,
-        width: 608,
-        // 是否关注
-        isLike: false,
-        showDetail: false,
-        showTaskProgress: false,
-        taskDesc: `关注“失控奔驰车”事件的最新进展。上周，央视新闻频道《法治在线》栏目连续两天播出了针对这一事件调查`,
-        taskProgressContent: `任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情`,
-        //项目群
-        parties: [{
-            partyImg: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
-            id: 0
-          },
-          {
-            partyImg: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
-            id: 1
-          },
-          {
-            partyImg: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
-            id: 2
-          }
-        ],
-        members: [{
-            //审批留言
-            name: "张三",
-            role: "发布者",
-            date: "x年x月x日",
-            time: "2018.10.25",
-            comments: `关注“失控奔驰车”事件的最新进展。上周，央视新闻频道《法治在线》栏目连续两天播出了针对这一事件调查。`,
-            imgUrl: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-          },
-          {
-            name: "李四",
-            role: "执行者",
-            date: "x年x月x日",
-            time: "2018.10.25",
-            comments: "会管家",
-            imgUrl: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-          },
-          {
-            name: "王五",
-            role: "观察者",
-            date: "x年x月x日",
-            time: "2018.10.25",
-            comments: "会管家",
-            imgUrl: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-          },
-          {
-            name: "小六",
-            role: "观察者",
-            date: "x年x月x日",
-            time: "2018.10.25",
-            comments: "会管家",
-            imgUrl: "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-          }
-        ],
-        items: [{
-            //轮播图处理时   51 234 51遵守这个有原则
-            imgUrl: "http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650"
-          },
-          {
-            imgUrl: "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg"
-          },
-          {
-            imgUrl: "http://bpic.588ku.com/element_origin_min_pic/16/06/20/165767ab7a315bd.jpg"
-          },
-          {
-            imgUrl: "http://bpic.588ku.com/element_origin_min_pic/18/03/24/494a50847f3dbef27c31355f35d0393d.jpg"
-          },
-          {
-            imgUrl: "http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650"
-          },
-          {
-            imgUrl: "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg"
-          }
-        ]
+        float: "right"
       };
     },
-    computed: {
-      // ...mapGetters(['getTaskHistoryOrUpdate']),//获取上传的轮播图图片
-      ...mapGetters({
-        role: "getProjectRole"
-      }),
-      styleTaskFocus() {
-        return {
-          float: 'right'
-        }
-      },
-      common() {
-        return "common";
-      },
-      active() {
-        return "isInProgress"; //确定任务完成状态
-      },
-      activeFont() {
-        return this.active === "isCompleted" ?
-          "已完成" :
-          this.active == "isInProgress" ?
-          "进行中" :
-          this.active == "overDeadLined" ? "已超时" : "";
-      }
+    common() {
+      return "common";
     },
-    components: {
-      comments,
-      Slide,
-      Detail
+    active() {
+      return "isInProgress"; //确定任务完成状态
     },
-    methods: {
-      recieveTask() {
-        let self = this;
-        this.$dialog.confirm({
-          message: "确定接受该任务?",
-          confirm() {
-            self.passer = setTimeout(() => {
-              self.$dialog.notice({
-                state: "pass",
-                title: "该任务已接受",
-                task: "展台基础工作"
-              });
-            }, 200);
-            self.timer = setTimeout(() => {
-              self.$router.push("conventEntry");
-            }, 1500);
-          }
-        });
-      },
-      taskDescActive() {
-        console.log(11111);
-        animati
-      },
-      closeTaskProgress() {
-        this.showTaskProgress = false;
-      },
-      toggleTaskProgress() {
-        this.showTaskProgress = !this.showTaskProgress;
-      },
-      closeDesc() {
-        this.showDetail = false;
-      },
-      showMoreTaskDesc() {
-        this.showDetail = !this.showDetail;
-      },
-      toggleLike() {
-        this.isLike = !this.isLike;
-      },
-      link_to_taskSetting() {
-        this.$router.push("addTaskSetting");
-      },
-      closeTask() {
-        let self = this;
-        this.$dialog.confirm({
-          message: "确定关闭该任务?",
-          confirm() {
-            //确定关闭任务逻辑
-            self.passer = setTimeout(() => {
-              self.$dialog.notice({
-                state: "pass",
-                title: "该任务已关闭",
-                task: "展台基础工作"
-              });
-            }, 200);
-            self.timer = setTimeout(() => {
-              self.$router.push("conventEntry");
-            }, 1500);
-          }
-        });
-      },
-      passTask() {
-        let self = this;
-        this.$dialog.confirm({
-          message: "确定通过该任务?",
-          showBottom: false,
-          confirm() {
-            self.passer = setTimeout(() => {
-              self.$dialog.notice({
-                state: "pass",
-                title: "该任务已通过",
-                task: "展台基础工作"
-              });
-            }, 200);
-            self.timer = setTimeout(() => {
-              self.$router.push("conventEntry");
-            }, 1500);
-          }
-        });
-      },
-      rejectTask() {
-        let self = this;
-        this.$dialog.confirm({
-          message: "确定拒绝该任务?",
-          showBottom: false,
-          confirm() {
-            self.passer = setTimeout(() => {
-              self.$dialog.notice({
-                state: "fail",
-                title: "该任务已拒绝",
-                task: "展台基础工作"
-              });
-            }, 200);
-            self.timer = setTimeout(() => {
-              self.$router.push("conventEntry");
-            }, 1500);
-          }
-        });
-      },
-      towardsUpdateHistory() {
-        //查看历史上传
-        this.$router.push({
-          path: "taskHistoryOrUpdate"
-        });
-      },
-      linkToSection() {
-        this.$router.push({
-          path: "/section"
-        });
-      },
-      loadImage() {
-        //轮播加载
-        if (!this.checkloaded) {
-          this.checkloaded = true;
-          this.$refs.scroll.refresh();
-        }
-      },
-      taskHistoryOrUpdate() {
-        this.$router.push("taskHistoryOrUpdate");
-      },
-      init() {
-        Convent.taskDetail({
-          id:'988354927714025474'
-        }).then((res)=>{
-          console.log(res)
-        }).catch((err)=>{
-
-        })
-        console.log(this.getTaskHistoryOrUpdate); //获取历史上传图片
-        if (!this.getTaskHistoryOrUpdate) {
-          // this.showSlide = false;
-        }
-      }
-    },
-    created() {
-      this.init();
-    },
-    mounted() {},
-    beforeDestroy() {
-      this.timer = null;
+    activeFont() {
+      return this.active === "isCompleted"
+        ? "已完成"
+        : this.active == "isInProgress"
+          ? "进行中"
+          : this.active == "overDeadLined" ? "已超时" : "";
     }
-  };
-
+  },
+  components: {
+    comments,
+    Slide,
+    Detail
+  },
+  watch: {
+    $route(to, from) {
+      if (to.path == "/taskDetail" && from.path == "/conventEntry") {
+        this.getData()
+          .then(res => {
+            console.log(res);
+            this.taskName = res.taskName;
+            this.taskDesc = res.taskDesc;
+            this.endTime = res.endTime;
+            this.startTime = res.startTime;
+            this.checkStandard = res.checkStandard;
+            this.isBrowse = res.isBrowse;
+            this.isOpen = res.isOpen;
+            this.isPass = res.isPass;
+            this.isLike = res.isStar;
+            this.position = res.position;
+            this.taskStatus = res.taskStatus;
+            this.defineRole(res.role);
+            this.fomatTime();
+          })
+          .catch(() => {});
+      }
+    }
+  },
+  methods: {
+    fomatTime() {
+      console.log(new Date().getMonth())
+      let startTime_m = new Date(parseInt(this.startTime)).getMonth() + 1;
+      let startTime_d = new Date(parseInt(this.startTime)).getDay();
+      let endTime_m = new Date(parseInt(this.endTime)).getMonth() + 1;
+      let endTime_d = new Date(parseInt(this.endTime)).getDay();
+      startTime_m = startTime_m < 10 ? `0${startTime_m}` : startTime_m;
+      startTime_d = startTime_d < 10 ? `0${startTime_d}` : startTime_d;
+      endTime_m = endTime_m < 10 ? `0${endTime_m}` : endTime_m;
+      endTime_d = endTime_d < 10 ? `0${endTime_d}` : endTime_d;
+      this.deadLine = `${startTime_m}/${startTime_d}-${endTime_m}/${endTime_d}`;
+      console.log(this.deadLine);
+    },
+    defineRole(role) {
+      switch (role) {
+        case 3: {
+          this.role = "creator";
+          break;
+        }
+        case 2: {
+          this.role = "operator";
+          break;
+        }
+        case 1: {
+          this.role = "visitor";
+          break;
+        }
+        default: {
+          this.role = "noTaskor";
+        }
+      }
+    },
+    getData() {
+      return new Promise((resolve, reject) => {
+        let taskId = "988624154215747586";
+        Convent.taskDetail(taskId)
+          .then(res => {
+            resolve(res);
+          })
+          .catch(err => {
+            if (err) {
+              this.$toast.show("网络错误"), 500;
+            }
+          });
+      });
+    },
+    recieveTask() {
+      let self = this;
+      this.$dialog.confirm({
+        message: "确定接受该任务?",
+        confirm() {
+          self.passer = setTimeout(() => {
+            self.$dialog.notice({
+              state: "pass",
+              title: "该任务已接受",
+              task: "展台基础工作"
+            });
+          }, 200);
+          self.timer = setTimeout(() => {
+            self.$router.push("conventEntry");
+          }, 1500);
+        }
+      });
+    },
+    taskDescActive() {
+      console.log(11111);
+      animati;
+    },
+    closeTaskProgress() {
+      this.showTaskProgress = false;
+    },
+    toggleTaskProgress() {
+      this.showTaskProgress = !this.showTaskProgress;
+    },
+    closeDesc() {
+      this.showDetail = false;
+    },
+    showMoreTaskDesc() {
+      this.showDetail = !this.showDetail;
+    },
+    toggleLike() {
+      this.isLike = !this.isLike;
+    },
+    link_to_taskSetting() {
+      this.$router.push("addTaskSetting");
+    },
+    closeTask() {
+      let self = this;
+      this.$dialog.confirm({
+        message: "确定关闭该任务?",
+        confirm() {
+          //确定关闭任务逻辑
+          self.passer = setTimeout(() => {
+            self.$dialog.notice({
+              state: "pass",
+              title: "该任务已关闭",
+              task: "展台基础工作"
+            });
+          }, 200);
+          self.timer = setTimeout(() => {
+            self.$router.push("conventEntry");
+          }, 1500);
+        }
+      });
+    },
+    passTask() {
+      let self = this;
+      this.$dialog.confirm({
+        message: "确定通过该任务?",
+        showBottom: false,
+        confirm() {
+          self.passer = setTimeout(() => {
+            self.$dialog.notice({
+              state: "pass",
+              title: "该任务已通过",
+              task: "展台基础工作"
+            });
+          }, 200);
+          self.timer = setTimeout(() => {
+            self.$router.push("conventEntry");
+          }, 1500);
+        }
+      });
+    },
+    rejectTask() {
+      let self = this;
+      this.$dialog.confirm({
+        message: "确定拒绝该任务?",
+        showBottom: false,
+        confirm() {
+          self.passer = setTimeout(() => {
+            self.$dialog.notice({
+              state: "fail",
+              title: "该任务已拒绝",
+              task: "展台基础工作"
+            });
+          }, 200);
+          self.timer = setTimeout(() => {
+            self.$router.push("conventEntry");
+          }, 1500);
+        }
+      });
+    },
+    towardsUpdateHistory() {
+      //查看历史上传
+      this.$router.push({
+        path: "taskHistoryOrUpdate"
+      });
+    },
+    linkToSection() {
+      this.$router.push({
+        path: "/section"
+      });
+    },
+    loadImage() {
+      //轮播加载
+      if (!this.checkloaded) {
+        this.checkloaded = true;
+        this.$refs.scroll.refresh();
+      }
+    },
+    taskHistoryOrUpdate() {
+      this.$router.push("taskHistoryOrUpdate");
+    },
+    init() {
+      console.log(this.getTaskHistoryOrUpdate); //获取历史上传图片
+      if (!this.getTaskHistoryOrUpdate) {
+        // this.showSlide = false;
+      }
+    }
+  },
+  created() {
+    this.init();
+  },
+  mounted() {},
+  beforeDestroy() {
+    this.timer = null;
+  }
+};
 </script>

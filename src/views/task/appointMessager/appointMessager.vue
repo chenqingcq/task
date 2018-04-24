@@ -445,7 +445,7 @@
         console.log(selfIndex, item);
         this.showBtntype = !this.showBtntype;
         if (this.showBtntype) {
-          this.SET_TASK_EXECUTOR(item);
+          this.taskExecutor = item;
         }
         this.isSelectedShow[selfIndex][0] = !this.isSelectedShow[selfIndex][0];
         console.log(
@@ -475,6 +475,10 @@
         this.showShare = !this.showShare;
       },
       commandExcutor() {
+        console.log(this.taskExecutor)
+        // debugger;
+        this.SET_TASK_EXECUTOR(this.taskExecutor[0])
+        // debugger;
         this.$router.push("addTaskSetting");
       },
       addExcutor() {

@@ -107,8 +107,8 @@ class Convent {
   /*
    * 获取任务详情 用于 任务详情页
    * */
-  taskDetail (opt, isShowFullLoading = true) {
-    const url = '/api/task/detail'
+  taskDetail(taskId, opt, isShowFullLoading = true, ) {
+    const url = `/api/task/detail/${taskId}`
     const params = opt || {}
     return get(
       url, params, isShowFullLoading

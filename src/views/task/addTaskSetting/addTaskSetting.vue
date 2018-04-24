@@ -422,8 +422,7 @@ let reflect_to_task = {
   taskDesc: "任务描述",
   startTime: "开始时间",
   endTime: "结束时间",
-  standard: " 验收标准",
-  executor: "执行人"
+  standard: " 验收标准"
 };
 export default {
   data() {
@@ -458,7 +457,8 @@ export default {
       allowedLook: false,
       showMembers: false,
       members: [],
-      check_pass: false
+      check_pass: false,
+      executor:''
     };
   },
   computed: {
@@ -466,6 +466,7 @@ export default {
       getTaskExecutor: "getTaskExecutor",
       getTaskSetting: "getTaskSetting",
       getTaskTheme: "getTaskTheme",
+      getProjectId: "getProjectId"
     }),
     styleStart() {
       if (!!this.startTime && window.sessionStorage.getItem("flag")) {
@@ -553,9 +554,10 @@ export default {
         window.sessionStorage.setItem("standard", val);
       }
     },
-    executor(val) {
-      if (!!val) {
-        window.sessionStorage.setItem("executor", val);
+    $route(to, from) {
+      if (to.path == "/addTaskSetting" && from.path == "/conventEntry") {
+        this.projectId = this.getProjectId;
+        console.log("1111111111111", this.projectId);
       }
     }
   },
@@ -564,19 +566,17 @@ export default {
       next(vm => {
         // console.log(vm.getTaskExecutor); //过滤选中的执行人;
         vm.$refs.exe.classList.add("active_");
-        vm.executor = vm.getTaskExecutor.username;
-        window.sessionStorage.setItem("executor", vm.executor);
+        vm.executor = vm.getTaskExecutor.executor;
       });
     } else if (
       from.path !== "/appointMessager" &&
       to.path == "/addTaskSetting"
     ) {
       next(vm => {
-        let executor = window.sessionStorage.getItem("executor");
         // console.log(executor);
-        if (executor) {
+        if (vm.getTaskExecutor) {
           vm.$refs.exe.classList.add("active_");
-          vm.$refs.executor.textContent = executor;
+          vm.executor = vm.getTaskExecutor.executor;
         }
       });
     }
@@ -599,7 +599,7 @@ export default {
       }
     },
     ...mapMutations({
-      SET_TASK: "SET_TASK"
+      SET_TASKID: "SET_TASKID"
     }),
     editProgress() {
       this.$router.push({
@@ -615,7 +615,7 @@ export default {
       return new Promise((resovle, reject) => {
         // console.log(window.location.hash);
         Convent.createTask({
-          projectId: window.localStorage.getItem("projectId"),
+          projectId: this.getProjectId,
           projectName: this.taskTheme,
           taskName: this.taskName,
           taskDesc: this.taskDesc,
@@ -626,8 +626,12 @@ export default {
           isOpen: this.isPublic ? 1 : 0
         })
           .then(res => {
-            this.taskId = res;
-            this.$toast.show("任务创建完成!", 500);
+            this.SET_TASKID(res);
+            // debugger;
+            this.$dialog.message({
+              message: "任务创建完成!",
+              icon: "pass"
+            });
             resovle();
           })
           .catch(err => {
@@ -639,22 +643,19 @@ export default {
       this.validate();
       //防抖和节流
       if (this.check_pass) {
-        this.getTaskId().then(() => {
-          this.$router.push({
-            path: "conventEntry",
-            query: {
-              projectId: window.localStorage.getItem("projectId"),
-              taskId: this.taskId
-            }
-          }); //项目创建完毕
-        });
+        this.getTaskId()
+          .then(() => {
+            this.$router.push({
+              path: "conventEntry"
+            }); //项目创建完毕
+          })
+          .catch(err => {});
       }
     },
     validate() {
       let k;
       for (k in reflect_to_task) {
         // console.log(this.$data[k]);
-
         if (
           this.$data.hasOwnProperty(k) &&
           this.$data[k] &&
@@ -726,31 +727,24 @@ export default {
       this.standard = window.sessionStorage.getItem("standard");
       this.isPublic = window.sessionStorage.getItem("isPublic");
       this.allowedLook = window.sessionStorage.getItem(" allowedLook");
-    },
-    setProjectId() {
-      if (!window.location.hash.includes("projectId")) {
-        this.$dialog.message({
-          message: "请先创建项目!",
-          icon: "fail"
-        });
-        this.$router.push("conventEntry");
-      } else {
-        let projectId = window.location.hash.split("?")[1].split("=")[1];
-        window.localStorage.setItem("projectId", projectId);
-      }
     }
   },
   created() {
     // this.role = 'taskManager'; //邀约他人可见
     //this.role = 'creator' //项目发起人编辑节点
     // console.log(this.taskExecutor);
-    if (window.sessionStorage.getItem("flag")) {
+    if (!this.getProjectId.length) {
+      this.$dialog.message({
+        message: "请先创建项目!",
+        icon: "fail"
+      });
+      this.$router.push("conventEntry");
+    } else {
       this.init();
     }
   },
   mounted() {
     window.sessionStorage.setItem("flag", true);
-    this.setProjectId();
   }
 };
 </script>
