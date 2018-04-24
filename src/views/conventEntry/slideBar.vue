@@ -189,7 +189,7 @@
                     <i :class="[ isPositive ? 'c_primary' : '']">↓</i><i :class="[ !isPositive ? 'c_primary' : '']">↑</i>
                   </span>
 
-            <div class="panel c_white-bg"  v-infinite-scroll="loadMore" infinite-scroll-disabled="false" infinite-scroll-distance="70"  >
+            <div class="panel c_white-bg"  v-infinite-scroll="loadMore" infinite-scroll-disabled="false" infinite-scroll-distance="70"  infinite-scroll-throttle-delay="1000" >
 
               <template v-for="(project, key) in projectList">
                 <v-swipeout contentBg="#f4f4f4" >
@@ -257,8 +257,32 @@
                   id: '3' ,
                   role : 'visitor'
                 }],
-                myCreateList: [] ,
-                myActionList: [] ,
+//                myCreateList: [] ,
+//                myActionList: [] ,
+                all : {
+                  list: [],
+                  page: {
+                    pageNum : 1 ,
+                    projectName : 10 ,
+                    isLoaded : true
+                  }
+                },
+                myCreate : {
+                  list: [],
+                  page: {
+                    pageNum : 1 ,
+                    projectName : 10 ,
+                    isLoaded : true
+                  }
+                },
+                myAction : {
+                  list: [],
+                  page: {
+                    pageNum : 1 ,
+                    projectName : 10 ,
+                    isLoaded : true
+                  }
+                },
                 // scroll 分页
                 listenScroll: true ,
 
@@ -266,13 +290,15 @@
         },
         computed:{
           hasMore(){
-            return false
+            if(this.navTab == 0 ) return !this.all.page.isLoaded
+            if(this.navTab == 1 ) return !this.myCreate.page.isLoaded
+            if(this.navTab == 0 ) return !this.myAction.page.isLoaded
           },
           projectList(){
             const type = this.navTab
-            if(type == 0 ) return  this.allList
-            if(type == 1 ) return  this.myCreateList
-            if(type == 2 ) return  this.myActionList
+            if(type == 0 ) return  this.all.list
+            if(type == 1 ) return  this.myCreate.list
+            if(type == 2 ) return  this.myAction.list
           }
         },
         components:{
@@ -288,14 +314,21 @@
             console.log('loadMore')
           },
           getProjectList(){
+
+            if(this.navTab == 0 ) var { pageNum ,projectName } = this.all.page
+            if(this.navTab == 1 ) var { pageNum ,projectName } = this.myCreate.page
+            if(this.navTab == 0 ) var { pageNum ,projectName } = this.myAction.page
+
+            console.log(pageNum, projectName)
             Convent.projectList({
               type : this.navTab ,
-              pageNum : 1 ,
-              projectName : 10
+              pageNum : pageNum ,
+              projectName : projectName
             }).then((res)=>{
-              if(this.navTab == 0 ) this.allList = res
-              if(this.navTab == 1 ) this.myCreateList = res
-              if(this.navTab == 0 ) this.myActionList = res
+
+              if(this.navTab == 0 ){ this.all.list = res.data ;this.all.page.this.all.page.pageNum++ }
+              if(this.navTab == 1 ){ this.myCreate.list = res.data ;this.myCreate.page.pageNum++ }
+              if(this.navTab == 0 ){ this.myAction.list = res.data ;this.myAction.page.pageNum++ }
             })
           },
           open(){
@@ -347,7 +380,7 @@
                 // update state
                 // string
                 this.setCurrentProject({
-                  projectId : res ,
+                  projectId : res.data , // id
                   projectName : text
                 })
                 this.$router.push('/addTaskSetting')

@@ -80,7 +80,7 @@ export const get = function(url, params = {}, isShowFullLoading) {
 
             if (successCode.has(res.code)) {
                 // 已经处理过状态，所以不用管状态，直接返回数据
-                resolve(res.data)
+                resolve(res)
             } else {
                 // 服务状态出现问题
                 reject(res)
@@ -106,7 +106,7 @@ export const deleter = function(url, {id}) {
             // 成功回调
             if (successCode.has(res.code)) {
                 // 已经处理过状态，所以不用管状态，直接返回数据
-                resolve(res.data)
+                resolve(res)
             } else {
                 // 服务状态出现问题
                 reject(res)
@@ -131,7 +131,7 @@ export const post = function(url, params = {}) {
             // 成功回调
             if (successCode.has(res.code)) {
                 // 已经处理过状态，所以不用管状态，直接返回数据
-                resolve(res.data)
+                resolve(res)
             } else {
                 // 服务状态出现问题
                 reject(res)
@@ -155,7 +155,7 @@ export const patch = function(url, params = {}) {
       // 成功回调
       if (successCode.has(res.code)) {
         // 已经处理过状态，所以不用管状态，直接返回数据
-        resolve(res.data)
+        resolve(res)
       } else {
         // 服务状态出现问题
         reject(res)
@@ -188,7 +188,7 @@ export const put = function(url, { id, params = {} }) {
                 // 成功回调
                 if (successCode.has(res.code)) {
                     // 已经处理过状态，所以不用管状态，直接返回数据
-                    resolve(res.data)
+                    resolve(res)
                 } else {
                     // 服务状态出现问题
                     reject(res)
@@ -238,7 +238,7 @@ export const upImage = function(url, { name, e }) {
                 // 成功回调
                 if (res.code == 1) {
                     // 已经处理过状态，所以不用管状态，直接返回数据
-                    resolve(res.data)
+                    resolve(res)
                 } else {
                     // 服务状态出现问题
                     reject(res)
@@ -269,7 +269,7 @@ export const upFileBlobData = function(url, { name, blob }) {
                 // 成功回调
                 if (successCode.has(res.code)) {
                     // 已经处理过状态，所以不用管状态，直接返回数据
-                    resolve(res.data)
+                    resolve(res)
                 } else {
                     // 服务状态出现问题
                     reject(res)
