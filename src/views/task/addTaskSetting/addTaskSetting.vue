@@ -313,7 +313,7 @@ input:disabled {
             </div>
             <div :class="[_tasksetting,{active_:isTaskTheme}]">项目主题</div>
           </label>
-          <input class="userInput" ref="taskTheme" type="text" id="taskTheme" v-model.trim="taskTheme" maxlength="10" placeholder="添加项目主题"
+          <input class="userInput" ref="taskTheme" type="text" id="taskTheme"  v-model.trim="taskTheme" maxlength="10" placeholder="添加项目主题"
           />
         </li>
         <ul class="editDeadTime">
@@ -466,7 +466,9 @@ export default {
       getTaskExecutor: "getTaskExecutor",
       getTaskSetting: "getTaskSetting",
       getTaskTheme: "getTaskTheme",
-      getProjectId: "getProjectId"
+      getProjectId: "getProjectId",
+      getTaskTheme: " getTaskTheme ",
+      _getTaskId: "getTaskId"
     }),
     styleStart() {
       if (!!this.startTime && window.sessionStorage.getItem("flag")) {
@@ -513,11 +515,6 @@ export default {
     }
   },
   watch: {
-    taskTheme(val) {
-      if (!!val) {
-        window.sessionStorage.setItem("taskTheme", val);
-      }
-    },
     taskName(val) {
       if (!!val) {
         window.sessionStorage.setItem("taskName", val);
@@ -554,14 +551,14 @@ export default {
         window.sessionStorage.setItem("standard", val);
       }
     },
-    $route(to, from) {
-      if (to.path == "/addTaskSetting" && from.path == "/conventEntry") {
-        this.projectId = this.getProjectId;
-        console.log("1111111111111", this.projectId);
+    taskTheme(val) {
+      if (!!val) {
+        window.sessionStorage.setItem("taskTheme", val);
       }
     }
   },
   beforeRouteEnter: (to, from, next) => {
+    console.log(to, from);
     if (from.path == "/appointMessager" && to.path == "/addTaskSetting") {
       next(vm => {
         // console.log(vm.getTaskExecutor); //过滤选中的执行人;
@@ -578,6 +575,12 @@ export default {
           vm.$refs.exe.classList.add("active_");
           vm.executor = vm.getTaskExecutor.executor;
         }
+      });
+    }
+    if (from.path == "/convententry" && to.path == "/addTaskSetting") {
+      next(vm => {
+        vm.projectId = vm._getTaskId;
+        vm.taskTheme = vm.getTaskTheme;
       });
     }
   },
@@ -626,7 +629,7 @@ export default {
           isOpen: this.isPublic ? 1 : 0
         })
           .then(res => {
-            this.SET_TASKID(res);
+            this.SET_TASKID(res.data);
             // debugger;
             this.$dialog.message({
               message: "任务创建完成!",
@@ -640,8 +643,17 @@ export default {
       });
     },
     confirm() {
+      let self = this;
+      this.$dialog.confirm({
+        message: "确定创建任务?",
+        confirm() {
+          self._createTask();
+        }
+      });
+    },
+    _createTask() {
       this.validate();
-      //防抖和节流
+
       if (this.check_pass) {
         this.getTaskId()
           .then(() => {
@@ -718,7 +730,7 @@ export default {
     },
     init() {
       this.flag;
-      //this.role != 'creator' ? this.setTaskTheme() : '';
+      //this.role != 'creator' ? this.setTaskTheme() : ''
       this.taskTheme = window.sessionStorage.getItem("taskTheme");
       this.taskName = window.sessionStorage.getItem("taskName");
       this.taskDesc = window.sessionStorage.getItem("taskDesc");
