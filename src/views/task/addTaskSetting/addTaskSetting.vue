@@ -458,7 +458,7 @@ export default {
       showMembers: false,
       members: [],
       check_pass: false,
-      executor:''
+      executor: ""
     };
   },
   computed: {
@@ -733,14 +733,14 @@ export default {
     // this.role = 'taskManager'; //邀约他人可见
     //this.role = 'creator' //项目发起人编辑节点
     // console.log(this.taskExecutor);
-    if (!this.getProjectId.length) {
+    if (this.getProjectId && this.getProjectId.length) {
+      this.init();
+    } else {
       this.$dialog.message({
-        message: "请先创建项目!",
+        message: "请创建项目名称",
         icon: "fail"
       });
       this.$router.push("conventEntry");
-    } else {
-      this.init();
     }
   },
   mounted() {

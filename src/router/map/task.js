@@ -9,7 +9,7 @@ const addTaskSetting = resolve => require(['@/views/task/addTaskSetting/addTaskS
 
 const appointMessager = resolve => require(['@/views/task/appointMessager/appointMessager'], resolve) // 任务- 指定管理员列表
 
-//const taskDetail = resolve => require(['@/views/task/taskDetail/taskDetail'], resolve) // 任务- 详情或者任务提交
+const taskDetail = resolve => require(['@/views/task/taskDetail/taskDetail'], resolve) // 任务- 详情或者任务提交
 
 const taskHistoryOrUpdate = resolve => require(['@/views/task/taskHistoryOrUpdate/taskHistoryOrUpdate'], resolve) // 任务- 上传历史或者任务提交
 
@@ -34,16 +34,16 @@ export default [
       isShowBottomSign : false
     }
   },
-  //{
-  //  path: '/taskDetail',
-  //  name: 'taskDetail',
-  //  component: taskDetail,
-  //  meta: {
-  //    title : '任务详情' ,
-  //    // 是否显示 底部栏 会展 logo
-  //    isShowBottomSign : true
-  //  }
-  //},
+  {
+   path: '/taskDetail',
+   name: 'taskDetail',
+   component: taskDetail,
+   meta: {
+     title : '任务详情' ,
+     // 是否显示 底部栏 会展 logo
+     isShowBottomSign : true
+   }
+  },
   {
     path: '/taskHistoryOrUpdate',
     name: 'taskHistoryOrUpdate',

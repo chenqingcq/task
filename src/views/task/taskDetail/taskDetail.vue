@@ -669,7 +669,7 @@ export default {
       showTaskProgress: false,
       taskName: "",
       taskDesc: "",
-      deadLine :'暂未设置起止时间',
+      deadLine: "暂未设置起止时间",
       taskProgressContent: `任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情`,
       //项目群
       parties: [
@@ -760,7 +760,7 @@ export default {
   computed: {
     // ...mapGetters(['getTaskHistoryOrUpdate']),//获取上传的轮播图图片
     ...mapGetters({
-      
+      getTaskId: "getTaskId"
     }),
     styleTaskFocus() {
       return {
@@ -788,7 +788,9 @@ export default {
   },
   watch: {
     $route(to, from) {
+      console.log(to,from)
       if (to.path == "/taskDetail" && from.path == "/conventEntry") {
+        debugger;
         this.getData()
           .then(res => {
             console.log(res);
@@ -812,7 +814,7 @@ export default {
   },
   methods: {
     fomatTime() {
-      console.log(new Date().getMonth())
+      console.log(new Date().getMonth());
       let startTime_m = new Date(parseInt(this.startTime)).getMonth() + 1;
       let startTime_d = new Date(parseInt(this.startTime)).getDay();
       let endTime_m = new Date(parseInt(this.endTime)).getMonth() + 1;
@@ -844,8 +846,10 @@ export default {
       }
     },
     getData() {
+      let me = this;
       return new Promise((resolve, reject) => {
-        let taskId = "988624154215747586";
+        console.log(me.getTaskId)
+        let taskId = me.getTaskId;
         Convent.taskDetail(taskId)
           .then(res => {
             resolve(res);
