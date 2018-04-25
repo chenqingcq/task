@@ -468,6 +468,7 @@ export default {
       getTaskTheme: "getTaskTheme",
       getProjectId: "getProjectId",
       getTaskTheme: " getTaskTheme ",
+      getProjectThemeName:'getProjectThemeName',
       _getTaskId: "getTaskId"
     }),
     styleStart() {
@@ -731,7 +732,7 @@ export default {
     init() {
       this.flag;
       //this.role != 'creator' ? this.setTaskTheme() : ''
-      this.taskTheme = window.sessionStorage.getItem("taskTheme");
+      this.taskTheme = this.getProjectThemeName;
       this.taskName = window.sessionStorage.getItem("taskName");
       this.taskDesc = window.sessionStorage.getItem("taskDesc");
       this.startTime = window.sessionStorage.getItem("startTime");
