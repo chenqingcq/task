@@ -669,6 +669,7 @@ export default {
       showTaskProgress: false,
       taskName: "",
       taskDesc: "",
+      taskId: "",
       deadLine: "暂未设置起止时间",
       taskProgressContent: `任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情`,
       //项目群
@@ -759,9 +760,7 @@ export default {
   },
   computed: {
     // ...mapGetters(['getTaskHistoryOrUpdate']),//获取上传的轮播图图片
-    ...mapGetters({
-      getTaskId: "getTaskId"
-    }),
+    ...mapGetters({}),
     styleTaskFocus() {
       return {
         float: "right"
@@ -786,33 +785,27 @@ export default {
     Slide,
     Detail
   },
-  watch: {
-    $route(to, from) {
-      console.log(to,from)
-      if (to.path == "/taskDetail" && from.path == "/conventEntry") {
-        debugger;
-        this.getData()
-          .then(res => {
-            console.log(res);
-            this.taskName = res.taskName;
-            this.taskDesc = res.taskDesc;
-            this.endTime = res.endTime;
-            this.startTime = res.startTime;
-            this.checkStandard = res.checkStandard;
-            this.isBrowse = res.isBrowse;
-            this.isOpen = res.isOpen;
-            this.isPass = res.isPass;
-            this.isLike = res.isStar;
-            this.position = res.position;
-            this.taskStatus = res.taskStatus;
-            this.defineRole(res.role);
-            this.fomatTime();
-          })
-          .catch(() => {});
-      }
+  beforeRouteEnter: (to, from, next) => {
+    console.log(to, from);
+    if (to.path == "/taskDetail" && from.path == "/conventEntry") {
+      next(vm => {
+        vm._getTaskId();
+        vm.getData();
+      });
+    } else {
+      next(() => {
+        vm._getTaskId();
+        vm.getData();
+      });
     }
   },
   methods: {
+    _getTaskId() {
+      if (window.location.hash.indexOf("taskId") > 0) {
+        this.taskId = window.location.hash.split("?")[1].split("=")[1];
+        console.log(this.taskId);
+      }
+    },
     fomatTime() {
       console.log(new Date().getMonth());
       let startTime_m = new Date(parseInt(this.startTime)).getMonth() + 1;
@@ -846,20 +839,29 @@ export default {
       }
     },
     getData() {
-      let me = this;
-      return new Promise((resolve, reject) => {
-        console.log(me.getTaskId)
-        let taskId = me.getTaskId;
-        Convent.taskDetail(taskId)
-          .then(res => {
-            resolve(res);
-          })
-          .catch(err => {
-            if (err) {
-              this.$toast.show("网络错误"), 500;
-            }
-          });
-      });
+      Convent.taskDetail(this.taskId)
+        .then(res => {
+          console.log(res);
+          res = res.data;
+          this.taskName = res.taskName;
+          this.taskDesc = res.taskDesc;
+          this.endTime = res.endTime;
+          this.startTime = res.startTime;
+          this.checkStandard = res.checkStandard;
+          this.isBrowse = res.isBrowse;
+          this.isOpen = res.isOpen;
+          this.isPass = res.isPass;
+          this.isLike = res.isStar;
+          this.position = res.position;
+          this.taskStatus = res.taskStatus;
+          this.defineRole(res.role);
+          this.fomatTime();
+        })
+        .catch(err => {
+          if (err) {
+            this.$toast.show("发送请求失败!"), 500;
+          }
+        });
     },
     recieveTask() {
       let self = this;
