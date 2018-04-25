@@ -760,7 +760,9 @@ export default {
   },
   computed: {
     // ...mapGetters(['getTaskHistoryOrUpdate']),//获取上传的轮播图图片
-    ...mapGetters({}),
+    ...mapGetters({
+      getProjectId:'getProjectId'
+    }),
     styleTaskFocus() {
       return {
         float: "right"
@@ -862,6 +864,12 @@ export default {
             this.$toast.show("发送请求失败!"), 500;
           }
         });
+        //获取群头像
+        Convent.getGroupAvatar(this.getProjectId).then((res)=>{
+          console.log(res)
+        }).catch((err)=>{
+          console.log(err)
+        })
     },
     recieveTask() {
       let self = this;

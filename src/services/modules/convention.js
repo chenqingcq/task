@@ -2,7 +2,9 @@
  * Created by hejiahui on 2018/4/16.
  */
 
+
 import {get, post, put, upImage, deleter,patch} from '@/services/ajax/netaxios'
+
 
 // 项目
 class Convent {
@@ -17,9 +19,9 @@ class Convent {
     )
   }
   /*
-  * 选择项目列表
-  * */
-  projectList (opt, isShowFullLoading = true) {
+   * 选择项目列表
+   * */
+  projectList(opt, isShowFullLoading = true) {
     const url = '/api/project/slidlist'
     const params = opt || {}
     return get(
@@ -27,9 +29,9 @@ class Convent {
     )
   }
   /*
-  *  项目下的任务列表
-  * */
-  tasksOfProject (opt, isShowFullLoading = true) {
+   *  项目下的任务列表
+   * */
+  tasksOfProject(opt, isShowFullLoading = true) {
     const url = '/api/project/tasks'
     const params = opt || {}
     return get(
@@ -39,7 +41,7 @@ class Convent {
   /*
    *  添加审批留言
    * */
-  taskComments (opt, isShowFullLoading = true) {
+  taskComments(opt, isShowFullLoading = true) {
     const url = '/api/task/comments'
     const params = opt || {}
     return post(
@@ -50,7 +52,7 @@ class Convent {
   /*
    *  添加/更新任务
    * */
-  createTask (opt, isShowFullLoading = true) {
+  createTask(opt, isShowFullLoading = true) {
     const url = '/api/task'
     const params = opt || {}
     return post(
@@ -61,7 +63,7 @@ class Convent {
   /*
    * 添加项目节点
    * */
-  createSection (opt, isShowFullLoading = true) {
+  createSection(opt, isShowFullLoading = true) {
     const url = '/api/project/point/insert'
     const params = opt || {}
     return post(
@@ -72,7 +74,7 @@ class Convent {
   /*
    * 删除项目节点
    * */
-  sectionDelete (opt, isShowFullLoading = true) {
+  sectionDelete(opt, isShowFullLoading = true) {
     // /api/project/point/:pointId
     const url = '/api/project/point/remove'
     const params = opt || {}
@@ -83,7 +85,7 @@ class Convent {
   /*
    * 项目节点列表
    * */
-  sectionList (opt, isShowFullLoading = true) {
+  sectionList(opt, isShowFullLoading = true) {
     // /api/project/point/:pointId
     const url = '/api/project/point/list'
     const params = opt || {}
@@ -95,7 +97,7 @@ class Convent {
   /*
    * 执行人列表
    * */
-  operatorList (opt, isShowFullLoading = true) {
+  operatorList(opt, isShowFullLoading = true) {
     // /api/project/point/:pointId
     const url = '/api/task/list'
     const params = opt || {}
@@ -118,7 +120,7 @@ class Convent {
   /*
    * 获取任务基本信息 用于进度更新页
    * */
-  getTaskBaseInfo (opt, isShowFullLoading = true) {
+  getTaskBaseInfo(opt, isShowFullLoading = true) {
     const url = '/api/task/basic'
     const params = opt || {}
     return post(
@@ -129,7 +131,7 @@ class Convent {
   /*
    * 收藏任务
    * */
-  starTask (taskId,opt, isShowFullLoading = true) {
+  starTask(taskId, opt, isShowFullLoading = true) {
     const url = `/api/task/user/star/${taskId}`
     const params = opt || {}
     return post(
@@ -138,9 +140,20 @@ class Convent {
   }
 
   /*
+   * 收藏任务
+   * */
+  getGroupAvatar(projectId, opt, isShowFullLoading = true) {
+    const url = `/project/group/users/${projectId}`
+    const params = opt || {}
+    return get(
+      url, params, isShowFullLoading
+    )
+  }
+
+  /*
    * 修改任务
    * */
-  editTask (opt, isShowFullLoading = true) {
+  editTask(opt, isShowFullLoading = true) {
     const url = '/api/task'
     const params = opt || {}
     return patch(
@@ -151,7 +164,7 @@ class Convent {
   /*
    * 关闭任务
    * */
-  closeTask (opt, isShowFullLoading = true) {
+  closeTask(opt, isShowFullLoading = true) {
     const url = '/api/task/close'
     const params = opt || {}
     return post(
@@ -162,6 +175,7 @@ class Convent {
   /*
    * 验收通过
    * */
+
   passTask (taskId,opt, isShowFullLoading = true) {
     const url = `/api/task/pass/${taskId}`
     const params = opt || {}
@@ -173,7 +187,7 @@ class Convent {
   /*
    * 拒绝任务
    * */
-  rejectTask (opt, isShowFullLoading = true) {
+  rejectTask(opt, isShowFullLoading = true) {
     const url = '/api/task/reject'
     const params = opt || {}
     return post(
@@ -183,7 +197,7 @@ class Convent {
   /*
    * 添加任务进度
    * */
-  addTaskProcess (opt, isShowFullLoading = true) {
+  addTaskProcess(opt, isShowFullLoading = true) {
     const url = '/api/task/schedule/add'
     const params = opt || {}
     return post(
@@ -193,7 +207,7 @@ class Convent {
   /*
    * 删除任务进度
    * */
-  deleteTaskProcess (opt, isShowFullLoading = true) {
+  deleteTaskProcess(opt, isShowFullLoading = true) {
     const url = '/api/task/schedule/remove'
     const params = opt || {}
     return get(
@@ -203,7 +217,7 @@ class Convent {
   /*
    * 任务进度列表
    * */
-  taskProcessList (opt, isShowFullLoading = true) {
+  taskProcessList(opt, isShowFullLoading = true) {
     const url = '/api/tast/schedule/list'
     const params = opt || {}
     return get(
