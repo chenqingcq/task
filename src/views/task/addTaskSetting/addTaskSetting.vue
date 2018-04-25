@@ -582,7 +582,7 @@ export default {
         // debugger;
         if (vm.projectId) {
           vm.taskTheme = vm.getTaskTheme;
-          debugger
+          // debugger
           vm.taskName = "";
           vm.taskDesc = "";
           vm.taskExecutor = "";
@@ -669,7 +669,10 @@ export default {
       });
     },
     check_time() {
-      if (this.startTime.length && this.endTime.length) {
+      if (
+        this.startTime &&
+        this.endTime 
+      ) {
         if (
           new Date(this.endTime).getTime() <= new Date(this.startTime).getTime()
         ) {
@@ -678,10 +681,10 @@ export default {
         } else {
           return true;
         }
-      } else if (!this.startTime.length) {
+      } else if (!this.startTime) {
         this.$toast.show("请设置开始时间!", 1000);
         return false;
-      } else if (!this.endTime.length) {
+      } else if (!this.endTime) {
         this.$toast.show("请设置结束时间!", 1000);
         return false;
       }
