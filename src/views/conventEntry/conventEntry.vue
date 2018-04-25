@@ -162,7 +162,6 @@
                          v-if="computedIsWeekInRange( list ,week )"
                          :class="computedInWeekRangeClass( list, week )"
                       >
-
                         <!-- 提前完成-->
                         <template v-if="list.status == 'aheadCompleted' && computedIsSameDay(list.completeDate,week.date) ">
                           <label class="status-text b_FS-6 text-center c_white b_font-PFR">{{ list.progress }}</label>

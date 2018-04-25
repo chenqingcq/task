@@ -189,7 +189,7 @@
                     <i :class="[ isPositive ? 'c_primary' : '']">↓</i><i :class="[ !isPositive ? 'c_primary' : '']">↑</i>
                   </span>
 
-            <div class="panel c_white-bg"  v-infinite-scroll="getProjectList" infinite-scroll-disabled="hasMore" infinite-scroll-distance="50"   >
+            <div class="panel c_white-bg"  v-infinite-scroll="getProjectList" infinite-scroll-disabled="projectHasMore" infinite-scroll-distance="30"  infinite-scroll-throttle-delay="600"  >
 
               <template v-for="(project, key) in projectList">
                 <v-swipeout contentBg="#f4f4f4" >
@@ -289,10 +289,13 @@
             }
         },
         computed:{
-          hasMore(){
-            if(this.navTab == 0 ) return !this.all.page.isLoaded || this.listenScroll
-            if(this.navTab == 1 ) return !this.myCreate.page.isLoaded || this.listenScroll
-            if(this.navTab == 0 ) return !this.myAction.page.isLoaded || this.listenScroll
+          projectHasMore(){
+
+              if(this.navTab == 0 ) return !this.all.page.isLoaded || this.listenScroll
+              if(this.navTab == 1 ) return !this.myCreate.page.isLoaded || this.listenScroll
+              if(this.navTab == 2 ) return !this.myAction.page.isLoaded || this.listenScroll
+
+
           },
           projectList(){
             const type = this.navTab
@@ -313,13 +316,86 @@
           loadMore(){
             console.log('loadMore')
           },
-          getProjectList(){
-
+          test_getProjectList(){
             if(this.navTab == 0 ) var { pageNum ,pageSize } = this.all.page
             if(this.navTab == 1 ) var { pageNum ,pageSize } = this.myCreate.page
-            if(this.navTab == 0 ) var { pageNum ,pageSize } = this.myAction.page
+            if(this.navTab == 2 ) var { pageNum ,pageSize } = this.myAction.page
             this.listenScroll = true
             console.log(pageNum ,pageSize)
+            setTimeout(()=>{
+              var data = [{
+                themeName : '我是创建者' ,
+                id: '1' ,
+                role : 'creator'
+              },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是访问者' ,
+                  id: '3' ,
+                  role : 'visitor'
+                }]
+
+              const oldList = this.projectList
+              const newList = oldList.concat( data )
+              if( this.navTab == 0 ){ this.all.list = newList  }
+              if( this.navTab == 1 ){ this.myCreate.list = newList  }
+              if( this.navTab == 2 ){ this.myAction.list = newList  }
+              this.all.page.isLoaded = true ;
+              this.myCreate.page.isLoaded = true ;
+              this.listenScroll = false
+
+            },100)
+            return
+          },
+          getProjectList(){
+            if(this.navTab == 0 ) var { pageNum ,pageSize } = this.all.page
+            if(this.navTab == 1 ) var { pageNum ,pageSize } = this.myCreate.page
+            if(this.navTab == 2 ) var { pageNum ,pageSize } = this.myAction.page
+            this.listenScroll = true
             Convent.projectList({
               type : this.navTab ,
               pageNum : pageNum ,
@@ -340,9 +416,11 @@
               else{
                 newList = oldList
               }
-              if( this.navTab == 0 ){ this.all.list = newList ;this.all.page = page }
-              if( this.navTab == 1 ){ this.myCreate.list = newList ;this.myCreate.page = page }
-              if( this.navTab == 0 ){ this.myAction.list = newList ;this.myAction.page = page }
+
+                if( this.navTab == 0 ){ this.all.list = newList ;this.all.page.pageNum++ ;this.all.page.isLoaded = page.isLoaded }
+                if( this.navTab == 1 ){ this.myCreate.list = newList ;this.myCreate.page.pageNum++ ; this.myCreate.page.isLoaded = page.isLoaded }
+                if( this.navTab == 2 ){ this.myAction.list = newList ;this.myAction.page.pageNum++ ;this.myAction.page.isLoaded = page.isLoaded }
+
 
               this.listenScroll = false
 
