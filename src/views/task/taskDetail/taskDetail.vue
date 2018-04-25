@@ -624,7 +624,7 @@ img.partyLogo {
         </div>
       </div>
     </div>
-    <comments :members='members'></comments>
+    <comments :members='members' :taskId='taskId'></comments>
     <div v-if="role == 'creator'" class="btn-warp b-LR-8 clearfix">
       <div @touchstart='closeTask' class="btn-normal-warn b_left b-MT-10">
         关闭任务
@@ -696,45 +696,7 @@ export default {
           id: 2
         }
       ],
-      members: [
-        {
-          //审批留言
-          name: "张三",
-          role: "发布者",
-          date: "x年x月x日",
-          time: "2018.10.25",
-          comments: `关注“失控奔驰车”事件的最新进展。上周，央视新闻频道《法治在线》栏目连续两天播出了针对这一事件调查。`,
-          imgUrl:
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-        },
-        {
-          name: "李四",
-          role: "执行者",
-          date: "x年x月x日",
-          time: "2018.10.25",
-          comments: "会管家",
-          imgUrl:
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-        },
-        {
-          name: "王五",
-          role: "观察者",
-          date: "x年x月x日",
-          time: "2018.10.25",
-          comments: "会管家",
-          imgUrl:
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-        },
-        {
-          name: "小六",
-          role: "观察者",
-          date: "x年x月x日",
-          time: "2018.10.25",
-          comments: "会管家",
-          imgUrl:
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-        }
-      ],
+      members: [],
       items: [
         {
           //轮播图处理时   51 234 51遵守这个有原则
@@ -799,6 +761,7 @@ export default {
       next(vm => {
         vm._getTaskId();
         vm.getData();
+        vm.getTaskComment()
       });
     } else {
       next(vm => {
@@ -808,6 +771,15 @@ export default {
     }
   },
   methods: {
+    getTaskComment(){
+      let self = this;
+      Convent.getTaskComments(this.taskId).then((res)=>{
+        console.log(res,'------一级评论------');
+        self.members = res.data;
+      }).catch((err)=>{
+        console.log(err)
+      })
+    },
     _getTaskId() {
       if (window.location.hash.indexOf("taskId") > 0) {
         this.taskId = window.location.hash.split("?")[1].split("=")[1];

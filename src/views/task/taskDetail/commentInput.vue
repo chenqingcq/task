@@ -4,7 +4,7 @@
           <div class="close" @touchstart='close'>
               <img src="@/assets/img/icon-close.png" />
           </div>
-          <textarea name="userIpt" id="userIpt" placeholder="说点什么吧..." v-model.trim="usreInput" >
+          <textarea name="userIpt" id="userIpt" placeholder="说点什么吧..." v-model.trim="usreInput" maxlength="200">
               
           </textarea>
           <div @touchstart='sendComments' class="comment-btn">评论</div>
@@ -12,42 +12,54 @@
   </div>
 </template>
 <script>
+import { Convent } from "@/services";
+
 export default {
   data() {
     return {
       usreInput: ""
     };
   },
+  props: {
+    taskId: {
+      type: String,
+      default: ""
+    }
+  },
   methods: {
     close() {
       this.$emit("close");
     },
     sendComments() {
-      if (!!this.usreInput) {
-        console.log(this.usreInput);
-        //提示上传成功刷新页面
-        this.setComment()
-          .then(() => {
-            this.$dialog.message({
-              message: "评论成功!",
-              icon: "pass"
-            });
+      let self = this;
+      if (this.usreInput.length && this.usreInput.length <= 200) {
+        Convent.taskComments({
+          taskId: self.taskId,
+          message: self.usreInput
+        })
+          .then(res => {
+            console.log(res);
+            if (res.code == 1 && res.status == 200) {
+              self.$dialog.message({
+                message:'评论成功!',
+                icon:'pass'
+              })
+              self.$emit("close");
+            }else if(res.code == 603){
+              debugger;
+              self.$dialog.message({
+                message:'任务未开启请勿评论!'
+              })
+              self.$emit('close')
+            }
           })
           .catch(err => {
-            console.log(err);
+            console.log(err)
           });
-        this.usreInput = "";
+      } else if (this.usreInput.length > 200) {
+        debugger
+        this.$toast.show("评论字数不得超过200字!", 1500);
       }
-    },
-    setComment() {
-      let me = this;
-      return new Promise((resolve, reject) => {
-        //上传评论
-        if (true) {
-          me.$emit("close"); //关闭评论框
-          resolve();
-        }
-      });
     }
   }
 };

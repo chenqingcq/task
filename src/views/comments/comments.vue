@@ -14,25 +14,25 @@
       </div>
       <scroll class="comments-container" ref="scroll" :listenScroll='listenScroll' @scroll='scrolling' @scrollEnd='scrollEnd' v-if="members.length>1">
         <ul class="comment-panel">
-          <li v-for="(item,index) in members" :key="index" class="lisItem">
+          <li v-for="(item,index) in members" :key="index" class="lisItem" :commentId ="item.commentId" ref='item'>
             <div class="left">
               <!--测试-->
               <div class="icon">
-                <img :src="item.imgUrl" alt="icon" class='iconImg'>
+                <img :src="item.headImage" class='iconImg'>
               </div>
             </div>
             <div class="right">
               <!--测试-->
               <div class="head">
-                <div class="role b_FS-12 ">{{item.name}}({{item.role}})</div>
-                <div class="time-panel"><span>{{item.date}}</span><span>{{item.time}}</span></div>
+                <div class="role b_FS-12 ">{{item.nickname}}({{item.role==3?"创建者":item.role== 2?"执行者":itme.role==1?"观察者":''}})</div>
+                <div class="time-panel"><span>{{defineDate(item.createTime)}}</span><span>{{defineTime(item.createTime)}}</span></div>
               </div>
-              <div class="comments-item">{{item.comments}}</div>
+              <div class="comments-item">{{item.message}}</div>
               <div class="comments-callback">
-                <span @touchstart='_link_to_secondary_comments'>2条回复</span>
+                <span @touchstart='_link_to_secondary_comments'>{{item.replyNum}}条回复</span>
                 <div>
-                  <img @touchstart='add_praise(index)' :src="imgUrl"/>
-                  <span ref="goods">50</span>
+                  <img @touchstart='add_praise(index,item.commentId)' :src="imgUrl"/>
+                  <span ref="goods">{{item.isThumbs}}</span>
                 </div>
               </div>
             </div>
@@ -49,13 +49,14 @@
       </div>
     </div>
     <transition name="zoom">
-      <user-input v-show="showUserInput" @close='closeUserInput'></user-input>
+      <user-input v-show="showUserInput" @close='closeUserInput' :taskId='taskId'></user-input>
     </transition>
   </div>
 </template>
 <script>
 import scroll from "@/common/base/scroll/scroll";
 import userInput from "@/views/task/taskDetail/commentInput.vue";
+import { Convent } from "@/services";
 export default {
   name: "comments",
   data() {
@@ -72,10 +73,14 @@ export default {
       default() {
         return [];
       }
+    },
+    taskId: {
+      type: String,
+      default: ""
     }
   },
   components: {
-   scroll,
+    scroll,
     userInput
   },
   computed: {
@@ -91,6 +96,28 @@ export default {
     }
   },
   methods: {
+    defineDate(date) {
+      console.log(date);
+      date = parseInt(date);
+      return (
+        new Date(date).getFullYear() +
+        "年" +
+        (new Date(date).getMonth() + 1) +
+        "月" +
+        new Date(date).getDay() +
+        "日"
+      );
+    },
+    defineTime(date) {
+      date = parseInt(date);
+      return (
+        new Date(date).getHours() +
+        ":" +
+        new Date(date).getMinutes() +
+        ":" +
+        new Date(date).getSeconds()
+      );
+    },
     _link_to_secondary_comments() {
       this.$router.push({
         path: "/comment",
@@ -109,18 +136,38 @@ export default {
     userInput() {
       this.showUserInput = true;
     },
-    add_praise(index) {
-      console.log(index, this.$refs.goods[index]);
-      if (!this.$refs.goods[index].getAttribute("class")) {
+    add_praise(index, commentId) {
+      console.log(index, commentId,this.$refs.item, "--------------->>");
+      if (!this.$refs.goods[index].getAttribute("class")) {//点赞
         this.$refs.goods[index].classList.add("active");
         this.$refs.goods[
           index
         ].parentNode.children[0].src = require("@/assets/img/iocn-good2.png");
-      } else {
+        Convent.thumbs( commentId,{
+          commentId: commentId,
+          isThumbs: 1
+        })
+          .then(res => {
+            console.log(res);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {//取消点赞
         this.$refs.goods[index].classList.remove("active");
         this.$refs.goods[
           index
         ].parentNode.children[0].src = require("@/assets/img/iocn-good.png");
+        Convent.thumbs( commentId,{
+          commentId: commentId,
+          isThumbs: 0
+        })
+          .then(res => {
+            console.log(res);
+          })
+          .catch(err => {
+            console.log(err);
+          });
       }
     },
     scrolling() {
@@ -132,36 +179,39 @@ export default {
       console.log("scrollEnd");
       this.$refs.banner.classList.remove("banner");
     }
+  },
+  mounted() {
+    console.log(this.members, this.taskId, "-----一级评论组件------");
   }
 };
 </script>
 <style lang="less" scoped>
-.all-comment{
+.all-comment {
   color: #999;
   height: 40*2px;
   text-align: left;
-  .comment-content{
+  .comment-content {
     margin-left: 22*2px;
     line-height: 80px;
     height: 100%;
     width: 100%;
   }
 }
-.zoom-enter-active{
-  animation: zoom .5s ease;
+.zoom-enter-active {
+  animation: zoom 0.5s ease;
 }
-.zooom-leave-active{
-  animation: zoom .5s ease reverse;
+.zooom-leave-active {
+  animation: zoom 0.5s ease reverse;
 }
 @keyframes zoom {
-  from{
-    transform: scale(.9,.9);
+  from {
+    transform: scale(0.9, 0.9);
   }
-  50%{
-    transform: scale(1.1,1.1);
+  50% {
+    transform: scale(1.1, 1.1);
   }
-  to{
-    transform: scale(1,1)
+  to {
+    transform: scale(1, 1);
   }
 }
 .user-input {

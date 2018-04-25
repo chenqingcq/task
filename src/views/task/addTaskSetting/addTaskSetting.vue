@@ -582,6 +582,12 @@ export default {
         // debugger;
         if (vm.projectId) {
           vm.taskTheme = vm.getTaskTheme;
+          debugger
+          vm.taskName = "";
+          vm.taskDesc = "";
+          vm.taskExecutor = "";
+          vm.startTime = "";
+          vm.endTime = "";
         } else {
           vm.taskTheme = "";
           vm.taskName = "";
@@ -755,7 +761,7 @@ export default {
     },
     setTaskTheme() {
       this.$refs.taskTheme.setAttribute("disabled", true);
-      this.taskTheme = this.getTaskTheme;//分为两种方式一种首页创建任务；另一直接创建任务直接;
+      this.taskTheme = this.getTaskTheme; //分为两种方式一种首页创建任务；另一直接创建任务直接;
     },
     init() {
       this.flag;

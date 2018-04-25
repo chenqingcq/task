@@ -47,13 +47,32 @@ class Convent {
    *  添加审批留言
    * */
   taskComments(opt, isShowFullLoading = true) {
-    const url = '/api/task/comments'
+    const url = '/api/comment'
     const params = opt || {}
     return post(
       url, params, isShowFullLoading
     )
   }
-
+  /*
+   *  添加审批留言列表
+   * */
+  getTaskComments(taskId, opt, isShowFullLoading = true) {
+    const url = `/api/comment/${taskId}`;
+    const params = opt || {}
+    return get(
+      url, params, isShowFullLoading
+    )
+  }
+   /*
+   *  对一级留言点赞或取消点赞
+   * */
+  thumbs(commentId,opt, isShowFullLoading = true) {
+    const url = `/api/comment/thumbs/${commentId}`
+    const params = opt || {}
+    return post(
+      url, params, isShowFullLoading
+    )
+  }
   /*
    *  添加/更新任务
    * */
