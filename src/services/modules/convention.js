@@ -169,7 +169,7 @@ class Convent {
   /*
    * 关闭任务
    * */
-  closeTask(taskId,opt, isShowFullLoading = true) {
+  closeTask(taskId, opt, isShowFullLoading = true) {
     const url = `/api/task/close/${taskId}`
     const params = opt || {}
     return patch(
@@ -181,7 +181,7 @@ class Convent {
    * 验收通过
    * */
 
-  passTask (taskId,opt, isShowFullLoading = true) {
+  passTask(taskId, opt, isShowFullLoading = true) {
     const url = `/api/task/pass/${taskId}`
     const params = opt || {}
     return patch(
@@ -192,10 +192,20 @@ class Convent {
   /*
    * 拒绝任务
    * */
-  rejectTask(opt, isShowFullLoading = true) {
-    const url = '/api/task/reject'
+  rejectTask(taskId, opt, isShowFullLoading = true) {
+    const url = `/api/task/reject/${taskId}`
     const params = opt || {}
-    return post(
+    return patch(
+      url, params, isShowFullLoading
+    )
+  }
+  /*
+   * 接受任务
+   * */
+  recieveTask(taskId, opt, isShowFullLoading = true) {
+    const url = `/api/task/recieve/${taskId}`
+    const params = opt || {}
+    return patch(
       url, params, isShowFullLoading
     )
   }

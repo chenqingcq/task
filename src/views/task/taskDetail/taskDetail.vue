@@ -361,7 +361,7 @@ img.partyLogo {
   font-size: 10*2px;
   font-family: PingFangSC-Regular;
   color: rgba(102, 102, 102, 1);
-  margin-left: 4*2px;
+  margin-left: 15*2px;
   width: auto;
   display: inline-block;
 }
@@ -886,24 +886,6 @@ export default {
           console.log(err);
         });
     },
-    recieveTask() {
-      let self = this;
-      this.$dialog.confirm({
-        message: "确定接受该任务?",
-        confirm() {
-          self.passer = setTimeout(() => {
-            self.$dialog.notice({
-              state: "pass",
-              title: "该任务已接受",
-              task: "展台基础工作"
-            });
-          }, 200);
-          self.timer = setTimeout(() => {
-            self.$router.push("conventEntry");
-          }, 1500);
-        }
-      });
-    },
     taskDescActive() {
       console.log(11111);
       animati;
@@ -984,22 +966,52 @@ export default {
         }
       });
     },
+    recieveTask() {
+      let self = this;
+      this.$dialog.confirm({
+        message: "确定接受该任务?",
+        confirm() {
+          Convent.recieveTask(self.taskId)
+            .then(res => {
+              console.log(res);
+              if (res.code == 1 && res.status == 200) {
+                self.$dialog.notice({
+                  state: "pass",
+                  title: "已接受该任务",
+                  task: self.taskName
+                });
+                self.$router.push("conventEntry"); //任务通过之后跳转至首页
+              }
+            })
+            .catch(err => {
+              self.$toast.show("提交失败!", 1000);
+              self.$router.push("conventEntry"); //提交失败之后跳转至首页?
+            });
+        }
+      });
+    },
     rejectTask() {
       let self = this;
       this.$dialog.confirm({
         message: "确定拒绝该任务?",
         showBottom: false,
         confirm() {
-          self.passer = setTimeout(() => {
-            self.$dialog.notice({
-              state: "fail",
-              title: "该任务已拒绝",
-              task: "展台基础工作"
+          Convent.rejectTask(self.taskId)
+            .then(res => {
+              console.log(res);
+              if (res.code == 1 && res.status == 200) {
+                self.$dialog.notice({
+                  state: "pass",
+                  title: "已拒绝该任务",
+                  task: self.taskName
+                });
+                self.$router.push("conventEntry"); //任务通过之后跳转至首页
+              }
+            })
+            .catch(err => {
+              self.$toast.show("提交失败!", 1000);
+              self.$router.push("conventEntry"); //提交失败之后跳转至首页?
             });
-          }, 200);
-          self.timer = setTimeout(() => {
-            self.$router.push("conventEntry");
-          }, 1500);
         }
       });
     },
