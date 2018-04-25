@@ -162,7 +162,8 @@
 
   // 微信图片点开大图查看
   import { doWechatPreview } from "@/utils/wx"
-
+  // services
+  import { Convent } from '@/services'
   export default{
     data(){
       return{
@@ -221,8 +222,10 @@
     },
     methods:{
       doWechatPreview: doWechatPreview,
-      initDate(){
-        var d = new Date()
+      initDate(d = null ){
+        if(!d){
+          d = new Date()
+        }
         var m = d.getMonth()+1
         var day = d.getDate()
 
@@ -236,6 +239,29 @@
           date
         }
 //        return ( m <10 ? ('0'+ m ): m )+ '/' + (day < 10 ? ('0' + day) : day)
+      },
+      addTaskProcess(){
+        Convent.addTaskProcess({
+          progressDesc : this.newSectionVal ,
+          taskId : this.$route.query.taskId ,
+          images : [],
+          list : false
+        }).then(res=>{
+
+        })
+
+
+      },
+      getTaskList(){
+        Convent.taskProcessList({
+          taskDetil : true
+        }).then(res=>{
+          const processData = res.data
+          console.log(res.data)
+          processData.map((process, key)=>{
+
+          })
+        })
       },
       deleteTask(key){
         console.log(key)

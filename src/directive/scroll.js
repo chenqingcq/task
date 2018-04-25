@@ -119,6 +119,7 @@ var doBind = function () {
   if (disabledExpr) {
     this.vm.$watch(disabledExpr, function(value) {
       directive.disabled = value;
+      console.log('watch', value)
       if (!value && directive.immediateCheck) {
         doCheck.call(directive);
       }
@@ -175,6 +176,7 @@ var doCheck = function (force) {
     shouldTrigger = viewportBottom + distance >= elementBottom;
   }
   if (shouldTrigger && this.expression && !this.disabled) {
+    console.log('expression effect', this.disabled)
     this.expression();
   }
 };
@@ -201,8 +203,10 @@ export default {
           if (el[ctx].bindTryCount > 10) return; //eslint-disable-line
           el[ctx].bindTryCount++;
           if (isAttached(el)) {
+
             doBind.call(el[ctx], args);
           } else {
+            console.log('trybind')
             setTimeout(tryBind, 50);
           }
         };

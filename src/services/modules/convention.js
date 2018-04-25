@@ -129,8 +129,8 @@ class Convent {
   /*
    * 收藏任务
    * */
-  starTask (opt, isShowFullLoading = true) {
-    const url = '/api/task/star'
+  starTask (taskId,opt, isShowFullLoading = true) {
+    const url = `/api/task/user/star/${taskId}`
     const params = opt || {}
     return post(
       url, params, isShowFullLoading
@@ -181,15 +181,36 @@ class Convent {
     )
   }
   /*
-   * 添加进度
+   * 添加任务进度
    * */
   addTaskProcess (opt, isShowFullLoading = true) {
-    const url = '/api/task/progress'
+    const url = '/api/task/schedule/add'
     const params = opt || {}
     return post(
       url, params, isShowFullLoading
     )
   }
+  /*
+   * 删除任务进度
+   * */
+  deleteTaskProcess (opt, isShowFullLoading = true) {
+    const url = '/api/task/schedule/remove'
+    const params = opt || {}
+    return get(
+      url, params, isShowFullLoading
+    )
+  }
+  /*
+   * 任务进度列表
+   * */
+  taskProcessList (opt, isShowFullLoading = true) {
+    const url = '/api/tast/schedule/list'
+    const params = opt || {}
+    return get(
+      url, params, isShowFullLoading
+    )
+  }
+
 
 }
 

@@ -8,6 +8,7 @@ export default{
   methods: {
     // 用 字符串 判断是否同一天
     computedIsSameDay(date1, date2){
+      console.log(date1, date2)
       var d1 = this.computedDate(date1)
       var d2 = this.computedDate(date2)
       return d1 == d2 ? true : false

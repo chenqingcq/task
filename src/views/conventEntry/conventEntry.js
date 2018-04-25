@@ -273,7 +273,7 @@ export default {
           dateStr = numberTransformChinese( parseInt(( (+new Date()) - val.startTime )/86400000 ))
           text = `超时${dateStr}天`
         }
-        val.completeDate = val.passTime
+        val.completeDate = Number(val.passTime)
         val.startTime = Number( val.startTime )
         val.endTime = Number( val.startTime )
         val.passTime = Number( val.passTime )
