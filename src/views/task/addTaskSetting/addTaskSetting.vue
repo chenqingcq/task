@@ -468,7 +468,7 @@ export default {
       getTaskTheme: "getTaskTheme",
       getProjectId: "getProjectId",
       getTaskTheme: " getTaskTheme ",
-      _getTaskId: "getTaskId"
+      getProjectThemeName: "getProjectThemeName"
     }),
     styleStart() {
       if (!!this.startTime && window.sessionStorage.getItem("flag")) {
@@ -579,8 +579,19 @@ export default {
     }
     if (from.path == "/convententry" && to.path == "/addTaskSetting") {
       next(vm => {
-        vm.projectId = vm._getTaskId;
-        vm.taskTheme = vm.getTaskTheme;
+        vm.projectId = vm.getProjectId || "";
+        console.log(vm.projectId);
+        // debugger;
+        if (vm.projectId) {
+          vm.taskTheme = vm.getTaskTheme;
+        } else {
+          vm.taskTheme = "";
+          vm.taskName = "";
+          vm.taskDesc = "";
+          vm.taskExecutor = "";
+          vm.startTime = "";
+          vm.endTime = "";
+        }
       });
     }
   },
@@ -647,9 +658,31 @@ export default {
       this.$dialog.confirm({
         message: "确定创建任务?",
         confirm() {
-          self._createTask();
+          if (self.check_time()) {
+            self._createTask();
+          }
         }
       });
+    },
+    check_time() {
+      if (this.startTime.length && this.endTime.length) {
+        if (
+          new Date(this.endTime).getTime() <= new Date(this.startTime).getTime()
+        ) {
+          this.startTime = "";
+          this.endTime = "";
+          this.$toast.show("结束应大于开始时间！", 1000);
+          return false;
+        } else {
+          return true;
+        }
+      } else if (!this.startTime.length) {
+        this.$toast.show("请设置开始时间!", 1000);
+        return false;
+      } else if (!this.endTime.length) {
+        this.$toast.show("请设置结束时间!", 1000);
+        return false;
+      }
     },
     _createTask() {
       this.validate();
@@ -731,7 +764,7 @@ export default {
     init() {
       this.flag;
       //this.role != 'creator' ? this.setTaskTheme() : ''
-      this.taskTheme = window.sessionStorage.getItem("taskTheme");
+      this.taskTheme = this.getProjectThemeName;
       this.taskName = window.sessionStorage.getItem("taskName");
       this.taskDesc = window.sessionStorage.getItem("taskDesc");
       this.startTime = window.sessionStorage.getItem("startTime");
