@@ -793,7 +793,6 @@ export default {
         vm.getData();
       });
     } else {
-
       next(vm => {
         vm._getTaskId();
         vm.getData();
@@ -901,7 +900,7 @@ export default {
     toggleLike() {
       this.isLike = !this.isLike;
       console.log(this.isLike);
-      Convent.starTask(this.taskId,{
+      Convent.starTask(this.taskId, {
         taskId: this.taskId,
         isStar: this.isLike ? 1 : 0
       })
@@ -938,16 +937,22 @@ export default {
         message: "确定通过该任务?",
         showBottom: false,
         confirm() {
-          self.passer = setTimeout(() => {
-            self.$dialog.notice({
-              state: "pass",
-              title: "该任务已通过",
-              task: "展台基础工作"
+          Convent.passTask(self.taskId)
+            .then(res => {
+              console.log(res);
+              if (res.code == 1 && res.status == 200) {
+                self.$dialog.notice({
+                  state: "pass",
+                  title: "该任务已通过",
+                  task: "展台基础工作"
+                });
+                self.$router.push("conventEntry"); //任务通过之后跳转至首页
+              }
+            })
+            .catch(err => {
+              self.$toast.show("提交失败!", 1000);
+              self.$router.push("conventEntry"); //提交失败之后跳转至首页?
             });
-          }, 200);
-          self.timer = setTimeout(() => {
-            self.$router.push("conventEntry");
-          }, 1500);
         }
       });
     },

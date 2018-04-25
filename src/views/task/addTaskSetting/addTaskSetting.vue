@@ -465,9 +465,7 @@ export default {
     ...mapGetters({
       getTaskExecutor: "getTaskExecutor",
       getTaskSetting: "getTaskSetting",
-      getTaskTheme: "getTaskTheme",
       getProjectId: "getProjectId",
-      getTaskTheme: " getTaskTheme ",
       getProjectThemeName: "getProjectThemeName"
     }),
     styleStart() {
@@ -759,7 +757,7 @@ export default {
     },
     setTaskTheme() {
       this.$refs.taskTheme.setAttribute("disabled", true);
-      //this.taskTheme = this.getTaskTheme;
+      this.taskTheme = this.getTaskTheme;//分为两种方式一种首页创建任务；另一直接创建任务直接;
     },
     init() {
       this.flag;

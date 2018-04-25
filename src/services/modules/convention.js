@@ -2,7 +2,7 @@
  * Created by hejiahui on 2018/4/16.
  */
 
-import {get, post, put, upImage, deleter} from '@/services/ajax/netaxios'
+import {get, post, put, upImage, deleter,patch} from '@/services/ajax/netaxios'
 
 // 项目
 class Convent {
@@ -155,17 +155,17 @@ class Convent {
     const url = '/api/task/close'
     const params = opt || {}
     return post(
-      url, params, isShowFullLoading
+      url, params, isShowFullLoadingpass
     )
   }
 
   /*
    * 验收通过
    * */
-  passTask (opt, isShowFullLoading = true) {
-    const url = '/api/task/pass'
+  passTask (taskId,opt, isShowFullLoading = true) {
+    const url = `/api/task/pass/${taskId}`
     const params = opt || {}
-    return post(
+    return patch(
       url, params, isShowFullLoading
     )
   }
