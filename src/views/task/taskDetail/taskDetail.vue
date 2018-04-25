@@ -545,7 +545,7 @@ img.partyLogo {
               </div>
             </div>
             <div class="task-focus">
-              <img @touchstart='link_to_taskSetting' class="focus-star" v-show="role=='creator'" src="@/assets/img/icon-set up.png" />
+              <img @touchstart='link_to_taskSetting' class="focus-star" v-show='role=="creator"' src="@/assets/img/icon-set up.png" />
               <transition name="zoomInDown">
                 <img v-show='isLike' @touchstart="toggleLike" class="focus-star " src="@/assets/img/icon-collection-highlight.png" />
               </transition>
@@ -793,7 +793,7 @@ export default {
         vm.getData();
       });
     } else {
-      next(() => {
+      next(vm => {
         vm._getTaskId();
         vm.getData();
       });
@@ -851,7 +851,7 @@ export default {
           this.isBrowse = res.isBrowse;
           this.isOpen = res.isOpen;
           this.isPass = res.isPass;
-          this.isLike = res.isStar;
+          this.isLike = res.isStar == "0" ? false : true;
           this.position = res.position;
           this.taskStatus = res.taskStatus;
           this.defineRole(res.role);
@@ -899,6 +899,15 @@ export default {
     },
     toggleLike() {
       this.isLike = !this.isLike;
+      console.log(this.isLike);
+      Convent.starTask(this.taskId,{
+        taskId: this.taskId,
+        isStar: this.isLike ? 1 : 0
+      })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {});
     },
     link_to_taskSetting() {
       this.$router.push("addTaskSetting");

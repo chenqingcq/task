@@ -129,8 +129,8 @@ class Convent {
   /*
    * 收藏任务
    * */
-  starTask (opt, isShowFullLoading = true) {
-    const url = '/api/task/star'
+  starTask (taskId,opt, isShowFullLoading = true) {
+    const url = `/api/task/user/star/${taskId}`
     const params = opt || {}
     return post(
       url, params, isShowFullLoading
