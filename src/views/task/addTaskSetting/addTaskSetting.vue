@@ -669,8 +669,6 @@ export default {
         if (
           new Date(this.endTime).getTime() <= new Date(this.startTime).getTime()
         ) {
-          this.startTime = "";
-          this.endTime = "";
           this.$toast.show("结束应大于开始时间！", 1000);
           return false;
         } else {

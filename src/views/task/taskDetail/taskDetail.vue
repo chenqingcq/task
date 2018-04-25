@@ -54,7 +54,7 @@
           flex: 1;
           height: 100%;
           text-align: left;
-          display: flex;
+          // display: flex;
           flex-direction: column;
           justify-content: space-between;
           .task-name {
@@ -62,10 +62,11 @@
             color: #333;
             margin-top: 2*2px;
             overflow: hidden;
+            height: 14*2px;
             text-overflow: ellipsis;
           }
           .task-detail {
-            margin-top: 2*2px;
+            margin-top: 4*2px;
             font-size: 12px*2;
             text-overflow: ellipsis;
             position: relative;
@@ -89,6 +90,9 @@
           }
           .progress {
             margin-top: 2*2px;
+            height: 16*2px;
+            display: flex;
+            flex-wrap: nowrap;
           }
         }
         .task-focus {
@@ -358,6 +362,8 @@ img.partyLogo {
   font-family: PingFangSC-Regular;
   color: rgba(102, 102, 102, 1);
   margin-left: 4*2px;
+  width: auto;
+  display: inline-block;
 }
 
 .no-historyUpdate {
@@ -811,15 +817,22 @@ export default {
     },
     fomatTime() {
       console.log(new Date().getMonth());
+      let startTime_y = new Date(parseInt(this.startTime)).getFullYear() ;      
       let startTime_m = new Date(parseInt(this.startTime)).getMonth() + 1;
       let startTime_d = new Date(parseInt(this.startTime)).getDay();
+
+      let endTime_y = new Date(parseInt(this.endTime)).getFullYear();  
       let endTime_m = new Date(parseInt(this.endTime)).getMonth() + 1;
       let endTime_d = new Date(parseInt(this.endTime)).getDay();
+
+      startTime_y = startTime_y < 10 ? `0${startTime_y}` : startTime_y; 
       startTime_m = startTime_m < 10 ? `0${startTime_m}` : startTime_m;
       startTime_d = startTime_d < 10 ? `0${startTime_d}` : startTime_d;
+
+      endTime_y = endTime_y < 10 ? `0${endTime_y}` : endTime_y;
       endTime_m = endTime_m < 10 ? `0${endTime_m}` : endTime_m;
       endTime_d = endTime_d < 10 ? `0${endTime_d}` : endTime_d;
-      this.deadLine = `${startTime_m}/${startTime_d}-${endTime_m}/${endTime_d}`;
+      this.deadLine = `${startTime_y}/${startTime_m}/${startTime_d}-${endTime_y}/${endTime_m}/${endTime_d}`;
       console.log(this.deadLine);
     },
     defineRole(role) {

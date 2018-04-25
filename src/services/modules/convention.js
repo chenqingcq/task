@@ -7,7 +7,8 @@ import {
   post,
   put,
   upImage,
-  deleter
+  deleter,
+  patch
 } from '@/services/ajax/netaxios'
 
 // 项目
