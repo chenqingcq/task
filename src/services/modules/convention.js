@@ -2,9 +2,14 @@
  * Created by hejiahui on 2018/4/16.
  */
 
-
-import {get, post, put, upImage, deleter,patch} from '@/services/ajax/netaxios'
-
+import {
+  get,
+  post,
+  put,
+  upImage,
+  deleter,
+  patch
+} from '@/services/ajax/netaxios'
 
 // 项目
 class Convent {
@@ -164,11 +169,11 @@ class Convent {
   /*
    * 关闭任务
    * */
-  closeTask(opt, isShowFullLoading = true) {
-    const url = '/api/task/close'
+  closeTask(taskId,opt, isShowFullLoading = true) {
+    const url = `/api/task/close/${taskId}`
     const params = opt || {}
-    return post(
-      url, params, isShowFullLoadingpass
+    return patch(
+      url, params, isShowFullLoading
     )
   }
 
