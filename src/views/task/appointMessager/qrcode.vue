@@ -142,6 +142,7 @@ export default {
     getId(){
       if(window.location.hash.includes('projectId')){
         console.log(window.location.query)
+        debugger;
         // this.projectId = window.location.
       }
       console.log(window.location.hash)
