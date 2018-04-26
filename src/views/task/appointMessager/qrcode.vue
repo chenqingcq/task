@@ -100,7 +100,17 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      projectId:''
+    };
+  },
+  beforeRouteEnter: (to, from, next) => {
+    // ...
+    if(to.path == '/appointMessager'&& from.path == '/addTaskSetting'){
+      next((vm)=>{
+        vm.getId()
+      })
+    }
   },
   watch: {
     showQrcode(newVal) {
@@ -129,6 +139,13 @@ export default {
     }
   },
   methods: {
+    getId(){
+      if(window.location.hash.includes('projectId')){
+        console.log(window.location.query)
+        // this.projectId = window.location.
+      }
+      console.log(window.location.hash)
+    },
     closeQRcode($ev) {
       if ($ev.target.className == "qr_container") {
         this.$emit("closeQrcode");

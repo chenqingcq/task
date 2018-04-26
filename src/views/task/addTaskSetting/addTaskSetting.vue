@@ -581,8 +581,8 @@ export default {
         console.log(vm.projectId);
         // debugger;
         if (vm.projectId) {
-          vm.taskTheme = vm.getTaskTheme;
-          // debugger
+          vm.taskTheme = vm.getProjectThemeName;
+          vm.$refs.taskTheme.setAttribute("disabled", true);
           vm.taskName = "";
           vm.taskDesc = "";
           vm.taskExecutor = "";
@@ -669,10 +669,7 @@ export default {
       });
     },
     check_time() {
-      if (
-        this.startTime &&
-        this.endTime 
-      ) {
+      if (this.startTime && this.endTime) {
         if (
           new Date(this.endTime).getTime() <= new Date(this.startTime).getTime()
         ) {
@@ -735,7 +732,14 @@ export default {
       }
     },
     appointerManager() {
-      this.$router.push("appointMessager");
+      this.$router.push({
+        path: "appointMessager",
+        query: {
+          [this.getProjectId ? "projectId" : "taskId"]: this.getProjectId
+            ? this.getProjectId
+            : this.getTaskId ? this.projectId : this.taskId
+        }
+      });
     },
     selected(index, isAllowed) {
       this.members[index].isAllowed = !isAllowed;
