@@ -38,7 +38,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        img {
+        .img {
           display: inline-block;
           width: 100%;
           height: 100%;
@@ -60,17 +60,17 @@
 }
 @keyframes showQrcode {
   from {
-      bottom: -370*2px;
+    bottom: -370*2px;
   }
   to {
-      bottom: 0;
+    bottom: 0;
   }
 }
 .show-enter-active {
-    animation: .5s showQrcode ease;
+  animation: 0.5s showQrcode ease;
 }
 .show-leave-active {
-    animation: .5s showQrcode ease reverse;    
+  animation: 0.5s showQrcode ease reverse;
 }
 </style>
 
@@ -81,7 +81,7 @@
              <div class="qrcode_panel">
                  <div class="tilte">面对面分发</div>
                  <div class="qrcodeImg_container">
-                     <img src="@/assets/img/logo.png" alt="网络出错">
+                     <canvas class="img"></canvas>
                  </div>
                  <div class="countdown">60s</div>
              </div>
@@ -90,6 +90,8 @@
     </transition>
 </template>
 <script>
+import { Convent } from "@/services";
+import QRcode from "qrcode";
 export default {
   props: {
     showQrcode: {
@@ -99,6 +101,32 @@ export default {
   },
   data() {
     return {};
+  },
+  watch: {
+    showQrcode(newVal) {
+      if (newVal) {
+        Convent.sharefacetoface({
+          id: "989060644221652993",
+          type: this.taskId ? 0 : 1
+        })
+          .then(res => {
+            console.log(res.shareUrl)
+            if (res.code == 1 && res.status == 200) {
+              QRcode.toCanvas(
+                document.querySelector('canvas.img'),
+                res.data.shareUrl,
+                function(error,url) {
+                  if (error) console.error(error);
+                  console.log("success!",url);
+                }
+              );
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    }
   },
   methods: {
     closeQRcode($ev) {
