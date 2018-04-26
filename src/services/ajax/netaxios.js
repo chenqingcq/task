@@ -15,7 +15,7 @@ const axiosInstance = axios.create({
     // baseURL: '//rk4k3z.natappfree.cc/v1/', //微信测试,
     // baseURL: '//192.168.0.126:8087/v1/', //测试服务器
     // baseURL: '//bf4c5e.natappfree.cc/v1/', //测试服务器
-    baseURL: '//192.168.0.112:3010/taskapi/v1/',
+    baseURL: '//192.168.0.114:3010/taskapi/v1/',
     //baseURL: '//share.s1.natapp.cc/v1/', //测试服务器
     timeout: 15000
 })
@@ -206,6 +206,68 @@ export const put = function(url, { id, params = {} }) {
     })
 }
 
+// 进度图片上传
+export const formDataPost = function(url, options = {}, isShowFullLoading = false) {
+  const imageFormats = new Set(['jpg', 'png', 'JPEG', 'GPG', 'jpeg', 'heic'])
+  console.log(options)
+  const number = options['images'].length
+  // 创建form对象
+  let params = new FormData()
+  // 通过append向form对象添加数据
+  for(let i in  options){
+    if(i == 'images'){
+      const files = options[i]
+      let _output = []
+      for(let j=0,file; file = files[j]; j++) {
+        let imageSuffix = file.name.split('.').pop()
+        if (!imageFormats.has(imageSuffix)) {
+          return new Promise((resolve, reject) => {
+            reject(ErrorMessage.imageFormatErr)
+          })
+        }
+        // 判断图片大小，超出后直接返回
+        let fileSize = file.size
+        if (fileSize > (2 * 1024 * 1024)) {
+          return new Promise((resolve, reject) => {
+            reject(ErrorMessage.imageSizeErr)
+          })
+        }
+        //if( files.length == 1 ){
+          params.append(i, file, file.name )
+        //}
+      }
+    }
+    else{
+      params.append(i, options[i])
+    }
+  }
+  // 添加token
+  const authorization = UserModel.getSendToken()
+  return new Promise((resolve, reject) => {
+    if(number && isShowFullLoading ) uploadProcess(number)
+    axiosInstance.post(url, params, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': authorization
+      }
+    }).then((res) => {
+        // 成功回调
+        if (successCode.has(res.code)) {
+          // 已经处理过状态，所以不用管状态，直接返回数据
+          resolve(res)
+        } else {
+          // 服务状态出现问题
+          reject(res)
+        }
+      })
+      .catch((err) => {
+        // 状态不是200
+        reject(err.response ? err.response.data : ErrorMessage.timeOut)
+      })
+  })
+}
+
+
 // 单图片上传
 export const upImage = function(url, { name, e }) {
     const self = this
@@ -230,7 +292,7 @@ export const upImage = function(url, { name, e }) {
     // 创建form对象
     let params = new FormData()
         // 通过append向form对象添加数据
-    params.append(name, file, file.name)
+    params.append('images', file, file.name)
         // 添加token
     const authorization = UserModel.getSendToken()
     return new Promise((resolve, reject) => {
@@ -286,3 +348,23 @@ export const upFileBlobData = function(url, { name, blob }) {
             })
     })
 }
+
+// 上传监控
+const uploadProcess = function( number ){
+  var title = 0
+  var timer = setInterval(()=>{
+    console.log( title )
+
+    if( title++ >= number ){
+      console.log( title )
+      Vue.prototype.$loadingClose()
+      clearInterval( timer )
+    }
+    else{
+      Vue.prototype.$loading({
+        title : `已上传第 ${title} 张...` ,
+      })
+    }
+  },500)
+}
+

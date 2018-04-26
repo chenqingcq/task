@@ -21,6 +21,9 @@ export default {
       }
     }
   },
+  beforeDestroy(){
+    this.clearIpt()
+  },
   methods: {
     /**
      * 清除键盘的置顶事件

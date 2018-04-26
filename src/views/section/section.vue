@@ -182,9 +182,9 @@
           <!------- begin status ------->
           <div class="edit-section b_d-flex b_flex-center">
             <div class="timer-shaft">
-              <v-datetime  v-if="mode =='edit'" v-model="todayDate" format="MM-DD"  >
+              <v-datetime  v-if="mode =='edit'" v-model="todayDate" format="YYYY-MM-DD"  >
                 <div class="c_white-bg c_7 b_FS-18 b_font-PFR text-center">
-                  {{ todayDate.replace('-','/') }}
+                  {{ formatDate(todayDate) }}
                 </div>
               </v-datetime>
 
@@ -210,7 +210,7 @@
             <div class=" b_d-flex b_flex-center" :class="[ section.isDoing ? 'doing-section' : 'complete-section' ]">
               <div class="timer-shaft">
                 <div class="c_white-bg c_7 b_FS-18 b_font-PFR text-center" >
-                  {{ section.pointTime }}
+                  {{ formatDate(section.pointTime) }}
                 </div>
                 <!--<div class="b_FS-10 c_7 b_font-PFR text-center b_lineH-28" v-if="section.isDoing">运行中</div>-->
                 <div v-if="key != (sectionDataLook.length -1)" class="light" :class="[section.isDoing? 'doing': 'pass']"></div>
@@ -310,10 +310,11 @@
           },
           initDate(){
             var d = new Date()
+            var y = d.getFullYear()
             var m = d.getMonth() + 1
             var day = d.getDate()
             console.log(( m < 10 ? ('0' + m ) : m ) + '/' + (day < 10 ? ('0' + day) : day))
-            return ( m < 10 ? ('0' + m ) : m ) + '-' + (day < 10 ? ('0' + day) : day)
+            return y + '-' + ( m < 10 ? ('0' + m ) : m ) + '-' + (day < 10 ? ('0' + day) : day)
           },
           deleteSect(key, pointId){
             Convent.sectionDelete({
@@ -350,6 +351,9 @@
               })
             })
 
+          },
+          formatDate( dateStr ){
+            return dateStr.substring(5,15).replace('-','/')
           }
         }
 

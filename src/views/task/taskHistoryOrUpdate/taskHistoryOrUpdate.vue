@@ -32,9 +32,19 @@
               <!--<img  src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">-->
               <!--<img  src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">-->
               <!--<img  src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">-->
-              <img src="../../../assets/img/icon-add01.png" alt="">
+              <template v-for="(image, key) in previewImages">
+                <div class="img-out">
+                  <img class="img" :src="image" alt="">
+                  <img @click.self = "giveUpANIamge(key)" class="close-btn" src="../../../assets/img/icon-close-small.png" alt="">
+                </div>
+              </template>
+              <div class="img-out" v-if="previewImages.length <4">
+                <img class="img" src="../../../assets/img/icon-add01.png" alt="">
+                <input type="file"  accept=".png,.jpg,.gif,.jpeg" @change ="selectImages($event)" multiple="multiple">
+              </div>
+
             </div>
-            <div class="btn-small-primary b-MT-5">提交</div>
+            <div @click="addTaskProcess" class="btn-small-primary b-MT-5" >提交</div>
           </div>
         </div>
         <div class="timer-shaft" v-if="mode== 'edit'">
@@ -63,13 +73,13 @@
               <!--</div>-->
             </div>
             <div class="panel panel-conf">
-              <img @click="deleteTask( key )" class = "delete"  src="../../../assets/img/icon-close.png" alt="">
+              <img @click="deleteTask( key, process.progressId )" class = "delete"  src="../../../assets/img/icon-close.png" alt="">
               <div class="text c_11">
-                建筑的修饰布置工作，建筑的修饰布置工作。
+                {{ process.progressDesc }}
               </div>
               <div v-if="process.imgs.length > 0" class="imgs-wrap b_FS-0">
                 <template v-for="(img,val) in process.imgs ">
-                  <img @click="doWechatPreview(process.imgs, val )"  :src="img" alt="">
+                  <img @click="doWechatPreview(process.imgs, val )"  :src="'//'+ img" alt="">
                 </template>
                 <!--<img  src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">-->
                 <!--<img  src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">-->
@@ -92,12 +102,10 @@
               <template v-if="!isShowAllTask" >
                 <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 c_6">任务名称</span></p>
                 <div class=" b_FS-14 c_11">
-                  展台基础工作
+                  {{ taskDetail.taskName }}
                   <img @click.self="isShowAllTask = true" class="tran" src="../../../assets/img/icon-slide downward.png"  alt="">
                 </div>
               </template>
-
-
               <template v-if="isShowAllTask" >
                 <p class="middle b_FS-14 "><span class="dot success"></span><span class="b-L-4 c_6">任务名称</span></p>
                 <img  @click.self="isShowAllTask = false"  class="tran-up" src="../../../assets/img/icon-slide downward.png"  alt="">
@@ -108,19 +116,19 @@
             <!--&gt;-->
             <div class="b-LR-20 b-TB-5 b_font-PFR bounceIn animated"  v-if="isShowAllTask"  >
               <div class="c_11 b_FS-12 b-B-10">
-                展台基础工作
+                {{ taskDetail.taskName }}
               </div>
               <div class="c_6 b_FS-14">
                 任务描述
               </div>
               <div class="c_11 b_FS-12 b-B-10">
-                展台工作安排布置展台工作安排布置展台工作安排布置展台工作安排布置展台工作安排布置
+                {{ taskDetail.taskDesc }}
               </div>
               <div class="c_6 b_FS-14">
-                任务描述
+                验收标准
               </div>
               <div class="c_11 b_FS-12 b-B-5">
-                展台工作安排布置展台工作安排布置展台工作安排布置展台工作安排布置展台工作安排布置
+                {{ taskDetail.checkStandard }}
               </div>
             </div>
             <!--</transition>-->
@@ -133,7 +141,7 @@
             <div class="b-LR-10 b-TB-5 text-main b_font-PFM between middle">
               <div  class="date c_11 text-center">
                 <div >
-                  01/06
+                  {{ initDate(taskDetail.startTime).date }}
                 </div>
                 <div class="b_FS-12"
                 >开始时间</div>
@@ -141,7 +149,7 @@
               <div class="line c_7-bg "></div>
               <div  class="date c_11 text-center">
                 <div >
-                  01/06
+                  {{ initDate(taskDetail.endTime).date }}
                 </div>
                 <div class="b_FS-12"
                 >开始时间</div>
@@ -158,7 +166,7 @@
   </div>
 
 </template>
-<script>
+<script type="text/babel">
 
   // 微信图片点开大图查看
   import { doWechatPreview } from "@/utils/wx"
@@ -167,48 +175,49 @@
   export default{
     data(){
       return{
-        mode: 'edit', // look
+        mode: 'look', // look
         newSectionVal : '' ,
         todayDate: '',
         todayTime : '',
         processData:[{
           date: '03/20',
           time: '12:30',
-          content: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
+          progressDesc: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
           imgs:[
-            'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-            'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-            'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
+            '//image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
+            '//image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
+            '//image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
           ]
         },
         {
           date: '03/20',
           time: '12:30',
-          content: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
+          progressDesc: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
           imgs:[
-            'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-            'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-            'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
+            '//image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
+            '//image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
+            '//image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
           ]
         },
           {
           date: '03/20',
           time: '12:30',
-          content: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
+          progressDesc: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
           imgs:[
 
           ]
         },{
           date: '03/20',
           time: '12:30',
-          content: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
+            progressDesc: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
           imgs:[
-            'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b'
+            '//image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b'
           ]
         }],
-
-        isShowAllTask : false
-
+        isShowAllTask : false ,
+        taskDetail : {}, // 任务详情
+        imagesFiles:[] , // e.target.files
+        previewImages : [] , // window.uril.createOBjUrl
       }
     },
     components:{
@@ -219,12 +228,18 @@
       this.todayDate = dateObj.date
       console.log(dateObj.time)
       this.todayTime = dateObj.time
+      const mode = this.$route.query.mode
+      if(mode) this.mode = mode
+      this.getProcessList()
     },
     methods:{
       doWechatPreview: doWechatPreview,
       initDate(d = null ){
         if(!d){
           d = new Date()
+        }
+        if(d && typeof d == 'string' ){
+          d = new Date(Number(d))
         }
         var m = d.getMonth()+1
         var day = d.getDate()
@@ -241,31 +256,121 @@
 //        return ( m <10 ? ('0'+ m ): m )+ '/' + (day < 10 ? ('0' + day) : day)
       },
       addTaskProcess(){
+        const progressDesc =  this.newSectionVal
+        if( !progressDesc ){ this.$toast.show('请填写文字') ; return }
+        if( !this.imagesFiles.length ){ this.$toast.show('请上传图片'); return }
+
         Convent.addTaskProcess({
           progressDesc : this.newSectionVal ,
           taskId : this.$route.query.taskId ,
-          images : [],
+          images : this.imagesFiles,
           list : false
         }).then(res=>{
+          console.log(res.data)
+          this.getProcessList()
 
         })
-
-
       },
-      getTaskList(){
+      getProcessList(){
         Convent.taskProcessList({
-          taskDetil : true
+          taskDetil : 1 ,
+          taskId : this.$route.query.taskId
         }).then(res=>{
-          const processData = res.data
+          const processData = res.data.taskList
+          this.taskDetail = res.data.taskDetil
           console.log(res.data)
-          processData.map((process, key)=>{
-
+          this.processData =  processData.map((process, key)=>{
+            const createTime = new Date( Number(process.updateTime) )
+            const { time ,date } =  this.initDate(createTime)
+            const _imgsStr = process.progressImage
+            console.log(key)
+            var _imgs
+            try{
+              // 旧数据错误
+               _imgs = JSON.parse( _imgsStr )
+            }catch(err) {
+               _imgs = []
+            }
+            process.time = time
+            process.date = date
+            process.imgs = _imgs
+            delete process.progressImage
+            delete process.createTime
+            delete process.updateTime
+            return process
+            //process
           })
         })
       },
-      deleteTask(key){
-        console.log(key)
-        this.processData.splice(key,1 )
+      deleteTask(key ,progressId){
+        console.log(progressId)
+        Convent.deleteTaskProcess({
+          progressId
+        }).then(res=>{
+          this.processData.splice(key,1 )
+        })
+      },
+      async selectImages(e){
+        const files = e.target.files
+        if (this.imageFilter(files) == false) {
+          return false;
+        }
+        // 存放 files 数组
+        this.imagesFiles = Array.prototype.map.call(files,(file)=>file )
+        console.log(this.imagesFiles)
+        this.previewImages = await this.previewImage(files)  // 预览 转url
+      },
+      giveUpANIamge(index){
+        this.previewImages.splice(index, 1)
+        this.imagesFiles.splice(index, 1)
+      },
+       previewImage(files){
+        const FILES = files
+        // e.target.files 不是数组 不能用map，只能用for 直接便利
+        return Array.prototype.map.call(FILES,(image, key)=>
+        {
+          let url = this.getObjectURL(image)
+          console.log(`>>>第 ${key} 张图：${url} `)
+          const img = new Image()
+          img.onload = ()=>{
+            this.revokeObjectURL(url)
+          }
+          return url
+        })
+      },
+      // 释放内存中指定的文件对象
+      revokeObjectURL(file){
+        window.URL.revokeObjectURL(objectURL);
+      },
+      getObjectURL(file){
+        let url = null
+        // URL.createObjectURL() 静态方法会创建一个 DOMString，其中包含一个表示参数中给出的对象的URL
+        if (window.createObjectURL != undefined) { // basic
+          url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+          url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL ) { // webkit or chrome
+          url = window.webkitURL.createObjectURL(file);
+        }
+        return url
+      },
+      imageFilter(files){
+        // 是否符合的图片格式和大小
+        let isMatch = true
+        for (var i = 0, file; file = files[i]; i++) {
+          console.log(file)
+          console.log(file.type)
+          if (file.type.indexOf("image") == 0) {
+            if (file.size >= 2 * 1024 * 1024) { // 2MB
+              this.$toast.show('您这张"' + file.name + '"图片大小过大，应小于2M，请重新上传', 2000)
+              isMatch = false
+            }
+          } else {
+            this.$toast.show('文件"' + file.name + '"不是图片。请重新上传', 2000)
+            isMatch = false
+          }
+        }
+        return isMatch
       }
     }
 

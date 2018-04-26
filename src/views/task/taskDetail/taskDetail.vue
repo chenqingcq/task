@@ -600,7 +600,7 @@ img.partyLogo {
           </div>
         </div>
         <div class="progress-container">
-          <div class="current-progress"> 
+          <div class="current-progress">
             <div class="left">01/30</div>
             <div class="right">
               展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕
@@ -988,9 +988,10 @@ export default {
       });
     },
     towardsUpdateHistory() {
+      const taskId = this.$route.query.taskId
       //查看历史上传
       this.$router.push({
-        path: "taskHistoryOrUpdate"
+        path: `taskHistoryOrUpdate?taskId=${taskId}`
       });
     },
     linkToSection() {

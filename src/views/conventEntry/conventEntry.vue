@@ -12,7 +12,7 @@
           <span class="project-name c_white b_FS-18 text-center">{{ themeName }} </span>
           <!--<img style="visibility: hidden" class="share" src="../../assets/img/icon-share.png" alt="">-->
 
-          <img v-if = "role == 'operator'" class="add" @click="addTask" src="../../assets/img/icon-setting.png" alt="">
+          <img v-if = "role == 'creator'" class="add" @click="addTask" src="../../assets/img/icon-setting.png" alt="">
           <img v-else class="add" @click="addTask" src="../../assets/img/icon-add.png" alt="">
         </div>
         <div class="calendar-wrapper">

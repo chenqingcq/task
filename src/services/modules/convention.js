@@ -2,14 +2,7 @@
  * Created by hejiahui on 2018/4/16.
  */
 
-import {
-  get,
-  post,
-  put,
-  upImage,
-  deleter,
-  patch
-} from '@/services/ajax/netaxios'
+import {get, post, put, upImage, deleter, formDataPost, patch} from '@/services/ajax/netaxios'
 
 // 项目
 class Convent {
@@ -234,14 +227,14 @@ class Convent {
   addTaskProcess(opt, isShowFullLoading = true) {
     const url = '/api/task/schedule/add'
     const params = opt || {}
-    return post(
+    return formDataPost(
       url, params, isShowFullLoading
     )
   }
   /*
    * 删除任务进度
    * */
-  deleteTaskProcess(opt, isShowFullLoading = true) {
+  deleteTaskProcess (opt, isShowFullLoading = true) {
     const url = '/api/task/schedule/remove'
     const params = opt || {}
     return get(
@@ -251,8 +244,8 @@ class Convent {
   /*
    * 任务进度列表
    * */
-  taskProcessList(opt, isShowFullLoading = true) {
-    const url = '/api/tast/schedule/list'
+  taskProcessList (opt, isShowFullLoading = true) {
+    const url = '/api/task/schedule/list'
     const params = opt || {}
     return get(
       url, params, isShowFullLoading
