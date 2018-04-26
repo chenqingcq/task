@@ -182,10 +182,11 @@ export default {
   },
   mounted() {
     console.log(this.members, this.taskId, "-----一级评论组件------");
-  }
+  },
 };
 </script>
 <style lang="less" scoped>
+
 .all-comment {
   color: #999;
   height: 40*2px;

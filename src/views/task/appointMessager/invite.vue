@@ -6,7 +6,7 @@
   bottom: 0;
   left: 0;
   z-index: 9999;
-  background: rgba(99, 99, 99, 0.6);
+  background: rgba(0, 0, 0, 0.4);
   .invite-panel {
     width: 100%;
     height: 100%;
