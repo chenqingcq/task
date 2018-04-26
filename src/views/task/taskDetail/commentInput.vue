@@ -38,7 +38,7 @@ export default {
           message: self.usreInput
         })
           .then(res => {
-            console.log(res);
+            console.log(res,"----------->>>");
             if (res.code == 1 && res.status == 200) {
               self.$dialog.message({
                 message:'评论成功!',

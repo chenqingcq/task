@@ -63,10 +63,10 @@ class Convent {
       url, params, isShowFullLoading
     )
   }
-   /*
+  /*
    *  对一级留言点赞或取消点赞
    * */
-  thumbs(commentId,opt, isShowFullLoading = true) {
+  thumbs(commentId, opt, isShowFullLoading = true) {
     const url = `/api/comment/thumbs/${commentId}`
     const params = opt || {}
     return post(
@@ -258,7 +258,16 @@ class Convent {
       url, params, isShowFullLoading
     )
   }
-
+  /*
+   * 面对面分享
+   * */
+  sharefacetoface(opt, isShowFullLoading = true) {
+    const url = '/api/wx/share/face'
+    const params = opt || {}
+    return post(
+      url, params, isShowFullLoading
+    )
+  }
 
 }
 
