@@ -482,6 +482,7 @@ export default {
     },
     inviteOthers() {
       //分享
+      console.log("------------------------->>>")
       this.showInvite = !this.showInvite;
       this.showShare = !this.showShare;
     },

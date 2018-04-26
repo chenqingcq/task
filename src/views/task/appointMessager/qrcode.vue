@@ -106,8 +106,8 @@ export default {
     showQrcode(newVal) {
       if (newVal) {
         Convent.sharefacetoface({
-          id: "989060644221652993",
-          type: this.taskId ? 0 : 1
+          id: "989060883695439873",
+          type:  1
         })
           .then(res => {
             console.log(res.shareUrl)
@@ -136,7 +136,8 @@ export default {
     }
   },
   mounted() {
-    console.log(222);
+    console.log(this.showQrcode);
+    // debugger;
   }
 };
 </script>
