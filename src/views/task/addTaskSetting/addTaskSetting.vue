@@ -735,9 +735,11 @@ export default {
       this.$router.push({
         path: "appointMessager",
         query: {
-          [this.getProjectId ? "projectId" : "taskId"]: this.getProjectId
+          [this.getProjectId
+            ? "projectId"
+            : this.getTaskId ? "taskId" : ""]: this.getProjectId
             ? this.getProjectId
-            : this.getTaskId ? this.projectId : this.taskId
+            : this.getTaskId ? this.getTaskId : ''
         }
       });
     },
