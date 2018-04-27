@@ -817,7 +817,6 @@ export default {
           this.taskStatus = res.taskStatus;
           this.defineRole(res.role);
           this.fomatTime();
-      debugger
           if(res.latestProgress){
             this.items = res.latestProgress.progressImage.map((val)=>{return {imgUrl:val}})
           }
