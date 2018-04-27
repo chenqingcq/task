@@ -57,7 +57,7 @@
   .editDeadTime {
     width: 100%;
     height: 300*2px;
-    overflow: auto;
+    overflow: hidden;
     background: linear-gradient(
       to bottom,
       rgba(105, 198, 254, 0.6),
@@ -330,15 +330,15 @@
           <div v-for="(item,index) in taskExecutors" :key="index">
             <li :userId='item[0].userId' :sex='item[0].sex'>
               <div class="user">
-                <div @touchstart='select(index,item)' class="select">
-                  <img src="@/assets/img/sign-selected.png" v-show="isSelectedShow[index]&&isSelectedShow[index][0]" />
+                <div @touchstart='select(index,item[0].userId,item)' class="select">
+                  <img src="@/assets/img/sign-selected.png" v-show="index == currentIndex && showArr[index] == true" />
                 </div>
                 <div class="icon">
                   <img v-lazy="item[0].headImage">
                 </div>
                 <div class="name">{{item[0].nickname}}</div>
               </div>
-              <div class="update">{{item[0].updated}}</div>
+              <div class="update">{{item[0].progressNum}}</div>
               <div class="comments">{{item[0].commentNum}}</div>
               <div class="progress">{{item[0].progress}}</div>
               <div class="arrow" @touchstart='showSub(index)'>
@@ -354,7 +354,7 @@
                   </div>
                   <div class="name" id="name">{{item_.taskName}}</div>
                 </div>
-                <div class="update">{{item_.updated}}</div>
+                <div class="update">{{item_.progressNum}}</div>
                 <div class="comments">{{item_.commentNum}}</div>
                 <div class="progress">{{item_.progress}}</div>
                 <div class="arrow">
@@ -376,7 +376,7 @@
       <div v-if="!showBtntype" class="addExcutor" @touchstart='addExcutor'>添加人员</div>
       <div ref="deleteBtn" :class="{deleteBtn:true,deleteExcutor: showBtntype,deleteExcutorDisable :!showBtntype}" @touchstart.native='deleteExcutor'>删除人员</div>
     </div>
-    <invites  v-if="taskExecutors.length>0" :showInvite='showInvite'></invites>
+    <invites   :showInvite='taskExecutors.length>0?false:true' ></invites>
     <qrcode :showQrcode='showQrcode' @closeQrcode ='closeQrcode' :projectId='projectId' :taskId = 'taskId'></qrcode>  
   </div>
 </template>
@@ -401,6 +401,7 @@ export default {
       showQrcode: false,
       projectId: "",
       taskId: "",
+      userId: "",
       navs: [
         {
           name: "更新",
@@ -417,7 +418,8 @@ export default {
       ],
       currentIndex: -1,
       nowIndex: 0,
-      taskExecutors: []
+      taskExecutors: [],
+      showArr: []
     };
   },
   computed: {
@@ -437,6 +439,11 @@ export default {
     }
   },
   watch: {
+    taskExecutors(newVal) {
+      if (newVal) {
+        this.defineShow(newVal);
+      }
+    },
     showBtntype(newVal, oldVal) {
       console.log(newVal, oldVal);
       if (!newVal) {
@@ -481,13 +488,12 @@ export default {
         if (window.location.hash.includes("projectId")) {
           let reg = /projectId=\d{18}/;
           vm.projectId = window.location.hash.match(reg)[0].split("=")[1];
-          console.log("-------", vm.projectId);
+          console.log("---pid----", vm.projectId);
           vm.getExcutorList(vm.projectId);
         } else if (window.location.hash.includes("taskId")) {
           let reg = /taskId=\d{18}/;
           vm.taskId = window.location.hash.match(reg)[0].split("=")[1];
           console.log("-----hasTaskId-----", vm.taskId);
-          vm.getExcutorList(vm.projectId);
           // debugger;
         } else {
           vm.$toast.show("请重新添加任务!", 500);
@@ -497,6 +503,10 @@ export default {
     }
   },
   methods: {
+    defineShow(arr) {
+      console.log(arr);
+      this.showArr = new Array(arr.length).fill(false);
+    },
     getExcutorList(id) {
       console.log(id);
 
@@ -521,15 +531,12 @@ export default {
     selectedSub(preIndex, selfIndex, item) {
       console.log(preIndex, selfIndex, item);
     },
-    select(selfIndex, item) {
-      console.log(selfIndex, item);
+    select(selfIndex, userId, item) {
+      console.log(selfIndex, userId, item);
+      this.currentIndex = selfIndex;
+      this.userId = userId;
+      this.showArr[selfIndex] = !this.showArr[selfIndex];
       this.showBtntype = !this.showBtntype;
-      if (this.showBtntype) {
-        this.taskExecutor = item;
-      }
-      this.isSelectedShow[selfIndex][0] = !this.isSelectedShow[selfIndex][0];
-      console.log(this.isSelectedShow[selfIndex]);
-      console.log(this.getTaskExecutor);
     },
     progress(item) {
       return "100%";
@@ -554,11 +561,25 @@ export default {
       this.showShare = !this.showShare;
     },
     commandExcutor() {
-      console.log(this.taskExecutor);
-      // debugger;
-      this.SET_TASK_EXECUTOR(this.taskExecutor[0]);
-      // debugger;
-      this.$router.push("addTaskSetting");
+      console.log(this.userId, this.projectId, this.taskId);
+      Convent.cmdExcutor(this.taskId, {
+        taskId: this.taskId,
+        userId: this.userId,
+        projectId: this.projectId
+      })
+        .then(res => {
+          console.log(res);
+          if (res.code == 1 && res.status == 200) {
+            this.$router.push({
+              path:"/addTaskSetting",
+              query:{
+                taskId : this.taskId,
+                projectId:this.projectId
+              }
+            });
+          }
+        })
+        .catch(err => {});
     },
     addExcutor() {
       let self = this;
@@ -568,7 +589,12 @@ export default {
           index,
           isSelected
         });
-        this.$router.push("addTaskSetting");
+        this.$router.push({
+          path: "/addTaskSetting",
+          query: {
+            taskId: this.taskId
+          }
+        });
         this.showBtntype = false;
         return;
       } else {
