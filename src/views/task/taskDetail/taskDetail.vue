@@ -552,20 +552,20 @@ img.partyLogo {
             </div>
             <div class="task-focus">
               <img @touchstart='link_to_taskSetting' class="focus-star" v-show='role=="creator"' src="@/assets/img/icon-set up.png" />
-              <transition name="zoomInDown">
-                <img v-show='isLike' @touchstart="toggleLike" class="focus-star " src="@/assets/img/icon-collection-highlight.png" />
-              </transition>
-              <transition name="canelLike">
-                <img v-if="!isLike" @touchstart="toggleLike" class="focus-star" src="@/assets/img/icon-collection-normal.png" :style="styleTaskFocus"
-                />
-              </transition>
+              <!--<transition name="zoomInDown">-->
+                <!--<img v-show='isLike' @touchstart="toggleLike" class="focus-star " src="@/assets/img/icon-collection-highlight.png" />-->
+              <!--</transition>-->
+              <!--<transition name="canelLike">-->
+                <!--<img v-if="!isLike" @touchstart="toggleLike" class="focus-star" src="@/assets/img/icon-collection-normal.png" :style="styleTaskFocus"-->
+                <!--/>-->
+              <!--</transition>-->
             </div>
           </div>
         </div>
         <!--轮播图-->
-        <slide ref="scroll" :loop='loop' v-if="showSlide">
+        <slide ref="scroll" :loop='loop' v-if="items.length">
           <div class="slider-item" v-for="(item,index) in items" :key="index">
-            <img @load='loadImage' :src="item.imgUrl">
+            <img @load='loadImage' :src="'\\\\' + item.imgUrl">
           </div>
         </slide>
         <div v-else class="no-historyUpdate">
@@ -580,7 +580,7 @@ img.partyLogo {
             <img src="@/assets/img/icon-slide downward.png" />
           </div>
           <div class="detail-btn" @touchstart='towardsUpdateHistory'>
-            查看上传历史
+            {{ role == 'operator'? '更新进度' : '查看上传历史'  }}
           </div>
         </div>
         <transition name="bounceIn">
@@ -686,31 +686,12 @@ export default {
       ],
       members: [],
       items: [
-        {
           //轮播图处理时   51 234 51遵守这个有原则
-          imgUrl:
-            "http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650"
-        },
-        {
-          imgUrl:
-            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg"
-        },
-        {
-          imgUrl:
-            "http://bpic.588ku.com/element_origin_min_pic/16/06/20/165767ab7a315bd.jpg"
-        },
-        {
-          imgUrl:
-            "http://bpic.588ku.com/element_origin_min_pic/18/03/24/494a50847f3dbef27c31355f35d0393d.jpg"
-        },
-        {
-          imgUrl:
-            "http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650"
-        },
-        {
-          imgUrl:
-            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg"
-        }
+//            "http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650",
+//            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg",
+//            "http://bpic.588ku.com/element_origin_min_pic/16/06/20/165767ab7a315bd.jpg",
+//            "http://bpic.588ku.com/element_origin_min_pic/18/03/24/494a50847f3dbef27c31355f35d0393d.jpg" ,
+//            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg"
       ]
     };
   },
@@ -755,7 +736,7 @@ export default {
       next(vm => {
         vm._getTaskId();
         vm.getData();
-        vm.getTaskComment();        
+        vm.getTaskComment();
       });
     }
   },
@@ -792,7 +773,7 @@ export default {
       endTime_y = endTime_y < 10 ? `0${endTime_y}` : endTime_y;
       endTime_m = endTime_m < 10 ? `0${endTime_m}` : endTime_m;
       endTime_d = endTime_d < 10 ? `0${endTime_d}` : endTime_d;
-      this.deadLine = `${startTime_y}/${startTime_m}/${startTime_d}-${endTime_y}/${endTime_m}/${endTime_d}`;
+      this.deadLine = `${startTime_m}/${startTime_d}-${endTime_m}/${endTime_d}`;
       console.log(this.deadLine);
     },
     defineRole(role) {
@@ -815,8 +796,12 @@ export default {
       }
     },
     getData() {
-      Convent.taskDetail(this.taskId)
-        .then(res => {
+      const taskId = this.taskId
+      const projectId = this.getProjectId
+      Convent.taskDetail({
+        taskId ,
+        projectId
+      }).then(res => {
           console.log(res);
           res = res.data;
           this.taskName = res.taskName;
@@ -832,6 +817,14 @@ export default {
           this.taskStatus = res.taskStatus;
           this.defineRole(res.role);
           this.fomatTime();
+      debugger
+          if(res.latestProgress){
+            this.items = res.latestProgress.progressImage.map((val)=>{return {imgUrl:val}})
+          }
+          else{
+            this.items = []
+          }
+
         })
         .catch(err => {
           if (err) {
@@ -841,6 +834,7 @@ export default {
       //获取群头像
       Convent.getGroupAvatar(this.getProjectId)
         .then(res => {
+          this.parties = res.data
           console.log(res);
         })
         .catch(err => {
@@ -979,9 +973,16 @@ export default {
     towardsUpdateHistory() {
       const taskId = this.$route.query.taskId
       //查看历史上传
-      this.$router.push({
-        path: `taskHistoryOrUpdate?taskId=${taskId}`
-      });
+      if( this.role == 'operator' ){
+        this.$router.push({
+          path: `taskHistoryOrUpdate?taskId=${taskId}&mode=edit`
+        });
+      }else{
+        this.$router.push({
+          path: `taskHistoryOrUpdate?taskId=${taskId}`
+        });
+      }
+
     },
     linkToSection() {
       this.$router.push({

@@ -635,7 +635,7 @@ export default {
           isOpen: this.isPublic ? 1 : 0
         })
           .then(res => {
-            this.$toast.show('项目创建完成,调转中...')
+            this.$toast.show('调转中...')
             resovle(res.data);
           })
           .catch(err => {

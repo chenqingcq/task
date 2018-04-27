@@ -56,7 +56,7 @@ export default {
     ...mapGetters({
       'user': 'user',
       role : 'getProjectRole',
-      themeName : 'getProjectThemeName',
+      projectName : 'getProjectThemeName',
       projectId : 'getProjectId'
     }),
     hasMore(){
@@ -83,7 +83,7 @@ export default {
           this.$refs.slide.newAproject()
         }
         else {
-          this.$router.push(`/addTaskSetting`)
+          this.$router.push(`/addTaskSetting?projectId=${this.projectId}&projectName=${this.projectName}`)
         }
       }
     },
@@ -265,12 +265,16 @@ export default {
             text = '' ,
             dateStr = '' // 时间间隔
         switch (status){
-          case 0: resStatus = 'pending' ;text = '正在进行' ;break;
-          case 1: resStatus = 'completed';text = '完成通过';break;
-          case 2: resStatus = 'aheadCompleted';break;
-          case 3: resStatus = 'outDate' ;break;
-          case 4: resStatus = 'closed' ;text = '已关闭' ;break ;
+          case 0: resStatus = 'pending' ;text = '等待接受' ;break;
+          case 1: resStatus = 'pending' ;text = '正在进行' ;break;
+          case 2: resStatus = 'closed' ;text = '已关闭' ;break ;
+          case 3: resStatus = 'rejected' ;text = '已拒绝' ; break ;
+          case 4: resStatus = 'completed';text = '完成通过';break;
+          case 5: resStatus = 'aheadCompleted';break;
+          case 6: resStatus = 'outDate' ;break;
+          case 7: resStatus = 'outDate' ;break;
         }
+
         val.status = resStatus
 
         if( resStatus == 'aheadCompleted' ){

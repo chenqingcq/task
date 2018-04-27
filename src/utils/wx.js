@@ -194,11 +194,11 @@ Vue.prototype.$wechat = {
     networkType: null,
     trace: '' // 同于统计的标示参数
   },
-  doWechatPreview ,
+  doWechatPreview: doWechatPreview ,
 
 }
 
 export default {
   install ,
-  doWechatPreview
+  doWechatPreview : doWechatPreview
 }
