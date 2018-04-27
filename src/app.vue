@@ -34,6 +34,12 @@ export default {
   created() {
     this.getToken();
   },
+  mounted() {
+    setTimeout(() => {
+      console.log("存起来的微信配置信息 ------------------------》");
+      this.$wechat.getWechatConfig(); // 会自动 wx.config
+    }, 1500);
+  },
   methods: {
     getToken() {
       // 在url 上面截取token
@@ -42,7 +48,6 @@ export default {
         // set token
         this.$store.commit("setToken", token);
       }
-
       User.getUserInfo({}).then(res => {
         console.log(res);
         this.$store.commit("user", res.data);
@@ -58,6 +63,17 @@ export default {
       //
       //        })
     }
+
+    //        userModel.userid='0f4b68b07b9e4bab9c6cbe639b148358';
+    //        userModel.channelcode='7dc26571d9ff4';
+    //        // 获取token
+    //        userModel.getToken().then((data) => {
+    //        er
+    //          this.$store.commit('setToken', data.token)
+    //        this.$store.commit('user', userModel)
+    //      }).catch(() => {
+    //
+    //        })
   },
   watch: {
     $route(to, from) {

@@ -8,7 +8,9 @@ const state = {
     headImage: '',
     userId: ''
   },
-  token: ''
+  token: '' ,
+  wechatConfig: {} ,
+  entryURL : ''
 }
 
 export default state

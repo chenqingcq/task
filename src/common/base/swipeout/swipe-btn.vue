@@ -76,6 +76,7 @@
         if (this.$parent.$options._componentTag === 'v-swipeout') {
           this.$parent.onItemClick(this.text)
         }
+        this.$emit('click')
       }
     }
   }

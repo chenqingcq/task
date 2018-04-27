@@ -13,17 +13,18 @@
             <!--</div>-->
             <div class="b_FS-18 c_7 b_font-PFR text-center">{{ todayDate }}</div>
             <div class="light doing"></div>
-            <div class="link-dot"></div>
-            <div class="link-dot"></div>
-            <div class="link-dot"></div>
-            <div class="link-dot"></div>
-            <div class="link-dot"></div>
-            <div class="link-dot"></div>
-            <div class="link-dot"></div>
-            <div class="link-dot"></div>
-            <div class="link-dot"></div>
-            <div class="link-dot b-MB-0"></div>
-
+            <template v-if="processData.length > 0 ">
+              <div class="link-dot"></div>
+              <div class="link-dot"></div>
+              <div class="link-dot"></div>
+              <div class="link-dot"></div>
+              <div class="link-dot"></div>
+              <div class="link-dot"></div>
+              <div class="link-dot"></div>
+              <div class="link-dot"></div>
+              <div class="link-dot"></div>
+              <div class="link-dot b-MB-0"></div>
+            </template>
           </div>
           <div class="panel panel-conf edit">
             <textarea class="input" v-model="newSectionVal" name="" placeholder="记录一下吧" id="" cols="30" ></textarea>
@@ -47,7 +48,7 @@
             <div @click="addTaskProcess" class="btn-small-primary b-MT-5" >提交</div>
           </div>
         </div>
-        <div class="timer-shaft" v-if="mode== 'edit'">
+        <div class="timer-shaft" v-if="mode== 'edit' && processData.length > 0 ">
           <div class="link-dot b-MT-0"></div>
           <div class="link-dot"></div>
           <div class="link-dot b-MB-0"></div>
@@ -175,7 +176,7 @@
   export default{
     data(){
       return{
-        mode: 'look', // look
+        mode: 'edit', // look
         newSectionVal : '' ,
         todayDate: '',
         todayTime : '',
@@ -316,7 +317,7 @@
           return false;
         }
         // 存放 files 数组
-        this.imagesFiles = Array.prototype.map.call(files,(file)=>file )
+        this.imagesFiles.push.apply(this.imagesFiles, Array.prototype.map.call(files,(file)=>file ))
         console.log(this.imagesFiles)
         this.previewImages = await this.previewImage(files)  // 预览 转url
       },
@@ -327,7 +328,7 @@
        previewImage(files){
         const FILES = files
         // e.target.files 不是数组 不能用map，只能用for 直接便利
-        return Array.prototype.map.call(FILES,(image, key)=>
+        return this.previewImages.concat(Array.prototype.map.call(FILES,(image, key)=>
         {
           let url = this.getObjectURL(image)
           console.log(`>>>第 ${key} 张图：${url} `)
@@ -336,7 +337,7 @@
             this.revokeObjectURL(url)
           }
           return url
-        })
+        }))
       },
       // 释放内存中指定的文件对象
       revokeObjectURL(file){
@@ -357,6 +358,10 @@
       imageFilter(files){
         // 是否符合的图片格式和大小
         let isMatch = true
+        if( files.length > 4 || (files.length + this.imagesFiles.length ) >4){
+          this.$toast.show('最多只能上传4张图片', 2000)
+          return false
+        }
         for (var i = 0, file; file = files[i]; i++) {
           console.log(file)
           console.log(file.type)
