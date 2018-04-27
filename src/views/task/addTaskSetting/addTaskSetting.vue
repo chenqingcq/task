@@ -549,7 +549,7 @@ export default {
       next(vm => {
         vm._getProjectId();
         vm.setNull();
-        vm._getProjectThemeName();
+        vm.taskTheme = Vm.getProjectThemeName;
         console.log(vm.projectId);
         if (vm.projectId) {
           vm.hasProjectId = true;
