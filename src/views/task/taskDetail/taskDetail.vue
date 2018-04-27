@@ -618,7 +618,7 @@ img.partyLogo {
           <div class="b-LR-10 b-T-5 between ">
             <p class="middle b_FS-14 c_6 "><span class="dot success"></span><span class="b-L-4">进入项目群</span></p>
             <div class="entry-project-party">
-              <img class="partyLogo" :src="item.partyImg" v-for="item in parties" :key="item.id" />
+              <img class="partyLogo" :src="item" v-for="item in parties" :key="item.id" />
             </div>
           </div>
         </div>
@@ -680,21 +680,9 @@ export default {
       taskProgressContent: `任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情`,
       //项目群
       parties: [
-        {
-          partyImg:
             "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
-          id: 0
-        },
-        {
-          partyImg:
             "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
-          id: 1
-        },
-        {
-          partyImg:
             "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
-          id: 2
-        }
       ],
       members: [],
       items: [

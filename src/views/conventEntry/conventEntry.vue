@@ -16,9 +16,7 @@
           <img v-else class="add" @click="addTask" src="../../assets/img/icon-add.png" alt="">
         </div>
         <div class="calendar-wrapper">
-
           <v-calendar @getDateData = 'getDateData' @statusChange="statusChange" ></v-calendar>
-
         </div>
       </div><!--头部日历导航栏 end-->
       <!--任务列表-->
@@ -171,7 +169,7 @@
 
                         </template>
                         <template v-if="list.status == 'pending' && computedIsSameDay(todayTime, week.date)" >
-                          <label class="status-text b_FS-6 text-center c_white b_font-PFR">{{ list.process }}</label>
+                          <label class="status-text b_FS-6 text-center c_white b_font-PFR">{{ list.progress }}</label>
                           <img class="status-bg" src="../../assets/img/sign-remind01.png" alt="">
                           <img class="end-sign-logo" src="../../assets/img/image-car02.png"/>
                         </template>
@@ -189,7 +187,7 @@
 
                         <template v-if="list.status == 'completed'" >
 
-                          <label key='label' class="status-text b_FS-6 text-center c_white b_font-PFR">100%</label>
+                          <label key='label' class="status-text b_FS-6 text-center c_white b_font-PFR">{{ list.progress }}</label>
                           <img key="img1" class="status-bg" src="../../assets/img/sign-remind01.png" alt="">
                           <img  v-if="list.status == 'completed'" class="end-sign-logo" src="../../assets/img/image-car02.png"/>
                         </template>
@@ -215,13 +213,18 @@
 
             </div>
             <div slot = 'right-menu'>
-              <v-swipe-btn :width="50" >
+              <v-swipe-btn v-if="list.position != 0" :width="50" @click="standUpTask( list, index )" >
+                恢复
+              </v-swipe-btn>
+              <v-swipe-btn v-if="list.position == 0" :width="50" @click="standUpTask( list, index )" >
                 置顶
-              </v-swipe-btn><v-swipe-btn
-                :width="50"  >
+              </v-swipe-btn ><v-swipe-btn
+                :width="50"
+                v-if="list.position == 0"
+                @click="sitDownTask( list, index )" >
                 置底
               </v-swipe-btn ><v-swipe-btn v-if="role== 'creator' " :width="50" type="warn" >
-              删除
+              关闭
             </v-swipe-btn>
             </div>
           </v-swipeout>

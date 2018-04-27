@@ -162,6 +162,37 @@ class Convent {
       url, params, isShowFullLoading
     )
   }
+
+  /*
+   * 置底任务
+   * */
+  sitDownTask (taskId, opt, isShowFullLoading = true) {
+    const url = `/api/task/user/down/${taskId}`
+    const params = opt || {}
+    return post(
+      url, params, isShowFullLoading
+    )
+  }
+  /*
+   * 置顶任务
+   * */
+  standUpTask (taskId, opt, isShowFullLoading = true) {
+    const url = `/api/task/user/up/${taskId}`
+    const params = opt || {}
+    return post(
+      url, params, isShowFullLoading
+    )
+  }
+  /*
+   * 置顶任务
+   * */
+  recoverTask (taskId, opt, isShowFullLoading = true) {
+    const url = `/api/task/user/normal/${taskId}`
+    const params = opt || {}
+    return post(
+      url, params, isShowFullLoading
+    )
+  }
   /*
    * 收藏任务
    * */
@@ -174,10 +205,10 @@ class Convent {
   }
 
   /*
-   * 收藏任务
+   * 获取群组
    * */
   getGroupAvatar(projectId, opt, isShowFullLoading = true) {
-    const url = `/project/group/users/${projectId}`
+    const url = `/api/project/group/users/${projectId}`
     const params = opt || {}
     return get(
       url, params, isShowFullLoading
