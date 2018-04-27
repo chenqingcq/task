@@ -8,7 +8,9 @@
       <div class="header-wrapper c_1-bg">
         <div class="header-main">
           <img class="user-photo"  :src="user.headImage" alt="">
-          <img class="menu" @click="showSlideBar" src="../../assets/img/icon-menu.png" alt="">
+          <div class="menu-box">
+            <img class="menu" @click="showSlideBar" src="../../assets/img/icon-menu.png" alt="">
+          </div>
           <span class="project-name c_white b_FS-18 text-center">{{ projectName }} </span>
           <!--<img style="visibility: hidden" class="share" src="../../assets/img/icon-share.png" alt="">-->
 
@@ -213,18 +215,21 @@
 
             </div>
             <div slot = 'right-menu'>
-              <v-swipe-btn v-if="list.position != 0" :width="50" @click="standUpTask( list, index )" >
-                恢复
+              <v-swipe-btn v-if="list.position == 1" :width="50" @click="standUpTask( list, index )" >
+                <img class="swiper-img" src="../../assets/img/top-cancel.png" alt="">
               </v-swipe-btn>
-              <v-swipe-btn v-if="list.position == 0" :width="50" @click="standUpTask( list, index )" >
-                置顶
+              <v-swipe-btn v-if="list.position != 1" :width="50" @click="standUpTask( list, index )" >
+                <img class="swiper-img" src="../../assets/img/top.png" alt="">
+                <v-swipe-btn v-if="list.position == 2" :width="50" @click="standUpTask( list, index )" >
+                  <img class="swiper-img" src="../../assets/img/down-cancel.png" alt="">
+                </v-swipe-btn>
               </v-swipe-btn ><v-swipe-btn
                 :width="50"
-                v-if="list.position == 0"
+                v-if="list.position != 2"
                 @click="sitDownTask( list, index )" >
-                置底
+                <img class="swiper-img" src="../../assets/img/down.png" alt="">
               </v-swipe-btn ><v-swipe-btn v-if="role== 'creator' " :width="50" type="warn" >
-              关闭
+              <img class="swiper-img close"  src="../../assets/img/close-task.png" alt="">
             </v-swipe-btn>
             </div>
           </v-swipeout>

@@ -599,11 +599,14 @@ img.partyLogo {
             更多项目节点<img src="@/assets/img/icon-right-slide03.png" />
           </div>
         </div>
-        <div class="progress-container">
-          <div class="current-progress">
+        <div class="progress-container"  >
+          <div class="current-progress" v-if="!currentPoint">
+            暂无
+          </div>
+          <div v-else class="current-progress">
             <div class="left">01/30</div>
             <div class="right">
-              展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕
+              {{ currentPoint.pointDesc }}
             </div>
           </div>
           <!-- <div class="current-no-progress" >
@@ -692,7 +695,12 @@ export default {
 //            "http://bpic.588ku.com/element_origin_min_pic/16/06/20/165767ab7a315bd.jpg",
 //            "http://bpic.588ku.com/element_origin_min_pic/18/03/24/494a50847f3dbef27c31355f35d0393d.jpg" ,
 //            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg"
-      ]
+      ],
+      currentPoint:{
+        "pointId": "",
+        "pointDesc": "",
+        "pointTime": ""
+      }
     };
   },
   computed: {
@@ -817,6 +825,13 @@ export default {
           this.taskStatus = res.taskStatus;
           this.defineRole(res.role);
           this.fomatTime();
+          if( res.currentPoint ){
+            this.currentPoint = res.currentPoint
+          }
+          else{
+            this.currentPoint = null
+          }
+
           if(res.latestProgress){
             this.items = res.latestProgress.progressImage.map((val)=>{return {imgUrl:val}})
           }

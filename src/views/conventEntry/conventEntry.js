@@ -274,12 +274,13 @@ export default {
           case 6: resStatus = 'outDate' ;break;
           case 7: resStatus = 'outDate' ;break;
         }
-
         val.status = resStatus
 
         if( resStatus == 'aheadCompleted' ){
           // 天数
+
           dateStr = numberTransformChinese( parseInt(( val.completeDate - val.startTime )/86400000 ))
+          console.log(dateStr ,( val.completeDate - val.startTime )/86400000)
           text = `提前${dateStr}天完成`
         }
         else if( resStatus == 'outDate' ){

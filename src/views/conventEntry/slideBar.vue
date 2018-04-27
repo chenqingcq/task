@@ -9,8 +9,8 @@
     background: rgba(0,0,0,.6);
     z-index : 99;
   }
-  .m-t-64{
-    margin-top: 64px;
+  .m-t-50{
+    margin-top: 50px;
   }
   .slide-wrap{
     position: absolute;
@@ -216,10 +216,9 @@
                 <div class="c_white-bg text-center" style="position: relative;z-index: 2">
                   <div class="bar"></div>
                 </div>
-
               </template>
             </div>
-            <div class="btn-warp m-t-64">
+            <div class="btn-warp m-t-50">
               <div class="btn-small-success b_FS-28  ">
                 <div class="b_d-flex b_flex-center-col b_flex-center-row" @touchstart = 'newAproject' >
                   <img class="new-project-btn" src="../../assets/img/icon-add02.png" alt=""> 新增项目
@@ -328,9 +327,9 @@
               pageSize : 10 ,
               isLoaded : true
             }
-            if(this.navTab == 0 ) this.all.page = page
-            if(this.navTab == 1 ) this.myCreate.page = page
-            if(this.navTab == 2 ) this.myAction.page = page
+            if(this.navTab == 0 ){ this.all.page = page;this.all.list = [] }
+            if(this.navTab == 1 ){ this.myCreate.page = page ;this.myCreate.list = [] }
+            if(this.navTab == 2 ){ this.myAction.page = page ;this.myAction.list = []  }
           },
           test_getProjectList(){
             if(this.navTab == 0 ) var { pageNum ,pageSize } = this.all.page
