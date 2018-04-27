@@ -421,7 +421,8 @@ let reflect_to_task = {
   taskName: "任务名称",
   startTime: "开始时间",
   endTime: "结束时间",
-  standard: " 验收标准"
+  standard: " 验收标准",
+  taskDesc: "任务描述"
 };
 export default {
   data() {
@@ -457,13 +458,11 @@ export default {
       allowedLook: false,
       showMembers: false,
       members: [],
-      check_pass: false,
-      executor: ""
+      check_pass: false
     };
   },
   computed: {
     ...mapGetters({
-      getTaskExecutor: "getTaskExecutor",
       getTaskSetting: "getTaskSetting",
       getProjectId: "getProjectId",
       getTaskId: "getTaskId",
@@ -533,18 +532,17 @@ export default {
       next(vm => {
         // console.log(vm.getTaskExecutor); //过滤选中的执行人;
         vm.$refs.exe.classList.add("active_");
-        vm.executor = vm.getTaskExecutor.executor;
+        // vm.executor = vm.getTaskExecutor.executor;
+        vm.showExcutor();
       });
     } else if (
       from.path !== "/appointMessager" &&
-      to.path == "/addTaskSetting"
+      to.path == "/addTaskSetting" &&
+      from.path != "/convententry"
     ) {
       next(vm => {
         // console.log(executor);
-        if (vm.getTaskExecutor) {
-          vm.$refs.exe.classList.add("active_");
-          vm.executor = vm.getTaskExecutor.executor;
-        }
+        vm.showExcutor();
       });
     }
     if (from.path == "/convententry" && to.path == "/addTaskSetting") {
@@ -573,6 +571,25 @@ export default {
     }
   },
   methods: {
+    showExcutor() {
+      let reg = /taskId=\d{18}/;
+      if (window.location.hash.includes("taskId")) {
+        this.taskId = window.location.hash.match(reg)[0].split("=")[1];
+      }
+      if (window.location.hash.includes("projectId")) {
+        this.projectId = window.location.hash.match(reg)[0].split("=")[1];
+      }
+      Convent.getTaskBasicInfo(this.taskId)
+        .then(res => {
+          console.log("---基本任务信息--", res);
+          if (res.code == 1 && res.status == 200) {
+            this.executor = res.data.executorNickName;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     changeIndex(index, item) {
       // console.log(item);
       this.currentIndex = index;
@@ -613,12 +630,10 @@ export default {
           startTime: new Date(this.startTime).getTime(),
           endTime: new Date(this.endTime).getTime(),
           checkStandard: this.standard,
-          taskExecutor: this.executor,
           isOpen: this.isPublic ? 1 : 0
         })
           .then(res => {
-            this.SET_TASKID(res.data);
-            resovle(res);
+            resovle(res.data);
           })
           .catch(err => {
             console.log(err);
@@ -626,7 +641,15 @@ export default {
           });
       });
     },
-    confirm() {},
+    confirm() {
+      this.$router.push({
+        path: "/convententry",
+        query: {
+          taskId: this.taskId,
+          projectId: this.projectId
+        }
+      });
+    },
     check_time() {
       if (this.startTime && this.endTime) {
         if (
@@ -642,11 +665,11 @@ export default {
       let self = this;
       if (this.check_pass) {
         this._getTaskId()
-          .then(res => {
+          .then(taskId => {
             this.$router.push({
               path: "/appointMessager",
               query: {
-                taskId: self.getTaskId,
+                taskId: taskId,
                 projectId: self.getProjectId
               }
             }); //项目创建完毕
@@ -694,12 +717,7 @@ export default {
             console.log(res, "-------------pid----------");
             if (res.code == 1 && res.status == 200) {
               this.projectId = res.data;
-              this.$router.push({
-                path: "/appointMessager",
-                query: {
-                  projectId: this.projectId
-                }
-              });
+              this._createTask();
             }
           })
           .catch(err => {
@@ -756,7 +774,7 @@ export default {
     // }
   },
   mounted() {
-    window.sessionStorage.setItem("flag", true);
+    console.log(this.projectId);
   }
 };
 </script>

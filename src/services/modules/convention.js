@@ -152,7 +152,16 @@ class Convent {
       url, params, isShowFullLoading
     )
   }
-
+  /*
+   * 获取任务基本信息 
+   * */
+  getTaskBasicInfo(taskId,opt, isShowFullLoading = true) {
+    const url = `/api/task/basic/${taskId}`
+    const params = opt || {}
+    return get(
+      url, params, isShowFullLoading
+    )
+  }
   /*
    * 收藏任务
    * */
@@ -266,7 +275,7 @@ class Convent {
     const url = '/api/wx/share/face'
     const params = opt || {}
     return post(
-      url, params, isShowFullLoading =false
+      url, params, isShowFullLoading = false
     )
   }
   /*
@@ -276,20 +285,30 @@ class Convent {
     const url = '/api/wx/share/face/check'
     const params = opt || {}
     return get(
-      url, params, isShowFullLoading =false
+      url, params, isShowFullLoading = false
     )
   }
   /*
    * 获取执行人列表
    * */
-  getExcutorList(projectId,opt, isShowFullLoading = true) {
+  getExcutorList(projectId, opt, isShowFullLoading = true) {
     const url = `/api/project/members/${projectId}`
     const params = opt || {}
     return get(
-      url, params, isShowFullLoading =false
+      url, params, isShowFullLoading = false
     )
   }
-
+  /*
+   * 指定执行人
+   * */
+  cmdExcutor(taskId, opt, isShowFullLoading = true) {
+    const url = `/api/task/assign/${taskId}`
+    const params = opt || {}
+    return patch(
+      url, params, isShowFullLoading = false
+    )
+  }
+  // 
 }
 
 export default new Convent()
