@@ -165,6 +165,7 @@ export default {
           this.expires -= 1;
         }, 1000);
         if (this.expires <= 0) {
+          this.expires = '';
           clearInterval(this.timer);
           clearInterval(this.countDowner);
           this.$emit("closeQrcode");

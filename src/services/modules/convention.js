@@ -279,6 +279,17 @@ class Convent {
       url, params, isShowFullLoading =false
     )
   }
+  /*
+   * 获取执行人列表
+   * */
+  getExcutorList(projectId,opt, isShowFullLoading = true) {
+    const url = `/api/project/members/${projectId}`
+    const params = opt || {}
+    return get(
+      url, params, isShowFullLoading =false
+    )
+  }
+
 }
 
 export default new Convent()

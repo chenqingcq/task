@@ -56,7 +56,7 @@
       color: #666666;
       text-align: right;
       width: 112px*2;
-      overflow-x: scroll;
+      overflow-x: auto;
     }
     .switch-contaiener {
       margin-right: 15*2px;
@@ -419,7 +419,6 @@ import { Convent } from "@/services";
 let reflect_to_task = {
   taskTheme: "项目主题",
   taskName: "任务名称",
-  taskDesc: "任务描述",
   startTime: "开始时间",
   endTime: "结束时间",
   standard: " 验收标准"
@@ -440,6 +439,7 @@ export default {
         }
       ],
       flag: false,
+      hasProjectId: false,
       toastDom: null,
       showToast: true,
       currentIndex: 0,
@@ -448,8 +448,8 @@ export default {
       taskTheme: "",
       taskName: "",
       taskDesc: "",
-      startTime: "开始时间",
-      endTime: "结束时间",
+      startTime: "",
+      endTime: "",
       standard: "",
       executor: "",
       allowCreate: false,
@@ -466,6 +466,7 @@ export default {
       getTaskExecutor: "getTaskExecutor",
       getTaskSetting: "getTaskSetting",
       getProjectId: "getProjectId",
+      getTaskId: "getTaskId",
       getProjectThemeName: "getProjectThemeName"
     }),
     styleStart() {
@@ -506,52 +507,23 @@ export default {
       return "task-setting";
     },
     role() {
-      return this.$store.state.permission.project.role;
+      return this.$store.state.permission.project.role || "";
     },
     themeName() {
-      return this.$store.state.permission.project.themeName;
+      return this.$store.state.permission.project.themeName || "";
     }
   },
   watch: {
-    taskName(val) {
-      if (!!val) {
-        window.sessionStorage.setItem("taskName", val);
-      }
-    },
-    taskDesc(val) {
-      if (!!val) {
-        window.sessionStorage.setItem("taskDesc", val);
-      }
-    },
-    startTime(val) {
-      // console.log(val);
-      if (!!val) {
-        window.sessionStorage.setItem("startTime", val);
-        this.$refs.startDate.classList.add("active_");
-        this.startTime = val;
-      } else {
-        this.$refs.startDate.classList.remove("active_");
-      }
-    },
-    endTime(val) {
-      // console.log(val);
-      if (!!val) {
-        this.endTime = val;
+    endTime(newVal) {
+      if (!!newVal) {
         this.$refs.endDate.classList.add("active_");
-        window.sessionStorage.setItem("endTime", val);
-      } else {
-        this.$refs.endDate.classList.remove("active_");
-        // console.log(document.querySelector(".selectEndTime>.vux-cell-primary"));
+        this.check_time();
       }
     },
-    standard(val) {
-      if (!!val) {
-        window.sessionStorage.setItem("standard", val);
-      }
-    },
-    taskTheme(val) {
-      if (!!val) {
-        window.sessionStorage.setItem("taskTheme", val);
+    startTime(newVal) {
+      if (!!newVal) {
+        this.$refs.startDate.classList.add("active_");
+        this.check_time();
       }
     }
   },
@@ -579,20 +551,21 @@ export default {
       next(vm => {
         vm.projectId = vm.getProjectId || "";
         console.log(vm.projectId);
-        // debugger;
         if (vm.projectId) {
+          vm.hasProjectId = true;
           vm.taskTheme = vm.getProjectThemeName;
           vm.$refs.taskTheme.setAttribute("disabled", true);
           vm.taskName = "";
           vm.taskDesc = "";
-          vm.taskExecutor = "";
+          vm.executor = "";
           vm.startTime = "";
           vm.endTime = "";
         } else {
+          vm.hasProjectId = false;
           vm.taskTheme = "";
           vm.taskName = "";
           vm.taskDesc = "";
-          vm.taskExecutor = "";
+          vm.executor = "";
           vm.startTime = "";
           vm.endTime = "";
         }
@@ -629,7 +602,7 @@ export default {
         path: "/section?mode=edit"
       }); //编辑项目节点
     },
-    getTaskId() {
+    _getTaskId() {
       return new Promise((resovle, reject) => {
         // console.log(window.location.hash);
         Convent.createTask({
@@ -645,58 +618,44 @@ export default {
         })
           .then(res => {
             this.SET_TASKID(res.data);
-            // debugger;
-            this.$dialog.message({
-              message: "任务创建完成!",
-              icon: "pass"
-            });
-            resovle();
+            resovle(res);
           })
           .catch(err => {
             console.log(err);
+            reject();
           });
       });
     },
-    confirm() {
-      let self = this;
-      this.$dialog.confirm({
-        message: "确定创建任务?",
-        confirm() {
-          if (self.check_time()) {
-            self._createTask();
-          }
-        }
-      });
-    },
+    confirm() {},
     check_time() {
       if (this.startTime && this.endTime) {
         if (
           new Date(this.endTime).getTime() <= new Date(this.startTime).getTime()
         ) {
           this.$toast.show("结束应大于开始时间！", 1000);
-          return false;
-        } else {
-          return true;
+          this.endTime = "";
         }
-      } else if (!this.startTime) {
-        this.$toast.show("请设置开始时间!", 1000);
-        return false;
-      } else if (!this.endTime) {
-        this.$toast.show("请设置结束时间!", 1000);
-        return false;
       }
     },
     _createTask() {
       this.validate();
-
+      let self = this;
       if (this.check_pass) {
-        this.getTaskId()
-          .then(() => {
+        this._getTaskId()
+          .then(res => {
             this.$router.push({
-              path: "conventEntry"
+              path: "/appointMessager",
+              query: {
+                taskId: self.getTaskId,
+                projectId: self.getProjectId
+              }
             }); //项目创建完毕
+            // debugger;
           })
-          .catch(err => {});
+          .catch(err => {
+            console.log(err);
+            // debugger;
+          });
       }
     },
     validate() {
@@ -711,37 +670,42 @@ export default {
           this.check_pass = true;
         } else {
           // console.log(k);
-          this.$dialog.message({
-            message: `请添加${reflect_to_task[k]}`,
-            icon: "fail"
-          });
+          this.$toast.show(`请添加${reflect_to_task[k]}`, 500);
           this.check_pass = false;
           return;
         }
-        // if (this.role === 'creator' && k === 'projectDeadLine') {//项目创建人可见
-        //   if (!this.getProjectDeadLine) {
-        //     this.$dialog.message({
-        //       message: `请添加${reflect_to_task[k]}`
-        //     });
-        //     this.check_pass = false;
-        //     return;
-        //   } else {
-        //     this.check_pass = true;
-        //   }
-        // };
       }
     },
     appointerManager() {
-      this.$router.push({
-        path: "appointMessager",
-        query: {
-          [this.getProjectId
-            ? "projectId"
-            : this.getTaskId ? "taskId" : ""]: this.getProjectId
-            ? this.getProjectId
-            : this.getTaskId ? this.getTaskId : ''
-        }
-      });
+      //验证必选项
+      if (this.hasProjectId) {
+        this._createTask();
+      } else {
+        this._createProject();
+      }
+    },
+    _createProject() {
+      this.validate();
+      if (this.check_pass) {
+        Convent.createProject({
+          projectName: this.taskTheme
+        })
+          .then(res => {
+            console.log(res, "-------------pid----------");
+            if (res.code == 1 && res.status == 200) {
+              this.projectId = res.data;
+              this.$router.push({
+                path: "/appointMessager",
+                query: {
+                  projectId: this.projectId
+                }
+              });
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     },
     selected(index, isAllowed) {
       this.members[index].isAllowed = !isAllowed;
@@ -773,16 +737,8 @@ export default {
       this.taskTheme = this.getTaskTheme; //分为两种方式一种首页创建任务；另一直接创建任务直接;
     },
     init() {
-      this.flag;
       //this.role != 'creator' ? this.setTaskTheme() : ''
       this.taskTheme = this.getProjectThemeName;
-      this.taskName = window.sessionStorage.getItem("taskName");
-      this.taskDesc = window.sessionStorage.getItem("taskDesc");
-      this.startTime = window.sessionStorage.getItem("startTime");
-      this.endTime = window.sessionStorage.getItem("endTime");
-      this.standard = window.sessionStorage.getItem("standard");
-      this.isPublic = window.sessionStorage.getItem("isPublic");
-      this.allowedLook = window.sessionStorage.getItem(" allowedLook");
     }
   },
   created() {
