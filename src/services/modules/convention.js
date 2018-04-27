@@ -264,7 +264,7 @@ class Convent {
    * 接受任务
    * */
   recieveTask(taskId, opt, isShowFullLoading = true) {
-    const url = `/api/task/recieve/${taskId}`
+    const url = `/api/task/receive/${taskId}`
     const params = opt || {}
     return patch(
       url, params, isShowFullLoading

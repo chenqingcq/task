@@ -548,16 +548,14 @@ export default {
     if (from.path == "/convententry" && to.path == "/addTaskSetting") {
       next(vm => {
         vm._getProjectId();
+        vm.setNull();
+        vm._getProjectThemeName();
         console.log(vm.projectId);
         if (vm.projectId) {
           vm.hasProjectId = true;
-          vm.setNull();
-        } else if(vm.taskTheme){
-          vm.$refs.taskTheme.style.setAttribute('disabled',true);
-        }else{
+        } else {
           vm.hasProjectId = false;
           vm.taskTheme = "";
-          vm.setNull();
         }
       });
     }
@@ -571,12 +569,26 @@ export default {
       this.endTime = "";
     },
     _getProjectId() {
-      let reg = /taskId=\d{18}/;
       if (window.location.hash.includes("taskId")) {
-        this.taskId = window.location.hash.match(reg)[0].split("=")[1];
+        let reg = /taskId=\d{18}/;
+        this.taskId = window.location.hash.match(reg)
+          ? window.location.hash.match(reg)[0].split("=")[1]
+          : "";
       }
       if (window.location.hash.includes("projectId")) {
-        this.projectId = window.location.hash.match(reg)[0].split("=")[1];
+        let reg = /projectId=\d{18}/;
+        this.projectId = window.location.hash.match(reg)
+          ? window.location.hash.match(reg)[0].split("=")[1]
+          : "";
+      }
+    },
+    _getProjectThemeName() {
+      if (window.location.hash.includes("projectName")) {
+        this.taskTheme = window.location.hash
+          .split("projectName")[1]
+          .split("=")[1];
+        this.$refs.taskTheme.setAttribute("disabled", true);
+        console.log(this.taskTheme);
       }
     },
     setExcutor() {
@@ -635,7 +647,7 @@ export default {
           isOpen: this.isPublic ? 1 : 0
         })
           .then(res => {
-            this.$toast.show('调转中...')
+            this.$toast.show("调转中...");
             resovle(res.data);
           })
           .catch(err => {

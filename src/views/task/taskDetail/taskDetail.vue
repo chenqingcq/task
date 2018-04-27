@@ -793,7 +793,8 @@ export default {
         default: {
           this.role = "noTaskor";
         }
-      }
+      };
+      console.log(this.role)
     },
     getData() {
       const taskId = this.taskId
@@ -815,9 +816,8 @@ export default {
           this.isLike = res.isStar == "0" ? false : true;
           this.position = res.position;
           this.taskStatus = res.taskStatus;
-          this.defineRole(res.role);
+          this.defineRole(2);
           this.fomatTime();
-      debugger
           if(res.latestProgress){
             this.items = res.latestProgress.progressImage.map((val)=>{return {imgUrl:val}})
           }
@@ -1009,7 +1009,9 @@ export default {
   created() {
     this.init();
   },
-  mounted() {},
+  mounted() {
+    
+  },
   beforeDestroy() {
     this.timer = null;
   }
