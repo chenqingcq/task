@@ -38,7 +38,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        img {
+        .img {
           display: inline-block;
           width: 100%;
           height: 100%;
@@ -60,17 +60,17 @@
 }
 @keyframes showQrcode {
   from {
-      bottom: -370*2px;
+    bottom: -370*2px;
   }
   to {
-      bottom: 0;
+    bottom: 0;
   }
 }
 .show-enter-active {
-    animation: .5s showQrcode ease;
+  animation: 0.5s showQrcode ease;
 }
 .show-leave-active {
-    animation: .5s showQrcode ease reverse;    
+  animation: 0.5s showQrcode ease reverse;
 }
 </style>
 
@@ -81,26 +81,118 @@
              <div class="qrcode_panel">
                  <div class="tilte">面对面分发</div>
                  <div class="qrcodeImg_container">
-                     <img src="@/assets/img/logo.png" alt="网络出错">
+                     <canvas class="img"></canvas>
                  </div>
-                 <div class="countdown">60s</div>
+                 <div class="countdown">{{expires}}s</div>
              </div>
          </div>
         </div>
     </transition>
 </template>
 <script>
+import { Convent } from "@/services";
+import QRcode from "qrcode";
 export default {
   props: {
     showQrcode: {
       type: Boolean,
       default: false
+    },
+    projectId: {
+      type: String,
+      default: ""
+    },
+    taskId: {
+      type: String,
+      default: ""
     }
   },
   data() {
-    return {};
+    return {
+      _projectId: "",
+      _taskId: "",
+      isInvalid: true,
+      timer: null,
+      expires: ""
+    };
+  },
+  watch: {
+    projectId(newVal) {
+      console.log("qr" + newVal);
+      this._projectId = newVal;
+    },
+    taskId(newVal) {
+      this._taskId = newVal;
+    },
+    showQrcode() {
+      Convent.sharefacetoface({
+        id: this._projectId ? this._projectId : this._taskId,
+        type: this._projectId ? 1 : 0
+      })
+        .then(res => {
+          console.log(res.shareUrl);
+          if (res.code == 1 && res.status == 200) {
+            QRcode.toCanvas(
+              document.querySelector("canvas.img"),
+              res.data.shareUrl,
+              function(error, url) {
+                if (error) console.error(error);
+                console.log("success!", url);
+              }
+            );
+            this.checkValid(res.data.key); //检测是否有效
+
+            this.countDown((this.expires = res.data.expiresIn)); //有效期
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    isInvalid(newVal) {
+      if (!newVal) {
+        clearInterval(this.timer);
+        clearInterval(this.countDowner);
+      }
+    }
   },
   methods: {
+    countDown(time) {
+      if (this.countDowner && this.isInvalid) {
+        clearInterval(this.countDowner);
+      } else {
+        this.countDowner = setInterval(() => {
+          this.expires -= 1;
+        }, 1000);
+        if (this.expires <= 0) {
+          clearInterval(this.timer);
+          clearInterval(this.countDowner);
+          this.$emit("closeQrcode");
+        }
+      }
+    },
+    checkValid(key) {
+      console.log(key);
+      if (this.timer) {
+        clearInterval(this.timer);
+      } else {
+        this.timer = setInterval(() => {
+          Convent.checkValid({
+            key: key
+          })
+            .then(res => {
+              console.log(res);
+              this.isInvalid = res.data.isValid;
+              if (!this.isInvalid) {
+                this.$emit("closeQrcode");
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }, 5000);
+      }
+    },
     closeQRcode($ev) {
       if ($ev.target.className == "qr_container") {
         this.$emit("closeQrcode");
@@ -108,7 +200,8 @@ export default {
     }
   },
   mounted() {
-    console.log(222);
+    console.log(this.showQrcode);
+    // debugger;
   }
 };
 </script>

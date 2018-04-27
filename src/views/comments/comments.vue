@@ -14,7 +14,7 @@
       </div>
       <scroll class="comments-container" ref="scroll" :listenScroll='listenScroll' @scroll='scrolling' @scrollEnd='scrollEnd' v-if="members.length>1">
         <ul class="comment-panel">
-          <li v-for="(item,index) in members" :key="index" class="lisItem" :commentId ="item.commentId" ref='item'>
+          <li v-for="(item,index) in members" :key="index" class="lisItem" :commentPid ='item.commentPid' :commentId ="item.commentId" ref='item'>
             <div class="left">
               <!--测试-->
               <div class="icon">
@@ -31,8 +31,8 @@
               <div class="comments-callback">
                 <span @touchstart='_link_to_secondary_comments'>{{item.replyNum}}条回复</span>
                 <div>
-                  <img @touchstart='add_praise(index,item.commentId)' :src="imgUrl"/>
-                  <span ref="goods">{{item.isThumbs}}</span>
+                  <img @touchstart='add_praise($event, item.isThumbs,item.commentId)'  :isThumbs='item.isThumbs' :src="imgUrl"/>
+                  <span ref="goods">{{calThumbsNum(item.thumbsNum)}}</span>
                 </div>
               </div>
             </div>
@@ -64,7 +64,10 @@ export default {
       listenScroll: true,
       state: false,
       showUserInput: false,
-      currentState: {}
+      currentState: {},
+      isThumbs: 0,
+      addThumbs: false,
+      flag: false
     };
   },
   props: {
@@ -96,6 +99,15 @@ export default {
     }
   },
   methods: {
+    calThumbsNum(num) {
+      if (this.flag && this.addThumbs) {
+        return num + 1;
+      } else if (this.flag && !this.addThumbs) {
+        return num - 1;
+      } else if (!this.flag) {
+        return num;
+      }
+    },
     defineDate(date) {
       console.log(date);
       date = parseInt(date);
@@ -104,7 +116,7 @@ export default {
         "年" +
         (new Date(date).getMonth() + 1) +
         "月" +
-        new Date(date).getDay() +
+        new Date(date).getDate() +
         "日"
       );
     },
@@ -136,39 +148,44 @@ export default {
     userInput() {
       this.showUserInput = true;
     },
-    add_praise(index, commentId) {
-      console.log(index, commentId,this.$refs.item, "--------------->>");
-      if (!this.$refs.goods[index].getAttribute("class")) {//点赞
-        this.$refs.goods[index].classList.add("active");
-        this.$refs.goods[
-          index
-        ].parentNode.children[0].src = require("@/assets/img/iocn-good2.png");
-        Convent.thumbs( commentId,{
-          commentId: commentId,
-          isThumbs: 1
-        })
-          .then(res => {
-            console.log(res);
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      } else {//取消点赞
-        this.$refs.goods[index].classList.remove("active");
-        this.$refs.goods[
-          index
-        ].parentNode.children[0].src = require("@/assets/img/iocn-good.png");
-        Convent.thumbs( commentId,{
-          commentId: commentId,
-          isThumbs: 0
-        })
-          .then(res => {
-            console.log(res);
-          })
-          .catch(err => {
-            console.log(err);
-          });
+    add_praise(e, isThumbs, commentId) {
+      let thumbs = e.target.getAttribute("isthumbs");
+      console.log(thumbs);
+      if (thumbs == 0) {
+        e.target.setAttribute("isthumbs", 1);
+        e.target.src = require("@/assets/img/iocn-good2.png");
+        e.target.parentNode.classList.add("active");
+        //点赞
+        this.thumb(commentId, 1, true);
+      } else {
+        e.target.setAttribute("isthumbs", 0);
+        e.target.src = require("@/assets/img/iocn-good.png");
+        e.target.parentNode.classList.remove("active");
+        this.thumb(commentId, 0, false);
       }
+    },
+    thumb(commentId, isThumbs, mode) {
+      Convent.thumbs(commentId, {
+        commentId: commentId,
+        isThumbs: parseInt(isThumbs)
+      })
+        .then(res => {
+          console.log(res);
+          if ((res.code = 1 && res.status == 200)) {
+            if (mode) {
+              this.$toast.show("点赞成功!");
+              this.addThumbs = true;
+              this.flag = true;
+            } else {
+              this.$toast.show("取消点赞!");
+              this.addThumbs = false;
+              this.flag = true;
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     scrolling() {
       console.log(" listenScroll");
@@ -182,11 +199,13 @@ export default {
   },
   mounted() {
     console.log(this.members, this.taskId, "-----一级评论组件------");
-  },
+  }
 };
 </script>
 <style lang="less" scoped>
-
+.banner {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
 .all-comment {
   color: #999;
   height: 40*2px;

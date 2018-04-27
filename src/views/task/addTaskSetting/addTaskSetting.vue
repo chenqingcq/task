@@ -581,8 +581,8 @@ export default {
         console.log(vm.projectId);
         // debugger;
         if (vm.projectId) {
-          vm.taskTheme = vm.getTaskTheme;
-          // debugger
+          vm.taskTheme = vm.getProjectThemeName;
+          vm.$refs.taskTheme.setAttribute("disabled", true);
           vm.taskName = "";
           vm.taskDesc = "";
           vm.taskExecutor = "";
@@ -669,10 +669,7 @@ export default {
       });
     },
     check_time() {
-      if (
-        this.startTime &&
-        this.endTime 
-      ) {
+      if (this.startTime && this.endTime) {
         if (
           new Date(this.endTime).getTime() <= new Date(this.startTime).getTime()
         ) {
@@ -735,7 +732,16 @@ export default {
       }
     },
     appointerManager() {
-      this.$router.push("appointMessager");
+      this.$router.push({
+        path: "appointMessager",
+        query: {
+          [this.getProjectId
+            ? "projectId"
+            : this.getTaskId ? "taskId" : ""]: this.getProjectId
+            ? this.getProjectId
+            : this.getTaskId ? this.getTaskId : ''
+        }
+      });
     },
     selected(index, isAllowed) {
       this.members[index].isAllowed = !isAllowed;
@@ -783,15 +789,15 @@ export default {
     // this.role = 'taskManager'; //邀约他人可见
     //this.role = 'creator' //项目发起人编辑节点
     // console.log(this.taskExecutor);
-    if (this.getProjectId && this.getProjectId.length) {
-      this.init();
-    } else {
-      this.$dialog.message({
-        message: "请创建项目名称",
-        icon: "fail"
-      });
-      this.$router.push("conventEntry");
-    }
+    // if (this.getProjectId && this.getProjectId.length) {
+    //   this.init();
+    // } else {
+    //   this.$dialog.message({
+    //     message: "请创建项目名称",
+    //     icon: "fail"
+    //   });
+    //   this.$router.push("conventEntry");
+    // }
   },
   mounted() {
     window.sessionStorage.setItem("flag", true);

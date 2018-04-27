@@ -377,7 +377,7 @@
       <div ref="deleteBtn" :class="{deleteBtn:true,deleteExcutor: showBtntype,deleteExcutorDisable :!showBtntype}" @touchstart.native='deleteExcutor'>删除人员</div>
     </div>
     <invites :showInvite='showInvite'></invites>
-    <qrcode :showQrcode='showQrcode' @closeQrcode ='closeQrcode'></qrcode>  
+    <qrcode :showQrcode='showQrcode' @closeQrcode ='closeQrcode' :projectId='projectId' :taskId = 'taskId'></qrcode>  
   </div>
 </template>
 <script>
@@ -398,6 +398,8 @@ export default {
       type: "updated",
       showInvite: false,
       showQrcode: false,
+      projectId: "",
+      taskId: "",
       navs: [
         {
           name: "更新",
@@ -443,8 +445,28 @@ export default {
       }
     }
   },
+  beforeRouteEnter: (to, from, next) => {
+    // ...
+    console.log(to, from);
+    if (to.path == "/appointMessager" && from.path == "/addTaskSetting") {
+      next(vm => {
+        if (window.location.hash.includes("projectId")) {
+          console.log("-------hasprojectId-------<<<<");
+          vm.projectId = window.location.hash.split("?")[1].split("=")[1];
+          // debugger;
+          // this.projectId = window.location.
+        } else if (window.location.hash.includes("taskId")) {
+          vm.taskId = window.location.hash.split("?")[1].split("=")[1];
+          console.log("-----hasTaskId-----");
+        } else {
+          vm.$toast.show("请重新添加任务!", 500);
+          vm.$router.push("addTaskSetting");
+        }
+      });
+    }
+  },
   methods: {
-    closeQrcode(){
+    closeQrcode() {
       this.showQrcode = false;
     },
     face_to_face() {
@@ -482,6 +504,7 @@ export default {
     },
     inviteOthers() {
       //分享
+      console.log("------------------------->>>");
       this.showInvite = !this.showInvite;
       this.showShare = !this.showShare;
     },

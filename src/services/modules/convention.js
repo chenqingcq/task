@@ -2,7 +2,15 @@
  * Created by hejiahui on 2018/4/16.
  */
 
-import {get, post, put, upImage, deleter, formDataPost, patch} from '@/services/ajax/netaxios'
+import {
+  get,
+  post,
+  put,
+  upImage,
+  deleter,
+  formDataPost,
+  patch
+} from '@/services/ajax/netaxios'
 
 // 项目
 class Convent {
@@ -56,10 +64,10 @@ class Convent {
       url, params, isShowFullLoading
     )
   }
-   /*
+  /*
    *  对一级留言点赞或取消点赞
    * */
-  thumbs(commentId,opt, isShowFullLoading = true) {
+  thumbs(commentId, opt, isShowFullLoading = true) {
     const url = `/api/comment/thumbs/${commentId}`
     const params = opt || {}
     return post(
@@ -264,7 +272,7 @@ class Convent {
   /*
    * 删除任务进度
    * */
-  deleteTaskProcess (opt, isShowFullLoading = true) {
+  deleteTaskProcess(opt, isShowFullLoading = true) {
     const url = '/api/task/schedule/remove'
     const params = opt || {}
     return get(
@@ -274,15 +282,33 @@ class Convent {
   /*
    * 任务进度列表
    * */
-  taskProcessList (opt, isShowFullLoading = true) {
+  taskProcessList(opt, isShowFullLoading = true) {
     const url = '/api/task/schedule/list'
     const params = opt || {}
     return get(
       url, params, isShowFullLoading
     )
   }
-
-
+  /*
+   * 面对面分享
+   * */
+  sharefacetoface(opt, isShowFullLoading = true) {
+    const url = '/api/wx/share/face'
+    const params = opt || {}
+    return post(
+      url, params, isShowFullLoading =false
+    )
+  }
+  /*
+   * 检测二维码是否有效
+   * */
+  checkValid(opt, isShowFullLoading = true) {
+    const url = '/api/wx/share/face/check'
+    const params = opt || {}
+    return get(
+      url, params, isShowFullLoading =false
+    )
+  }
 }
 
 export default new Convent()

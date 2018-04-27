@@ -755,6 +755,7 @@ export default {
       next(vm => {
         vm._getTaskId();
         vm.getData();
+        vm.getTaskComment();        
       });
     }
   },
