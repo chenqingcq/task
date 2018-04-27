@@ -533,7 +533,7 @@ export default {
         // console.log(vm.getTaskExecutor); //过滤选中的执行人;
         vm.$refs.exe.classList.add("active_");
         // vm.executor = vm.getTaskExecutor.executor;
-        vm.showExcutor();
+        vm.setExcutor();
       });
     } else if (
       from.path !== "/appointMessager" &&
@@ -542,36 +542,35 @@ export default {
     ) {
       next(vm => {
         // console.log(executor);
-        vm.showExcutor();
+        vm.setExcutor();
       });
     }
     if (from.path == "/convententry" && to.path == "/addTaskSetting") {
       next(vm => {
-        vm.projectId = vm.getProjectId || "";
+        vm._getProjectId();
         console.log(vm.projectId);
         if (vm.projectId) {
           vm.hasProjectId = true;
-          vm.taskTheme = vm.getProjectThemeName;
-          vm.$refs.taskTheme.setAttribute("disabled", true);
-          vm.taskName = "";
-          vm.taskDesc = "";
-          vm.executor = "";
-          vm.startTime = "";
-          vm.endTime = "";
-        } else {
+          vm.setNull();
+        } else if(vm.taskTheme){
+          vm.$refs.taskTheme.style.setAttribute('disabled',true);
+        }else{
           vm.hasProjectId = false;
           vm.taskTheme = "";
-          vm.taskName = "";
-          vm.taskDesc = "";
-          vm.executor = "";
-          vm.startTime = "";
-          vm.endTime = "";
+          vm.setNull();
         }
       });
     }
   },
   methods: {
-    showExcutor() {
+    setNull() {
+      this.taskName = "";
+      this.taskDesc = "";
+      this.executor = "";
+      this.startTime = "";
+      this.endTime = "";
+    },
+    _getProjectId() {
       let reg = /taskId=\d{18}/;
       if (window.location.hash.includes("taskId")) {
         this.taskId = window.location.hash.match(reg)[0].split("=")[1];
@@ -579,6 +578,9 @@ export default {
       if (window.location.hash.includes("projectId")) {
         this.projectId = window.location.hash.match(reg)[0].split("=")[1];
       }
+    },
+    setExcutor() {
+      this._getProjectId();
       Convent.getTaskBasicInfo(this.taskId)
         .then(res => {
           console.log("---基本任务信息--", res);
@@ -633,6 +635,7 @@ export default {
           isOpen: this.isPublic ? 1 : 0
         })
           .then(res => {
+            this.$toast.show('项目创建完成,调转中...')
             resovle(res.data);
           })
           .catch(err => {
