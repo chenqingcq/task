@@ -328,7 +328,7 @@
           newSection(){
             const projectId = this.projectId
             const pointDesc = this.newSectionVal
-            const pointTime = this.todayDate
+            const pointTime = +new Date(this.todayDate.replace('-','/'))
             if( !pointDesc ){
               this.$dialog.message({
                 message: '请添加文字',

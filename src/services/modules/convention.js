@@ -134,11 +134,11 @@ class Convent {
   /*
    * 获取任务详情 用于 任务详情页
    * */
-  taskDetail(taskId, opt, isShowFullLoading = true, ) {
-    const url = `/api/task/detail/${taskId}`
-    const params = opt || {}
+  taskDetail(opt, isShowFullLoading = true ) {
+    const url = `/api/task/detail/${opt.taskId}?projectId=${opt.projectId}`
+    //const url = '/api/task/detail/9872488840072298?projectId=986811721771147'
     return get(
-      url, params, isShowFullLoading
+      url, {}, isShowFullLoading
     )
   }
 

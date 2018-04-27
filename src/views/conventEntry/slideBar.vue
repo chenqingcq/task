@@ -499,7 +499,7 @@
                   projectName : text ,
                   role : 'creator'
                 })
-                this.$router.push('/addTaskSetting')
+                this.$router.push(`/addTaskSetting?projectId=${res.data}&projectName=${text}`)
               })
             }
 

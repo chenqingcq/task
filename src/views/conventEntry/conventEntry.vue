@@ -9,7 +9,7 @@
         <div class="header-main">
           <img class="user-photo"  :src="user.headImage" alt="">
           <img class="menu" @click="showSlideBar" src="../../assets/img/icon-menu.png" alt="">
-          <span class="project-name c_white b_FS-18 text-center">{{ themeName }} </span>
+          <span class="project-name c_white b_FS-18 text-center">{{ projectName }} </span>
           <!--<img style="visibility: hidden" class="share" src="../../assets/img/icon-share.png" alt="">-->
 
           <img v-if = "role == 'creator'" class="add" @click="addTask" src="../../assets/img/icon-setting.png" alt="">

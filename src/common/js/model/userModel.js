@@ -1,5 +1,5 @@
 import { User } from '@/services'
-import {wx} from '@/services'
+import {Wechat} from '@/services'
 import BaseModel from './BaseModel'
 import HUD from '../Extension/YBProgressHUD'
 const FOO_KEY = Symbol.for('userModel');
@@ -68,7 +68,7 @@ class UserModel extends BaseModel{
 
   // 获取微信基本信息
   getWxBaseData (url) {
-    wx.getWxBaseData(url).then((data) => {
+    Wechat.getWxBaseData(url).then((data) => {
       this.setData(data)
       this.getWxCode()
     }).catch((err) => {
@@ -95,7 +95,7 @@ class UserModel extends BaseModel{
 
   // 获取微信code值
   getWxCode () {
-    wx.getWxCode({
+    Wechat.getWxCode({
       appid: this.appId,
       redirect_uri: encodeURI('https://baidu.com'),
       response_type: 'code',

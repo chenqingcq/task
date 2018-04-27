@@ -80,7 +80,7 @@
               </div>
               <div v-if="process.imgs.length > 0" class="imgs-wrap b_FS-0">
                 <template v-for="(img,val) in process.imgs ">
-                  <img @click="doWechatPreview(process.imgs, val )"  :src="'//'+ img" alt="">
+                  <img @click="$wechat.doWechatPreview(process.imgs, val )"  :src="'//'+ img" alt="">
                 </template>
                 <!--<img  src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">-->
                 <!--<img  src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">-->
@@ -169,8 +169,6 @@
 </template>
 <script type="text/babel">
 
-  // 微信图片点开大图查看
-  import { doWechatPreview } from "@/utils/wx"
   // services
   import { Convent } from '@/services'
   export default{
@@ -234,7 +232,7 @@
       this.getProcessList()
     },
     methods:{
-      doWechatPreview: doWechatPreview,
+
       initDate(d = null ){
         if(!d){
           d = new Date()
