@@ -816,7 +816,7 @@ export default {
           this.isLike = res.isStar == "0" ? false : true;
           this.position = res.position;
           this.taskStatus = res.taskStatus;
-          this.defineRole(2);
+          this.defineRole(res.role);
           this.fomatTime();
           if(res.latestProgress){
             this.items = res.latestProgress.progressImage.map((val)=>{return {imgUrl:val}})

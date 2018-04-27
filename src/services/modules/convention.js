@@ -9,7 +9,7 @@ import {
   upImage,
   deleter,
   formDataPost,
-  patch
+  patch,
 } from '@/services/ajax/netaxios'
 
 // 项目
@@ -134,7 +134,7 @@ class Convent {
   /*
    * 获取任务详情 用于 任务详情页
    * */
-  taskDetail(opt, isShowFullLoading = true ) {
+  taskDetail(opt, isShowFullLoading = true) {
     const url = `/api/task/detail/${opt.taskId}?projectId=${opt.projectId}`
     //const url = '/api/task/detail/9872488840072298?projectId=986811721771147'
     return get(
@@ -155,7 +155,7 @@ class Convent {
   /*
    * 获取任务基本信息 
    * */
-  getTaskBasicInfo(taskId,opt, isShowFullLoading = true) {
+  getTaskBasicInfo(taskId, opt, isShowFullLoading = true) {
     const url = `/api/task/basic/${taskId}`
     const params = opt || {}
     return get(
@@ -166,7 +166,7 @@ class Convent {
   /*
    * 置底任务
    * */
-  sitDownTask (taskId, opt, isShowFullLoading = true) {
+  sitDownTask(taskId, opt, isShowFullLoading = true) {
     const url = `/api/task/user/down/${taskId}`
     const params = opt || {}
     return post(
@@ -176,7 +176,7 @@ class Convent {
   /*
    * 置顶任务
    * */
-  standUpTask (taskId, opt, isShowFullLoading = true) {
+  standUpTask(taskId, opt, isShowFullLoading = true) {
     const url = `/api/task/user/up/${taskId}`
     const params = opt || {}
     return post(
@@ -186,7 +186,7 @@ class Convent {
   /*
    * 置顶任务
    * */
-  recoverTask (taskId, opt, isShowFullLoading = true) {
+  recoverTask(taskId, opt, isShowFullLoading = true) {
     const url = `/api/task/user/normal/${taskId}`
     const params = opt || {}
     return post(
@@ -330,6 +330,16 @@ class Convent {
       url, params, isShowFullLoading = false
     )
   }
+   /*
+   * 删除项目成员
+   * */
+  deleteExcutor(projectId, opt, isShowFullLoading = true) {
+    const url = `/api/project/members/${projectId}`
+    const params = opt || {}
+    return deleter(
+      url, params, isShowFullLoading = false
+    )
+  }
   /*
    * 指定执行人
    * */
@@ -340,7 +350,16 @@ class Convent {
       url, params, isShowFullLoading = false
     )
   }
-  // 
+  /*
+   * 更新进度
+   * */
+  updateTask(taskId, opt, isShowFullLoading = true) {
+    const url = `/api/task/${taskId}`
+    const params = opt || {}
+    return patch(
+      url, params, isShowFullLoading = false
+    )
+  }
 }
 
 export default new Convent()

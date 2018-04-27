@@ -461,14 +461,18 @@ export default {
         if (window.location.hash.includes("projectId")) {
           let reg = /projectId=\d{18}/;
           console.log(window.location.hash.match(reg));
-          vm.projectId = window.location.hash.match(reg)[0].split("=")[1];
+          vm.projectId = window.location.hash.match(reg)
+            ? window.location.hash.match(reg)[0].split("=")[1]
+            : "";
           console.log("-------", vm.projectId);
           vm.getExcutorList(vm.projectId);
           // debugger;
         }
         if (window.location.hash.includes("taskId")) {
           let reg = /taskId=\d{18}/;
-          vm.taskId = window.location.hash.match(reg)[0].split("=")[1];
+          vm.taskId = window.location.hash.match(reg)
+            ? window.location.hash.match(reg)[0].split("=")[1]
+            : "";
           console.log("-----hasTaskId-----", vm.taskId);
           vm.getExcutorList(vm.projectId);
           // debugger;
@@ -487,12 +491,16 @@ export default {
       next(vm => {
         if (window.location.hash.includes("projectId")) {
           let reg = /projectId=\d{18}/;
-          vm.projectId = window.location.hash.match(reg)[0].split("=")[1];
+          vm.projectId = window.location.hash.match(reg)
+            ? window.location.hash.match(reg)[0].split("=")[1]
+            : "";
           console.log("---pid----", vm.projectId);
           vm.getExcutorList(vm.projectId);
         } else if (window.location.hash.includes("taskId")) {
           let reg = /taskId=\d{18}/;
-          vm.taskId = window.location.hash.match(reg)[0].split("=")[1];
+          vm.taskId = window.location.hash.match(reg)
+            ? window.location.hash.match(reg)[0].split("=")[1]
+            : "";
           console.log("-----hasTaskId-----", vm.taskId);
           // debugger;
         } else {
@@ -503,6 +511,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      SET_USER_ID: "SET_USER_ID"
+    }),
     defineShow(arr) {
       console.log(arr);
       this.showArr = new Array(arr.length).fill(false);
@@ -562,6 +573,7 @@ export default {
     },
     commandExcutor() {
       console.log(this.userId, this.projectId, this.taskId);
+      this.SET_USER_ID(this.userId);
       Convent.cmdExcutor(this.taskId, {
         taskId: this.taskId,
         userId: this.userId,
@@ -571,10 +583,11 @@ export default {
           console.log(res);
           if (res.code == 1 && res.status == 200) {
             this.$router.push({
-              path:"/addTaskSetting",
-              query:{
-                taskId : this.taskId,
-                projectId:this.projectId
+              path: "/addTaskSetting",
+              query: {
+                taskId: this.taskId,
+                projectId: this.projectId,
+                userId: this.userId
               }
             });
           }
@@ -601,26 +614,25 @@ export default {
         this.showShare = !this.showShare;
       }
     },
-    deleteExcutor() {
+    deleteExcutor() {//删除项目成员
+      this.showBtntype = !this.showBtntype;
+      let self = this;
       if (this.showBtntype) {
-        //已经选中成员
-        console.log(this.nowIndex);
-        let self = this;
-        this.$dialog.info({
-          btnName: "delete",
-          placeholder: "确定删除成员",
+        this.$dialog.confirm({
+          message: "确定删除该成员?",
           operate() {
-            self.DELETE_TASK_EXECUTOR(self.nowIndex); //删除选中成员
-            self.sort(self.type); //重新排序
-            self.showBtntype = false;
+            //已经选中成员
+            Convent.deleteExcutor(self.projectId, {
+              projectId: self.projectId,
+              userId: self.userId
+            })
+              .then(res => {
+                console.log(res);
+              })
+              .catch(err => {
+                console.log(err);
+              });
           }
-        });
-      } else {
-        console.log("跳转至删除人员界面");
-        let self = this;
-        this.$dialog.info({
-          btnName: "delete",
-          placeholder: "选择要删除的成员"
         });
       }
     },

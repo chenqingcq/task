@@ -466,7 +466,8 @@ export default {
       getTaskSetting: "getTaskSetting",
       getProjectId: "getProjectId",
       getTaskId: "getTaskId",
-      getProjectThemeName: "getProjectThemeName"
+      getProjectThemeName: "getProjectThemeName",
+      getUserId: "getUserId"
     }),
     styleStart() {
       if (!!this.startTime && window.sessionStorage.getItem("flag")) {
@@ -547,52 +548,32 @@ export default {
     }
     if (from.path == "/convententry" && to.path == "/addTaskSetting") {
       next(vm => {
-        vm._getProjectId();
-        vm.setNull();
-        vm.taskTheme = Vm.getProjectThemeName;
+        vm.projectId = vm.getProjectId || "";
         console.log(vm.projectId);
         if (vm.projectId) {
           vm.hasProjectId = true;
+          vm.taskTheme = vm.getProjectThemeName;
+          vm.$refs.taskTheme.setAttribute("disabled", true);
+          vm.taskName = "";
+          vm.taskDesc = "";
+          vm.executor = "";
+          vm.startTime = "";
+          vm.endTime = "";
         } else {
           vm.hasProjectId = false;
           vm.taskTheme = "";
+          vm.taskName = "";
+          vm.taskDesc = "";
+          vm.executor = "";
+          vm.startTime = "";
+          vm.endTime = "";
         }
       });
     }
   },
   methods: {
-    setNull() {
-      this.taskName = "";
-      this.taskDesc = "";
-      this.executor = "";
-      this.startTime = "";
-      this.endTime = "";
-    },
-    _getProjectId() {
-      if (window.location.hash.includes("taskId")) {
-        let reg = /taskId=\d{18}/;
-        this.taskId = window.location.hash.match(reg)
-          ? window.location.hash.match(reg)[0].split("=")[1]
-          : "";
-      }
-      if (window.location.hash.includes("projectId")) {
-        let reg = /projectId=\d{18}/;
-        this.projectId = window.location.hash.match(reg)
-          ? window.location.hash.match(reg)[0].split("=")[1]
-          : "";
-      }
-    },
-    _getProjectThemeName() {
-      if (window.location.hash.includes("projectName")) {
-        this.taskTheme = window.location.hash
-          .split("projectName")[1]
-          .split("=")[1];
-        this.$refs.taskTheme.setAttribute("disabled", true);
-        console.log(this.taskTheme);
-      }
-    },
     setExcutor() {
-      this._getProjectId();
+      this.taskId = this.getTaskId;
       Convent.getTaskBasicInfo(this.taskId)
         .then(res => {
           console.log("---基本任务信息--", res);
@@ -647,7 +628,7 @@ export default {
           isOpen: this.isPublic ? 1 : 0
         })
           .then(res => {
-            this.$toast.show("调转中...");
+            this.SET_TASKID(res.data);
             resovle(res.data);
           })
           .catch(err => {
@@ -657,13 +638,32 @@ export default {
       });
     },
     confirm() {
-      this.$router.push({
-        path: "/convententry",
-        query: {
-          taskId: this.taskId,
-          projectId: this.projectId
-        }
-      });
+      Convent.updateTask(this.taskId, {
+        taskId: this.taskId,
+        projectId: this.projectId,
+        projectName: this.taskTheme,
+        taskName: this.taskName,
+        taskDesc: this.taskDesc,
+        startTime: this.startTime,
+        endTime: this.endTime,
+        checkStandard: this.standard,
+        isOpen: this.isOpen ? 1 : 0,
+        executorUserId: this.getUserId
+      })
+        .then(res => {
+          if (res.code == 1 && res.status == 200) {
+            this.$router.push({
+              path: "/convententry",
+              query: {
+                taskId: this.taskId,
+                projectId: this.projectId
+              }
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     check_time() {
       if (this.startTime && this.endTime) {

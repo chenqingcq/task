@@ -15,6 +15,7 @@ let state = {
   taskTheme: '',
   taskExecutor: '',
   taskId :'',
+  userId:'',
   taskExecutors: [],
   taskSetting: [{
     id: 0,
@@ -49,6 +50,9 @@ const mutations = {
   },
   [types.SET_TASKTHEME](state, value) {
     state.taskTheme = value;
+  },
+  [types.SET_USER_ID](state, value) {
+    state.userId = value;
   },
   [types.SET_TASK_EXECUTOR](state, taskExecutor) {
     state.taskExecutor = taskExecutor
