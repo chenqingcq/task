@@ -34,6 +34,12 @@
     created(){
       this.getToken()
     },
+    mounted() {
+      setTimeout(()=>{
+        console.log('存起来的微信配置信息 ------------------------》')
+        this.$wechat.getWechatConfig() // 会自动 wx.config
+      },1500)
+    },
     methods:{
       getToken(){
         // 在url 上面截取token
@@ -42,9 +48,6 @@
           // set token
           this.$store.commit('setToken', token)
         }
-
-
-
         User.getUserInfo({}).then(res=>{
           console.log(res)
           this.$store.commit('user', res.data)

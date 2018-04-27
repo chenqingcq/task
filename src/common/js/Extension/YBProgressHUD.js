@@ -1,6 +1,4 @@
 import Toast from '@/common/base/toast/toast.js'
-
-console.log(Toast)
 // 显示的时间
 const showTime = 1500
 

@@ -143,7 +143,7 @@
             <div class=" b_d-flex b_flex-center" :class="[ section.isDoing ? 'doing-section' : 'complete-section' ]">
               <div class="timer-shaft">
                 <div class="c_white-bg  b_FS-18 b_font-PFR text-center" :class="[section.isDoing ? 'c_primary' : 'c_7']">
-                  {{ section.pointTime }}
+                  {{ formatDate(section.pointTime) }}
                 </div>
                 <div class="b_FS-10 c_7 b_font-PFR text-center b_lineH-28" v-if="section.isDoing">运行中</div>
                 <div class="light" :class="[section.isDoing? 'doing': 'pass']"></div>

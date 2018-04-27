@@ -47,8 +47,6 @@ class UserModel extends BaseModel{
 
   // 获取发送数据的的token
   getSendToken () {
-
-    console.log(store.getters.getToken)
     return 'Bearer ' + store.getters.getToken
   }
 

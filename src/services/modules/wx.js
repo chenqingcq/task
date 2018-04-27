@@ -9,7 +9,7 @@ import {
 import {post, get} from '@/services/ajax/netaxios'
 
 
-class wx {
+class Wechat {
   getWxBaseData(url) {
     return get(wxBaseData, {
       url
@@ -32,8 +32,13 @@ class wx {
     }))
   }
 
+  configSign(){
+    return get('/api/wx/jssdk',{
+      currentUrl : location.origin
+    })
+  }
 }
-export  default new wx()
+export  default new Wechat()
 /*
 //========================获取微信配置 start==========================================
 export function getWxBaseData(url) {

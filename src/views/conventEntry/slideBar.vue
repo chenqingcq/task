@@ -168,15 +168,15 @@
           <img class="banner" src="../../assets/img/image-background01.png" alt="">
           <img @click="skipToHelp" class="help" src="../../assets/img/icon-help.png" alt="">
           <div class="nav-container b_d-flex c_white-bg" >
-            <div @touchstart="navTab = 0" class="nav" :class="[navTab == 0 ? 'active' : 'default c_7' ]"  >
+            <div @touchstart="changeNav(0), getProjectList()" class="nav" :class="[navTab == 0 ? 'active' : 'default c_7' ]"  >
               <p class="b_FS-12" >全部</p>
               <div class="line" ></div>
             </div>
-            <div @touchstart="navTab = 1" class="nav" :class="[navTab == 1 ? 'active' : 'default c_7' ]" >
+            <div @touchstart="changeNav(1), getProjectList()" class="nav" :class="[navTab == 1 ? 'active' : 'default c_7' ]" >
               <p  class="b_FS-12" >我发布</p>
               <div class="line" ></div>
             </div>
-            <div @touchstart="navTab = 2" class="nav" :class="[navTab == 2 ? 'active' : 'default c_7' ]"  >
+            <div @touchstart="changeNav(2), getProjectList()" class="nav" :class="[navTab == 2 ? 'active' : 'default c_7' ]"  >
               <p  class="b_FS-12" >我执行</p>
               <div class="line" ></div>
             </div>
@@ -189,7 +189,13 @@
                     <i :class="[ isPositive ? 'c_primary' : '']">↓</i><i :class="[ !isPositive ? 'c_primary' : '']">↑</i>
                   </span>
 
-            <div class="panel c_white-bg"  v-infinite-scroll="getProjectList" infinite-scroll-disabled="projectHasMore" infinite-scroll-distance="30"  infinite-scroll-throttle-delay="600"  >
+            <div class="panel c_white-bg"
+                 v-infinite-scroll="getProjectList"
+                 infinite-scroll-disabled="hasMore"
+                 infinite-scroll-distance="30"
+                 infinite-scroll-throttle-delay="300"
+                 @scroll.self
+            >
 
               <template v-for="(project, key) in projectList">
                 <v-swipeout contentBg="#f4f4f4" >
@@ -207,8 +213,10 @@
                     </v-swipe-btn>
                   </div>
                 </v-swipeout>
+                <div class="c_white-bg text-center" style="position: relative;z-index: 2">
+                  <div class="bar"></div>
+                </div>
 
-                <div class="bar"></div>
               </template>
             </div>
             <div class="btn-warp m-t-64">
@@ -241,7 +249,7 @@
             return{
                 navTab : 0,//  全部. 0:全部 1: 我创建 2: 我执行
                 isShow : false,
-                isPositive: false , // 顺序
+                isPositive: true , // 顺序
                 allList: [{
                   themeName : '我是创建者' ,
                   id: '1' ,
@@ -289,13 +297,13 @@
             }
         },
         computed:{
+          hasMore(){
+            return this.projectHasMore || this.listenScroll
+          },
           projectHasMore(){
-
-              if(this.navTab == 0 ) return !this.all.page.isLoaded || this.listenScroll
-              if(this.navTab == 1 ) return !this.myCreate.page.isLoaded || this.listenScroll
-              if(this.navTab == 2 ) return !this.myAction.page.isLoaded || this.listenScroll
-
-
+              if(this.navTab == 0 ) return !this.all.page.isLoaded
+              if(this.navTab == 1 ) return !this.myCreate.page.isLoaded
+              if(this.navTab == 2 ) return !this.myAction.page.isLoaded
           },
           projectList(){
             const type = this.navTab
@@ -313,8 +321,16 @@
           ...mapActions([
             'setCurrentProject'
           ]),
-          loadMore(){
-            console.log('loadMore')
+          changeNav(tab){
+            this.navTab = tab
+            const page =  {
+              pageNum : 1 ,
+              pageSize : 10 ,
+              isLoaded : true
+            }
+            if(this.navTab == 0 ) this.all.page = page
+            if(this.navTab == 1 ) this.myCreate.page = page
+            if(this.navTab == 2 ) this.myAction.page = page
           },
           test_getProjectList(){
             if(this.navTab == 0 ) var { pageNum ,pageSize } = this.all.page
@@ -392,38 +408,41 @@
             return
           },
           getProjectList(){
-            if(this.navTab == 0 ) var { pageNum ,pageSize } = this.all.page
-            if(this.navTab == 1 ) var { pageNum ,pageSize } = this.myCreate.page
-            if(this.navTab == 2 ) var { pageNum ,pageSize } = this.myAction.page
+            if(this.navTab == 0 ) var { pageNum ,pageSize ,isLoaded } = this.all.page
+            if(this.navTab == 1 ) var { pageNum ,pageSize ,isLoaded } = this.myCreate.page
+            if(this.navTab == 2 ) var { pageNum ,pageSize ,isLoaded } = this.myAction.page
+            if( !isLoaded ){
+              return
+            }
             this.listenScroll = true
             Convent.projectList({
               type : this.navTab ,
               pageNum : pageNum ,
-              pageSize : pageSize
+              pageSize : pageSize ,
+              sort : this.isPositive ? 0 : 1
             }).then((res)=>{
-              const oldList = this.projectList
-              console.log(res)
-              const arr = res.data
-              const page = res.page
-              var  newList = []
-              if( page.isLoaded ){
-                // 还有下一页
-                page.pageNum++
-              }
-              if(res.data.length){
-                newList = oldList.concat(arr)
-              }
-              else{
-                newList = oldList
-              }
-
-                if( this.navTab == 0 ){ this.all.list = newList ;this.all.page.pageNum++ ;this.all.page.isLoaded = page.isLoaded }
-                if( this.navTab == 1 ){ this.myCreate.list = newList ;this.myCreate.page.pageNum++ ; this.myCreate.page.isLoaded = page.isLoaded }
-                if( this.navTab == 2 ){ this.myAction.list = newList ;this.myAction.page.pageNum++ ;this.myAction.page.isLoaded = page.isLoaded }
-
-
+                const oldList = this.projectList
+                const arr = res.data
+                const page = res.page
+                var  newList = []
+                if( page.isLoaded ){
+                  // 还有下一页
+                  page.pageNum++
+                }
+                if(res.data.length){
+                  newList = oldList.concat(arr)
+                }
+                else{
+                  //newList = oldList
+                  if( this.navTab == 0 ){ this.all.page.isLoaded = false }
+                  if( this.navTab == 1 ){ this.myCreate.page.isLoaded = false }
+                  if( this.navTab == 2 ){ this.myAction.page.isLoaded = false }
+                  return
+                }
+               if( this.navTab == 0 ){ this.all.list = newList ;this.all.page.pageNum++ ;this.all.page.isLoaded = page.isLoaded }
+               if( this.navTab == 1 ){ this.myCreate.list = newList ;this.myCreate.page.pageNum++ ; this.myCreate.page.isLoaded = page.isLoaded }
+               if( this.navTab == 2 ){ this.myAction.list = newList ;this.myAction.page.pageNum++ ;this.myAction.page.isLoaded = page.isLoaded }
               this.listenScroll = false
-
             })
           },
           open(){
@@ -487,6 +506,20 @@
           },
           reverseList(){
             this.isPositive = !this.isPositive
+            const page =  {
+                pageNum : 1 ,
+                pageSize : 10 ,
+                isLoaded : true
+            }
+            this.all.page = page
+            this.all.list = []
+            this.myCreate.page = page
+            this.myCreate.list = []
+            this.myAction.page = page
+            this.myAction.list = []
+            this.getProjectList()
+
+
           }
         }
     }

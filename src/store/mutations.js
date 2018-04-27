@@ -16,7 +16,13 @@ const matutaions = {
   },
   setToken (state, token) {
     state.token = token
-  }
+  },
+  [types.SET_WECHAT_CONFIG](state, config) {
+    state.wechatConfig = config
+  },
+  [types.SET_ENTRY_URL](state, url) {
+    state.entryURL = url
+  },
 }
 
 export default matutaions;

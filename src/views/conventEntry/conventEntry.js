@@ -43,6 +43,10 @@ export default {
   },
   mounted(){
     this.getTasksList()
+    this.$wechat.weChatShare({
+      title: '测试标题',
+      desc: '分享描述'
+    })
     //this.taskList = this.dealWithTaskList()
   },
   components:{
@@ -62,6 +66,7 @@ export default {
   methods:{
     loadMore(){
       console.log('loadMore');
+      this.getTasksList()
     },
     // 周／月
     statusChange(status){
@@ -99,8 +104,8 @@ export default {
       console.log('hello slidebar')
     },
     getTasksList(){
-      const { pageNum, pageSize } = this.page
-      if( !this.page.hasMore ){
+      const { pageNum, pageSize ,hasMore } = this.page
+      if( !hasMore ){
         return
       }
       this.page.hasMore = false
@@ -116,7 +121,10 @@ export default {
           this.taskList = newList
           this.todayTime = newList[0].serverTime
         }
-
+        else{
+          this.page.hasMore = false
+          return
+        }
         this.page.hasMore = res.page.isLoaded
         if( this.page.hasMore ){
           this.page.pageNum++
@@ -125,12 +133,14 @@ export default {
     },
     changeProject(){
       console.log('change', this.projectId)
-      Convent.tasksOfProject({
-        projectId : this.projectId
-
-      }).then(res=>{
-
-      })
+      this.taskList = []
+      // reset
+      this.page =  {
+        pageNum : 1 ,
+          pageSize : 10 ,
+          hasMore : true
+      }
+      this.getTasksList()
     },
     watchOpenSwipe(index){
       console.log('index' , index)
@@ -275,10 +285,42 @@ export default {
         }
         val.completeDate = Number(val.passTime)
         val.startTime = Number( val.startTime )
-        val.endTime = Number( val.startTime )
+        val.endTime = Number( val.endTime )
         val.passTime = Number( val.passTime )
         val.text = text
         return val
+      })
+    },
+    standUpTask(list , index){
+      const taskId = list.taskId
+      Convent.standUpTask(taskId)
+      .then(res=>{
+        const c_task = this.taskList[index]
+        c_task.position = '1'
+        this.taskList.splice(index, 1)
+        this.taskList.unshift(c_task)
+      })
+    },
+    sitDownTask(list, index){
+      const taskId = list.taskId
+      Convent.sitDownTask(taskId)
+      .then(res=>{
+        const c_task = this.taskList[index]
+        c_task.position = '2'
+        this.taskList.splice(index, 1)
+        this.taskList.push(c_task)
+      })
+    },
+    closeTask( list, index ){
+      const taskId = list.taskId
+      Convent.recoverTask(taskId)
+      .then(res=>{
+          this.page =  {
+            pageNum : 1 ,
+              pageSize : 10 ,
+              hasMore : true
+          }
+          this.getTasksList()
       })
     }
   }

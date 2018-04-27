@@ -11,3 +11,6 @@ export const getToken = state => state.token
 export const getProjectRole = state => state.permission.project.role
 export const getProjectThemeName = state => state.permission.project.projectName
 export const getProjectId = state => state.permission.project.projectId
+
+export const getWechatConfig = state => state.wechatConfig
+export const getEntryURL = state => state.wechatConfig

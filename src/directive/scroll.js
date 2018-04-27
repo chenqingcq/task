@@ -188,8 +188,6 @@ export default {
       vm: vnode.context,
       expression: binding.value
     };
-
-    console.log(el[ctx].vm)
     const args = arguments;
     //el[ctx].vm.$on('hook:mounted', function () {
       el[ctx].vm.$nextTick(function () {
