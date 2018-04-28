@@ -458,7 +458,8 @@ export default {
       allowedLook: false,
       showMembers: false,
       members: [],
-      check_pass: false
+      check_pass: false,
+      isOpen:true
     };
   },
   computed: {
@@ -467,7 +468,8 @@ export default {
       getProjectId: "getProjectId",
       getTaskId: "getTaskId",
       getProjectThemeName: "getProjectThemeName",
-      getUserId: "getUserId"
+      getUserId: "getUserId",
+      getUserRole:'getUserRole'
     }),
     styleStart() {
       if (!!this.startTime && window.sessionStorage.getItem("flag")) {
@@ -559,6 +561,7 @@ export default {
           vm.executor = "";
           vm.startTime = "";
           vm.endTime = "";
+          vm.standard = '';
         } else {
           vm.hasProjectId = false;
           vm.taskTheme = "";
@@ -567,6 +570,7 @@ export default {
           vm.executor = "";
           vm.startTime = "";
           vm.endTime = "";
+          vm.standard= '';
         }
       });
     }
@@ -644,11 +648,10 @@ export default {
         projectName: this.taskTheme,
         taskName: this.taskName,
         taskDesc: this.taskDesc,
-        startTime: this.startTime,
-        endTime: this.endTime,
+        startTime: new Date(this.startTime).getTime(),
+        endTime:new Date(this.endTime).getTime(),
         checkStandard: this.standard,
         isOpen: this.isOpen ? 1 : 0,
-        executorUserId: this.getUserId
       })
         .then(res => {
           if (res.code == 1 && res.status == 200) {

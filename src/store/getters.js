@@ -5,6 +5,7 @@ export const getTaskSetting = state => state.task.taskSetting
 export const getTaskTheme = state => state.task.taskTheme
 export const getTaskId = state => state.task.taskId
 export const getUserId = state => state.task.userId
+export const getUserRole = state => state.task.userRole
 
 
 export const getToken = state => state.token

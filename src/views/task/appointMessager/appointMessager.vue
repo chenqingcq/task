@@ -587,7 +587,6 @@ export default {
               query: {
                 taskId: this.taskId,
                 projectId: this.projectId,
-                userId: this.userId
               }
             });
           }

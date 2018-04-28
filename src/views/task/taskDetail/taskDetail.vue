@@ -680,18 +680,18 @@ export default {
       taskProgressContent: `任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情`,
       //项目群
       parties: [
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
+        "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
+        "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
+        "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
       ],
       members: [],
       items: [
-          //轮播图处理时   51 234 51遵守这个有原则
-//            "http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650",
-//            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg",
-//            "http://bpic.588ku.com/element_origin_min_pic/16/06/20/165767ab7a315bd.jpg",
-//            "http://bpic.588ku.com/element_origin_min_pic/18/03/24/494a50847f3dbef27c31355f35d0393d.jpg" ,
-//            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg"
+        //轮播图处理时   51 234 51遵守这个有原则
+        //            "http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650",
+        //            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg",
+        //            "http://bpic.588ku.com/element_origin_min_pic/16/06/20/165767ab7a315bd.jpg",
+        //            "http://bpic.588ku.com/element_origin_min_pic/18/03/24/494a50847f3dbef27c31355f35d0393d.jpg" ,
+        //            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg"
       ]
     };
   },
@@ -730,7 +730,7 @@ export default {
       next(vm => {
         vm._getTaskId();
         vm.getData();
-        vm.getTaskComment()
+        vm.getTaskComment();
       });
     } else {
       next(vm => {
@@ -741,14 +741,19 @@ export default {
     }
   },
   methods: {
-    getTaskComment(){
+    ...mapMutations({
+      SET_USER_ROLE: "SET_USER_ROLE"
+    }),
+    getTaskComment() {
       let self = this;
-      Convent.getTaskComments(this.taskId).then((res)=>{
-        console.log(res,'------一级评论------');
-        self.members = res.data;
-      }).catch((err)=>{
-        console.log(err)
-      })
+      Convent.getTaskComments(this.taskId)
+        .then(res => {
+          console.log(res, "------一级评论------");
+          self.members = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     _getTaskId() {
       if (window.location.hash.indexOf("taskId") > 0) {
@@ -787,22 +792,26 @@ export default {
           break;
         }
         case 1: {
+          this.role = "noTaskor";
+          break;
+        }
+        case 0: {
           this.role = "visitor";
           break;
         }
-        default: {
-          this.role = "noTaskor";
-        }
-      };
-      console.log(this.role)
+      }
+      console.log(this.role);
+      //存取角色
+      this.SET_USER_ROLE(this.role);
     },
     getData() {
-      const taskId = this.taskId
-      const projectId = this.getProjectId
+      const taskId = this.taskId;
+      const projectId = this.getProjectId;
       Convent.taskDetail({
-        taskId ,
+        taskId,
         projectId
-      }).then(res => {
+      })
+        .then(res => {
           console.log(res);
           res = res.data;
           this.taskName = res.taskName;
@@ -818,13 +827,13 @@ export default {
           this.taskStatus = res.taskStatus;
           this.defineRole(res.role);
           this.fomatTime();
-          if(res.latestProgress){
-            this.items = res.latestProgress.progressImage.map((val)=>{return {imgUrl:val}})
+          if (res.latestProgress) {
+            this.items = res.latestProgress.progressImage.map(val => {
+              return { imgUrl: val };
+            });
+          } else {
+            this.items = [];
           }
-          else{
-            this.items = []
-          }
-
         })
         .catch(err => {
           if (err) {
@@ -834,7 +843,7 @@ export default {
       //获取群头像
       Convent.getGroupAvatar(this.getProjectId)
         .then(res => {
-          this.parties = res.data
+          this.parties = res.data;
           console.log(res);
         })
         .catch(err => {
@@ -971,18 +980,17 @@ export default {
       });
     },
     towardsUpdateHistory() {
-      const taskId = this.$route.query.taskId
+      const taskId = this.$route.query.taskId;
       //查看历史上传
-      if( this.role == 'operator' ){
+      if (this.role == "operator") {
         this.$router.push({
           path: `taskHistoryOrUpdate?taskId=${taskId}&mode=edit`
         });
-      }else{
+      } else {
         this.$router.push({
           path: `taskHistoryOrUpdate?taskId=${taskId}`
         });
       }
-
     },
     linkToSection() {
       this.$router.push({
@@ -1009,9 +1017,7 @@ export default {
   created() {
     this.init();
   },
-  mounted() {
-    
-  },
+  mounted() {},
   beforeDestroy() {
     this.timer = null;
   }

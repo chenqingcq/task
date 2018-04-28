@@ -14,8 +14,9 @@ let state = {
   },
   taskTheme: '',
   taskExecutor: '',
-  taskId :'',
-  userId:'',
+  taskRole: '',
+  taskId: '',
+  userId: '',
   taskExecutors: [],
   taskSetting: [{
     id: 0,
@@ -39,7 +40,7 @@ const mutations = {
   bevip(state) {
     state.user.isvip = 1;
   },
-  [types.SET_TASKID](state,taskId){
+  [types.SET_TASKID](state, taskId) {
     state.taskId = taskId;
   },
   user(state, data) {
@@ -56,6 +57,9 @@ const mutations = {
   },
   [types.SET_TASK_EXECUTOR](state, taskExecutor) {
     state.taskExecutor = taskExecutor
+  },
+  [types.SET_USER_ROLE](state, role) {
+    state.role = role;
   },
   [types.SORT_TASK_EXECUTOR](state, type) {
     state.taskExecutor.sort((a, b) => {
