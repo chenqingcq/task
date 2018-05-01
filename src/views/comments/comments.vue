@@ -48,9 +48,7 @@
           <img class="icon-input" src="@/assets/img/iocn-pen.png" />
       </div>
     </div>
-    <transition name="zoom">
       <user-input v-show="showUserInput" @close='closeUserInput' :taskId='taskId'></user-input>
-    </transition>
   </div>
 </template>
 <script>

@@ -566,6 +566,7 @@ export default {
       this.$nextTick(() => {
         console.log(fatherIndex, selfIndex, item);
         this.deletSubArr[fatherIndex][selfIndex] = !this
+        
           .deletSubArr[fatherIndex][selfIndex];
 
         console.log(this.deletSubArr, this.deletSubArr[fatherIndex][selfIndex]);
