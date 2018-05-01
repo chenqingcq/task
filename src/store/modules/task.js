@@ -17,21 +17,8 @@ let state = {
   taskRole: '',
   taskId: '',
   userId: '',
+  taskSettings:'',
   taskExecutors: [],
-  taskSetting: [{
-    id: 0,
-    taskTheme: '',
-    taskName: '',
-    taskDesc: '',
-    startTime: '',
-    endTime: '',
-    standard: '',
-    taskExecutor: "",
-    allowedCreate: true,
-    isPublic: false,
-    membersCanSee: true,
-    othersCanSee: []
-  }],
 }
 const mutations = {
   [types.SET_USER_TYPE](state, type) {
@@ -81,30 +68,9 @@ const mutations = {
   [types.DELETE_TASK_EXECUTOR](state, index) {
     state.taskExecutor.splice(index, 1);
   },
-  [types.SET_TASK](state, val) {
-    let {
-      taskTheme,
-      taskName,
-      taskDesc,
-      startTime,
-      endTime,
-      standard,
-      taskExecutor,
-      allowedCreate,
-      isPublic,
-    } = val;
-    state.taskSetting.push({
-      taskTheme,
-      taskName,
-      taskDesc,
-      startTime,
-      endTime,
-      standard,
-      taskExecutor,
-      allowedCreate,
-      isPublic
-    });
-  }
+  [types.SET_TASK_SETTINGS](state, val) {
+    state.taskSettings = val;
+  } 
 };
 
 export default {

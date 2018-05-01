@@ -108,7 +108,7 @@
             height: 100%;
             position: absolute;
             top: 0;
-            left: 0;
+            right: 0;
           }
           img:nth-child(2) {
             height: 100%;
@@ -529,7 +529,7 @@ img.partyLogo {
       <div class="panel c-1 c_white-bg">
         <div class="task-slide-top">
           <div class="user-icon">
-            <img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" />
+            <img :src="headImg" />
           </div>
           <div class="right">
             <div class="show-task-detail">
@@ -552,13 +552,6 @@ img.partyLogo {
             </div>
             <div class="task-focus">
               <img @touchstart='link_to_taskSetting' class="focus-star" v-show='role=="creator"' src="@/assets/img/icon-set up.png" />
-              <!--<transition name="zoomInDown">-->
-                <!--<img v-show='isLike' @touchstart="toggleLike" class="focus-star " src="@/assets/img/icon-collection-highlight.png" />-->
-              <!--</transition>-->
-              <!--<transition name="canelLike">-->
-                <!--<img v-if="!isLike" @touchstart="toggleLike" class="focus-star" src="@/assets/img/icon-collection-normal.png" :style="styleTaskFocus"-->
-                <!--/>-->
-              <!--</transition>-->
             </div>
           </div>
         </div>
@@ -654,6 +647,8 @@ import { mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
+      activeFont: "",
+      headImg: "",
       taskDesc: "",
       endTime: "",
       startTime: "",
@@ -676,6 +671,7 @@ export default {
       taskName: "",
       taskDesc: "",
       taskId: "",
+      active:'',
       deadLine: "暂未设置起止时间",
       taskProgressContent: `任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情`,
       //项目群
@@ -708,16 +704,6 @@ export default {
     common() {
       return "common";
     },
-    active() {
-      return "isInProgress"; //确定任务完成状态
-    },
-    activeFont() {
-      return this.active === "isCompleted"
-        ? "已完成"
-        : this.active == "isInProgress"
-          ? "进行中"
-          : this.active == "overDeadLined" ? "已超时" : "";
-    }
   },
   components: {
     comments,
@@ -731,12 +717,14 @@ export default {
         vm._getTaskId();
         vm.getData();
         vm.getTaskComment();
+        vm.getThemeList();
       });
     } else {
       next(vm => {
         vm._getTaskId();
         vm.getData();
         vm.getTaskComment();
+        vm.getThemeList();        
       });
     }
   },
@@ -744,6 +732,16 @@ export default {
     ...mapMutations({
       SET_USER_ROLE: "SET_USER_ROLE"
     }),
+    getThemeList(){
+      let self = this;
+      Convent.sectionList({
+        projectId:'990421156408336385'
+      }).then((res)=>{
+        console.log('list------',res)
+      }).catch((err)=>{
+        console.log(err)
+      })
+    },
     getTaskComment() {
       let self = this;
       Convent.getTaskComments(this.taskId)
@@ -815,6 +813,7 @@ export default {
           console.log(res);
           res = res.data;
           this.taskName = res.taskName;
+          this.headImg = res.headImage;
           this.taskDesc = res.taskDesc;
           this.endTime = res.endTime;
           this.startTime = res.startTime;
@@ -824,7 +823,7 @@ export default {
           this.isPass = res.isPass;
           this.isLike = res.isStar == "0" ? false : true;
           this.position = res.position;
-          this.taskStatus = res.taskStatus;
+          this.defineStatus(res.taskStatus);
           this.defineRole(res.role);
           this.fomatTime();
           if (res.latestProgress) {
@@ -850,9 +849,56 @@ export default {
           console.log(err);
         });
     },
+    defineStatus(status) {
+      // 1	进行中(接受)
+      // 2	关闭
+      // 3	拒绝
+      // 4	已完成
+      // 5	提前完成
+      // 6	超时
+      // 7	未接受且超时
+      console.log(status,'===================>>>>>');
+
+      switch (status) {
+        case 0: {
+          this.active = "isInProgress";
+          this.activeFont = "进行中";
+          break;
+        }
+        case 1: {
+          this.active = "isCompleted";
+          this.activeFont = "关闭";
+          break;
+        }
+        case 2: {
+          this.active = "overDeadLined";
+          this.activeFont = "拒绝";
+          break;
+        }
+        case 3: {
+          this.active = "isCompleted";
+          this.activeFont = "已完成";
+          break;
+        }
+        case 4: {
+          this.active = "isCompleted";
+          this.activeFont = "提前完成";
+          break;
+        }
+        case 5: {
+          this.activeFont = "overDeadLined";
+          this.activeFont = "超时";
+          break;
+        }
+        case 6: {
+          this.active = "overDeadLined";
+          this.activeFont = "未接受且超时";
+          break;
+        }
+      }
+    },
     taskDescActive() {
       console.log(11111);
-      animati;
     },
     closeTaskProgress() {
       this.showTaskProgress = false;
@@ -879,7 +925,12 @@ export default {
         .catch(err => {});
     },
     link_to_taskSetting() {
-      this.$router.push("addTaskSetting");
+      this.$router.push({
+        path:"/addTaskSetting",
+        query:{
+
+        }
+      });
     },
     closeTask() {
       let self = this;

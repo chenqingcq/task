@@ -12,4 +12,5 @@ export const SET_WECHAT_CONFIG = 'SET_WECHAT_CONFIG'
 export const SET_ENTRY_URL = 'SET_ENTRY_URL'
 export const SET_USER_ID = 'SET_USER_ID'
 export const SET_USER_ROLE = 'SET_USER_ROLE'
+export const SET_TASK_SETTINGS = 'SET_TASK_SETTINGS'
 

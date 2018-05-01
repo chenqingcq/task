@@ -297,7 +297,7 @@
 }
 
 #name {
-  font-size: 12*2px;
+  font-size: 10*2px;
   width: auto;
 }
 </style>
@@ -336,7 +336,10 @@
                 <div class="icon">
                   <img v-lazy="item[0].headImage">
                 </div>
-                <div class="name">{{item[0].nickname}}</div>
+                <div class="name">
+                  <span>{{item[0].nickname}}</span>
+                  <span id="name">{{item[0].taskName}}</span>
+                </div>
               </div>
               <div class="update">{{item[0].progressNum}}</div>
               <div class="comments">{{item[0].commentNum}}</div>
@@ -345,22 +348,21 @@
                 <img :src="imgUrl(index)" v-show="item.length>1" />
               </div>
             </li>
-            <transition-group name='scale'>
-              <li class="sub-item" v-for="(item_,index_) in item" v-if="isSubShow[index] && item.length>1" :key="index_">
+              <li class="sub-item" v-for="(_item,_index) in item"  :key="_index" v-show="subShow">
                 <!--下拉可见-->
                 <div class="user">
-                  <div @touchstart='selectedSub(index,index_,item_)' class="select">
-                    <img src="@/assets/img/sign-selected.png" v-show="item_.isSelected" />
+                  <div @touchstart='selectedSub(index,_index,_item)' class="select">
+                    <img src="@/assets/img/sign-selected.png"  v-show="index == currentIndex_ && showSub_[index] == true" />
                   </div>
-                  <div class="name" id="name">{{item_.taskName}}</div>
+                  <div class="name" id="name">{{_item.taskName}}</div>
                 </div>
-                <div class="update">{{item_.progressNum}}</div>
-                <div class="comments">{{item_.commentNum}}</div>
-                <div class="progress">{{item_.progress}}</div>
-                <div class="arrow">
-                </div>
+                <div class="update">{{_item.progressNum}}</div>
+                <div class="comments">{{_item.commentNum}}</div>
+                <div class="progress">{{_item.progress}}</div>
+                <div class="arrow" >
+                  
+                 </div>
               </li>
-            </transition-group>
           </div>
         </ul>
       </scroll>
@@ -392,6 +394,7 @@ export default {
     return {
       showShare: false, //分享
       isExtend: false, //点击显示下拉
+      subShow: false,
       isSubShow: "",
       isSelectedShow: "",
       showBtntype: false, //默认显示添加成员按钮
@@ -417,9 +420,11 @@ export default {
         }
       ],
       currentIndex: -1,
+      currentIndex_: -1,
       nowIndex: 0,
       taskExecutors: [],
-      showArr: []
+      showArr: [],
+      showSub_: []
     };
   },
   computed: {
@@ -496,14 +501,16 @@ export default {
             : "";
           console.log("---pid----", vm.projectId);
           vm.getExcutorList(vm.projectId);
-        } else if (window.location.hash.includes("taskId")) {
+        }
+        if (window.location.hash.includes("taskId")) {
           let reg = /taskId=\d{18}/;
           vm.taskId = window.location.hash.match(reg)
             ? window.location.hash.match(reg)[0].split("=")[1]
             : "";
           console.log("-----hasTaskId-----", vm.taskId);
           // debugger;
-        } else {
+        }
+        if (!vm.projectId && !vm.taskId) {
           vm.$toast.show("请重新添加任务!", 500);
           vm.$router.push("addTaskSetting");
         }
@@ -517,6 +524,7 @@ export default {
     defineShow(arr) {
       console.log(arr);
       this.showArr = new Array(arr.length).fill(false);
+      this.showSub_ = new Array(arr.length).fill(false);
     },
     getExcutorList(id) {
       console.log(id);
@@ -538,9 +546,12 @@ export default {
     face_to_face() {
       this.showShare = !this.showShare;
       this.showQrcode = !this.showQrcode;
+      this.countDouwn = setInterval(() => {
+        console.log("=========================");
+      }, 1000);
     },
-    selectedSub(preIndex, selfIndex, item) {
-      console.log(preIndex, selfIndex, item);
+    selectedSub(fatherIndex, selfIndex, item) {
+      console.log(fatherIndex, selfIndex, item);
     },
     select(selfIndex, userId, item) {
       console.log(selfIndex, userId, item);
@@ -560,10 +571,13 @@ export default {
       }
     },
     showSub(index) {
-      this.currentIndex = index;
+      this.currentIndex_ = index;
       console.log(index);
-      this.isSubShow[index] = !this.isSubShow[index];
-      this.isExtend = !this.isExtend;
+      this.showSub_[index] = !this.showSub_[index];
+      console.log(this.showSub_[index]);
+      this.subShow = this.showSub_[index];
+      return this.showSub_[index];
+      // debugger;
     },
     inviteOthers() {
       //分享
@@ -586,7 +600,7 @@ export default {
               path: "/addTaskSetting",
               query: {
                 taskId: this.taskId,
-                projectId: this.projectId,
+                projectId: this.projectId
               }
             });
           }
@@ -613,7 +627,8 @@ export default {
         this.showShare = !this.showShare;
       }
     },
-    deleteExcutor() {//删除项目成员
+    deleteExcutor() {
+      //删除项目成员
       this.showBtntype = !this.showBtntype;
       let self = this;
       if (this.showBtntype) {

@@ -459,7 +459,7 @@ export default {
       showMembers: false,
       members: [],
       check_pass: false,
-      isOpen:true
+      isOpen: true
     };
   },
   computed: {
@@ -469,7 +469,7 @@ export default {
       getTaskId: "getTaskId",
       getProjectThemeName: "getProjectThemeName",
       getUserId: "getUserId",
-      getUserRole:'getUserRole'
+      getUserRole: "getUserRole"
     }),
     styleStart() {
       if (!!this.startTime && window.sessionStorage.getItem("flag")) {
@@ -561,7 +561,7 @@ export default {
           vm.executor = "";
           vm.startTime = "";
           vm.endTime = "";
-          vm.standard = '';
+          vm.standard = "";
         } else {
           vm.hasProjectId = false;
           vm.taskTheme = "";
@@ -570,7 +570,7 @@ export default {
           vm.executor = "";
           vm.startTime = "";
           vm.endTime = "";
-          vm.standard= '';
+          vm.standard = "";
         }
       });
     }
@@ -606,7 +606,8 @@ export default {
       }
     },
     ...mapMutations({
-      SET_TASKID: "SET_TASKID"
+      SET_TASKID: "SET_TASKID",
+      SET_TASK_SETTINGS: "SET_TASK_SETTINGS"
     }),
     editProgress() {
       this.$router.push({
@@ -649,9 +650,9 @@ export default {
         taskName: this.taskName,
         taskDesc: this.taskDesc,
         startTime: new Date(this.startTime).getTime(),
-        endTime:new Date(this.endTime).getTime(),
+        endTime: new Date(this.endTime).getTime(),
         checkStandard: this.standard,
-        isOpen: this.isOpen ? 1 : 0,
+        isOpen: this.isOpen ? 1 : 0
       })
         .then(res => {
           if (res.code == 1 && res.status == 200) {
@@ -682,6 +683,17 @@ export default {
       this.validate();
       let self = this;
       if (this.check_pass) {
+        self.SET_TASK_SETTINGS({
+          taskId: self.taskId,
+          projectId: self.projectId,
+          projectName: self.taskTheme,
+          taskName: self.taskName,
+          taskDesc: self.taskDesc,
+          startTime: new Date(self.startTime).getTime(),
+          endTime: new Date(self.endTime).getTime(),
+          checkStandard: self.standard,
+          isOpen: self.isOpen ? 1 : 0
+        });
         this._getTaskId()
           .then(taskId => {
             this.$router.push({
