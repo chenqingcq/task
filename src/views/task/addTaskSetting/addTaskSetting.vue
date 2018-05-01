@@ -423,7 +423,6 @@ let reflect_to_task = {
   startTime: "开始时间",
   endTime: "结束时间",
   standard: " 验收标准",
-  executor: "任务执行人"
 };
 export default {
   data() {
@@ -453,7 +452,7 @@ export default {
       startTime: "",
       endTime: "",
       standard: "",
-      executor: " ",
+      executor: "  ",
       allowCreate: false,
       isPublic: true,
       allowedLook: false,
@@ -774,8 +773,7 @@ export default {
         // console.log(this.$data[k]);
         if (
           this.$data.hasOwnProperty(k) &&
-          this.$data[k] &&
-          this.$data[k].length
+          this.$data[k]
         ) {
           this.check_pass = true;
         } else {
@@ -787,7 +785,7 @@ export default {
       }
     },
     appointerManager() {
-      if(this.hasExcutor){
+      if(this.hasExcutor){//有执行人就不用填
         this.$refs.exe.classList.add('active_')
         return ;
       }
