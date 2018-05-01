@@ -419,10 +419,11 @@ import { Convent } from "@/services";
 let reflect_to_task = {
   taskTheme: "项目主题",
   taskName: "任务名称",
+  taskDesc: "任务描述",
   startTime: "开始时间",
   endTime: "结束时间",
   standard: " 验收标准",
-  taskDesc: "任务描述"
+  executor: "任务执行人"
 };
 export default {
   data() {
@@ -452,14 +453,16 @@ export default {
       startTime: "",
       endTime: "",
       standard: "",
-      executor: "",
+      executor: " ",
       allowCreate: false,
       isPublic: true,
       allowedLook: false,
       showMembers: false,
       members: [],
       check_pass: false,
-      isOpen: true
+      isOpen: true,
+      cantSetTime: true,
+      hasExcutor:false
     };
   },
   computed: {
@@ -538,14 +541,12 @@ export default {
         // vm.executor = vm.getTaskExecutor.executor;
         vm.setExcutor();
       });
-    } else if (
-      from.path !== "/appointMessager" &&
-      to.path == "/addTaskSetting" &&
-      from.path != "/convententry"
-    ) {
+    } else if (to.path == "/addTaskSetting" && from.path == "/taskDetail") {
       next(vm => {
         // console.log(executor);
-        vm.setExcutor();
+        vm.hasProjectId = true;
+        vm.$refs.exe.classList.add("active_");
+        vm._updateTask(to.query); //重新设置任务
       });
     }
     if (from.path == "/convententry" && to.path == "/addTaskSetting") {
@@ -642,32 +643,88 @@ export default {
           });
       });
     },
-    confirm() {
-      Convent.updateTask(this.taskId, {
-        taskId: this.taskId,
-        projectId: this.projectId,
-        projectName: this.taskTheme,
-        taskName: this.taskName,
-        taskDesc: this.taskDesc,
-        startTime: new Date(this.startTime).getTime(),
-        endTime: new Date(this.endTime).getTime(),
-        checkStandard: this.standard,
-        isOpen: this.isOpen ? 1 : 0
-      })
+    _updateTask(query) {
+      let self = this;
+      this.taskTheme = this.getProjectThemeName;
+      this.projectId = query.projectId;
+      this.taskId = query.taskId;
+      console.log(query);
+      //任务名称 开始时间结束时间不可更改
+      Convent.getTaskBasicInfo(query.taskId)
         .then(res => {
+          console.log(res);
           if (res.code == 1 && res.status == 200) {
-            this.$router.push({
-              path: "/convententry",
-              query: {
-                taskId: this.taskId,
-                projectId: this.projectId
-              }
-            });
+            self.updateTime(res.data.startTime, res.data.endTime);
+            self.taskName = res.data.taskName;
+            self.executor = res.data.executorNickName || " ";
+            self.hasExcutor = true;
           }
         })
         .catch(err => {
           console.log(err);
         });
+    },
+    //重新刷新时间
+    updateTime(start, end) {
+      console.log(start, end);
+      start = parseInt(start);
+      end = parseInt(end);
+      let s_y = new Date(start).getFullYear(),
+        s_m =
+          new Date(start).getMonth() + 1 < 10
+            ? `0${new Date(start).getMonth() + 1}`
+            : new Date(start).getMonth() + 1,
+        s_d =
+          new Date(start).getDate() < 10
+            ? `0${new Date(start).getDate()}`
+            : new Date(start).getDate(),
+        e_y = new Date(end).getFullYear(),
+        e_m =
+          new Date(end).getMonth() + 1 < 10
+            ? `0${new Date(end).getMonth() + 1}`
+            : new Date(end).getMonth() + 1,
+        e_d =
+          new Date(end).getDate() < 10
+            ? `0${new Date(end).getDate()}`
+            : new Date(end).getDate();
+      this.startTime = `${s_y}.${s_m}.${s_d}`;
+      this.endTime = `${e_y}.${e_m}.${e_d}`;
+      this.cantSetTime = false;
+      console.log(
+        this.startTime,
+        this.endTime,
+        "-----------------------<<<>>>"
+      );
+    },
+    confirm() {
+      this.validate();
+      if (this.check_pass) {
+        Convent.updateTask(this.taskId, {
+          taskId: this.taskId,
+          projectId: this.projectId,
+          projectName: this.taskTheme,
+          taskName: this.taskName,
+          taskDesc: this.taskDesc,
+          startTime: new Date(this.startTime).getTime(),
+          endTime: new Date(this.endTime).getTime(),
+          checkStandard: this.standard,
+          isOpen: this.isOpen ? 1 : 0
+        })
+          .then(res => {
+            if (res.code == 1 && res.status == 200) {
+              this.$router.push({
+                path: "/convententry",
+                query: {
+                  taskId: this.taskId,
+                  projectId: this.projectId
+                }
+              });
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     },
     check_time() {
       if (this.startTime && this.endTime) {
@@ -730,6 +787,10 @@ export default {
       }
     },
     appointerManager() {
+      if(this.hasExcutor){
+        this.$refs.exe.classList.add('active_')
+        return ;
+      }
       //验证必选项
       if (this.hasProjectId) {
         this._createTask();
@@ -775,10 +836,14 @@ export default {
       this.allowedLook = status;
     },
     startDate_change(val) {
-      this.startTime = val;
+      if (!!this.cantSetTime) {
+        this.startTime = val;
+      }
     },
     endDatechange(val) {
-      this.endTime = val;
+      if (!!this.cantSetTime) {
+        this.endTime = val;
+      }
     },
     setTaskTheme() {
       this.$refs.taskTheme.setAttribute("disabled", true);

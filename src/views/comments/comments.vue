@@ -29,10 +29,10 @@
               </div>
               <div class="comments-item">{{item.message}}</div>
               <div class="comments-callback">
-                <span @touchstart='_link_to_secondary_comments'>{{item.replyNum}}条回复</span>
+                <span @touchstart='_link_to_secondary_comments'>{{`${item.replyNum}`> 0 ? `${item.replyNum}条回复`:`${item.replyNum}条回复`}}</span>
                 <div>
                   <img @touchstart='add_praise($event, item.isThumbs,item.commentId)'  :isThumbs='item.isThumbs' :src="imgUrl"/>
-                  <span ref="goods">{{calThumbsNum(item.thumbsNum)}}</span>
+                  <span ref="goods">{{item.thumbsNum}}</span>
                 </div>
               </div>
             </div>
@@ -44,7 +44,7 @@
         </ul>
       </scroll>
       <div class="user-input">
-          <input @focus="userInput" type="text" placeholder="赶快评论吧~" class="comment_input">
+          <input @touchstart="userInput" type="text" placeholder="赶快评论吧~" class="comment_input" disabled>
           <img class="icon-input" src="@/assets/img/iocn-pen.png" />
       </div>
     </div>
@@ -66,7 +66,6 @@ export default {
       showUserInput: false,
       currentState: {},
       isThumbs: 0,
-      addThumbs: false,
       flag: false
     };
   },
@@ -98,18 +97,9 @@ export default {
       }
     }
   },
+  watch: {},
   methods: {
-    calThumbsNum(num) {
-      if (this.flag && this.addThumbs) {
-        return num + 1;
-      } else if (this.flag && !this.addThumbs) {
-        return num - 1;
-      } else if (!this.flag) {
-        return num;
-      }
-    },
     defineDate(date) {
-      console.log(date);
       date = parseInt(date);
       return (
         new Date(date).getFullYear() +
@@ -144,6 +134,7 @@ export default {
     },
     closeUserInput() {
       this.showUserInput = false;
+      this.$emit("close");
     },
     userInput() {
       this.showUserInput = true;
@@ -158,12 +149,14 @@ export default {
         //点赞
         this.thumb(commentId, 1, true);
       } else {
+        return;
         e.target.setAttribute("isthumbs", 0);
         e.target.src = require("@/assets/img/iocn-good.png");
         e.target.parentNode.classList.remove("active");
         this.thumb(commentId, 0, false);
       }
     },
+
     thumb(commentId, isThumbs, mode) {
       Convent.thumbs(commentId, {
         commentId: commentId,
@@ -174,13 +167,12 @@ export default {
           if ((res.code = 1 && res.status == 200)) {
             if (mode) {
               this.$toast.show("点赞成功!");
-              this.addThumbs = true;
-              this.flag = true;
             } else {
               this.$toast.show("取消点赞!");
-              this.addThumbs = false;
-              this.flag = true;
             }
+            //刷新评论列表
+            //评论成功
+            this.$emit("close");
           }
         })
         .catch(err => {

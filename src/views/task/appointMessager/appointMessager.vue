@@ -351,8 +351,8 @@
               <li class="sub-item" v-for="(_item,_index) in item"  :key="_index" v-show="subShow">
                 <!--下拉可见-->
                 <div class="user">
-                  <div @touchstart='selectedSub(index,_index,_item)' class="select">
-                    <img src="@/assets/img/sign-selected.png"  v-show="index == currentIndex_ && showSub_[index] == true" />
+                  <div @touchstart='selectedSub(index,_index,_item )' class="select">
+                    <img src="@/assets/img/sign-selected.png"  v-show="controlShow(index,_index)" />
                   </div>
                   <div class="name" id="name">{{_item.taskName}}</div>
                 </div>
@@ -395,6 +395,7 @@ export default {
       showShare: false, //分享
       isExtend: false, //点击显示下拉
       subShow: false,
+      show$: false,
       isSubShow: "",
       isSelectedShow: "",
       showBtntype: false, //默认显示添加成员按钮
@@ -424,7 +425,8 @@ export default {
       nowIndex: 0,
       taskExecutors: [],
       showArr: [],
-      showSub_: []
+      showSub_: [],
+      deletSubArr: []
     };
   },
   computed: {
@@ -444,6 +446,11 @@ export default {
     }
   },
   watch: {
+    deletSubArr: {
+      handler: (newVal, oldVal) => {
+        console.log(newVal, oldVal);
+      }
+    },
     taskExecutors(newVal) {
       if (newVal) {
         this.defineShow(newVal);
@@ -525,6 +532,11 @@ export default {
       console.log(arr);
       this.showArr = new Array(arr.length).fill(false);
       this.showSub_ = new Array(arr.length).fill(false);
+      let i = 0;
+      for (i; i < arr.length; i++) {
+        this.deletSubArr.push(new Array(arr[i].length).fill(false));
+      }
+      console.log(this.deletSubArr, "=========subArr=======");
     },
     getExcutorList(id) {
       console.log(id);
@@ -551,7 +563,16 @@ export default {
       }, 1000);
     },
     selectedSub(fatherIndex, selfIndex, item) {
-      console.log(fatherIndex, selfIndex, item);
+      this.$nextTick(() => {
+        console.log(fatherIndex, selfIndex, item);
+        this.deletSubArr[fatherIndex][selfIndex] = !this
+          .deletSubArr[fatherIndex][selfIndex];
+
+        console.log(this.deletSubArr, this.deletSubArr[fatherIndex][selfIndex]);
+      });
+    },
+    controlShow(index,_index){
+      return this.deletSubArr[index][_index]
     },
     select(selfIndex, userId, item) {
       console.log(selfIndex, userId, item);
@@ -564,7 +585,7 @@ export default {
       return "100%";
     },
     imgUrl(index) {
-      if (this.isExtend && this.currentIndex === index) {
+      if (this.showSub_[index] ) {
         return require("@/assets/img/05.png");
       } else {
         return require("@/assets/img/04.png");

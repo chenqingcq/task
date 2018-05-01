@@ -275,7 +275,7 @@
     text-align: center;
     height: 40px*2;
     line-height: 80px;
-    color: rgba(51, 51, 51, 1);
+    color: #999;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -569,7 +569,7 @@ img.partyLogo {
         </div>
         <div class="task-progress">
           <div class="task-desc" @touchstart='toggleTaskProgress'>
-            <span>展台基础已布置完毕展台基础已布置完毕台基础已布置完毕</span>
+            <span>{{taskDesc}}</span>
             <img src="@/assets/img/icon-slide downward.png" />
           </div>
           <div class="detail-btn" @touchstart='towardsUpdateHistory'>
@@ -578,7 +578,7 @@ img.partyLogo {
         </div>
         <transition name="bounceIn">
           <div class="taskProgress" v-show="showTaskProgress">
-            <detail :taskDesc='taskProgressContent' @close='closeTaskProgress'></detail>
+            <detail :taskDesc='taskDesc' @close='closeTaskProgress'></detail>
           </div>
         </transition>
       </div>
@@ -593,15 +593,17 @@ img.partyLogo {
           </div>
         </div>
         <div class="progress-container">
-          <div class="current-progress">
-            <div class="left">01/30</div>
+          <div class="current-progress" v-if="node.length > 1">
+            <div class="left">
+              {{currentNode}}
+            </div>
             <div class="right">
-              展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕展台基础已布置完毕
+              {{node.pointDesc}}
             </div>
           </div>
-          <!-- <div class="current-no-progress" >
-             暂未设置项目节点
-          </div> -->
+          <div class="current-no-progress" v-else >
+             暂未添加项目节点
+          </div>
         </div>
       </div>
     </div>
@@ -617,7 +619,7 @@ img.partyLogo {
         </div>
       </div>
     </div>
-    <comments :members='members' :taskId='taskId'></comments>
+    <comments :members='members' :taskId='taskId' @close='updateComments'></comments>
     <div v-if="role == 'creator'" class="btn-warp b-LR-8 clearfix">
       <div @touchstart='closeTask' class="btn-normal-warn b_left b-MT-10">
         关闭任务
@@ -647,6 +649,7 @@ import { mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
+      currentNode:'',
       activeFont: "",
       headImg: "",
       taskDesc: "",
@@ -668,10 +671,11 @@ export default {
       isLike: false,
       showDetail: false,
       showTaskProgress: false,
+      node: " ",
       taskName: "",
       taskDesc: "",
       taskId: "",
-      active:'',
+      active: "",
       deadLine: "暂未设置起止时间",
       taskProgressContent: `任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情`,
       //项目群
@@ -703,7 +707,7 @@ export default {
     },
     common() {
       return "common";
-    },
+    }
   },
   components: {
     comments,
@@ -724,27 +728,66 @@ export default {
         vm._getTaskId();
         vm.getData();
         vm.getTaskComment();
-        vm.getThemeList();        
+        vm.getThemeList();
       });
     }
   },
   methods: {
+    updateComments() {
+      this.getComments();
+    },
+    getComments() {
+      let self = this;
+      Convent.getTaskComments(self.taskId, {
+        pageSize: "10"
+      })
+        .then(res => {
+          console.log(res, "------一级评论------");
+          if (res.code == 1 && res.status == 200) {
+            self.members = res.data;
+          }
+          if (res.code == 603) {
+            self.$toast.show("任务暂未开启请勿评论", 1000);
+          }
+          console.log(self.members, "///////////////////////");
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     ...mapMutations({
       SET_USER_ROLE: "SET_USER_ROLE"
     }),
-    getThemeList(){
+    getThemeList() {
       let self = this;
       Convent.sectionList({
-        projectId:'990421156408336385'
-      }).then((res)=>{
-        console.log('list------',res)
-      }).catch((err)=>{
-        console.log(err)
+        projectId: self.getProjectId
       })
+        .then(res => {
+          console.log("list------", res);
+          if (res.code == 1 && res.status == 200) {
+            if (res.data.length > 1) {
+              self.node = res.data[0];
+              self.taskDesc = res.data[0].pointDesc;
+              self.calcuTime();
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    calcuTime() {
+      let m = new Date(parseInt(self.node.createTime)).getMonth() + 1;
+      let d = new Date(parseInt(self.node.createTime)).getDay();
+      self.currentNode = m > 10 ? m : `0${m}` + "/" + d > 10 ? d : `0${m}`;
     },
     getTaskComment() {
+      //获取评论
       let self = this;
-      Convent.getTaskComments(this.taskId)
+      Convent.getTaskComments(this.taskId, {
+        pageSize: "20"
+      })
         .then(res => {
           console.log(res, "------一级评论------");
           self.members = res.data;
@@ -857,40 +900,40 @@ export default {
       // 5	提前完成
       // 6	超时
       // 7	未接受且超时
-      console.log(status,'===================>>>>>');
+      console.log(status, "===================>>>>>");
 
       switch (status) {
-        case 0: {
+        case 1: {
           this.active = "isInProgress";
           this.activeFont = "进行中";
           break;
         }
-        case 1: {
+        case 2: {
           this.active = "isCompleted";
           this.activeFont = "关闭";
           break;
         }
-        case 2: {
+        case 3: {
           this.active = "overDeadLined";
           this.activeFont = "拒绝";
           break;
         }
-        case 3: {
+        case 4: {
           this.active = "isCompleted";
           this.activeFont = "已完成";
           break;
         }
-        case 4: {
+        case 5: {
           this.active = "isCompleted";
           this.activeFont = "提前完成";
           break;
         }
-        case 5: {
+        case 6: {
           this.activeFont = "overDeadLined";
           this.activeFont = "超时";
           break;
         }
-        case 6: {
+        case 7: {
           this.active = "overDeadLined";
           this.activeFont = "未接受且超时";
           break;
@@ -925,10 +968,12 @@ export default {
         .catch(err => {});
     },
     link_to_taskSetting() {
+      let self = this;
       this.$router.push({
-        path:"/addTaskSetting",
-        query:{
-
+        path: "/addTaskSetting",
+        query: {
+          projectId:self.getProjectId,
+          taskId:self.taskId
         }
       });
     },
