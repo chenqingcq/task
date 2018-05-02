@@ -49,7 +49,7 @@
           </div>
         </div>
         <div class="timer-shaft" v-if="mode== 'edit' && processData.length > 0 ">
-          <div class="link-dot b-MT-0"></div>
+          <div class="link-dot "></div>
           <div class="link-dot"></div>
           <div class="link-dot b-MB-0"></div>
         </div>
@@ -178,49 +178,12 @@
         newSectionVal : '' ,
         todayDate: '',
         todayTime : '',
-        processData:[{
-          date: '03/20',
-          time: '12:30',
-          progressDesc: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
-          imgs:[
-            '//image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-            '//image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-            '//image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-          ]
-        },
-        {
-          date: '03/20',
-          time: '12:30',
-          progressDesc: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
-          imgs:[
-            '//image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-            '//image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-            '//image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-          ]
-        },
-          {
-          date: '03/20',
-          time: '12:30',
-          progressDesc: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
-          imgs:[
-
-          ]
-        },{
-          date: '03/20',
-          time: '12:30',
-            progressDesc: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
-          imgs:[
-            '//image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b'
-          ]
-        }],
+        processData:[],
         isShowAllTask : false ,
         taskDetail : {}, // 任务详情
         imagesFiles:[] , // e.target.files
         previewImages : [] , // window.uril.createOBjUrl
       }
-    },
-    components:{
-
     },
     mounted(){
       var dateObj = this.initDate()
@@ -256,6 +219,7 @@
       },
       addTaskProcess(){
         const progressDesc =  this.newSectionVal
+        // 表单验证
         if( !progressDesc ){ this.$toast.show('请填写文字') ; return }
         if( !this.imagesFiles.length ){ this.$toast.show('请上传图片'); return }
 
@@ -270,6 +234,7 @@
 
         })
       },
+      // 获取进度列表后的处理
       getProcessList(){
         Convent.taskProcessList({
           taskDetil : 1 ,
@@ -319,10 +284,12 @@
         console.log(this.imagesFiles)
         this.previewImages = await this.previewImage(files)  // 预览 转url
       },
+      // 取消某一张的上传
       giveUpANIamge(index){
         this.previewImages.splice(index, 1)
         this.imagesFiles.splice(index, 1)
       },
+      // 上传后的图片预览展示
        previewImage(files){
         const FILES = files
         // e.target.files 不是数组 不能用map，只能用for 直接便利
@@ -341,6 +308,7 @@
       revokeObjectURL(file){
         window.URL.revokeObjectURL(objectURL);
       },
+      // 获取 url 在内存的片段url
       getObjectURL(file){
         let url = null
         // URL.createObjectURL() 静态方法会创建一个 DOMString，其中包含一个表示参数中给出的对象的URL
