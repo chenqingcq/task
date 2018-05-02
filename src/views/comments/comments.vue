@@ -128,6 +128,10 @@ export default {
       });
     },
     link_to_allComments() {
+      if( this.members.length == 0 ){
+        this.$toast.show('暂无评论', 1000)
+        return
+      }
       this.$router.push("comment");
     },
     closeUserInput() {

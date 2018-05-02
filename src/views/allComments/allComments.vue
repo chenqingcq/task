@@ -4,23 +4,24 @@
             <div class="panel b-P-10 " style="background:#fff">
               <!--scroll-->
             <div class="comments-container"
-                 v-infinite-scroll="refresh" infinite-scroll-disabled="false" infinite-scroll-distance="60"
+                 v-infinite-scroll="getCommentsList" infinite-scroll-disabled="hasMore" infinite-scroll-distance="60"
                  ref="scroll"  v-if="members.length>1">
                 <ul class="comment-panel">
                 <li v-for="(item,index) in members" :key="index" class="lisItem">
                     <div class="left">
                     <!--测试-->
                     <div class="icon">
-                        <img :src="item.imgUrl" alt="icon" class='iconImg'>
+                        <img :src="item.headImage" alt="icon" class='iconImg'>
                     </div>
                     </div>
                     <div class="right">
                     <!--测试-->
                     <div class="head">
-                        <div class="role b_FS-12 ">{{item.name}}({{item.role}})</div>
-                        <div class="time-panel"><span>{{item.date}}</span><span>{{item.time}}</span></div>
+                        <div class="role b_FS-12 ">{{item.nickname}}({{item.role}})</div>
+                        <!--{{ item.createTime }}-->
+                        <div class="time-panel"><span>{{dateFormatInChinese(item.createTime)}}</span></div>
                     </div>
-                    <div class="comments-item">{{item.comments}}</div>
+                    <div class="comments-item">{{item.message}}</div>
                     <div class="comments-callback">
                         <span @touchstart='_look_all_reply'>2条回复</span>
                         <div>
@@ -58,6 +59,7 @@
 <script>
 import scroll from "@/common/base/scroll/scroll";
 import  boardfix from '@/mixins/keyboardfix'
+import { dateFormatInChinese } from '@/utils/transform'
 export default {
   name: "allComments",
   mixins : [boardfix],
@@ -68,6 +70,11 @@ export default {
       showUserInput: false,
       currentState: {},
       comments: "",
+      page: {
+        pageNum : 1 ,
+        pageSize : 10 ,
+        hasMore : true
+      },
       members: [
         {
           //审批留言
@@ -159,7 +166,7 @@ export default {
   },
   computed: {
     hasMore(){
-      return this.listenScroll
+      return !this.page.hasMore
     },
     commentImgUrl() {
       return require("@/assets/img/icon-comment.png");
@@ -173,6 +180,36 @@ export default {
     }
   },
   methods: {
+    dateFormatInChinese : dateFormatInChinese ,
+    getCommentsList( ){
+      const { pageNum, pageSize ,hasMore } = this.page
+      if( !hasMore ){
+        return
+      }
+      this.page.hasMore = false
+      const taskId = this.$route.query.taskId
+      Convent.getTaskComments({
+        taskId ,
+        pageNum ,
+        pageSize
+      }).then(res=>{
+        let oldList = this.members , newList = []
+
+        if(res.data.length){
+          newList = oldList.concat( res.data )
+          this.members = newList
+
+        }
+        else{
+          this.page.hasMore = false
+          return
+        }
+        this.page.hasMore = res.page.isLoaded
+        if( this.page.hasMore ){
+          this.page.pageNum++
+        }
+      })
+    },
     refresh() {
       console.log("下拉加载");
     },
