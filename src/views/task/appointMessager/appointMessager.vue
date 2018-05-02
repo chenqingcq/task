@@ -56,7 +56,7 @@
   }
   .editDeadTime {
     width: 100%;
-    height: 300*2px;
+    height: 500*2px;
     overflow: hidden;
     background: linear-gradient(
       to bottom,
