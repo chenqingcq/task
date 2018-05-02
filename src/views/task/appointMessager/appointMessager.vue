@@ -360,7 +360,7 @@
                 <div class="comments">{{_item.commentNum}}</div>
                 <div class="progress">{{_item.progress}}</div>
                 <div class="arrow" >
-
+                  
                  </div>
               </li>
           </div>
@@ -379,7 +379,7 @@
       <div ref="deleteBtn" :class="{deleteBtn:true,deleteExcutor: showBtntype,deleteExcutorDisable :!showBtntype}" @touchstart.native='deleteExcutor'>删除人员</div>
     </div>
     <invites   :showInvite='taskExecutors.length>0?false:true' ></invites>
-    <qrcode :showQrcode='showQrcode' @closeQrcode ='closeQrcode' :projectId='projectId' :taskId = 'taskId'></qrcode>
+    <qrcode :showQrcode='showQrcode' @closeQrcode ='closeQrcode' :projectId='projectId' :taskId = 'taskId'></qrcode>  
   </div>
 </template>
 <script>
@@ -454,6 +454,8 @@ export default {
     taskExecutors(newVal) {
       if (newVal) {
         this.defineShow(newVal);
+      }else{
+        this.showInvite  = true;
       }
     },
     showBtntype(newVal, oldVal) {
@@ -486,7 +488,6 @@ export default {
             ? window.location.hash.match(reg)[0].split("=")[1]
             : "";
           console.log("-----hasTaskId-----", vm.taskId);
-          vm.getExcutorList(vm.projectId);
           // debugger;
         }
         if (
@@ -523,7 +524,6 @@ export default {
         }
       });
     }
-
   },
   methods: {
     ...mapMutations({
@@ -541,7 +541,7 @@ export default {
     },
     getExcutorList(id) {
       console.log(id);
-
+      debugger;
       Convent.getExcutorList(id) //项目id
         .then(res => {
           console.log(Object.keys(res.data), Object.values(res.data));
@@ -564,7 +564,7 @@ export default {
       this.$nextTick(() => {
         console.log(fatherIndex, selfIndex, item);
         this.deletSubArr[fatherIndex][selfIndex] = !this
-
+        
           .deletSubArr[fatherIndex][selfIndex];
 
         console.log(this.deletSubArr, this.deletSubArr[fatherIndex][selfIndex]);
@@ -580,7 +580,7 @@ export default {
       this.showArr[selfIndex] = !this.showArr[selfIndex];
       this.showBtntype = !this.showBtntype;
       if(this.showBtntype){
-
+        
       }
     },
     progress(item) {
