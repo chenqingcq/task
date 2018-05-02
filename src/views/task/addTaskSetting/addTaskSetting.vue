@@ -575,7 +575,30 @@ export default {
       });
     }
     else{
-      next()
+      next(vm => {
+        vm.projectId = vm.getProjectId || "";
+        console.log(vm.projectId);
+        if (vm.projectId) {
+          vm.hasProjectId = true;
+          vm.taskTheme = vm.getProjectThemeName;
+          vm.$refs.taskTheme.setAttribute("disabled", true);
+          vm.taskName = "";
+          vm.taskDesc = "";
+          vm.executor = "";
+          vm.startTime = "";
+          vm.endTime = "";
+          vm.standard = "";
+        } else {
+          vm.hasProjectId = false;
+          vm.taskTheme = "";
+          vm.taskName = "";
+          vm.taskDesc = "";
+          vm.executor = "";
+          vm.startTime = "";
+          vm.endTime = "";
+          vm.standard = "";
+        }
+      })
     }
   },
   methods: {
@@ -775,7 +798,7 @@ export default {
           .catch(err => {
             console.log(err);
             // debugger;
-          });   
+          });
       }
     },
     validate() {
