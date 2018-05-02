@@ -174,7 +174,7 @@
   export default{
     data(){
       return{
-        mode: 'edit', // look
+        mode: 'look', // look
         newSectionVal : '' ,
         todayDate: '',
         todayTime : '',
