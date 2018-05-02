@@ -4,7 +4,7 @@
           <div class="close" @touchstart='close'>
               <img src="@/assets/img/icon-close.png" />
           </div>
-          <textarea name="userIpt" id="userIpt" placeholder="说点什么吧..." v-model.trim="usreInput" maxlength="200">
+          <textarea ref="ipt" autofocus=true  @keyup.enter='sendComments' name="userIpt" id="userIpt" placeholder="说点什么吧..." v-model.trim="usreInput" maxlength="200">
               
           </textarea>
           <div @touchstart='sendComments' class="comment-btn">评论</div>
@@ -38,29 +38,35 @@ export default {
           message: self.usreInput
         })
           .then(res => {
-            console.log(res,"----------->>>");
+            console.log(res, "----------->>>");
             if (res.code == 1 && res.status == 200) {
-              self.$dialog.message({
-                message:'评论成功!',
-                icon:'pass'
-              })
+              self.$toast.show('评论成功！',1000);
+              self.usreInput = '';
+              //重新刷新列表
               self.$emit("close");
-            }else if(res.code == 603){
-              debugger;
+            } else if (res.code == 603) {
               self.$dialog.message({
-                message:'任务未开启请勿评论!'
-              })
-              self.$emit('close')
+                message: "任务未开启请勿评论!"
+              });
+              self.$emit("close");
             }
           })
           .catch(err => {
-            console.log(err)
+            console.log(err);
+            if(err.code == 603){
+              self.$toast.show("任务未开启请勿评论!",1000);
+              self.usreInput = ''
+            }
+            self.$emit("close");
           });
       } else if (this.usreInput.length > 200) {
-        debugger
+        debugger;
         this.$toast.show("评论字数不得超过200字!", 1500);
       }
     }
+  },
+  mounted(){
+    
   }
 };
 </script>

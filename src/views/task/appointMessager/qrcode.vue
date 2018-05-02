@@ -83,7 +83,7 @@
                  <div class="qrcodeImg_container">
                      <canvas class="img"></canvas>
                  </div>
-                 <div class="countdown">{{expires}}s</div>
+                 <div class="countdown">{{expire}}s</div>
              </div>
          </div>
         </div>
@@ -105,6 +105,10 @@ export default {
     taskId: {
       type: String,
       default: ""
+    },
+    expires: {
+      type:Number,
+      default:60
     }
   },
   data() {
@@ -112,8 +116,9 @@ export default {
       _projectId: "",
       _taskId: "",
       isInvalid: true,
+      startCount: false,
       timer: null,
-      expires: ""
+      expire:'',
     };
   },
   watch: {
@@ -124,30 +129,58 @@ export default {
     taskId(newVal) {
       this._taskId = newVal;
     },
-    showQrcode() {
-      Convent.sharefacetoface({
-        id: this._projectId ? this._projectId : this._taskId,
-        type: this._projectId ? 1 : 0
-      })
-        .then(res => {
-          console.log(res.shareUrl);
-          if (res.code == 1 && res.status == 200) {
-            QRcode.toCanvas(
-              document.querySelector("canvas.img"),
-              res.data.shareUrl,
-              function(error, url) {
-                if (error) console.error(error);
-                console.log("success!", url);
-              }
-            );
-            this.checkValid(res.data.key); //检测是否有效
-
-            this.countDown((this.expires = res.data.expiresIn)); //有效期
-          }
+    showQrcode(newVal,oldVal) {
+      console.log(newVal,oldVal);
+      this.expire = this.expires;
+      if (newVal) {
+        let self = this;
+        Convent.sharefacetoface({
+          id: this._projectId ? this._projectId : this._taskId,
+          type: this._projectId ? 1 : 0
         })
-        .catch(err => {
-          console.log(err);
-        });
+          .then(res => {
+            console.log(res.shareUrl);
+            if (res.code == 1 && res.status == 200) {
+              self.key = res.data.key;
+              QRcode.toCanvas(
+                document.querySelector("canvas.img"),
+                res.data.shareUrl,
+                function(error, url) {
+                  if (!error) {
+                    self.countDowner = setInterval(() => {
+                      console.log("------------->>>");
+                      self.expire -= 1;
+                      if (self.expire <= 0 || !self.isInvalid) {
+                        self.expire = "";
+                        clearInterval(self.countDowner);
+                        self.$emit("closeQrcode");
+                      }
+                      Convent.checkValid({
+                        key: self.key
+                      })
+                        .then(res => {
+                          console.log(res);
+                          if (res.code == 1 && res.status == 200) {
+                            self.isInvalid = res.data.isValid;
+                          }
+                          if (!self.isInvalid) {
+                            self.$emit("closeQrcode");
+                            self.$toast.show("二维码已失效请重新刷新！", 1000);
+                          }
+                        })
+                        .catch(err => {
+                          console.log(err);
+                        });
+                    }, 1000);
+                  }
+                }
+              );
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     },
     isInvalid(newVal) {
       if (!newVal) {
@@ -157,53 +190,18 @@ export default {
     }
   },
   methods: {
-    countDown(time) {
-      if (this.countDowner && this.isInvalid) {
-        clearInterval(this.countDowner);
-      } else {
-        this.countDowner = setInterval(() => {
-          this.expires -= 1;
-        }, 1000);
-        if (this.expires <= 0) {
-          this.expires = '';
-          clearInterval(this.timer);
-          clearInterval(this.countDowner);
-          this.$emit("closeQrcode");
-        }
-      }
-    },
-    checkValid(key) {
-      console.log(key);
-      if (this.timer) {
-        clearInterval(this.timer);
-      } else {
-        this.timer = setInterval(() => {
-          Convent.checkValid({
-            key: key
-          })
-            .then(res => {
-              console.log(res);
-              this.isInvalid = res.data.isValid;
-              if (!this.isInvalid) {
-                this.$emit("closeQrcode");
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            });
-        }, 5000);
-      }
-    },
     closeQRcode($ev) {
       if ($ev.target.className == "qr_container") {
         this.$emit("closeQrcode");
       }
-    }
+    },
+    count(_res) {}
   },
-  mounted() {
-    console.log(this.showQrcode);
-    // debugger;
-  }
+  beforeDestroy() {
+    clearInterval(this.timer);
+    clearInterval(this.countDowner);
+  },
+  mounted() {}
 };
 </script>
 

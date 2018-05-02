@@ -14,22 +14,11 @@ let state = {
   },
   taskTheme: '',
   taskExecutor: '',
-  taskId :'',
+  taskRole: '',
+  taskId: '',
+  userId: '',
+  taskSettings:'',
   taskExecutors: [],
-  taskSetting: [{
-    id: 0,
-    taskTheme: '',
-    taskName: '',
-    taskDesc: '',
-    startTime: '',
-    endTime: '',
-    standard: '',
-    taskExecutor: "",
-    allowedCreate: true,
-    isPublic: false,
-    membersCanSee: true,
-    othersCanSee: []
-  }],
 }
 const mutations = {
   [types.SET_USER_TYPE](state, type) {
@@ -38,7 +27,7 @@ const mutations = {
   bevip(state) {
     state.user.isvip = 1;
   },
-  [types.SET_TASKID](state,taskId){
+  [types.SET_TASKID](state, taskId) {
     state.taskId = taskId;
   },
   user(state, data) {
@@ -50,8 +39,14 @@ const mutations = {
   [types.SET_TASKTHEME](state, value) {
     state.taskTheme = value;
   },
+  [types.SET_USER_ID](state, value) {
+    state.userId = value;
+  },
   [types.SET_TASK_EXECUTOR](state, taskExecutor) {
     state.taskExecutor = taskExecutor
+  },
+  [types.SET_USER_ROLE](state, role) {
+    state.role = role;
   },
   [types.SORT_TASK_EXECUTOR](state, type) {
     state.taskExecutor.sort((a, b) => {
@@ -73,30 +68,9 @@ const mutations = {
   [types.DELETE_TASK_EXECUTOR](state, index) {
     state.taskExecutor.splice(index, 1);
   },
-  [types.SET_TASK](state, val) {
-    let {
-      taskTheme,
-      taskName,
-      taskDesc,
-      startTime,
-      endTime,
-      standard,
-      taskExecutor,
-      allowedCreate,
-      isPublic,
-    } = val;
-    state.taskSetting.push({
-      taskTheme,
-      taskName,
-      taskDesc,
-      startTime,
-      endTime,
-      standard,
-      taskExecutor,
-      allowedCreate,
-      isPublic
-    });
-  }
+  [types.SET_TASK_SETTINGS](state, val) {
+    state.taskSettings = val;
+  } 
 };
 
 export default {

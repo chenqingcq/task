@@ -108,7 +108,7 @@
             height: 100%;
             position: absolute;
             top: 0;
-            left: 0;
+            right: 0;
           }
           img:nth-child(2) {
             height: 100%;
@@ -275,7 +275,7 @@
     text-align: center;
     height: 40px*2;
     line-height: 80px;
-    color: rgba(51, 51, 51, 1);
+    color: #999;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -529,7 +529,7 @@ img.partyLogo {
       <div class="panel c-1 c_white-bg">
         <div class="task-slide-top">
           <div class="user-icon">
-            <img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" />
+            <img :src="headImg" />
           </div>
           <div class="right">
             <div class="show-task-detail">
@@ -552,13 +552,6 @@ img.partyLogo {
             </div>
             <div class="task-focus">
               <img @touchstart='link_to_taskSetting' class="focus-star" v-show='role=="creator"' src="@/assets/img/icon-set up.png" />
-              <!--<transition name="zoomInDown">-->
-                <!--<img v-show='isLike' @touchstart="toggleLike" class="focus-star " src="@/assets/img/icon-collection-highlight.png" />-->
-              <!--</transition>-->
-              <!--<transition name="canelLike">-->
-                <!--<img v-if="!isLike" @touchstart="toggleLike" class="focus-star" src="@/assets/img/icon-collection-normal.png" :style="styleTaskFocus"-->
-                <!--/>-->
-              <!--</transition>-->
             </div>
           </div>
         </div>
@@ -576,7 +569,7 @@ img.partyLogo {
         </div>
         <div class="task-progress">
           <div class="task-desc" @touchstart='toggleTaskProgress'>
-            <span>展台基础已布置完毕展台基础已布置完毕台基础已布置完毕</span>
+            <span>{{taskDesc}}</span>
             <img src="@/assets/img/icon-slide downward.png" />
           </div>
           <div class="detail-btn" @touchstart='towardsUpdateHistory'>
@@ -585,7 +578,7 @@ img.partyLogo {
         </div>
         <transition name="bounceIn">
           <div class="taskProgress" v-show="showTaskProgress">
-            <detail :taskDesc='taskProgressContent' @close='closeTaskProgress'></detail>
+            <detail :taskDesc='taskDesc' @close='closeTaskProgress'></detail>
           </div>
         </transition>
       </div>
@@ -599,19 +592,18 @@ img.partyLogo {
             更多项目节点<img src="@/assets/img/icon-right-slide03.png" />
           </div>
         </div>
-        <div class="progress-container"  >
-          <div class="current-progress" v-if="!currentPoint">
-            暂无
-          </div>
-          <div v-else class="current-progress">
-            <div class="left">01/30</div>
+        <div class="progress-container">
+          <div class="current-progress" v-if="node.length > 1">
+            <div class="left">
+              {{currentNode}}
+            </div>
             <div class="right">
-              {{ currentPoint.pointDesc }}
+              {{node.pointDesc}}
             </div>
           </div>
-          <!-- <div class="current-no-progress" >
-             暂未设置项目节点
-          </div> -->
+          <div class="current-no-progress" v-else >
+             暂未添加项目节点
+          </div>
         </div>
       </div>
     </div>
@@ -627,7 +619,7 @@ img.partyLogo {
         </div>
       </div>
     </div>
-    <comments :members='members' :taskId='taskId'></comments>
+    <comments :members='members' :taskId='taskId' @close='updateComments'></comments>
     <div v-if="role == 'creator'" class="btn-warp b-LR-8 clearfix">
       <div @touchstart='closeTask' class="btn-normal-warn b_left b-MT-10">
         关闭任务
@@ -657,6 +649,9 @@ import { mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
+      currentNode:'',
+      activeFont: "",
+      headImg: "",
       taskDesc: "",
       endTime: "",
       startTime: "",
@@ -676,31 +671,28 @@ export default {
       isLike: false,
       showDetail: false,
       showTaskProgress: false,
+      node: " ",
       taskName: "",
       taskDesc: "",
       taskId: "",
+      active: "",
       deadLine: "暂未设置起止时间",
       taskProgressContent: `任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情`,
       //项目群
       parties: [
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
+        "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
+        "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
+        "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
       ],
       members: [],
       items: [
-          //轮播图处理时   51 234 51遵守这个有原则
-//            "http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650",
-//            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg",
-//            "http://bpic.588ku.com/element_origin_min_pic/16/06/20/165767ab7a315bd.jpg",
-//            "http://bpic.588ku.com/element_origin_min_pic/18/03/24/494a50847f3dbef27c31355f35d0393d.jpg" ,
-//            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg"
-      ],
-      currentPoint:{
-        "pointId": "",
-        "pointDesc": "",
-        "pointTime": ""
-      }
+        //轮播图处理时   51 234 51遵守这个有原则
+        //            "http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650",
+        //            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg",
+        //            "http://bpic.588ku.com/element_origin_min_pic/16/06/20/165767ab7a315bd.jpg",
+        //            "http://bpic.588ku.com/element_origin_min_pic/18/03/24/494a50847f3dbef27c31355f35d0393d.jpg" ,
+        //            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg"
+      ]
     };
   },
   computed: {
@@ -715,16 +707,6 @@ export default {
     },
     common() {
       return "common";
-    },
-    active() {
-      return "isInProgress"; //确定任务完成状态
-    },
-    activeFont() {
-      return this.active === "isCompleted"
-        ? "已完成"
-        : this.active == "isInProgress"
-          ? "进行中"
-          : this.active == "overDeadLined" ? "已超时" : "";
     }
   },
   components: {
@@ -738,25 +720,81 @@ export default {
       next(vm => {
         vm._getTaskId();
         vm.getData();
-        vm.getTaskComment()
+        vm.getTaskComment();
+        vm.getThemeList();
       });
     } else {
       next(vm => {
         vm._getTaskId();
         vm.getData();
         vm.getTaskComment();
+        vm.getThemeList();
       });
     }
   },
   methods: {
-    getTaskComment(){
+    updateComments() {
+      this.getComments();
+    },
+    getComments() {
       let self = this;
-      Convent.getTaskComments(this.taskId).then((res)=>{
-        console.log(res,'------一级评论------');
-        self.members = res.data;
-      }).catch((err)=>{
-        console.log(err)
+      Convent.getTaskComments(self.taskId, {
+        pageSize: "10"
       })
+        .then(res => {
+          console.log(res, "------一级评论------");
+          if (res.code == 1 && res.status == 200) {
+            self.members = res.data;
+          }
+          if (res.code == 603) {
+            self.$toast.show("任务暂未开启请勿评论", 1000);
+          }
+          console.log(self.members, "///////////////////////");
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    ...mapMutations({
+      SET_USER_ROLE: "SET_USER_ROLE"
+    }),
+    getThemeList() {
+      let self = this;
+      Convent.sectionList({
+        projectId: self.getProjectId
+      })
+        .then(res => {
+          console.log("list------", res);
+          if (res.code == 1 && res.status == 200) {
+            if (res.data.length > 1) {
+              self.node = res.data[0];
+              self.taskDesc = res.data[0].pointDesc;
+              self.calcuTime();
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    calcuTime() {
+      let m = new Date(parseInt(self.node.createTime)).getMonth() + 1;
+      let d = new Date(parseInt(self.node.createTime)).getDay();
+      self.currentNode = m > 10 ? m : `0${m}` + "/" + d > 10 ? d : `0${m}`;
+    },
+    getTaskComment() {
+      //获取评论
+      let self = this;
+      Convent.getTaskComments(this.taskId, {
+        pageSize: "20"
+      })
+        .then(res => {
+          console.log(res, "------一级评论------");
+          self.members = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     _getTaskId() {
       if (window.location.hash.indexOf("taskId") > 0) {
@@ -795,24 +833,30 @@ export default {
           break;
         }
         case 1: {
+          this.role = "noTaskor";
+          break;
+        }
+        case 0: {
           this.role = "visitor";
           break;
         }
-        default: {
-          this.role = "noTaskor";
-        }
       }
+      console.log(this.role);
+      //存取角色
+      this.SET_USER_ROLE(this.role);
     },
     getData() {
-      const taskId = this.taskId
-      const projectId = this.getProjectId
+      const taskId = this.taskId;
+      const projectId = this.getProjectId;
       Convent.taskDetail({
-        taskId ,
+        taskId,
         projectId
-      }).then(res => {
+      })
+        .then(res => {
           console.log(res);
           res = res.data;
           this.taskName = res.taskName;
+          this.headImg = res.headImage;
           this.taskDesc = res.taskDesc;
           this.endTime = res.endTime;
           this.startTime = res.startTime;
@@ -822,23 +866,16 @@ export default {
           this.isPass = res.isPass;
           this.isLike = res.isStar == "0" ? false : true;
           this.position = res.position;
-          this.taskStatus = res.taskStatus;
+          this.defineStatus(res.taskStatus);
           this.defineRole(res.role);
           this.fomatTime();
-          if( res.currentPoint ){
-            this.currentPoint = res.currentPoint
+          if (res.latestProgress) {
+            this.items = res.latestProgress.progressImage.map(val => {
+              return { imgUrl: val };
+            });
+          } else {
+            this.items = [];
           }
-          else{
-            this.currentPoint = null
-          }
-
-          if(res.latestProgress){
-            this.items = res.latestProgress.progressImage.map((val)=>{return {imgUrl:val}})
-          }
-          else{
-            this.items = []
-          }
-
         })
         .catch(err => {
           if (err) {
@@ -848,16 +885,63 @@ export default {
       //获取群头像
       Convent.getGroupAvatar(this.getProjectId)
         .then(res => {
-          this.parties = res.data
+          this.parties = res.data;
           console.log(res);
         })
         .catch(err => {
           console.log(err);
         });
     },
+    defineStatus(status) {
+      // 1	进行中(接受)
+      // 2	关闭
+      // 3	拒绝
+      // 4	已完成
+      // 5	提前完成
+      // 6	超时
+      // 7	未接受且超时
+      console.log(status, "===================>>>>>");
+
+      switch (status) {
+        case 1: {
+          this.active = "isInProgress";
+          this.activeFont = "进行中";
+          break;
+        }
+        case 2: {
+          this.active = "isCompleted";
+          this.activeFont = "关闭";
+          break;
+        }
+        case 3: {
+          this.active = "overDeadLined";
+          this.activeFont = "拒绝";
+          break;
+        }
+        case 4: {
+          this.active = "isCompleted";
+          this.activeFont = "已完成";
+          break;
+        }
+        case 5: {
+          this.active = "isCompleted";
+          this.activeFont = "提前完成";
+          break;
+        }
+        case 6: {
+          this.activeFont = "overDeadLined";
+          this.activeFont = "超时";
+          break;
+        }
+        case 7: {
+          this.active = "overDeadLined";
+          this.activeFont = "未接受且超时";
+          break;
+        }
+      }
+    },
     taskDescActive() {
       console.log(11111);
-      animati;
     },
     closeTaskProgress() {
       this.showTaskProgress = false;
@@ -884,7 +968,14 @@ export default {
         .catch(err => {});
     },
     link_to_taskSetting() {
-      this.$router.push("addTaskSetting");
+      let self = this;
+      this.$router.push({
+        path: "/addTaskSetting",
+        query: {
+          projectId:self.getProjectId,
+          taskId:self.taskId
+        }
+      });
     },
     closeTask() {
       let self = this;
@@ -985,18 +1076,17 @@ export default {
       });
     },
     towardsUpdateHistory() {
-      const taskId = this.$route.query.taskId
+      const taskId = this.$route.query.taskId;
       //查看历史上传
-      if( this.role == 'operator' ){
+      if (this.role == "operator") {
         this.$router.push({
           path: `taskHistoryOrUpdate?taskId=${taskId}&mode=edit`
         });
-      }else{
+      } else {
         this.$router.push({
           path: `taskHistoryOrUpdate?taskId=${taskId}`
         });
       }
-
     },
     linkToSection() {
       this.$router.push({

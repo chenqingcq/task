@@ -330,6 +330,16 @@ class Convent {
       url, params, isShowFullLoading = false
     )
   }
+   /*
+   * 删除项目成员
+   * */
+  deleteExcutor(projectId, opt, isShowFullLoading = true) {
+    const url = `/api/project/members/${projectId}`
+    const params = opt || {}
+    return deleter(
+      url, params, isShowFullLoading = false
+    )
+  }
   /*
    * 指定执行人
    * */
@@ -340,7 +350,16 @@ class Convent {
       url, params, isShowFullLoading = false
     )
   }
-  //
+  /*
+   * 更新进度
+   * */
+  updateTask(taskId, opt, isShowFullLoading = true) {
+    const url = `/api/task/${taskId}`
+    const params = opt || {}
+    return patch(
+      url, params, isShowFullLoading = false
+    )
+  }
 }
 
 export default new Convent()

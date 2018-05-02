@@ -297,7 +297,7 @@
 }
 
 #name {
-  font-size: 12*2px;
+  font-size: 10*2px;
   width: auto;
 }
 </style>
@@ -336,7 +336,10 @@
                 <div class="icon">
                   <img v-lazy="item[0].headImage">
                 </div>
-                <div class="name">{{item[0].nickname}}</div>
+                <div class="name">
+                  <span>{{item[0].nickname}}</span>
+                  <span id="name">{{item[0].taskName}}</span>
+                </div>
               </div>
               <div class="update">{{item[0].progressNum}}</div>
               <div class="comments">{{item[0].commentNum}}</div>
@@ -345,22 +348,21 @@
                 <img :src="imgUrl(index)" v-show="item.length>1" />
               </div>
             </li>
-            <transition-group name='scale'>
-              <li class="sub-item" v-for="(item_,index_) in item" v-if="isSubShow[index] && item.length>1" :key="index_">
+              <li class="sub-item" v-for="(_item,_index) in item"  :key="_index" v-show="subShow">
                 <!--下拉可见-->
                 <div class="user">
-                  <div @touchstart='selectedSub(index,index_,item_)' class="select">
-                    <img src="@/assets/img/sign-selected.png" v-show="item_.isSelected" />
+                  <div @touchstart='selectedSub(index,_index,_item )' class="select">
+                    <img src="@/assets/img/sign-selected.png"  v-show="controlShow(index,_index)" />
                   </div>
-                  <div class="name" id="name">{{item_.taskName}}</div>
+                  <div class="name" id="name">{{_item.taskName}}</div>
                 </div>
-                <div class="update">{{item_.progressNum}}</div>
-                <div class="comments">{{item_.commentNum}}</div>
-                <div class="progress">{{item_.progress}}</div>
-                <div class="arrow">
-                </div>
+                <div class="update">{{_item.progressNum}}</div>
+                <div class="comments">{{_item.commentNum}}</div>
+                <div class="progress">{{_item.progress}}</div>
+                <div class="arrow" >
+                  
+                 </div>
               </li>
-            </transition-group>
           </div>
         </ul>
       </scroll>
@@ -392,6 +394,8 @@ export default {
     return {
       showShare: false, //分享
       isExtend: false, //点击显示下拉
+      subShow: false,
+      show$: false,
       isSubShow: "",
       isSelectedShow: "",
       showBtntype: false, //默认显示添加成员按钮
@@ -417,9 +421,12 @@ export default {
         }
       ],
       currentIndex: -1,
+      currentIndex_: -1,
       nowIndex: 0,
       taskExecutors: [],
-      showArr: []
+      showArr: [],
+      showSub_: [],
+      deletSubArr: []
     };
   },
   computed: {
@@ -439,6 +446,11 @@ export default {
     }
   },
   watch: {
+    deletSubArr: {
+      handler: (newVal, oldVal) => {
+        console.log(newVal, oldVal);
+      }
+    },
     taskExecutors(newVal) {
       if (newVal) {
         this.defineShow(newVal);
@@ -461,14 +473,18 @@ export default {
         if (window.location.hash.includes("projectId")) {
           let reg = /projectId=\d{18}/;
           console.log(window.location.hash.match(reg));
-          vm.projectId = window.location.hash.match(reg)[0].split("=")[1];
+          vm.projectId = window.location.hash.match(reg)
+            ? window.location.hash.match(reg)[0].split("=")[1]
+            : "";
           console.log("-------", vm.projectId);
           vm.getExcutorList(vm.projectId);
           // debugger;
         }
         if (window.location.hash.includes("taskId")) {
           let reg = /taskId=\d{18}/;
-          vm.taskId = window.location.hash.match(reg)[0].split("=")[1];
+          vm.taskId = window.location.hash.match(reg)
+            ? window.location.hash.match(reg)[0].split("=")[1]
+            : "";
           console.log("-----hasTaskId-----", vm.taskId);
           vm.getExcutorList(vm.projectId);
           // debugger;
@@ -487,15 +503,21 @@ export default {
       next(vm => {
         if (window.location.hash.includes("projectId")) {
           let reg = /projectId=\d{18}/;
-          vm.projectId = window.location.hash.match(reg)[0].split("=")[1];
+          vm.projectId = window.location.hash.match(reg)
+            ? window.location.hash.match(reg)[0].split("=")[1]
+            : "";
           console.log("---pid----", vm.projectId);
           vm.getExcutorList(vm.projectId);
-        } else if (window.location.hash.includes("taskId")) {
+        }
+        if (window.location.hash.includes("taskId")) {
           let reg = /taskId=\d{18}/;
-          vm.taskId = window.location.hash.match(reg)[0].split("=")[1];
+          vm.taskId = window.location.hash.match(reg)
+            ? window.location.hash.match(reg)[0].split("=")[1]
+            : "";
           console.log("-----hasTaskId-----", vm.taskId);
           // debugger;
-        } else {
+        }
+        if (!vm.projectId && !vm.taskId) {
           vm.$toast.show("请重新添加任务!", 500);
           vm.$router.push("addTaskSetting");
         }
@@ -503,9 +525,18 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      SET_USER_ID: "SET_USER_ID"
+    }),
     defineShow(arr) {
       console.log(arr);
       this.showArr = new Array(arr.length).fill(false);
+      this.showSub_ = new Array(arr.length).fill(false);
+      let i = 0;
+      for (i; i < arr.length; i++) {
+        this.deletSubArr.push(new Array(arr[i].length).fill(false));
+      }
+      console.log(this.deletSubArr, "=========subArr=======");
     },
     getExcutorList(id) {
       console.log(id);
@@ -528,8 +559,18 @@ export default {
       this.showShare = !this.showShare;
       this.showQrcode = !this.showQrcode;
     },
-    selectedSub(preIndex, selfIndex, item) {
-      console.log(preIndex, selfIndex, item);
+    selectedSub(fatherIndex, selfIndex, item) {
+      this.$nextTick(() => {
+        console.log(fatherIndex, selfIndex, item);
+        this.deletSubArr[fatherIndex][selfIndex] = !this
+        
+          .deletSubArr[fatherIndex][selfIndex];
+
+        console.log(this.deletSubArr, this.deletSubArr[fatherIndex][selfIndex]);
+      });
+    },
+    controlShow(index,_index){
+      return this.deletSubArr[index][_index]
     },
     select(selfIndex, userId, item) {
       console.log(selfIndex, userId, item);
@@ -537,22 +578,28 @@ export default {
       this.userId = userId;
       this.showArr[selfIndex] = !this.showArr[selfIndex];
       this.showBtntype = !this.showBtntype;
+      if(this.showBtntype){
+        
+      }
     },
     progress(item) {
       return "100%";
     },
     imgUrl(index) {
-      if (this.isExtend && this.currentIndex === index) {
+      if (this.showSub_[index] ) {
         return require("@/assets/img/05.png");
       } else {
         return require("@/assets/img/04.png");
       }
     },
     showSub(index) {
-      this.currentIndex = index;
+      this.currentIndex_ = index;
       console.log(index);
-      this.isSubShow[index] = !this.isSubShow[index];
-      this.isExtend = !this.isExtend;
+      this.showSub_[index] = !this.showSub_[index];
+      console.log(this.showSub_[index]);
+      this.subShow = this.showSub_[index];
+      return this.showSub_[index];
+      // debugger;
     },
     inviteOthers() {
       //分享
@@ -562,6 +609,7 @@ export default {
     },
     commandExcutor() {
       console.log(this.userId, this.projectId, this.taskId);
+      this.SET_USER_ID(this.userId);
       Convent.cmdExcutor(this.taskId, {
         taskId: this.taskId,
         userId: this.userId,
@@ -571,10 +619,10 @@ export default {
           console.log(res);
           if (res.code == 1 && res.status == 200) {
             this.$router.push({
-              path:"/addTaskSetting",
-              query:{
-                taskId : this.taskId,
-                projectId:this.projectId
+              path: "/addTaskSetting",
+              query: {
+                taskId: this.taskId,
+                projectId: this.projectId
               }
             });
           }
@@ -602,25 +650,25 @@ export default {
       }
     },
     deleteExcutor() {
+      //删除项目成员
+      this.showBtntype = !this.showBtntype;
+      let self = this;
       if (this.showBtntype) {
-        //已经选中成员
-        console.log(this.nowIndex);
-        let self = this;
-        this.$dialog.info({
-          btnName: "delete",
-          placeholder: "确定删除成员",
+        this.$dialog.confirm({
+          message: "确定删除该成员?",
           operate() {
-            self.DELETE_TASK_EXECUTOR(self.nowIndex); //删除选中成员
-            self.sort(self.type); //重新排序
-            self.showBtntype = false;
+            //已经选中成员
+            Convent.deleteExcutor(self.projectId, {
+              projectId: self.projectId,
+              userId: self.userId
+            })
+              .then(res => {
+                console.log(res);
+              })
+              .catch(err => {
+                console.log(err);
+              });
           }
-        });
-      } else {
-        console.log("跳转至删除人员界面");
-        let self = this;
-        this.$dialog.info({
-          btnName: "delete",
-          placeholder: "选择要删除的成员"
         });
       }
     },
