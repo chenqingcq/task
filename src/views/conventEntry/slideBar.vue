@@ -290,12 +290,19 @@
                     isLoaded : true
                   }
                 },
+                isFirstAjax : true,
                 // scroll 分页
                 listenScroll: false ,
 
             }
         },
         computed:{
+          ...mapGetters({
+            'user': 'user',
+            role : 'getProjectRole',
+            projectName : 'getProjectThemeName',
+            projectId : 'getProjectId'
+          }),
           hasMore(){
             return this.projectHasMore || this.listenScroll
           },
@@ -310,8 +317,6 @@
             if(type == 1 ) return  this.myCreate.list
             if(type == 2 ) return  this.myAction.list
           }
-        },
-        components:{
         },
         mounted(){
           this.getProjectList()
@@ -420,6 +425,18 @@
               pageSize : pageSize ,
               sort : this.isPositive ? 0 : 1
             }).then((res)=>{
+                if( this.isFirstAjax ){
+                  this.isFirstAjax = false
+                  if( !this.projectId  ){
+                    if( res.data.length > 0 ){
+                      this.selectProject( res.data[0] )
+                    }
+                    else{
+
+                    }
+
+                  }
+                }
                 const oldList = this.projectList
                 const arr = res.data
                 const page = res.page

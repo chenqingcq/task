@@ -118,7 +118,7 @@ const initWechatConfig = function (JSsdk) {
       console.log('错误次数：' + Vue.prototype.$wechat.weChatHandle.errorCount)
 
       if (Vue.prototype.$wechat.weChatHandle.errorCount > 3) {
-        //HUD.showError('当前微信相关的注册已经失败3次，无法进行调用微信的部分接口')
+        HUD.showError('当前微信相关的注册已经失败3次，无法进行调用微信的部分接口')
       } else {
         // 重新注册
         initWechatConfig(store.getters.getWechatConfig)
