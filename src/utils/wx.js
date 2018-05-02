@@ -66,7 +66,7 @@ const getWechatConfig = function(){
   Wechat.configSign().then(res=>{
     const wxConfig = res.data.jssdk
     const wechatConfig = {
-      debug : true ,
+      //debug : true ,
       appId: wxConfig.AppId, // 必填，企业号的唯一标识，此处填写企业号corpid
       timestamp: wxConfig.Timestamp, // 必填，生成签名的时间戳
       nonceStr: wxConfig.NonceStr, // 必填，生成签名的随机串
@@ -84,7 +84,7 @@ const initWechatConfig = function (JSsdk) {
   console.log('开始进行微信初始化')
   // 初始化微信
   wx.config({
-    debug: true ,
+    //debug: true ,
     ...JSsdk ,
     //...store.getters.weChatConfig, jdk
     jsApiList: [
@@ -120,7 +120,7 @@ const initWechatConfig = function (JSsdk) {
       console.log('错误次数：' + Vue.prototype.$wechat.weChatHandle.errorCount)
 
       if (Vue.prototype.$wechat.weChatHandle.errorCount > 3) {
-        HUD.showError('当前微信相关的注册已经失败3次，无法进行调用微信的部分接口')
+        //HUD.showError('当前微信相关的注册已经失败3次，无法进行调用微信的部分接口')
       } else {
         // 重新注册
         initWechatConfig(store.getters.getWechatConfig)
