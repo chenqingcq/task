@@ -541,7 +541,7 @@ export default {
     },
     getExcutorList(id) {
       console.log(id);
-      debugger;
+      // debugger;
       Convent.getExcutorList(id) //项目id
         .then(res => {
           console.log(Object.keys(res.data), Object.values(res.data));
