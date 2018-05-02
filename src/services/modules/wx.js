@@ -34,7 +34,7 @@ class Wechat {
 
   configSign(){
     return get('/api/wx/jssdk',{
-      currentUrl : location.origin
+      currentUrl : location.origin + location.pathname
     })
   }
 }
