@@ -12,10 +12,11 @@
     bottom: 0;
     width: 100%;
     height: 370*2px;
-    background:-webkit-linear-gradient(left top, #68c5fd, #568bfe);
-    background:-moz-linear-gradient(left top, #68c5fd, #568bfe);
-    background:-o-linear-gradient(left top, #68c5fd, #568bfe);
-    background:-ms-linear-gradient(left top, #68c5fd, #568bfe);
+    background: linear-gradient(left top, #68c5fd, #568bfe);
+    background: -webkit-linear-gradient(left top, #68c5fd, #568bfe);
+    background: -moz-linear-gradient(left top, #68c5fd, #568bfe);
+    background: -o-linear-gradient(left top, #68c5fd, #568bfe);
+    background: -ms-linear-gradient(left top, #68c5fd, #568bfe);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -176,7 +177,6 @@ export default {
         clearTimeout(this.countDowner);
       } else {
         this.countDowner = setTimeout(() => {
-
           this.expire--;
           console.log(this.expire);
           //递减
@@ -205,10 +205,10 @@ export default {
     close($ev) {
       if ($ev.target.className == "qr_container") {
         console.log(this.$el);
-        this.$el.parentNode.removeChild(this.$el)
+        this.$el.parentNode.removeChild(this.$el);
         this.$emit("close");
         clearTimeout(this.countDowner);
-        this.countDowner = null ;
+        this.countDowner = null;
       }
     },
     count(_res) {}
