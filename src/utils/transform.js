@@ -57,3 +57,12 @@ export const dateFormat = function (date, format = 'yyyy-MM-dd hh:mm:ss') {
   }
   return format
 }
+
+export const dateFormatInChinese = function (dateStr) {
+  const date = new Date(Number(dateStr))
+  const month = date.getMonth() + 1
+  function addZero(num){
+    return num < 10 ? '0' + num : num
+  }
+  return date.getFullYear() + '年' + addZero(month) + '月' + addZero(date.getDate()) + '日  ' + addZero(date.getHours()) + ':' +  addZero(date.getMinutes()) + ':' + addZero(date.getSeconds())
+}

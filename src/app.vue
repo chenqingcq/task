@@ -2,8 +2,8 @@
   <div  :style = '[appContainerCss]'  >
 
       <transition name="fade">
-        <keep-alive>
-          <router-view class="wrapper Router" />      
+        <keep-alive exclude="/conventEntry">
+          <router-view class="wrapper Router" />
         </keep-alive>
 
      </transition>

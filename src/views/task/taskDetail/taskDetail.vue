@@ -1073,6 +1073,11 @@ export default {
       });
     },
     towardsUpdateHistory() {
+
+      if( this.role != 'operator' && this.items.length == 0 ){
+        this.$toast.show('暂无更新')
+        return
+      }
       const taskId = this.$route.query.taskId;
       //查看历史上传
       if (this.role == "operator") {
