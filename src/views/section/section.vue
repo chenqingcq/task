@@ -270,7 +270,7 @@
               processData:[{
                 pointTime: '03/20',
                 time: '12:30',
-                pointDesc: '布置展管入口处，以免人多发生意外，入口处，以免 人多发生意外。',
+                pointDesc: '',
                 imgs:[
                   'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
                   'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',

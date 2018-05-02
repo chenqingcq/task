@@ -274,9 +274,11 @@ export default {
           case 6: resStatus = 'outDate' ;break;
           case 7: resStatus = 'outDate' ;break;
         }
-
         val.status = resStatus
-
+        val.completeDate = Number(val.passTime)
+        val.startTime = Number( val.startTime )
+        val.endTime = Number( val.endTime )
+        val.passTime = Number( val.passTime )
         if( resStatus == 'aheadCompleted' ){
           // 天数
           dateStr = numberTransformChinese( parseInt(( val.completeDate - val.startTime )/86400000 ))
@@ -287,10 +289,6 @@ export default {
           dateStr = numberTransformChinese( parseInt(( (+new Date()) - val.startTime )/86400000 ))
           text = `超时${dateStr}天`
         }
-        val.completeDate = Number(val.passTime)
-        val.startTime = Number( val.startTime )
-        val.endTime = Number( val.endTime )
-        val.passTime = Number( val.passTime )
         val.text = text
         return val
       })

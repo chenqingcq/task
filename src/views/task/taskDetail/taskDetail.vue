@@ -629,7 +629,7 @@ img.partyLogo {
       </div>
     </div>
     <!-- 执行者 -->
-    <div v-if="role == 'operator'" class="btn-warp b-LR-8 clearfix">
+    <div v-if="role == 'operator' && taskStatus == 0 " class="btn-warp b-LR-8 clearfix">
       <div @touchstart="rejectTask" class="btn-normal-warn b_left b-MT-10 ">
         拒绝任务
       </div>
