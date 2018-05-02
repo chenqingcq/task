@@ -417,12 +417,9 @@ input:disabled {
 import { mapMutations, mapGetters } from "vuex";
 import { Convent } from "@/services";
 let reflect_to_task = {
-  taskTheme: "项目主题",
   taskName: "任务名称",
-  taskDesc: "任务描述",
   startTime: "开始时间",
-  endTime: "结束时间",
-  standard: " 验收标准",
+  endTime: "结束时间"
 };
 export default {
   data() {
@@ -461,7 +458,8 @@ export default {
       check_pass: false,
       isOpen: true,
       cantSetTime: true,
-      hasExcutor:false
+      hasExcutor: false,
+      hasTaskId: false
     };
   },
   computed: {
@@ -548,7 +546,10 @@ export default {
         vm._updateTask(to.query); //重新设置任务
       });
     }
-    if( (from.path == "/conventEntry"|| from.path == "/convententry") && to.path == "/addTaskSetting") {
+    if (
+      (from.path == "/conventEntry" || from.path == "/convententry") &&
+      to.path == "/addTaskSetting"
+    ) {
       next(vm => {
         vm.projectId = vm.getProjectId || "";
         console.log(vm.projectId);
@@ -556,49 +557,25 @@ export default {
           vm.hasProjectId = true;
           vm.taskTheme = vm.getProjectThemeName;
           vm.$refs.taskTheme.setAttribute("disabled", true);
-          vm.taskName = "";
-          vm.taskDesc = "";
-          vm.executor = "";
-          vm.startTime = "";
-          vm.endTime = "";
-          vm.standard = "";
+          // vm.taskName = "";
+          // vm.taskDesc = "";
+          // vm.executor = "";
+          // vm.startTime = "";
+          // vm.endTime = "";
+          // vm.standard = "";
         } else {
           vm.hasProjectId = false;
-          vm.taskTheme = "";
-          vm.taskName = "";
-          vm.taskDesc = "";
-          vm.executor = "";
-          vm.startTime = "";
-          vm.endTime = "";
-          vm.standard = "";
+          // vm.taskTheme = "";
+          // vm.taskName = "";
+          // vm.taskDesc = "";
+          // vm.executor = "";
+          // vm.startTime = "";
+          // vm.endTime = "";
+          // vm.standard = "";
         }
       });
-    }
-    else{
-      next(vm => {
-        vm.projectId = vm.getProjectId || "";
-        console.log(vm.projectId);
-        if (vm.projectId) {
-          vm.hasProjectId = true;
-          vm.taskTheme = vm.getProjectThemeName;
-          vm.$refs.taskTheme.setAttribute("disabled", true);
-          vm.taskName = "";
-          vm.taskDesc = "";
-          vm.executor = "";
-          vm.startTime = "";
-          vm.endTime = "";
-          vm.standard = "";
-        } else {
-          vm.hasProjectId = false;
-          vm.taskTheme = "";
-          vm.taskName = "";
-          vm.taskDesc = "";
-          vm.executor = "";
-          vm.startTime = "";
-          vm.endTime = "";
-          vm.standard = "";
-        }
-      })
+    } else {
+      next();
     }
   },
   methods: {
@@ -653,8 +630,8 @@ export default {
           projectName: this.taskTheme,
           taskName: this.taskName,
           taskDesc: this.taskDesc,
-          startTime: +new Date(this.startTime.replace(/\./g,'/')),
-          endTime: +new Date(this.endTime.replace(/\./g,'/')),
+          startTime: +new Date(this.startTime.replace(/\./g, "/")),
+          endTime: +new Date(this.endTime.replace(/\./g, "/")),
           checkStandard: this.standard,
           isOpen: this.isPublic ? 1 : 0
         })
@@ -664,6 +641,7 @@ export default {
           })
           .catch(err => {
             console.log(err);
+            self.$toast.show("创建任务失败!", 500);
             reject();
           });
       });
@@ -722,75 +700,25 @@ export default {
       );
     },
 
-    dateFixedIos( str ){
-      if( typeof str == 'number' ){
-        return str
+    dateFixedIos(str) {
+      if (typeof str == "number") {
+        return str;
       }
-      return str.replace(/\.|\-/g,'/')
+      return str.replace(/\.|\-/g, "/");
     },
     confirm() {
-      this.validate();
-      if (this.check_pass) {
-
-        Convent.updateTask(this.taskId, {
-          taskId: this.taskId,
-          projectId: this.projectId,
-          projectName: this.taskTheme,
-          taskName: this.taskName,
-          taskDesc: this.taskDesc,
-          startTime: +new Date(this.startTime.replace(/\./g,'/')),
-          endTime: +new Date(this.endTime.replace(/\./g,'/')),
-          checkStandard: this.standard,
-          isOpen: this.isOpen ? 1 : 0
-        })
-          .then(res => {
-            if (res.code == 1 && res.status == 200) {
-              this.$router.push({
-                path: "/convententry",
-                query: {
-                  taskId: this.taskId,
-                  projectId: this.projectId
-                }
-              });
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }
-    },
-    check_time() {
-      if (this.startTime && this.endTime) {
-        if (
-          new Date(this.dateFixedIos(this.endTime)).getTime() <= new Date(this.dateFixedIos(this.startTime)).getTime()
-        ) {
-          this.$toast.show("结束应大于开始时间！", 1000);
-          this.endTime = "";
-        }
-      }
-    },
-    _createTask() {
-      this.validate();
       let self = this;
-      if (this.check_pass) {
-        self.SET_TASK_SETTINGS({
-          taskId: self.taskId,
-          projectId: self.projectId,
-          projectName: self.taskTheme,
-          taskName: self.taskName,
-          taskDesc: self.taskDesc,
-          startTime: new Date(self.startTime.replace(/\./g,'/')).getTime(),
-          endTime: new Date(self.endTime.replace(/\./g,'/')).getTime(),
-          checkStandard: self.standard,
-          isOpen: self.isOpen ? 1 : 0
-        });
+      this.validate();
+      if (!this.check_pass && !this.taskId) {
+        this._validate();
+      } else if (this.check_pass && !this.taskId) {
         this._getTaskId()
           .then(taskId => {
+            self.taskId = taskId;
             this.$router.push({
               path: "/appointMessager",
               query: {
-                taskId: taskId,
-                projectId: self.getProjectId
+                taskId: taskId
               }
             }); //项目创建完毕
             // debugger;
@@ -799,35 +727,134 @@ export default {
             console.log(err);
             // debugger;
           });
+      } else if (this.taskId) {
+        Convent.updateTask(this.taskId, {
+          taskId: this.taskId,
+          projectId: this.projectId,
+          projectName: this.taskTheme,
+          taskName: this.taskName,
+          taskDesc: this.taskDesc,
+          startTime: +new Date(this.startTime.replace(/\./g, "/")),
+          endTime: +new Date(this.endTime.replace(/\./g, "/")),
+          checkStandard: this.standard,
+          isOpen: this.isOpen ? 1 : 0
+        })
+          .then(res => {
+            if (res.code == 1 && res.status == 200) {
+              this.$router.push({
+                path: "/convententry",
+                query: {
+                  taskId: self.taskId,
+                  projectId: self.projectId
+                }
+              });
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else if (this.check_pass && !this.taskId) {
+        this._createTask();
       }
+    },
+    check_time() {
+      if (this.startTime && this.endTime) {
+        if (
+          new Date(this.dateFixedIos(this.endTime)).getTime() <=
+          new Date(this.dateFixedIos(this.startTime)).getTime()
+        ) {
+          this.$toast.show("结束应大于开始时间！", 1000);
+          this.endTime = "";
+        }
+      }
+    },
+    _createTask() {
+      let self = this;
+      this._getTaskId()
+        .then(taskId => {
+          this.$router.push({
+            path: "/appointMessager",
+            query: {
+              taskId: taskId,
+              projectId: self.getProjectId
+            }
+          }); //项目创建完毕
+          // debugger;
+        })
+        .catch(err => {
+          console.log(err);
+          // debugger;
+        });
     },
     validate() {
       let k;
       for (k in reflect_to_task) {
-        // console.log(this.$data[k]);
         if (
           this.$data.hasOwnProperty(k) &&
-          this.$data[k]
+          this.$data[k] &&
+          this.$data[k].length
         ) {
           this.check_pass = true;
+          console.log(this.check_pass);
         } else {
-          // console.log(k);
-          this.$toast.show(`请添加${reflect_to_task[k]}`, 500);
           this.check_pass = false;
+          console.log(this.check_pass);
+          return;
+        }
+      }
+    },
+    _validate() {
+      let k;
+      for (k in reflect_to_task) {
+        if (
+          this.$data.hasOwnProperty(k) &&
+          this.$data[k] &&
+          this.$data[k].length
+        ) {
+          this.check_pass = true;
+          console.log(this.check_pass);
+        } else {
+          this.check_pass = false;
+          this.$toast.show(`请添加${reflect_to_task[k]}`, 500);
+          console.log(this.check_pass);
           return;
         }
       }
     },
     appointerManager() {
-      if(this.hasExcutor){//有执行人就不用填
-        this.$refs.exe.classList.add('active_')
-        return ;
-      }
+      let self = this;
+      this.validate();
       //验证必选项
-      if (this.hasProjectId) {
-        this._createTask();
+      if (self.taskId) {
+        self.$router.push({
+          path: "/appointMessager",
+          query: {
+            taskId: self.taskId
+          }
+        });
+      } else if (this.check_pass && !this.taskId) {
+        this._getTaskId()
+          .then(taskId => {
+            self.taskId = taskId;
+            this.$router.push({
+              path: "/appointMessager",
+              query: {
+                taskId: taskId
+              }
+            }); //项目创建完毕
+            // debugger;
+          })
+          .catch(err => {
+            console.log(err);
+            // debugger;
+          });
       } else {
-        this._createProject();
+        self.$router.push({
+          path: "/appointMessager",
+          query: {
+            projectId: self.getProjectId
+          }
+        });
       }
     },
     _createProject() {
