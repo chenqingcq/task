@@ -428,12 +428,10 @@ export default {
         {
           title: "公开",
           detail: "所有成员可见",
-          isPublic: true
         },
         {
           title: "项目成员可见",
           detail: "该项目的成员可见",
-          isMembersCanSee: false
         }
       ],
       flag: false,
@@ -597,14 +595,10 @@ export default {
       this.currentIndex = index;
       if (this.currentIndex == 0) {
         this.isPublic = true;
-        window.sessionStorage.setItem("isPublic", true);
-        window.sessionStorage.setItem("allowedLook", false);
         this.allowedLook = false;
       }
       if (this.currentIndex == 1) {
         this.isPublic = false;
-        window.sessionStorage.setItem("allowedLook", true);
-        window.sessionStorage.setItem("isPublic", false);
         this.allowedLook = true;
       }
     },
