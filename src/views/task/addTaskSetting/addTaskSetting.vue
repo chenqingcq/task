@@ -548,7 +548,7 @@ export default {
         vm._updateTask(to.query); //重新设置任务
       });
     }
-    if (from.path == "/convententry" && to.path == "/addTaskSetting") {
+    if( (from.path == "/conventEntry"|| from.path == "/convententry") && to.path == "/addTaskSetting") {
       next(vm => {
         vm.projectId = vm.getProjectId || "";
         console.log(vm.projectId);
