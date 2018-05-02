@@ -549,27 +549,27 @@ export default {
       to.path == "/addTaskSetting"
     ) {
       next(vm => {
-        vm.projectId = vm.getProjectId || "";
+        vm.projectId = to.query.projectId;
         console.log(vm.projectId);
         if (vm.projectId) {
           vm.hasProjectId = true;
           vm.taskTheme = vm.getProjectThemeName;
           vm.$refs.taskTheme.setAttribute("disabled", true);
-          // vm.taskName = "";
-          // vm.taskDesc = "";
-          // vm.executor = "";
-          // vm.startTime = "";
-          // vm.endTime = "";
-          // vm.standard = "";
+          vm.taskName = "";
+          vm.taskDesc = "";
+          vm.executor = "";
+          vm.startTime = "";
+          vm.endTime = "";
+          vm.standard = "";
         } else {
           vm.hasProjectId = false;
-          // vm.taskTheme = "";
-          // vm.taskName = "";
-          // vm.taskDesc = "";
-          // vm.executor = "";
-          // vm.startTime = "";
-          // vm.endTime = "";
-          // vm.standard = "";
+          vm.taskTheme = "";
+          vm.taskName = "";
+          vm.taskDesc = "";
+          vm.executor = "";
+          vm.startTime = "";
+          vm.endTime = "";
+          vm.standard = "";
         }
       });
     } else {
@@ -617,17 +617,18 @@ export default {
       }); //编辑项目节点
     },
     _getTaskId() {
+      let self = this;
       return new Promise((resovle, reject) => {
         // console.log(window.location.hash);
         Convent.createTask({
-          projectId: this.getProjectId,
-          projectName: this.taskTheme,
-          taskName: this.taskName,
-          taskDesc: this.taskDesc,
+          projectId: self.getProjectId,
+          projectName: self.taskTheme,
+          taskName: self.taskName,
+          taskDesc: self.taskDesc,
           startTime: +new Date(this.startTime.replace(/\./g, "/")),
           endTime: +new Date(this.endTime.replace(/\./g, "/")),
-          checkStandard: this.standard,
-          isOpen: this.isPublic ? 1 : 0
+          checkStandard: self.standard,
+          isOpen: self.isPublic ? 1 : 0
         })
           .then(res => {
             this.SET_TASKID(res.data);
@@ -709,10 +710,11 @@ export default {
         this._getTaskId()
           .then(taskId => {
             self.taskId = taskId;
-            this.$router.push({
+            self.$router.push({
               path: "/appointMessager",
               query: {
-                taskId: taskId
+                taskId: taskId,
+                projectId :self.getProjectId
               }
             }); //项目创建完毕
             // debugger;
@@ -739,7 +741,7 @@ export default {
                 path: "/convententry",
                 query: {
                   taskId: self.taskId,
-                  projectId: self.projectId
+                  projectId: self.getProjectId
                 }
               });
             }
@@ -823,7 +825,8 @@ export default {
         self.$router.push({
           path: "/appointMessager",
           query: {
-            taskId: self.taskId
+            taskId: self.taskId,
+            project:self.getProjectId
           }
         });
       } else if (this.check_pass && !this.taskId) {
@@ -833,7 +836,8 @@ export default {
             this.$router.push({
               path: "/appointMessager",
               query: {
-                taskId: taskId
+                taskId: taskId,
+                projectId:self.getProjectId
               }
             }); //项目创建完毕
             // debugger;

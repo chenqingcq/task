@@ -2,6 +2,7 @@
 .appointer-container {
   width: 100%;
   height: 100vh;
+  position: relative;
   header {
     width: 100%;
     height: 65*2px;
@@ -379,7 +380,7 @@
       <div ref="deleteBtn" :class="{deleteBtn:true,deleteExcutor: showBtntype,deleteExcutorDisable :!showBtntype}" @touchstart.native='deleteExcutor'>删除人员</div>
     </div>
     <invites   :showInvite='taskExecutors.length>0?false:true' ></invites>
-    <qrcode :showQrcode='showQrcode' @closeQrcode ='closeQrcode' :projectId='projectId' :taskId = 'taskId'></qrcode>  
+    <qrcode :showQrcode='showQrcode' @close='closeQrcode' :projectId='projectId' :taskId = 'taskId'></qrcode>  
   </div>
 </template>
 <script>
@@ -473,12 +474,7 @@ export default {
     if (to.path == "/appointMessager" && from.path == "/addTaskSetting") {
       next(vm => {
         if (window.location.hash.includes("projectId")) {
-          let reg = /projectId=\d{18}/;
-          console.log(window.location.hash.match(reg));
-          vm.projectId = window.location.hash.match(reg)
-            ? window.location.hash.match(reg)[0].split("=")[1]
-            : "";
-          console.log("-------", vm.projectId);
+          vm.projectId  = to.query.projectId;
           vm.getExcutorList(vm.projectId);
           // debugger;
         }
