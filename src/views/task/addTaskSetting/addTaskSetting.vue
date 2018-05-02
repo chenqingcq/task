@@ -574,6 +574,9 @@ export default {
         }
       });
     }
+    else{
+      next()
+    }
   },
   methods: {
     setExcutor() {
@@ -698,14 +701,15 @@ export default {
     confirm() {
       this.validate();
       if (this.check_pass) {
+
         Convent.updateTask(this.taskId, {
           taskId: this.taskId,
           projectId: this.projectId,
           projectName: this.taskTheme,
           taskName: this.taskName,
           taskDesc: this.taskDesc,
-          startTime: new Date(this.startTime).getTime(),
-          endTime: new Date(this.endTime).getTime(),
+          startTime: new Date(this.startTime.replace('.','/')).getTime(),
+          endTime: new Date(this.endTime.replace('.','/')).getTime(),
           checkStandard: this.standard,
           isOpen: this.isOpen ? 1 : 0
         })
@@ -745,8 +749,8 @@ export default {
           projectName: self.taskTheme,
           taskName: self.taskName,
           taskDesc: self.taskDesc,
-          startTime: new Date(self.startTime).getTime(),
-          endTime: new Date(self.endTime).getTime(),
+          startTime: new Date(self.startTime.replace('.','/')).getTime(),
+          endTime: new Date(self.endTime.replace('.','/')).getTime(),
           checkStandard: self.standard,
           isOpen: self.isOpen ? 1 : 0
         });
