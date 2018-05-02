@@ -558,9 +558,6 @@ export default {
     face_to_face() {
       this.showShare = !this.showShare;
       this.showQrcode = !this.showQrcode;
-      this.countDouwn = setInterval(() => {
-        console.log("=========================");
-      }, 1000);
     },
     selectedSub(fatherIndex, selfIndex, item) {
       this.$nextTick(() => {
@@ -581,6 +578,9 @@ export default {
       this.userId = userId;
       this.showArr[selfIndex] = !this.showArr[selfIndex];
       this.showBtntype = !this.showBtntype;
+      if(this.showBtntype){
+        
+      }
     },
     progress(item) {
       return "100%";

@@ -83,7 +83,7 @@
                  <div class="qrcodeImg_container">
                      <canvas class="img"></canvas>
                  </div>
-                 <div class="countdown">{{expires}}s</div>
+                 <div class="countdown">{{expire}}s</div>
              </div>
          </div>
         </div>
@@ -105,6 +105,10 @@ export default {
     taskId: {
       type: String,
       default: ""
+    },
+    expires: {
+      type:Number,
+      default:60
     }
   },
   data() {
@@ -114,7 +118,7 @@ export default {
       isInvalid: true,
       startCount: false,
       timer: null,
-      expires: 60
+      expire:'',
     };
   },
   watch: {
@@ -125,7 +129,9 @@ export default {
     taskId(newVal) {
       this._taskId = newVal;
     },
-    showQrcode(newVal) {
+    showQrcode(newVal,oldVal) {
+      console.log(newVal,oldVal);
+      this.expire = this.expires;
       if (newVal) {
         let self = this;
         Convent.sharefacetoface({
@@ -143,10 +149,9 @@ export default {
                   if (!error) {
                     self.countDowner = setInterval(() => {
                       console.log("------------->>>");
-                      let self = this;
-                      self.expires -= 1;
-                      if (self.expires <= 0 || !self.isInvalid) {
-                        self.expires = "";
+                      self.expire -= 1;
+                      if (self.expire <= 0 || !self.isInvalid) {
+                        self.expire = "";
                         clearInterval(self.countDowner);
                         self.$emit("closeQrcode");
                       }
