@@ -22,7 +22,7 @@
     width: 281*2px;
     background: #F4F4F4;
     .banner{
-      width: 562;
+      width: 562px;
       height: 196px;
     }
     .help{
@@ -165,7 +165,7 @@
     <!--<div v-show="isShow" >-->
       <v-pop ref="slide" animate ="left" >
         <div v-show="isShow" class="slide-wrap c_white-bg" >
-          <img class="banner" src="../../assets/img/image-background01.png" alt="">
+          <img class="banner" @click.prevent src="../../assets/img/image-background01.png" alt="">
           <img @click="skipToHelp" class="help" src="../../assets/img/icon-help.png" alt="">
           <div class="nav-container b_d-flex c_white-bg" >
             <div @touchstart="changeNav(0), getProjectList()" class="nav" :class="[navTab == 0 ? 'active' : 'default c_7' ]"  >

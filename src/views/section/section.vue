@@ -344,7 +344,7 @@
             })
             .then(res=>{
               this.sectionDataLook.unshift({
-                pointTime,
+                pointTime: this.todayDate ,
                 isDoing: false,
                 pointDesc : pointDesc,
                 id : res.data.pointId
