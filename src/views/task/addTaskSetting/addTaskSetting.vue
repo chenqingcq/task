@@ -630,8 +630,8 @@ export default {
           projectName: this.taskTheme,
           taskName: this.taskName,
           taskDesc: this.taskDesc,
-          startTime: new Date(this.startTime).getTime(),
-          endTime: new Date(this.endTime).getTime(),
+          startTime: +new Date(this.startTime.replace(/\./g,'/')),
+          endTime: +new Date(this.endTime.replace(/\./g,'/')),
           checkStandard: this.standard,
           isOpen: this.isPublic ? 1 : 0
         })
@@ -698,6 +698,13 @@ export default {
         "-----------------------<<<>>>"
       );
     },
+
+    dateFixedIos( str ){
+      if( typeof str == 'number' ){
+        return str
+      }
+      return str.replace(/\.|\-/g,'/')
+    },
     confirm() {
       this.validate();
       if (this.check_pass) {
@@ -708,8 +715,8 @@ export default {
           projectName: this.taskTheme,
           taskName: this.taskName,
           taskDesc: this.taskDesc,
-          startTime: new Date(this.startTime.replace('.','/')).getTime(),
-          endTime: new Date(this.endTime.replace('.','/')).getTime(),
+          startTime: +new Date(this.startTime.replace(/\./g,'/')),
+          endTime: +new Date(this.endTime.replace(/\./g,'/')),
           checkStandard: this.standard,
           isOpen: this.isOpen ? 1 : 0
         })
@@ -732,7 +739,7 @@ export default {
     check_time() {
       if (this.startTime && this.endTime) {
         if (
-          new Date(this.endTime).getTime() <= new Date(this.startTime).getTime()
+          new Date(this.dateFixedIos(this.endTime)).getTime() <= new Date(this.dateFixedIos(this.startTime)).getTime()
         ) {
           this.$toast.show("结束应大于开始时间！", 1000);
           this.endTime = "";
@@ -749,8 +756,8 @@ export default {
           projectName: self.taskTheme,
           taskName: self.taskName,
           taskDesc: self.taskDesc,
-          startTime: new Date(self.startTime.replace('.','/')).getTime(),
-          endTime: new Date(self.endTime.replace('.','/')).getTime(),
+          startTime: new Date(self.startTime.replace(/\./g,'/')).getTime(),
+          endTime: new Date(self.endTime.replace(/\./g,'/')).getTime(),
           checkStandard: self.standard,
           isOpen: self.isOpen ? 1 : 0
         });
