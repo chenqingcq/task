@@ -601,9 +601,6 @@ img.partyLogo {
               {{node.pointDesc}}
             </div>
           </div>
-          <div class="current-no-progress" v-else >
-             暂未添加项目节点
-          </div>
         </div>
       </div>
     </div>
@@ -1090,7 +1087,7 @@ export default {
     },
     linkToSection() {
       this.$router.push({
-        path: "/section"
+        path: "/section?role=" + this.role
       });
     },
     loadImage() {

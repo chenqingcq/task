@@ -245,7 +245,7 @@
     export default{
         data(){
             return{
-              mode: 'edit', // look/edit
+              mode: 'look', // look/edit
               newSectionVal : '' ,
               todayDate: '',
               sectionDataLook: [],
@@ -300,7 +300,8 @@
             })
             .then(res=>{
               if( !res.data.length ){
-                this.mode = 'edit'
+
+                if(this.$route.query.role == 'operator') this.mode = 'edit'
                 return
               }
               this.sectionDataLook = res.data
