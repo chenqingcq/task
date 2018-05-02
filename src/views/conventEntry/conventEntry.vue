@@ -44,7 +44,8 @@
                 style="height: 140px">
                 <span class="left-dot dot " :class="[list.isBrowse	 ? 'info': 'warn']" ></span>
                 <p class="left-photo">
-                  <img :src="list.headImage" alt="">
+                  <img v-if="list.headImage" :src="list.headImage" alt="">
+                  <img src="../../assets/img/default-image.png" v-else alt="">
                 </p>
                 <div class="right-content" >
                   <div class="line1">

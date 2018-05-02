@@ -529,7 +529,8 @@ img.partyLogo {
       <div class="panel c-1 c_white-bg">
         <div class="task-slide-top">
           <div class="user-icon">
-            <img :src="headImg" />
+            <img v-if="headImg" :src="headImg" />
+            <img v-else src="../../../assets/img/default-image.png" />
           </div>
           <div class="right">
             <div class="show-task-detail">

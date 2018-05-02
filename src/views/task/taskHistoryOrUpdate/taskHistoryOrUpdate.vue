@@ -41,7 +41,7 @@
               </template>
               <div class="img-out" v-if="previewImages.length <4">
                 <img class="img" src="../../../assets/img/icon-add01.png" alt="">
-                <input type="file"  accept=".png,.jpg,.gif,.jpeg" @change ="selectImages($event)" multiple="multiple">
+                <input type="file" accept="image/gif,image/jpg,image/jpeg,image/bmp,image/png" @change ="selectImages($event)" multiple="multiple">
               </div>
 
             </div>

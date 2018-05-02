@@ -57,8 +57,8 @@ class Convent {
   /*
    *  添加审批留言列表
    * */
-  getTaskComments(taskId, opt, isShowFullLoading = false) {
-    const url = `/api/comment/${taskId}`;
+  getTaskComments( opt, isShowFullLoading = false) {
+    const url = `/api/comment/${opt.taskId}`
     const params = opt || {}
     return get(
       url, params, isShowFullLoading
