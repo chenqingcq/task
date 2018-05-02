@@ -773,7 +773,7 @@ export default {
       this._getTaskId()
         .then(taskId => {
           this.$router.push({
-            path: "/appointMessager",
+            path: "/convententry",
             query: {
               taskId: taskId,
               projectId: self.getProjectId
