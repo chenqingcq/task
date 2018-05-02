@@ -427,11 +427,11 @@ export default {
       setting: [
         {
           title: "公开",
-          detail: "所有成员可见",
+          detail: "所有成员可见"
         },
         {
           title: "项目成员可见",
-          detail: "该项目的成员可见",
+          detail: "该项目的成员可见"
         }
       ],
       flag: false,
@@ -656,6 +656,9 @@ export default {
             self.taskName = res.data.taskName;
             self.executor = res.data.executorNickName || " ";
             self.hasExcutor = true;
+            self.taskDesc = res.data.taskDesc || "";
+            self.checkStandard = res.data.executorNickName || "";
+            self.isPublic = res.data.isOpen ? true : false;
           }
         })
         .catch(err => {
@@ -714,7 +717,7 @@ export default {
               path: "/appointMessager",
               query: {
                 taskId: taskId,
-                projectId :self.getProjectId
+                projectId: self.getProjectId
               }
             }); //项目创建完毕
             // debugger;
@@ -826,7 +829,7 @@ export default {
           path: "/appointMessager",
           query: {
             taskId: self.taskId,
-            project:self.getProjectId
+            project: self.getProjectId
           }
         });
       } else if (this.check_pass && !this.taskId) {
@@ -837,7 +840,7 @@ export default {
               path: "/appointMessager",
               query: {
                 taskId: taskId,
-                projectId:self.getProjectId
+                projectId: self.getProjectId
               }
             }); //项目创建完毕
             // debugger;

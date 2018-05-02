@@ -72,7 +72,7 @@
             position: relative;
             .task-detail-content {
               overflow: hidden;
-              width: 109*2px;
+              max-width: 109*2px;
               display: inline-block;
               text-overflow: ellipsis;
               white-space: nowrap;
@@ -85,7 +85,7 @@
               height: 12px;
               position: absolute;
               bottom: 6px;
-              left: 110*2px;
+              margin-left: 10*2px;
             }
           }
           .progress {
@@ -131,7 +131,7 @@
       justify-content: center;
       .task-desc {
         display: block;
-        width: 146*2px;
+        max-width: 146*2px;
         margin: 0 auto;
         text-align: center;
         font-size: 12px*2;
@@ -144,7 +144,7 @@
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          width: 100%;
+          width: auto;
         }
       }
       .detail-btn {
@@ -162,11 +162,8 @@
         margin-top: 5*2px;
       }
       img {
-        position: absolute;
-        display: block;
-        top: 8*2px;
-        left: 244*2px;
         height: 10px;
+        margin-left: 20px;
       }
     }
   }
@@ -535,11 +532,11 @@ img.partyLogo {
           <div class="right">
             <div class="show-task-detail">
               <div class="task-name">{{taskName}}</div>
-              <div class="task-detail" @touchstart='showMoreTaskDesc'>
+              <div class="task-detail" >
                 <span class="task-detail-content">
                   {{taskDesc}}
                 </span>
-                <img src="@/assets/img/icon-slide downward.png" />
+                <img src="@/assets/img/icon-slide downward.png"  @touchend='showMoreTaskDesc'/>
               </div>
               <transition name="bounceIn">
                 <div class="taskDesc-container" v-show="showDetail">
@@ -552,7 +549,7 @@ img.partyLogo {
               </div>
             </div>
             <div class="task-focus">
-              <img @touchstart='link_to_taskSetting' class="focus-star" v-show='role=="creator"' src="@/assets/img/icon-set up.png" />
+              <img @touchend='link_to_taskSetting' class="focus-star" v-show='role=="creator"' src="@/assets/img/icon-set up.png" />
             </div>
           </div>
         </div>
@@ -569,11 +566,12 @@ img.partyLogo {
           </div>
         </div>
         <div class="task-progress">
-          <div class="task-desc" @touchstart='toggleTaskProgress'>
-            <span>{{taskDesc}}</span>
-            <img src="@/assets/img/icon-slide downward.png" />
+          <div class="task-desc" >
+            <span>{{taskDesc}}
+            <img src="@/assets/img/icon-slide downward.png"  @touchend='toggleTaskProgress'/>              
+            </span>
           </div>
-          <div class="detail-btn" @touchstart='towardsUpdateHistory'>
+          <div class="detail-btn" @touchend='towardsUpdateHistory'>
             {{ role == 'operator'? '更新进度' : '查看上传历史'  }}
           </div>
         </div>
@@ -589,7 +587,7 @@ img.partyLogo {
       <div class="panel b-MT-10 c_white-bg">
         <div class="b-LR-10 b-T-5 between">
           <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 b_FS-14 c_6 ">主题节点</span></p>
-          <div @touchstart='linkToSection' class="more b_FS-10  c_7">
+          <div @touchend='linkToSection' class="more b_FS-10  c_7">
             更多项目节点<img src="@/assets/img/icon-right-slide03.png" />
           </div>
         </div>
@@ -619,19 +617,19 @@ img.partyLogo {
     </div>
     <comments :members='members' :taskId='taskId' @close='updateComments'></comments>
     <div v-if="role == 'creator'" class="btn-warp b-LR-8 clearfix">
-      <div @touchstart='closeTask' class="btn-normal-warn b_left b-MT-10">
+      <div @touchend='closeTask' class="btn-normal-warn b_left b-MT-10">
         关闭任务
       </div>
-      <div @touchstart='passTask' class="btn-normal-success b_right b-MT-10">
+      <div @touchend='passTask' class="btn-normal-success b_right b-MT-10">
         验收通过
       </div>
     </div>
     <!-- 执行者 -->
     <div v-if="role == 'operator' && taskStatus == 0 " class="btn-warp b-LR-8 clearfix">
-      <div @touchstart="rejectTask" class="btn-normal-warn b_left b-MT-10 ">
+      <div @touchend="rejectTask" class="btn-normal-warn b_left b-MT-10 ">
         拒绝任务
       </div>
-      <div @touchstart='recieveTask' class="btn-normal-success b_right b-MT-10">
+      <div @touchend='recieveTask' class="btn-normal-success b_right b-MT-10">
         接受任务
       </div>
     </div>

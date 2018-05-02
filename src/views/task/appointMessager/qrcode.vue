@@ -12,7 +12,10 @@
     bottom: 0;
     width: 100%;
     height: 370*2px;
-    background-image: linear-gradient(left top, #68c5fd, #568bfe);
+    background:-webkit-linear-gradient(left top, #68c5fd, #568bfe);
+    background:-moz-linear-gradient(left top, #68c5fd, #568bfe);
+    background:-o-linear-gradient(left top, #68c5fd, #568bfe);
+    background:-ms-linear-gradient(left top, #68c5fd, #568bfe);
     display: flex;
     justify-content: center;
     align-items: center;
