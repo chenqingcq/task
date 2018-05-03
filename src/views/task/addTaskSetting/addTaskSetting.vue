@@ -598,10 +598,21 @@ export default {
         .then(res => {
           console.log("---基本任务信息--", res);
           if (res.code == 1 && res.status == 200) {
+            debugger;
             if (res.data.executorNickName && res.data.executorNickName.length) {
               this.$refs.exe.classList.add("active_");
               this.executor = res.data.executorNickName;
             }
+            self.updateTime(res.data.startTime, res.data.endTime);
+            self.taskName = res.data.taskName;
+            self.taskTheme = res.data.projectName;
+            self.$refs.taskTheme.setAttribute("disabled", true);
+            self.executor = res.data.executorNickName
+              ? res.data.executorNickName
+              : undefined;
+            self.taskDesc = res.data.taskDesc;
+            self.checkStandard = res.data.checkStandard;
+            self.isPublic = res.data.isOpen ? true : false;
           }
         })
         .catch(err => {
@@ -733,7 +744,7 @@ export default {
           .then(taskId => {
             self.taskId = taskId;
             self.$router.push({
-              path: "/appointMessager",
+              path: "/convententry",
               query: {
                 taskId: taskId,
                 projectId: self.getProjectId
