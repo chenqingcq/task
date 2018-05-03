@@ -317,7 +317,7 @@ input:disabled {
           />
         </li>
         <ul class="editDeadTime">
-          <li v-if="role == 'creator'" @touchstart='editSection'>
+          <li v-if="role == 'creator'" @touchend='editSection'>
             <img class="editpng" src="@/assets/img/task-edit.png" />
             <div class="editProgress">编辑项目节点</div>
             <div class="editmore">
@@ -388,7 +388,7 @@ input:disabled {
             </div>
             <div class="task-setting" ref="exe">指定执行人</div>
           </label>
-          <div id="appointer" @touchstart='appointerManager'>
+          <div id="appointer" @touchend='appointerManager'>
             <span class="name" ref="executor">{{executor}}</span>
             <span class="arrow">
             <img src="@/assets/img/icon-right-slide03.png" />
@@ -400,7 +400,7 @@ input:disabled {
       <div class="permit-setting"><span>权限设置</span></div>
       <ul class="task-panel permission-setting">
         <li class="task-item">
-          <div v-for="(item,index) in setting" :key="index" @touchstart='changeIndex(index,item)'>
+          <div v-for="(item,index) in setting" :key="index" @touchend='changeIndex(index,item)'>
             <p :class="{active_:currentIndex == index}">{{item.title}} </p>
             <p>
               <span :class='{active :currentIndex == index}'>{{item.detail}}</span>
@@ -408,7 +408,7 @@ input:disabled {
           </div>
         </li>
       </ul>
-      <div @touchstart='confirm' class="confirm">确定</div>
+      <div @touchend='confirm' class="confirm">确定</div>
     </div>
   </div>
 

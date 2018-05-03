@@ -316,12 +316,12 @@
         </li>
         <li></li>
       </ul>
-      <img @touchstart='inviteOthers' class="invite" src="@/assets/img/icon-menu.png">
+      <img @touchend='inviteOthers' class="invite" src="@/assets/img/icon-menu.png">
       <share :showShare='showShare'>
         <ul class="share-items">
           <div class="arrow"></div>
           <li><img src="@/assets/img/01.png" />微信分发</li>
-          <li @touchstart='face_to_face'><img src="@/assets/img/02.png" />面对面发</li>
+          <li @touchend='face_to_face'><img src="@/assets/img/02.png" />面对面发</li>
         </ul>
       </share>
     </header>
@@ -331,7 +331,7 @@
           <div v-for="(item,index) in taskExecutors" :key="index">
             <li :userId='item[0].userId' :sex='item[0].sex'>
               <div class="user">
-                <div @touchstart='select(index,item[0].userId,item)' class="select">
+                <div @touchend='select(index,item[0].userId,item)' class="select">
                   <img src="@/assets/img/sign-selected.png" v-show="index == currentIndex && showArr[index] == true" />
                 </div>
                 <div class="icon">
@@ -345,14 +345,14 @@
               <div class="update">{{item[0].progressNum}}</div>
               <div class="comments">{{item[0].commentNum}}</div>
               <div class="progress">{{item[0].progress}}</div>
-              <div class="arrow" @touchstart='showSub(index)'>
+              <div class="arrow" @touchend='showSub(index)'>
                 <img :src="imgUrl(index)" v-show="item.length>1" />
               </div>
             </li>
               <li class="sub-item" v-for="(_item,_index) in item"  :key="_index" v-show="subShow">
                 <!--下拉可见-->
                 <div class="user">
-                  <input type="radio" name="identity"  @touchstart='selectedSub($event,index,_index,_item )' class="select"/>
+                  <input type="radio" name="identity"  @touchend='selectedSub($event,index,_index,_item )' class="select"/>
                     <!-- <img src="@/assets/img/sign-selected.png"  v-show="controlShow(index,_index)" /> -->
                   <div class="name" id="name">{{_item.taskName}}</div>
                 </div>
@@ -374,9 +374,9 @@
           <p>群聊</p>
         </div>
       </div>
-      <div v-if="showBtntype" class="addExcutor" @touchstart='commandExcutor'>指派人员</div>
-      <div v-if="!showBtntype" class="addExcutor" @touchstart='addExcutor'>添加人员</div>
-      <div ref="deleteBtn" :class="{deleteBtn:true,deleteExcutor: showBtntype,deleteExcutorDisable :!showBtntype}" @touchstart.native='deleteExcutor'>删除人员</div>
+      <div v-if="showBtntype" class="addExcutor" @touchend='commandExcutor'>指派人员</div>
+      <div v-if="!showBtntype" class="addExcutor" @touchend='addExcutor'>添加人员</div>
+      <div ref="deleteBtn" :class="{deleteBtn:true,deleteExcutor: showBtntype,deleteExcutorDisable :!showBtntype}" @touchend.native='deleteExcutor'>删除人员</div>
     </div>
     <invites   :showInvite='taskExecutors.length>0?false:true' ></invites>
     <qrcode :showQrcode='showQrcode' @close='closeQrcode' :projectId='projectId' :taskId = 'taskId'></qrcode>  
@@ -454,16 +454,16 @@ export default {
     taskExecutors(newVal) {
       if (newVal) {
         this.defineShow(newVal);
-      }else{
-        this.showInvite  = true;
+      } else {
+        this.showInvite = true;
       }
     },
     showBtntype(newVal, oldVal) {
       console.log(newVal, oldVal);
       if (!newVal) {
-        this.$refs.deleteBtn.removeEventListener("touchstart", () => {});
+        this.$refs.deleteBtn.removeEventListener("touchend", () => {});
       } else {
-        this.$refs.deleteBtn.addEventListener("touchstart", this.deleteExcutor);
+        this.$refs.deleteBtn.addEventListener("touchend", this.deleteExcutor);
       }
     }
   },
@@ -473,7 +473,7 @@ export default {
     if (to.path == "/appointMessager" && from.path == "/addTaskSetting") {
       next(vm => {
         if (window.location.hash.includes("projectId")) {
-          vm.projectId  = to.query.projectId;
+          vm.projectId = to.query.projectId;
           vm.getExcutorList(vm.projectId);
           // debugger;
         }
@@ -555,20 +555,20 @@ export default {
       this.showShare = !this.showShare;
       this.showQrcode = !this.showQrcode;
     },
-    selectedSub(ev,fatherIndex, selfIndex, item) {
-      console.log(ev.target,fatherIndex,selfIndex,item);
-      ev.target.setAttribute('checked',true);
+    selectedSub(ev, fatherIndex, selfIndex, item) {
+      console.log(ev.target, fatherIndex, selfIndex, item);
+      ev.target.setAttribute("checked", true);
       this.$nextTick(() => {
         console.log(fatherIndex, selfIndex, item);
-        this.deletSubArr[fatherIndex][selfIndex] = !this
-        
-          .deletSubArr[fatherIndex][selfIndex];
+        this.deletSubArr[fatherIndex][selfIndex] = !this.deletSubArr[
+          fatherIndex
+        ][selfIndex];
 
         console.log(this.deletSubArr, this.deletSubArr[fatherIndex][selfIndex]);
       });
     },
-    controlShow(index,_index){
-      return this.deletSubArr[index][_index]
+    controlShow(index, _index) {
+      return this.deletSubArr[index][_index];
     },
     select(selfIndex, userId, item) {
       console.log(selfIndex, userId, item);
@@ -576,15 +576,14 @@ export default {
       this.userId = userId;
       this.showArr[selfIndex] = !this.showArr[selfIndex];
       this.showBtntype = !this.showBtntype;
-      if(this.showBtntype){
-        
+      if (this.showBtntype) {
       }
     },
     progress(item) {
       return "100%";
     },
     imgUrl(index) {
-      if (this.showSub_[index] ) {
+      if (this.showSub_[index]) {
         return require("@/assets/img/05.png");
       } else {
         return require("@/assets/img/04.png");
@@ -606,26 +605,33 @@ export default {
       this.showShare = !this.showShare;
     },
     commandExcutor() {
+      //指定执行人
       console.log(this.userId, this.projectId, this.taskId);
       this.SET_USER_ID(this.userId);
-      Convent.cmdExcutor(this.taskId, {
-        taskId: this.taskId,
-        userId: this.userId,
-        projectId: this.projectId
-      })
-        .then(res => {
-          console.log(res);
-          if (res.code == 1 && res.status == 200) {
-            this.$router.push({
-              path: "/addTaskSetting",
-              query: {
-                taskId: this.taskId,
-                projectId: this.projectId
+      let self = this;
+      this.$dialog.confirm({
+        message: "确定指定该执行人?",
+        operate() {
+          Convent.cmdExcutor(this.taskId, {
+            taskId: self.taskId,
+            userId: self.userId,
+            projectId: self.projectId
+          })
+            .then(res => {
+              console.log(res);
+              if (res.code == 1 && res.status == 200) {
+                self.$router.push({
+                  path: "/addTaskSetting",
+                  // query: {
+                  //   taskId: self.taskId,
+                  //   projectId: this.projectId
+                  // }
+                });
               }
-            });
-          }
-        })
-        .catch(err => {});
+            })
+            .catch(err => {});
+        }
+      });
     },
     addExcutor() {
       let self = this;
@@ -649,7 +655,7 @@ export default {
     },
     deleteExcutor() {
       //删除项目成员
-      this.showBtntype = !this.showBtntype;
+      // this.showBtntype = !this.showBtntype;
       let self = this;
       if (this.showBtntype) {
         this.$dialog.confirm({
@@ -726,7 +732,7 @@ export default {
     init() {
       document
         .querySelector(".deleteBtn")
-        .addEventListener("touchstart", this.deleteExcutor);
+        .addEventListener("touchend", this.deleteExcutor);
       if (this.taskExecutors.length) {
         this.showInvite = true;
       } else {
