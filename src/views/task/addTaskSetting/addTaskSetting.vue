@@ -598,7 +598,7 @@ export default {
         .then(res => {
           console.log("---基本任务信息--", res);
           if (res.code == 1 && res.status == 200) {
-            debugger;
+            // debugger;
             if (res.data.executorNickName && res.data.executorNickName.length) {
               this.$refs.exe.classList.add("active_");
               this.executor = res.data.executorNickName;
