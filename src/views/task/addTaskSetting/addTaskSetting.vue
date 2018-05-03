@@ -317,7 +317,7 @@ input:disabled {
           />
         </li>
         <ul class="editDeadTime">
-          <li v-if="role == 'creator'" @touchstart='editSection'>
+          <li v-if="role == 'creator'" @touchend='editSection'>
             <img class="editpng" src="@/assets/img/task-edit.png" />
             <div class="editProgress">编辑项目节点</div>
             <div class="editmore">
@@ -388,7 +388,7 @@ input:disabled {
             </div>
             <div class="task-setting" ref="exe">指定执行人</div>
           </label>
-          <div id="appointer" @touchstart='appointerManager'>
+          <div id="appointer" @touchend='appointerManager'>
             <span class="name" ref="executor">{{executor}}</span>
             <span class="arrow">
             <img src="@/assets/img/icon-right-slide03.png" />
@@ -400,7 +400,7 @@ input:disabled {
       <div class="permit-setting"><span>权限设置</span></div>
       <ul class="task-panel permission-setting">
         <li class="task-item">
-          <div v-for="(item,index) in setting" :key="index" @touchstart='changeIndex(index,item)'>
+          <div v-for="(item,index) in setting" :key="index" @touchend='changeIndex(index,item)'>
             <p :class="{active_:currentIndex == index}">{{item.title}} </p>
             <p>
               <span :class='{active :currentIndex == index}'>{{item.detail}}</span>
@@ -408,7 +408,7 @@ input:disabled {
           </div>
         </li>
       </ul>
-      <div @touchstart='confirm' class="confirm">确定</div>
+      <div @touchend='confirm' class="confirm">确定</div>
     </div>
   </div>
 
@@ -427,13 +427,11 @@ export default {
       setting: [
         {
           title: "公开",
-          detail: "所有成员可见",
-          isPublic: true
+          detail: "所有成员可见"
         },
         {
           title: "项目成员可见",
-          detail: "该项目的成员可见",
-          isMembersCanSee: false
+          detail: "该项目的成员可见"
         }
       ],
       flag: false,
@@ -458,7 +456,6 @@ export default {
       check_pass: false,
       isOpen: true,
       cantSetTime: true,
-      hasExcutor: false,
       hasTaskId: false
     };
   },
@@ -517,15 +514,26 @@ export default {
   },
   watch: {
     endTime(newVal) {
-      if (!!newVal) {
+      if (newVal) {
         this.$refs.endDate.classList.add("active_");
         this.check_time();
+      } else {
+        this.$refs.endDate.classList.remove("active_");
       }
     },
     startTime(newVal) {
-      if (!!newVal) {
+      if (newVal) {
         this.$refs.startDate.classList.add("active_");
         this.check_time();
+      } else {
+        this.$refs.startDate.classList.remove("active_");
+      }
+    },
+    executor(newVal) {
+      if (newVal) {
+        this.$refs.exe.classList.add("active_");
+      } else {
+        this.$refs.exe.classList.remove("active_");
       }
     }
   },
@@ -534,7 +542,8 @@ export default {
     if (from.path == "/appointMessager" && to.path == "/addTaskSetting") {
       next(vm => {
         // console.log(vm.getTaskExecutor); //过滤选中的执行人;
-        vm.$refs.exe.classList.add("active_");
+        vm.taskId = to.query.taskId;
+        vm.projectId = to.query.projectId;
         // vm.executor = vm.getTaskExecutor.executor;
         vm.setExcutor();
       });
@@ -542,7 +551,9 @@ export default {
       next(vm => {
         // console.log(executor);
         vm.hasProjectId = true;
-        vm.$refs.exe.classList.add("active_");
+        if (vm.executor) {
+          vm.$refs.exe.classList.add("active_");
+        }
         vm._updateTask(to.query); //重新设置任务
       });
     }
@@ -551,27 +562,27 @@ export default {
       to.path == "/addTaskSetting"
     ) {
       next(vm => {
-        vm.projectId = vm.getProjectId || "";
+        vm.projectId = to.query.projectId;
         console.log(vm.projectId);
         if (vm.projectId) {
           vm.hasProjectId = true;
           vm.taskTheme = vm.getProjectThemeName;
           vm.$refs.taskTheme.setAttribute("disabled", true);
-          // vm.taskName = "";
-          // vm.taskDesc = "";
-          // vm.executor = "";
-          // vm.startTime = "";
-          // vm.endTime = "";
-          // vm.standard = "";
+          vm.taskName = "";
+          vm.taskDesc = "";
+          vm.executor = "";
+          vm.startTime = "";
+          vm.endTime = "";
+          vm.standard = "";
         } else {
           vm.hasProjectId = false;
-          // vm.taskTheme = "";
-          // vm.taskName = "";
-          // vm.taskDesc = "";
-          // vm.executor = "";
-          // vm.startTime = "";
-          // vm.endTime = "";
-          // vm.standard = "";
+          vm.taskTheme = "";
+          vm.taskName = "";
+          vm.taskDesc = "";
+          vm.executor = "";
+          vm.startTime = "";
+          vm.endTime = "";
+          vm.standard = "";
         }
       });
     } else {
@@ -580,12 +591,14 @@ export default {
   },
   methods: {
     setExcutor() {
-      this.taskId = this.getTaskId;
       Convent.getTaskBasicInfo(this.taskId)
         .then(res => {
           console.log("---基本任务信息--", res);
           if (res.code == 1 && res.status == 200) {
-            this.executor = res.data.executorNickName;
+            if (res.data.executorNickName && res.data.executorNickName.length) {
+              this.$refs.exe.classList.add("active_");
+              this.executor = res.data.executorNickName;
+            }
           }
         })
         .catch(err => {
@@ -597,14 +610,10 @@ export default {
       this.currentIndex = index;
       if (this.currentIndex == 0) {
         this.isPublic = true;
-        window.sessionStorage.setItem("isPublic", true);
-        window.sessionStorage.setItem("allowedLook", false);
         this.allowedLook = false;
       }
       if (this.currentIndex == 1) {
         this.isPublic = false;
-        window.sessionStorage.setItem("allowedLook", true);
-        window.sessionStorage.setItem("isPublic", false);
         this.allowedLook = true;
       }
     },
@@ -623,17 +632,18 @@ export default {
       }); //编辑项目节点
     },
     _getTaskId() {
+      let self = this;
       return new Promise((resovle, reject) => {
         // console.log(window.location.hash);
         Convent.createTask({
-          projectId: this.getProjectId,
-          projectName: this.taskTheme,
-          taskName: this.taskName,
-          taskDesc: this.taskDesc,
+          projectId: self.getProjectId,
+          projectName: self.taskTheme,
+          taskName: self.taskName,
+          taskDesc: self.taskDesc,
           startTime: +new Date(this.startTime.replace(/\./g, "/")),
           endTime: +new Date(this.endTime.replace(/\./g, "/")),
-          checkStandard: this.standard,
-          isOpen: this.isPublic ? 1 : 0
+          checkStandard: self.standard,
+          isOpen: self.isPublic ? 1 : 0
         })
           .then(res => {
             this.SET_TASKID(res.data);
@@ -659,8 +669,12 @@ export default {
           if (res.code == 1 && res.status == 200) {
             self.updateTime(res.data.startTime, res.data.endTime);
             self.taskName = res.data.taskName;
-            self.executor = res.data.executorNickName || " ";
-            self.hasExcutor = true;
+            self.executor = res.data.executorNickName
+              ? res.data.executorNickName
+              : undefined;
+            self.taskDesc = res.data.taskDesc;
+            self.checkStandard = res.data.checkStandard;
+            self.isPublic = res.data.isOpen ? true : false;
           }
         })
         .catch(err => {
@@ -715,10 +729,11 @@ export default {
         this._getTaskId()
           .then(taskId => {
             self.taskId = taskId;
-            this.$router.push({
+            self.$router.push({
               path: "/appointMessager",
               query: {
-                taskId: taskId
+                taskId: taskId,
+                projectId: self.getProjectId
               }
             }); //项目创建完毕
             // debugger;
@@ -745,7 +760,7 @@ export default {
                 path: "/convententry",
                 query: {
                   taskId: self.taskId,
-                  projectId: self.projectId
+                  projectId: self.getProjectId
                 }
               });
             }
@@ -824,12 +839,21 @@ export default {
     appointerManager() {
       let self = this;
       this.validate();
+      if (this.executor) {
+        this.$toast.show("执行人已存在!");
+        return;
+      }
       //验证必选项
+      if (!this.check_pass) {
+        this._validate();
+        return;
+      }
       if (self.taskId) {
         self.$router.push({
           path: "/appointMessager",
           query: {
-            taskId: self.taskId
+            taskId: self.taskId,
+            project: self.getProjectId
           }
         });
       } else if (this.check_pass && !this.taskId) {
@@ -839,7 +863,8 @@ export default {
             this.$router.push({
               path: "/appointMessager",
               query: {
-                taskId: taskId
+                taskId: taskId,
+                projectId: self.getProjectId
               }
             }); //项目创建完毕
             // debugger;
@@ -848,13 +873,6 @@ export default {
             console.log(err);
             // debugger;
           });
-      } else {
-        self.$router.push({
-          path: "/appointMessager",
-          query: {
-            projectId: self.getProjectId
-          }
-        });
       }
     },
     _createProject() {
@@ -895,14 +913,10 @@ export default {
       this.allowedLook = status;
     },
     startDate_change(val) {
-      if (!!this.cantSetTime) {
-        this.startTime = val;
-      }
+      this.startTime = val;
     },
     endDatechange(val) {
-      if (!!this.cantSetTime) {
-        this.endTime = val;
-      }
+      this.endTime = val;
     },
     setTaskTheme() {
       this.$refs.taskTheme.setAttribute("disabled", true);

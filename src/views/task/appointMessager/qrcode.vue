@@ -12,7 +12,11 @@
     bottom: 0;
     width: 100%;
     height: 370*2px;
-    background-image: linear-gradient(left top, #68c5fd, #568bfe);
+    background: linear-gradient(left top, #68c5fd, #568bfe);
+    background: -webkit-linear-gradient(left top, #68c5fd, #568bfe);
+    background: -moz-linear-gradient(left top, #68c5fd, #568bfe);
+    background: -o-linear-gradient(left top, #68c5fd, #568bfe);
+    background: -ms-linear-gradient(left top, #68c5fd, #568bfe);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -76,7 +80,7 @@
 
 <template>
     <transition name="show">
-        <div class="qr_container" v-show="showQrcode" @touchstart='closeQRcode'>
+        <div class="qr_container" v-if="showQrcode" @touchend='close'>
              <div class="qrcode_container" >
              <div class="qrcode_panel">
                  <div class="tilte">面对面分发</div>
@@ -107,8 +111,8 @@ export default {
       default: ""
     },
     expires: {
-      type:Number,
-      default:60
+      type: Number,
+      default: 60
     }
   },
   data() {
@@ -117,26 +121,20 @@ export default {
       _taskId: "",
       isInvalid: true,
       startCount: false,
-      timer: null,
-      expire:'',
+      countDowner: null,
+      expire: ""
     };
   },
   watch: {
-    projectId(newVal) {
-      console.log("qr" + newVal);
-      this._projectId = newVal;
-    },
-    taskId(newVal) {
-      this._taskId = newVal;
-    },
-    showQrcode(newVal,oldVal) {
-      console.log(newVal,oldVal);
+    showQrcode(newVal, oldVal) {
+      console.log(newVal, oldVal);
       this.expire = this.expires;
+      let self = this;
       if (newVal) {
-        let self = this;
+        self.time();
         Convent.sharefacetoface({
-          id: this._projectId ? this._projectId : this._taskId,
-          type: this._projectId ? 1 : 0
+          id: self.taskId ? self.taskId : self.projectId,
+          type: self.taskId ? 0 : 1
         })
           .then(res => {
             console.log(res.shareUrl);
@@ -147,31 +145,10 @@ export default {
                 res.data.shareUrl,
                 function(error, url) {
                   if (!error) {
-                    self.countDowner = setInterval(() => {
-                      console.log("------------->>>");
-                      self.expire -= 1;
-                      if (self.expire <= 0 || !self.isInvalid) {
-                        self.expire = "";
-                        clearInterval(self.countDowner);
-                        self.$emit("closeQrcode");
-                      }
-                      Convent.checkValid({
-                        key: self.key
-                      })
-                        .then(res => {
-                          console.log(res);
-                          if (res.code == 1 && res.status == 200) {
-                            self.isInvalid = res.data.isValid;
-                          }
-                          if (!self.isInvalid) {
-                            self.$emit("closeQrcode");
-                            self.$toast.show("二维码已失效请重新刷新！", 1000);
-                          }
-                        })
-                        .catch(err => {
-                          console.log(err);
-                        });
-                    }, 1000);
+                    if (self.countDowner) {
+                      self.countDowner = null;
+                    } else {
+                    }
                   }
                 }
               );
@@ -184,22 +161,61 @@ export default {
     },
     isInvalid(newVal) {
       if (!newVal) {
-        clearInterval(this.timer);
         clearInterval(this.countDowner);
+        this.countDowner = null;
+        this.$emit("close");
       }
     }
   },
   methods: {
-    closeQRcode($ev) {
+    time() {
+      let self = this;
+      if (this.expire == 0) {
+        this.expire = "";
+        self.countDowner = null;
+        self.$emit("close");
+        clearTimeout(this.countDowner);
+      } else {
+        this.countDowner = setTimeout(() => {
+          this.expire--;
+          console.log(this.expire);
+          //递减
+          Convent.checkValid({
+            key: self.key
+          })
+            .then(res => {
+              console.log(res);
+              if (res.code == 1 && res.status == 200) {
+                self.isInvalid = res.data.isValid;
+              }
+              if (!self.isInvalid) {
+                self.$toast.show("二维码已失效~");
+                clearTimeout(self.countDowner);
+                self.countDowner = null;
+                self.$emit("close");
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+          this.time();
+        }, 1000); //倒计时
+      }
+    },
+    close($ev) {
       if ($ev.target.className == "qr_container") {
-        this.$emit("closeQrcode");
+        console.log(this.$el);
+        this.$el.parentNode.removeChild(this.$el);
+        this.$emit("close");
+        clearTimeout(this.countDowner);
+        this.countDowner = null;
       }
     },
     count(_res) {}
   },
   beforeDestroy() {
-    clearInterval(this.timer);
     clearInterval(this.countDowner);
+    this.countDowner = null;
   },
   mounted() {}
 };

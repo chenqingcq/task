@@ -72,7 +72,7 @@
             position: relative;
             .task-detail-content {
               overflow: hidden;
-              width: 109*2px;
+              max-width: 109*2px;
               display: inline-block;
               text-overflow: ellipsis;
               white-space: nowrap;
@@ -85,7 +85,7 @@
               height: 12px;
               position: absolute;
               bottom: 6px;
-              left: 110*2px;
+              margin-left: 10*2px;
             }
           }
           .progress {
@@ -131,7 +131,7 @@
       justify-content: center;
       .task-desc {
         display: block;
-        width: 146*2px;
+        max-width: 146*2px;
         margin: 0 auto;
         text-align: center;
         font-size: 12px*2;
@@ -144,7 +144,7 @@
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          width: 100%;
+          width: auto;
         }
       }
       .detail-btn {
@@ -162,11 +162,8 @@
         margin-top: 5*2px;
       }
       img {
-        position: absolute;
-        display: block;
-        top: 8*2px;
-        left: 244*2px;
         height: 10px;
+        margin-left: 20px;
       }
     }
   }
@@ -535,11 +532,11 @@ img.partyLogo {
           <div class="right">
             <div class="show-task-detail">
               <div class="task-name">{{taskName}}</div>
-              <div class="task-detail" @click='showMoreTaskDesc'>
+              <div class="task-detail" >
                 <span class="task-detail-content">
                   {{taskDesc}}
                 </span>
-                <img src="@/assets/img/icon-slide downward.png" />
+                <img src="@/assets/img/icon-slide downward.png"  @touchend='showMoreTaskDesc'/>
               </div>
               <transition name="bounceIn">
                 <div class="taskDesc-container" v-show="showDetail">
@@ -871,8 +868,6 @@ export default {
           this.taskStatus = res.taskStatus
           this.defineRole(res.role);
           this.fomatTime();
-
-
           if (res.latestProgress) {
             this.items = res.latestProgress.progressImage.map(val => {
               return { imgUrl: val };
