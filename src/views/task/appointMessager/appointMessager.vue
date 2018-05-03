@@ -115,11 +115,23 @@
           left: 75*2px;
           transform: translateY(-50%);
           margin-left: 10*2px;
-          width: auto;
+          min-width: 100px;
+          max-width: 160px;
           font-family: PingFangSC-Regular;
           font-size: 16px*2;
           color: #333333;
           float: left;
+          span {
+            &:first-of-type {
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              height: 32px;
+              line-height: 32px;
+              width: auto;
+              display: block;
+            }
+          }
         }
         .select {
           position: absolute;
@@ -299,7 +311,11 @@
 
 #name {
   font-size: 10*2px;
-  width: auto;
+  min-width: 100px;
+  max-width: 160px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 </style>
 <template>
@@ -316,12 +332,12 @@
         </li>
         <li></li>
       </ul>
-      <img @touchend='inviteOthers' class="invite" src="@/assets/img/icon-menu.png">
+      <img @click='inviteOthers' class="invite" src="@/assets/img/icon-menu.png">
       <share :showShare='showShare'>
         <ul class="share-items">
           <div class="arrow"></div>
           <li><img src="@/assets/img/01.png" />微信分发</li>
-          <li @touchend='face_to_face'><img src="@/assets/img/02.png" />面对面发</li>
+          <li @click='face_to_face'><img src="@/assets/img/02.png" />面对面发</li>
         </ul>
       </share>
     </header>
@@ -331,7 +347,7 @@
           <div v-for="(item,index) in taskExecutors" :key="index">
             <li :userId='item[0].userId' :sex='item[0].sex'>
               <div class="user">
-                <div @touchend='select(index,item[0].userId,item)' class="select">
+                <div @click='select(index,item[0].userId,item)' class="select">
                   <img src="@/assets/img/sign-selected.png" v-show="index == currentIndex && showArr[index] == true" />
                 </div>
                 <div class="icon">
@@ -345,14 +361,14 @@
               <div class="update">{{item[0].progressNum}}</div>
               <div class="comments">{{item[0].commentNum}}</div>
               <div class="progress">{{item[0].progress}}</div>
-              <div class="arrow" @touchend='showSub(index)'>
+              <div class="arrow" @click='showSub(index)'>
                 <img :src="imgUrl(index)" v-show="item.length>1" />
               </div>
             </li>
               <li class="sub-item" v-for="(_item,_index) in item"  :key="_index" v-show="subShow">
                 <!--下拉可见-->
                 <div class="user">
-                  <input type="radio" name="identity"  @touchend='selectedSub($event,index,_index,_item )' class="select"/>
+                  <input type="radio" name="identity"  @click='selectedSub($event,index,_index,_item )' class="select"/>
                     <!-- <img src="@/assets/img/sign-selected.png"  v-show="controlShow(index,_index)" /> -->
                   <div class="name" id="name">{{_item.taskName}}</div>
                 </div>
@@ -374,9 +390,9 @@
           <p>群聊</p>
         </div>
       </div>
-      <div v-if="showBtntype" class="addExcutor" @touchend='commandExcutor'>指派人员</div>
-      <div v-if="!showBtntype" class="addExcutor" @touchend='addExcutor'>添加人员</div>
-      <div ref="deleteBtn" :class="{deleteBtn:true,deleteExcutor: showBtntype,deleteExcutorDisable :!showBtntype}" @touchend.native='deleteExcutor'>删除人员</div>
+      <div v-if="showBtntype" class="addExcutor" @click='commandExcutor'>指派人员</div>
+      <div v-if="!showBtntype" class="addExcutor" @click='addExcutor'>添加人员</div>
+      <div ref="deleteBtn" :class="{deleteBtn:true,deleteExcutor: showBtntype,deleteExcutorDisable :!showBtntype}" @click='deleteExcutor'>删除人员</div>
     </div>
     <invites   :showInvite='taskExecutors.length>0?false:true' ></invites>
     <qrcode :showQrcode='showQrcode' @close='closeQrcode' :projectId='projectId' :taskId = 'taskId'></qrcode>  
@@ -431,7 +447,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getTaskExecutor: "getTaskExecutor"
+      getTaskExecutor: "getTaskExecutor",
+      getProjectId: "getProjectId",
+      getUserId: "getUserId"
     }),
     styleObj() {
       if (this.taskExecutors.length >= 6) {
@@ -461,9 +479,9 @@ export default {
     showBtntype(newVal, oldVal) {
       console.log(newVal, oldVal);
       if (!newVal) {
-        this.$refs.deleteBtn.removeEventListener("touchend", () => {});
+        this.$refs.deleteBtn.removeEventListener("click", () => {});
       } else {
-        this.$refs.deleteBtn.addEventListener("touchend", this.deleteExcutor);
+        this.$refs.deleteBtn.addEventListener("click", this.deleteExcutor);
       }
     }
   },
@@ -573,7 +591,7 @@ export default {
     select(selfIndex, userId, item) {
       console.log(selfIndex, userId, item);
       this.currentIndex = selfIndex;
-      this.userId = userId;
+      this.SET_USER_ID(userId);
       this.showArr[selfIndex] = !this.showArr[selfIndex];
       this.showBtntype = !this.showBtntype;
       if (this.showBtntype) {
@@ -607,25 +625,22 @@ export default {
     commandExcutor() {
       //指定执行人
       console.log(this.userId, this.projectId, this.taskId);
-      this.SET_USER_ID(this.userId);
+      // this.SET_USER_ID(this.userId);
+      this.SET_TASKID(this.taskId);
       let self = this;
       this.$dialog.confirm({
         message: "确定指定该执行人?",
-        operate() {
-          Convent.cmdExcutor(this.taskId, {
+        confirm() {
+          Convent.cmdExcutor(self.taskId, {
             taskId: self.taskId,
-            userId: self.userId,
+            userId: self.getUserId,
             projectId: self.projectId
           })
             .then(res => {
               console.log(res);
               if (res.code == 1 && res.status == 200) {
                 self.$router.push({
-                  path: "/addTaskSetting",
-                  // query: {
-                  //   taskId: self.taskId,
-                  //   projectId: this.projectId
-                  // }
+                  path: "/addTaskSetting"
                 });
               }
             })
@@ -657,20 +672,25 @@ export default {
       //删除项目成员
       // this.showBtntype = !this.showBtntype;
       let self = this;
+      console.log(self.getUserId, self.getProjectId);
+     let userId = self.getUserId ;
+     let projectId = self.getProjectId;
       if (this.showBtntype) {
         this.$dialog.confirm({
           message: "确定删除该成员?",
-          operate() {
+          confirm() {
             //已经选中成员
-            Convent.deleteExcutor(self.projectId, {
-              projectId: self.projectId,
-              userId: self.userId
+            Convent.deleteExcutor(projectId, {
+              ['projectId']:projectId ,
+              ['userId']: userId
             })
               .then(res => {
                 console.log(res);
+                // debugger;
               })
               .catch(err => {
                 console.log(err);
+                // debugger;
               });
           }
         });
@@ -680,7 +700,8 @@ export default {
       SET_TASK_EXECUTOR: "SET_TASK_EXECUTOR",
       SORT_TASK_EXECUTOR: "SORT_TASK_EXECUTOR",
       ADD_TASK_EXECUTOR: "ADD_TASK_EXECUTOR",
-      DELETE_TASK_EXECUTOR: "DELETE_TASK_EXECUTOR"
+      DELETE_TASK_EXECUTOR: "DELETE_TASK_EXECUTOR",
+      SET_TASKID: "SET_TASKID"
     }),
     selected(index, item) {
       console.log(index, item);
@@ -732,7 +753,7 @@ export default {
     init() {
       document
         .querySelector(".deleteBtn")
-        .addEventListener("touchend", this.deleteExcutor);
+        .addEventListener("click", this.deleteExcutor);
       if (this.taskExecutors.length) {
         this.showInvite = true;
       } else {

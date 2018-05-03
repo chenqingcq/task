@@ -80,7 +80,7 @@
 
 <template>
     <transition name="show">
-        <div class="qr_container" v-if="showQrcode" @touchend='close'>
+        <div class="qr_container" v-if="showQrcode" @click='close'>
              <div class="qrcode_container" >
              <div class="qrcode_panel">
                  <div class="tilte">面对面分发</div>
@@ -189,7 +189,6 @@ export default {
                 self.isInvalid = res.data.isValid;
               }
               if (!self.isInvalid) {
-                self.$toast.show("二维码已失效~");
                 clearTimeout(self.countDowner);
                 self.countDowner = null;
                 self.$emit("close");

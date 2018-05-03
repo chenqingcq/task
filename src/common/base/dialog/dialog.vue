@@ -13,22 +13,22 @@
               </div>
             </li>
             <li v-show="showBottom">
-              <div @touchstart='_concel'>取消</div>
-              <div @touchstart='_confirm'>确定</div>
+              <div @click='_concel'>取消</div>
+              <div @click='_confirm'>确定</div>
             </li>
           </ul>
         </div>
       </template>
       <template v-if="type==='info'">
         <div class="panel-info">
-          <img class="close" @touchstart='close' src="../../../assets/img/icon-close.png" />
+          <img class="close" @click='close' src="../../../assets/img/icon-close.png" />
           <input id="userIpt" class="b_FS-16" type="text" ref='input' v-model="text" :placeholder="placeholder" maxlength="20">
           <label for="userIpt" v-show="btnName=='add'">
             <!--<img class="icon-edit" v-show="btnName=='add'" src="@/assets/img/icon-edit01.png" />            -->
          </label>
           <div class="bar"></div>
-          <div @touchstart='close'>
-            <div class="btn b_FS-16" @touchstart='operate(text)' ref="btn">
+          <div @click='close'>
+            <div class="btn b_FS-16" @click='operate(text)' ref="btn">
               <img v-if="btnName=='add'" src="@/assets/img/icon-add01.png" />
               <img v-if="btnName=='delete'" src="@/assets/img/icon-delete.png" />
               <div>{{btn}}</div>
@@ -38,7 +38,7 @@
       </template>
       <template v-if="type==='notice'" v-show="showNotice">
         <div class="panel-notice">
-          <!--<img class="close" @touchstart='close' src="../../../assets/img/icon-close.png" />-->
+          <!--<img class="close" @click='close' src="../../../assets/img/icon-close.png" />-->
           <div class="top">
             <div class="noticeIcon">
               <img class="noticeImg" :src="imgUrl" />
