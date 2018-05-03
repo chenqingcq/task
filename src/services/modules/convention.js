@@ -338,7 +338,7 @@ class Convent {
     const url = `/api/project/member/${projectId}`;
     const params = opt || {}
     return post(
-      url, params, isShowFullLoading = false
+      url, params, isShowFullLoading = true
     )
   }
   /*

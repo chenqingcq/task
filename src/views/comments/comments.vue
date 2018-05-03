@@ -3,7 +3,7 @@
     <div class="panel b-MT-10 " style="background:#fff">
       <div class="b-LR-10 b-T-5 between " ref="banner">
         <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 c_6 b_FS-14">审批留言</span></p>
-        <div class=" b_FS-10 c_7 commenthint" @touchstart='link_to_allComments'>
+        <div class=" b_FS-10 c_7 commenthint" @click='link_to_allComments'>
           查看全部<img class="comments-icon" :src='commentImgUrl' />
         </div>
       </div>
@@ -44,7 +44,7 @@
         </ul>
       </scroll>
       <div class="user-input">
-          <input @touchstart="userInput" type="text" placeholder="赶快评论吧~" class="comment_input" disabled>
+          <input @click="userInput" type="text" placeholder="赶快评论吧~" class="comment_input" disabled>
           <img class="icon-input" src="@/assets/img/iocn-pen.png" />
       </div>
     </div>

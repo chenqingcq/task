@@ -127,15 +127,16 @@ export const deleter = function(url,  params = {}) {
 }
 
 // 注册自定义POST请求(不需要的传token, 自动生成token)
-export const post = function(url, params = {}) {
+export const post = function(url, params = {}, isShowFullLoading) {
     const authorization = UserModel.getSendToken()
+    isShowFullLoading && Vue.prototype.$loading()
     return new Promise((resolve, reject) => {
         axiosInstance.post(url, params, {
             headers: {
                 'Authorization': authorization
             },
         }).then((res) => {
-
+            Vue.prototype.$loadingClose()    
             // 成功回调
             if (successCode.has(res.code)) {
                 // 已经处理过状态，所以不用管状态，直接返回数据
@@ -145,6 +146,7 @@ export const post = function(url, params = {}) {
                 reject(res)
             }
         }).catch((err) => {
+            Vue.prototype.$loadingClose() 
             // 状态不是200
             reject(err.response ? err.response.data : ErrorMessage.timeOut)
         })

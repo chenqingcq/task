@@ -1,13 +1,13 @@
 <template>
   <div class="allComments-container">
       <div class="comment-panel">
-          <div class="close" @touchstart='close'>
+          <div class="close" @click='close'>
               <img src="@/assets/img/icon-close.png" />
           </div>
           <textarea ref="ipt" autofocus=true  @keyup.enter='sendComments' name="userIpt" id="userIpt" placeholder="说点什么吧..." v-model.trim="usreInput" maxlength="200">
               
           </textarea>
-          <div @touchstart='sendComments' class="comment-btn">评论</div>
+          <div @click='sendComments' class="comment-btn">评论</div>
       </div>
   </div>
 </template>

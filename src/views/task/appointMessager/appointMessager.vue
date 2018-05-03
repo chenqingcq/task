@@ -118,7 +118,7 @@
           min-width: 100px;
           max-width: 160px;
           font-family: PingFangSC-Regular;
-          font-size: 16px*2;
+          font-size: 12px*2;
           color: #333333;
           float: left;
           span {
@@ -342,7 +342,7 @@
       </share>
     </header>
     <div class="editDeadTime" ref="lisItem" :style='styleObj'>
-      <scroll>
+      <scroll >
         <ul>
           <div v-for="(item,index) in taskExecutors" :key="index">
             <li :userId='item[0].userId' :sex='item[0].sex'>
@@ -490,9 +490,17 @@ export default {
     console.log(to, from);
     if (to.path == "/appointMessager" && from.path == "/addTaskSetting") {
       next(vm => {
-        if ((vm.projectId = vm.getProjectId)) {
+        // if ((vm.projectId = vm.getProjectId)) {
+        //   vm.getExcutorList(vm.projectId);
+        //   // debugger;
+        // }
+        if (window.location.hash.includes("projectId")) {
+          let reg = /projectId=\d{18}/;
+          vm.projectId = window.location.hash.match(reg)
+            ? window.location.hash.match(reg)[0].split("=")[1]
+            : "";
+          console.log("---pid----", vm.projectId);
           vm.getExcutorList(vm.projectId);
-          // debugger;
         }
         if (window.location.hash.includes("taskId")) {
           let reg = /taskId=\d{18}/;
@@ -541,6 +549,13 @@ export default {
     ...mapMutations({
       SET_USER_ID: "SET_USER_ID"
     }),
+    // debounce(methods){
+    //   clearTimeout(methods.timer);
+    //   methods.timer = setTimeout(()=>{
+    //     console.log(methods);
+    //     methods();
+    //   },1500)
+    // },
     defineShow(arr) {
       console.log(arr);
       this.showArr = new Array(arr.length).fill(false);
@@ -671,9 +686,9 @@ export default {
       //删除项目成员
       // this.showBtntype = !this.showBtntype;
       let self = this;
-      console.log(self.getUserId, self.getProjectId);
+      console.log(self.getUserId, self.projectId);
       let userId = self.getUserId;
-      let projectId = self.getProjectId;
+      let projectId = self.projectId;
       if (this.showBtntype) {
         this.$dialog.confirm({
           message: "确定删除该成员?",
