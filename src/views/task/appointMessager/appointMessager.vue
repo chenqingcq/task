@@ -352,9 +352,8 @@
               <li class="sub-item" v-for="(_item,_index) in item"  :key="_index" v-show="subShow">
                 <!--下拉可见-->
                 <div class="user">
-                  <div @touchstart='selectedSub(index,_index,_item )' class="select">
-                    <img src="@/assets/img/sign-selected.png"  v-show="controlShow(index,_index)" />
-                  </div>
+                  <input type="radio" name="identity"  @touchstart='selectedSub($event,index,_index,_item )' class="select"/>
+                    <!-- <img src="@/assets/img/sign-selected.png"  v-show="controlShow(index,_index)" /> -->
                   <div class="name" id="name">{{_item.taskName}}</div>
                 </div>
                 <div class="update">{{_item.progressNum}}</div>
@@ -556,7 +555,9 @@ export default {
       this.showShare = !this.showShare;
       this.showQrcode = !this.showQrcode;
     },
-    selectedSub(fatherIndex, selfIndex, item) {
+    selectedSub(ev,fatherIndex, selfIndex, item) {
+      console.log(ev.target,fatherIndex,selfIndex,item);
+      ev.target.setAttribute('checked',true);
       this.$nextTick(() => {
         console.log(fatherIndex, selfIndex, item);
         this.deletSubArr[fatherIndex][selfIndex] = !this

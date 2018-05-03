@@ -532,7 +532,9 @@ export default {
     if (from.path == "/appointMessager" && to.path == "/addTaskSetting") {
       next(vm => {
         // console.log(vm.getTaskExecutor); //过滤选中的执行人;
-        vm.$refs.exe.classList.add("active_");
+        vm.taskId = to.query.taskId;
+        vm.projectId = to.query.projectId;
+        debugger;
         // vm.executor = vm.getTaskExecutor.executor;
         vm.setExcutor();
       });
@@ -578,12 +580,14 @@ export default {
   },
   methods: {
     setExcutor() {
-      this.taskId = this.getTaskId;
       Convent.getTaskBasicInfo(this.taskId)
         .then(res => {
           console.log("---基本任务信息--", res);
           if (res.code == 1 && res.status == 200) {
-            this.executor = res.data.executorNickName;
+            if (res.data.executorNickName) {
+              this.$refs.exe.classList.add("active_");
+              this.executor = res.data.executorNickName;
+            }
           }
         })
         .catch(err => {
@@ -823,7 +827,15 @@ export default {
     appointerManager() {
       let self = this;
       this.validate();
+      if(this.executor){
+        this.$toast.show('执行人已存在!')
+        return ;
+      }
       //验证必选项
+      if (!this.check_pass) {
+        this._validate();
+        return;
+      }
       if (self.taskId) {
         self.$router.push({
           path: "/appointMessager",
@@ -849,13 +861,6 @@ export default {
             console.log(err);
             // debugger;
           });
-      } else {
-        self.$router.push({
-          path: "/appointMessager",
-          query: {
-            projectId: self.getProjectId
-          }
-        });
       }
     },
     _createProject() {

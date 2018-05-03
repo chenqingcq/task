@@ -129,8 +129,9 @@ export default {
     showQrcode(newVal, oldVal) {
       console.log(newVal, oldVal);
       this.expire = this.expires;
+      let self = this;
       if (newVal) {
-        let self = this;
+        self.time();
         Convent.sharefacetoface({
           id: self.taskId ? self.taskId : self.projectId,
           type: self.taskId ? 0 : 1
@@ -147,7 +148,6 @@ export default {
                     if (self.countDowner) {
                       self.countDowner = null;
                     } else {
-                      self.time();
                     }
                   }
                 }
