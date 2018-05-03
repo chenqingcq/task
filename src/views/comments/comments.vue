@@ -151,7 +151,6 @@ export default {
         //点赞
         this.thumb(commentId, 1, true);
       } else {
-        return;
         e.target.setAttribute("isthumbs", 0);
         e.target.src = require("@/assets/img/iocn-good.png");
         e.target.parentNode.classList.remove("active");
