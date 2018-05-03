@@ -214,7 +214,7 @@ li#allowCreateTask {
 }
 
 .confirm {
-  position: absolute;
+  position: fixed;
   bottom: 8*2px;
   right: 8*2px;
   left: 8*2px;
@@ -551,9 +551,6 @@ export default {
       next(vm => {
         // console.log(executor);
         vm.hasProjectId = true;
-        if (vm.executor) {
-          vm.$refs.exe.classList.add("active_");
-        }
         vm._updateTask(to.query); //重新设置任务
       });
     }

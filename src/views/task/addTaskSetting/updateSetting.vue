@@ -214,7 +214,7 @@ li#allowCreateTask {
 }
 
 .confirm {
-  position: absolute;
+  position: fixed;
   bottom: 8*2px;
   right: 8*2px;
   left: 8*2px;
@@ -605,7 +605,7 @@ export default {
             }
             self.updateTime(res.data.startTime, res.data.endTime);
             self.taskName = res.data.taskName;
-            self.$refs._taskName.setAttribute("disabled", true);            
+            self.$refs._taskName.setAttribute("disabled", true);
             self.taskTheme = res.data.projectName;
             self.$refs.taskTheme.setAttribute("disabled", true);
             self.executor = res.data.executorNickName
@@ -683,15 +683,18 @@ export default {
           if (res.code == 1 && res.status == 200) {
             self.updateTime(res.data.startTime, res.data.endTime);
             self.taskName = res.data.taskName;
-            self.$refs._taskName.setAttribute("disabled", true);           
+            self.$refs._taskName.setAttribute("disabled", true);
             self.executor = res.data.executorNickName
               ? res.data.executorNickName
               : undefined;
+            if (self.executor) {
+              self.$refs.exe.classList.add("active_");
+            }
             self.taskDesc = res.data.taskDesc;
             self.standard = res.data.checkStandard;
             self.taskTheme = res.data.projectName;
-            if(self.taskTheme){
-                self.$refs.taskTheme.setAttribute('disabled',true);
+            if (self.taskTheme) {
+              self.$refs.taskTheme.setAttribute("disabled", true);
             }
             self.isPublic = res.data.isOpen ? true : false;
             // debugger;
@@ -763,7 +766,7 @@ export default {
             // debugger;
           });
       } else if (this.taskId) {
-          console.log(this.checkStandard);
+        console.log(this.checkStandard);
         //   debugger;
         Convent.updateTask(self.taskId, {
           taskId: self.taskId,
