@@ -456,7 +456,6 @@ export default {
       check_pass: false,
       isOpen: true,
       cantSetTime: true,
-      hasExcutor: false,
       hasTaskId: false
     };
   },
@@ -515,15 +514,26 @@ export default {
   },
   watch: {
     endTime(newVal) {
-      if (!!newVal) {
+      if (newVal) {
         this.$refs.endDate.classList.add("active_");
         this.check_time();
+      } else {
+        this.$refs.endDate.classList.remove("active_");
       }
     },
     startTime(newVal) {
-      if (!!newVal) {
+      if (newVal) {
         this.$refs.startDate.classList.add("active_");
         this.check_time();
+      } else {
+        this.$refs.startDate.classList.remove("active_");
+      }
+    },
+    executor(newVal) {
+      if (newVal) {
+        this.$refs.exe.classList.add("active_");
+      } else {
+        this.$refs.exe.classList.remove("active_");
       }
     }
   },
@@ -558,9 +568,22 @@ export default {
           vm.hasProjectId = true;
           vm.taskTheme = vm.getProjectThemeName;
           vm.$refs.taskTheme.setAttribute("disabled", true);
-
+          vm.taskName = "";
+          vm.taskDesc = "";
+          vm.executor = "";
+          vm.startTime = "";
+          vm.endTime = "";
+          vm.standard = "";
+          debugger;
         } else {
           vm.hasProjectId = false;
+          vm.taskTheme = "";
+          vm.taskName = "";
+          vm.taskDesc = "";
+          vm.executor = "";
+          vm.startTime = "";
+          vm.endTime = "";
+          vm.standard = "";
         }
       });
     } else {
@@ -573,7 +596,7 @@ export default {
         .then(res => {
           console.log("---基本任务信息--", res);
           if (res.code == 1 && res.status == 200) {
-            if (res.data.executorNickName) {
+            if (res.data.executorNickName && res.data.executorNickName.length) {
               this.$refs.exe.classList.add("active_");
               this.executor = res.data.executorNickName;
             }
@@ -647,10 +670,11 @@ export default {
           if (res.code == 1 && res.status == 200) {
             self.updateTime(res.data.startTime, res.data.endTime);
             self.taskName = res.data.taskName;
-            self.executor = res.data.executorNickName || " ";
-            self.hasExcutor = true;
-            self.taskDesc = res.data.taskDesc || "";
-            self.checkStandard = res.data.executorNickName || "";
+            self.executor = res.data.executorNickName
+              ? res.data.executorNickName
+              : undefined;
+            self.taskDesc = res.data.taskDesc;
+            self.checkStandard = res.data.checkStandard;
             self.isPublic = res.data.isOpen ? true : false;
           }
         })
@@ -890,14 +914,10 @@ export default {
       this.allowedLook = status;
     },
     startDate_change(val) {
-      if (!!this.cantSetTime) {
-        this.startTime = val;
-      }
+      this.startTime = val;
     },
     endDatechange(val) {
-      if (!!this.cantSetTime) {
-        this.endTime = val;
-      }
+      this.endTime = val;
     },
     setTaskTheme() {
       this.$refs.taskTheme.setAttribute("disabled", true);
