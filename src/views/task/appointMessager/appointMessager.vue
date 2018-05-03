@@ -490,8 +490,7 @@ export default {
     console.log(to, from);
     if (to.path == "/appointMessager" && from.path == "/addTaskSetting") {
       next(vm => {
-        if (window.location.hash.includes("projectId")) {
-          vm.projectId = to.query.projectId;
+        if ((vm.projectId = vm.getProjectId)) {
           vm.getExcutorList(vm.projectId);
           // debugger;
         }
@@ -673,20 +672,35 @@ export default {
       // this.showBtntype = !this.showBtntype;
       let self = this;
       console.log(self.getUserId, self.getProjectId);
-     let userId = self.getUserId ;
-     let projectId = self.getProjectId;
+      let userId = self.getUserId;
+      let projectId = self.getProjectId;
       if (this.showBtntype) {
         this.$dialog.confirm({
           message: "确定删除该成员?",
           confirm() {
             //已经选中成员
             Convent.deleteExcutor(projectId, {
-              ['projectId']:projectId ,
-              ['userId']: userId
+              ["projectId"]: projectId,
+              ["userId"]: userId
             })
               .then(res => {
                 console.log(res);
                 // debugger;
+                if (res.code == 1 && res.status == 200) {
+                  Convent.getExcutorList(projectId) //项目id
+                    .then(res => {
+                      console.log(
+                        Object.keys(res.data),
+                        Object.values(res.data)
+                      );
+                      this.taskExecutors = [...Object.values(res.data)];
+                      console.log(this.taskExecutors);
+                      // debugger;
+                    })
+                    .catch(err => {
+                      console.log(err);
+                    });
+                }
               })
               .catch(err => {
                 console.log(err);
