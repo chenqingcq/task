@@ -153,7 +153,7 @@
                   {{ initDate(taskDetail.endTime).date }}
                 </div>
                 <div class="b_FS-12"
-                >开始时间</div>
+                >结果时间</div>
               </div>
             </div>
           </div>

@@ -7,6 +7,8 @@ import router from './router'
 import infiniteScroll from '@/directive'
 import VueLazyLoad from 'vue-lazyload'//图片懒加载
 import wx from '@/utils/wx'
+import '@/utils/keyBoradFixed.js'
+//import { install ,keyBoradFixed } from '@/utils/index'
 import '@/filters' // 过滤器
 import 'lib-flexible/flexible.js'
 import store from './store'

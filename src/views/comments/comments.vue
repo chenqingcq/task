@@ -133,10 +133,10 @@ export default {
       );
     },
     _link_to_secondary_comments( item ) {
-      if( item.replyNum == 0 ){
-        this.$toast.show('暂无评论')
-        return
-      }
+//      if( item.replyNum == 0 ){
+//        this.$toast.show('暂无评论')
+//        return
+//      }
       this.$router.push({
         path: "/comment",
         query: {

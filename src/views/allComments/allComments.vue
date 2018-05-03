@@ -23,7 +23,7 @@
                     </div>
                     <div class="comments-item">{{item.message}}</div>
                     <div class="comments-callback">
-                        <span @touchstart='_look_all_reply'>{{ item.replyNum }}条回复</span>
+                        <span @touchstart='_look_all_reply(item)'>{{ item.replyNum }}条回复</span>
                         <div @click="doLike(item)" v-if="item.isThumbs">
                           <!--<img @touchstart='add_praise(index)'   :src="imgUrl"/>-->
                           <img  src="../../assets/img/iocn-good2.png" alt="">
@@ -74,6 +74,7 @@ export default {
   mixins : [boardfix],
   data() {
     return {
+      isOnstar : false ,
       listenScroll: true,
       state: false,
       showUserInput: false,
@@ -244,12 +245,21 @@ export default {
     },
     // 点赞或者取消点赞
     doLike( item, index ){
+      if( this.isOnstar  ){
+        this.$toast.show('请勿重复点击', 2000)
+        return
+      }
+      else{
+        this.isOnstar = true
+      }
       const isThumbs = !item.isThumbs ? 1 : 0
       const commentId = item.commentId
+
       Convent.thumbs({
         isThumbs ,commentId
       }).then(res=>{
         item.isThumbs = isThumbs
+        this.isOnstar = false
         if( isThumbs == 1 ){
           this.$toast.show('点赞成功')
           item.thumbsNum++
@@ -284,12 +294,12 @@ export default {
         // 重新加载列表
       })
     },
-    _look_all_reply() {
+    _look_all_reply(item) {
       this.$router.push({
         path: "/allReply",
         query:{
-          userId:0,
-          taskId:0
+          commentPid : item.commentId ,
+          taskId: this.$route.query.taskId
         }
       });
     },

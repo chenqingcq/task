@@ -640,10 +640,12 @@ import comments from "@/views/comments/comments";
 import Slide from "@/common/base/slide/slide.vue";
 import Detail from "./detail";
 import { Convent } from "@/services";
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   data() {
     return {
+      projectId : 0,
+
       currentPoint : null,
       currentNode:'',
       activeFont: "",
@@ -670,6 +672,7 @@ export default {
       node: " ",
       taskName: "",
       taskDesc: "",
+      taskStatus : -1 ,
       taskId: "",
       active: "",
       deadLine: "暂未设置起止时间",
@@ -717,18 +720,19 @@ export default {
         vm._getTaskId();
         vm.getData();
         vm.getTaskComment();
-        vm.getThemeList();
       });
     } else {
       next(vm => {
         vm._getTaskId();
         vm.getData();
         vm.getTaskComment();
-        //vm.getThemeList();
       });
     }
   },
   methods: {
+    ...mapActions([
+      'setCurrentProject'
+    ]),
     updateComments() {
       this.getComments();
     },
@@ -826,7 +830,7 @@ export default {
     },
     getData() {
       const taskId = this.$route.query.taskId
-      const projectId = this.getProjectId;
+      const projectId = this.projectId;
       Convent.taskDetail({
         taskId,
         projectId
@@ -849,6 +853,16 @@ export default {
           this.taskStatus = res.taskStatus
           this.defineRole(res.role);
           this.fomatTime();
+
+          const project = {
+            projectId : res.projectId ,
+            projectName : res.projectName ,
+            role: this.role ,
+            isCreate : res.role == 3 ? true : false
+          }
+      // set Vuex state
+          this.setCurrentProject(project)
+
           if( res.currentPoint ){
             this.currentPoint = res.currentPoint
           }
@@ -867,7 +881,7 @@ export default {
           }
         });
       //获取群头像
-      Convent.getGroupAvatar(this.getProjectId)
+      Convent.getGroupAvatar(this.projectId)
         .then(res => {
           this.parties = res.data;
           console.log(res);
@@ -956,7 +970,7 @@ export default {
       this.$router.push({
         path: "/updateTaskSetting",
         query: {
-          projectId:self.getProjectId,
+          projectId:self.projectId,
           taskId:self.taskId
         }
       });
@@ -1102,7 +1116,16 @@ export default {
   created() {
     this.init();
   },
-  mounted() {},
+  mounted() {
+    const projectId = this.$route.query.projectId
+    if( projectId ){
+      this.projectId = projectId
+    }
+    else{
+      this.projectId = this.getProjectId
+    }
+
+  },
   beforeDestroy() {
     this.timer = null;
   }
