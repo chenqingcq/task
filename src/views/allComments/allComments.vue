@@ -246,7 +246,7 @@ export default {
     // 点赞或者取消点赞
     doLike( item, index ){
       if( this.isOnstar  ){
-        this.$toast.show('请勿重复点击', 2000)
+        this.$toast.show('2秒后才能再次点击', 2000)
         return
       }
       else{
@@ -259,7 +259,10 @@ export default {
         isThumbs ,commentId
       }).then(res=>{
         item.isThumbs = isThumbs
-        this.isOnstar = false
+        setTimeout(()=>{
+          this.isOnstar = false
+        }, 1500)
+
         if( isThumbs == 1 ){
           this.$toast.show('点赞成功')
           item.thumbsNum++
