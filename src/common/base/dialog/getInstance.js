@@ -76,5 +76,7 @@ export default function getInstance(options) {
   }
   const instance = dialog.$mount();
 
-  document.body.appendChild(instance.$el);
+  if (instance.$el) {
+    document.body.appendChild(instance.$el);
+  }
 }

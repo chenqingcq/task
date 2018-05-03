@@ -137,6 +137,7 @@
           position: absolute;
           top: 50%;
           left: 15*2px;
+          z-index: 999;
           transform: translateY(-50%);
           width: 16*2px;
           height: 16*2px;
@@ -148,6 +149,8 @@
           float: left;
           img {
             display: inline-block;
+            position: absolute;
+            z-index: 666;
             width: 15*2px;
             height: 15*2px;
           }
@@ -317,6 +320,9 @@
   overflow: hidden;
   white-space: nowrap;
 }
+.radio {
+  opacity: 0;
+}
 </style>
 <template>
 
@@ -347,8 +353,8 @@
           <div v-for="(item,index) in taskExecutors" :key="index">
             <li :userId='item[0].userId' :sex='item[0].sex'>
               <div class="user">
-                <div @click='select(index,item[0].userId,item)' class="select">
-                  <img src="@/assets/img/sign-selected.png" v-show="index == currentIndex && showArr[index] == true" />
+                <div class="select">
+                  <img @click='selectedSub($event,item[0].taskId,item[0].userId, 0 )' src="@/assets/img/sign-selected.png" class='radio' />
                 </div>
                 <div class="icon">
                   <img v-lazy="item[0].headImage">
@@ -365,24 +371,26 @@
                 <img :src="imgUrl(index)" v-show="item.length>1" />
               </div>
             </li>
-              <li class="sub-item" v-for="(_item,_index) in item"  :key="_index" v-show="subShow">
-                <!--下拉可见-->
-                <div class="user">
-                  <input type="radio" name="identity"  @click='selectedSub($event,index,_index,_item )' class="select"/>
-                    <!-- <img src="@/assets/img/sign-selected.png"  v-show="controlShow(index,_index)" /> -->
-                  <div class="name" id="name">{{_item.taskName}}</div>
+            <li class="sub-item" v-for="(_item,_index) in item"  :key="_index" v-show="subShow">
+              <!--下拉可见-->
+              <div class="user">
+                <div  class="select">
+                  <img @click='selectedSub($event,_item.taskId,_item.userId, 1 )' src="@/assets/img/sign-selected.png" class="radio"/>
                 </div>
-                <div class="update">{{_item.progressNum}}</div>
-                <div class="comments">{{_item.commentNum}}</div>
-                <div class="progress">{{_item.progress}}</div>
-                <div class="arrow" >
-                  
-                 </div>
-              </li>
+                <div class="name" id="name">{{_item.taskName}}</div>
+              </div>
+              <div class="update">{{_item.progressNum}}</div>
+              <div class="comments">{{_item.commentNum}}</div>
+              <div class="progress">{{_item.progress}}</div>
+              <div class="arrow" >
+                
+                </div>
+            </li>
           </div>
         </ul>
       </scroll>
     </div>
+    <div check= 'checked'></div>
     <div class="operate">
       <div class="chat">
         <div class="chat-">
@@ -390,9 +398,9 @@
           <p>群聊</p>
         </div>
       </div>
-      <div v-if="showBtntype" class="addExcutor" @click='commandExcutor'>指派人员</div>
-      <div v-if="!showBtntype" class="addExcutor" @click='addExcutor'>添加人员</div>
-      <div ref="deleteBtn" :class="{deleteBtn:true,deleteExcutor: showBtntype,deleteExcutorDisable :!showBtntype}" @click='deleteExcutor'>删除人员</div>
+      <div v-if="!addMember" class="addExcutor" @click='commandExcutor'>指派人员</div>
+      <div v-if="addMember" class="addExcutor" @click='addExcutor'>添加人员</div>
+      <div ref="deleteBtn" :class="{deleteBtn:true,deleteExcutor:deleteMember,deleteExcutorDisable :doNothing}" @click='deleteExcutor'>{{deleteText}}</div>
     </div>
     <invites   :showInvite='taskExecutors.length>0?false:true' ></invites>
     <qrcode :showQrcode='showQrcode' @close='closeQrcode' :projectId='projectId' :taskId = 'taskId'></qrcode>  
@@ -408,6 +416,10 @@ import { mapMutations, mapGetters } from "vuex";
 export default {
   data() {
     return {
+      addMember: true, //添加人员
+      deleteMember: false, //删除人员
+      doNothing: true, //默认,
+      deleteTaskId:'',//关闭任务的id跟当前创建的taski不一样
       showShare: false, //分享
       isExtend: false, //点击显示下拉
       subShow: false,
@@ -419,6 +431,7 @@ export default {
       type: "updated",
       showInvite: false,
       showQrcode: false,
+      deleteText: "删除人员",
       projectId: "",
       taskId: "",
       userId: "",
@@ -442,13 +455,13 @@ export default {
       taskExecutors: [],
       showArr: [],
       showSub_: [],
-      deletSubArr: []
+      deletSubArr: [],
+      mode: 2
     };
   },
   computed: {
     ...mapGetters({
       getTaskExecutor: "getTaskExecutor",
-      getProjectId: "getProjectId",
       getUserId: "getUserId"
     }),
     styleObj() {
@@ -559,12 +572,6 @@ export default {
     defineShow(arr) {
       console.log(arr);
       this.showArr = new Array(arr.length).fill(false);
-      this.showSub_ = new Array(arr.length).fill(false);
-      let i = 0;
-      for (i; i < arr.length; i++) {
-        this.deletSubArr.push(new Array(arr[i].length).fill(false));
-      }
-      console.log(this.deletSubArr, "=========subArr=======");
     },
     getExcutorList(id) {
       console.log(id);
@@ -587,29 +594,60 @@ export default {
       this.showShare = !this.showShare;
       this.showQrcode = !this.showQrcode;
     },
-    selectedSub(ev, fatherIndex, selfIndex, item) {
-      console.log(ev.target, fatherIndex, selfIndex, item);
-      ev.target.setAttribute("checked", true);
+    selectedSub(e, taskId, userId, mode) {
+      console.log(e.target, taskId, userId, mode);
+      this.SET_USER_ID(userId);//设置userid
+      this.mode = mode;
       this.$nextTick(() => {
-        console.log(fatherIndex, selfIndex, item);
-        this.deletSubArr[fatherIndex][selfIndex] = !this.deletSubArr[
-          fatherIndex
-        ][selfIndex];
-
-        console.log(this.deletSubArr, this.deletSubArr[fatherIndex][selfIndex]);
+        let radios = document.querySelectorAll(".select>img"),
+          i = 0;
+        for (i; i < radios.length; i++) {
+          if (!radios[i].classList.contains("radio") && radios[i] != e.target) {
+            radios[i].classList.add("radio");
+          }
+        }
+        if (e.target.classList.contains("radio")) {
+          e.target.classList.remove("radio");
+        } else {
+          e.target.classList.add("radio");
+          this.mode = 2;
+        }
+        //根据mode判断是删除人员还是删除任务
+        switch (this.mode) {
+          case 0: {
+            console.log("选中成员");
+            this.addMember = false;
+            this.deleteMember = true;
+            this.doNothing = false;
+            this.deleteText = "删除人员";
+            break;
+          }
+          case 1: {
+            console.log("选中任务");
+            this.addMember = true;
+            this.deleteMember = true;
+            this.doNothing = false;
+            this.deleteText = "关闭任务";
+            this.deleteTaskId = taskId;
+            break;
+          }
+          case 2: {
+            console.log("默认");
+            this.addMember = true;
+            this.deleteMember = false;
+            this.doNothing = true;
+            this.deleteText = "删除人员";            
+            break;
+          }
+          default: {
+            console.log("默认");
+            this.addMember = true;
+            this.deleteMember = false;
+            this.doNothing = true;
+            this.deleteText = "删除人员";                        
+          }
+        }
       });
-    },
-    controlShow(index, _index) {
-      return this.deletSubArr[index][_index];
-    },
-    select(selfIndex, userId, item) {
-      console.log(selfIndex, userId, item);
-      this.currentIndex = selfIndex;
-      this.SET_USER_ID(userId);
-      this.showArr[selfIndex] = !this.showArr[selfIndex];
-      this.showBtntype = !this.showBtntype;
-      if (this.showBtntype) {
-      }
     },
     progress(item) {
       return "100%";
@@ -638,9 +676,8 @@ export default {
     },
     commandExcutor() {
       //指定执行人
-      console.log(this.userId, this.projectId, this.taskId);
+      console.log(this.mode);
       // this.SET_USER_ID(this.userId);
-      this.SET_TASKID(this.taskId);
       let self = this;
       this.$dialog.confirm({
         message: "确定指定该执行人?",
@@ -654,7 +691,11 @@ export default {
               console.log(res);
               if (res.code == 1 && res.status == 200) {
                 self.$router.push({
-                  path: "/addTaskSetting"
+                  path: "/addTaskSetting",
+                  query:{
+                    taskId:self.taskId,
+                    projectId:self.projectId
+                  }
                 });
               }
             })
@@ -684,12 +725,12 @@ export default {
     },
     deleteExcutor() {
       //删除项目成员
-      // this.showBtntype = !this.showBtntype;
+      console.log(this.mode);
       let self = this;
       console.log(self.getUserId, self.projectId);
       let userId = self.getUserId;
       let projectId = self.projectId;
-      if (this.showBtntype) {
+      if (this.mode == 0 ) {
         this.$dialog.confirm({
           message: "确定删除该成员?",
           confirm() {
@@ -702,19 +743,7 @@ export default {
                 console.log(res);
                 // debugger;
                 if (res.code == 1 && res.status == 200) {
-                  Convent.getExcutorList(projectId) //项目id
-                    .then(res => {
-                      console.log(
-                        Object.keys(res.data),
-                        Object.values(res.data)
-                      );
-                      this.taskExecutors = [...Object.values(res.data)];
-                      console.log(this.taskExecutors);
-                      // debugger;
-                    })
-                    .catch(err => {
-                      console.log(err);
-                    });
+                  self.getExcutorList(self.projectId);
                 }
               })
               .catch(err => {
@@ -723,6 +752,22 @@ export default {
               });
           }
         });
+      }
+      if(this.mode == 1){
+        let taskId  = this.deleteTaskId ,self = this;
+        this.$dialog.confirm({
+          message:"确定删除该任务?",
+          confirm(){
+            Convent.closeTask(taskId).then((res)=>{
+              console.log(res);
+              if(res.code == 1 && res.status == 200){
+                  self.getExcutorList(self.projectId);
+              }
+            }).catch((err)=>{
+              console.log(err)
+            })
+          }
+        })
       }
     },
     ...mapMutations({
