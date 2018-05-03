@@ -102,7 +102,7 @@ export const get = function(url, params = {}, isShowFullLoading) {
 // 注册自定义deleter请求(不需要的传token, 自动生成token)
 export const deleter = function(url,  params = {}) {
     const authorization = UserModel.getSendToken()
-    debugger 
+    debugger
     return new Promise((resolve, reject) => {
         axiosInstance.delete(url, params, {
             // 请求头
@@ -136,7 +136,7 @@ export const post = function(url, params = {}, isShowFullLoading) {
                 'Authorization': authorization
             },
         }).then((res) => {
-            Vue.prototype.$loadingClose()    
+            Vue.prototype.$loadingClose()
             // 成功回调
             if (successCode.has(res.code)) {
                 // 已经处理过状态，所以不用管状态，直接返回数据
@@ -146,7 +146,7 @@ export const post = function(url, params = {}, isShowFullLoading) {
                 reject(res)
             }
         }).catch((err) => {
-            Vue.prototype.$loadingClose() 
+            Vue.prototype.$loadingClose()
             // 状态不是200
             reject(err.response ? err.response.data : ErrorMessage.timeOut)
         })
@@ -232,7 +232,7 @@ export const formDataPost = function(url, options = {}, isShowFullLoading = fals
         }
         // 判断图片大小，超出后直接返回
         let fileSize = file.size
-        if (fileSize > (2 * 1024 * 1024)) {
+        if (fileSize > (5 * 1024 * 1024)) {
           return new Promise((resolve, reject) => {
             reject(ErrorMessage.imageSizeErr)
           })

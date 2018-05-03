@@ -246,7 +246,7 @@ export default {
     // 点赞或者取消点赞
     doLike( item, index ){
       if( this.isOnstar  ){
-        this.$toast.show('2秒后才能再次点击', 2000)
+        this.$toast.show('1秒后才能再次点击', 2000)
         return
       }
       else{
