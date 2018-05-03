@@ -75,7 +75,7 @@ export default {
       }
     },
     status: {
-      type: String ,
+      type: [String,Number] ,
       default : ""
     },
     taskId: {
