@@ -85,20 +85,20 @@ export default {
         hasMore : true,
         noDataText : '上拉加载更多'
       },
-      members:
-        [
-        {
-          //审批留言
-          name: "张三",
-          role: "发布者",
-          date: "x年x月x日",
-          time: "2018.10.25",
-          comments: `关注“失控奔驰车”事件的最新进展。上周，央视新闻频道《法治在线》栏目连续两天播出了针对这一事件调查。`,
-          thumbsNum : 1 ,
-          isThumbs : 0 ,
-          imgUrl:
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-        }],
+      members: []
+//        [
+//        {
+//          //审批留言
+//          name: "张三",
+//          role: "发布者",
+//          date: "x年x月x日",
+//          time: "2018.10.25",
+//          comments: `关注“失控奔驰车”事件的最新进展。上周，央视新闻频道《法治在线》栏目连续两天播出了针对这一事件调查。`,
+//          thumbsNum : 1 ,
+//          isThumbs : 0 ,
+//          imgUrl:
+//            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+//        }],
 //        {
 //          name: "李四",
 //          role: "执行者",
