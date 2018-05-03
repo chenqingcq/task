@@ -574,7 +574,6 @@ export default {
           vm.startTime = "";
           vm.endTime = "";
           vm.standard = "";
-          debugger;
         } else {
           vm.hasProjectId = false;
           vm.taskTheme = "";
