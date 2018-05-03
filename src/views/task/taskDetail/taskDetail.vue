@@ -1075,6 +1075,10 @@ export default {
     },
     towardsUpdateHistory() {
 
+      if( this.taskStatus == 0 ){
+        this.$toast.show('任务暂未开始')
+        return
+      }
       if( this.role != 'operator' && this.items.length == 0 ){
         this.$toast.show('暂无更新')
         return

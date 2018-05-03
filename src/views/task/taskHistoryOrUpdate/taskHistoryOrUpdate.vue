@@ -74,7 +74,7 @@
               <!--</div>-->
             </div>
             <div class="panel panel-conf">
-              <img @click="deleteTask( key, process.progressId )" class = "delete"  src="../../../assets/img/icon-close.png" alt="">
+              <img v-if="mode=='edit'" @click="deleteTask( key, process.progressId )" class = "delete"  src="../../../assets/img/icon-close.png" alt="">
               <div class="text c_11">
                 {{ process.progressDesc }}
               </div>
@@ -174,7 +174,7 @@
   export default{
     data(){
       return{
-        mode: 'look', // look
+        mode: 'look', // look edit
         newSectionVal : '' ,
         todayDate: '',
         todayTime : '',
