@@ -1,13 +1,10 @@
 <template>
   <div  :style = '[appContainerCss]'  >
-
+    <keep-alive exclude="conventEntry">
       <transition name="fade">
-        <keep-alive exclude="/conventEntry">
           <router-view class="wrapper Router" />
-        </keep-alive>
-
-     </transition>
-
+      </transition>
+    </keep-alive>
     <!--底部 会展 logo - 会管家-展会应用商店-->
     <v-bottom-sign v-if="isShowBottomSign"></v-bottom-sign>
   </div>
@@ -43,8 +40,8 @@ export default {
   methods: {
     getToken() {
       // 在url 上面截取token
-      if (location.hash.indexOf("?token=") > -1) {
-        const token = location.hash.split("?")[1].replace("token=", "");
+      if (location.hash.indexOf("token=") > -1) {
+        const token = location.hash.split("token=")[1].replace("token=", "");
         // set token
         this.$store.commit("setToken", token);
       }

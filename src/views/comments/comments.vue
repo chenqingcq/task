@@ -12,7 +12,7 @@
         <span>暂无评论,点击抢沙发</span>
         <i></i>
       </div>
-      <scroll class="comments-container" ref="scroll" :listenScroll='listenScroll' @scroll='scrolling' @scrollEnd='scrollEnd' v-if="members.length>1">
+      <scroll class="comments-container" ref="scroll" :listenScroll='listenScroll' @scroll='scrolling' @scrollEnd='scrollEnd' v-if="members.length">
         <ul class="comment-panel">
           <li v-for="(item,index) in members" :key="index" class="lisItem" :commentPid ='item.commentPid' :commentId ="item.commentId" ref='item'>
             <div class="left">
@@ -24,14 +24,14 @@
             <div class="right">
               <!--测试-->
               <div class="head">
-                <div class="role b_FS-12 ">{{item.nickname}}({{item.role==3?"创建者":item.role== 2?"执行者":itme.role==1?"观察者":''}})</div>
+                <div class="role b_FS-12 ">{{item.nickname}}({{ role2Str( item.role ) }})</div>
                 <div class="time-panel"><span>{{defineDate(item.createTime)}}</span><span>{{defineTime(item.createTime)}}</span></div>
               </div>
               <div class="comments-item">{{item.message}}</div>
               <div class="comments-callback">
-                <span @touchstart='_link_to_secondary_comments'>{{`${item.replyNum}`> 0 ? `${item.replyNum}条回复`:`${item.replyNum}条回复`}}</span>
+                <span @click='_link_to_secondary_comments( item )'>{{`${item.replyNum}`> 0 ? `${item.replyNum}条回复`:`${item.replyNum}条回复`}}</span>
                 <div>
-                  <img @touchstart='add_praise($event, item.isThumbs,item.commentId)'  :isThumbs='item.isThumbs' :src="imgUrl"/>
+                  <img @click='add_praise($event, item.isThumbs,item.commentId)'  :isThumbs='item.isThumbs' :src="imgUrl"/>
                   <span ref="goods">{{item.thumbsNum}}</span>
                 </div>
               </div>
@@ -74,6 +74,10 @@ export default {
         return [];
       }
     },
+    status: {
+      type: Number ,
+      default : -1
+    },
     taskId: {
       type: String,
       default: ""
@@ -97,6 +101,16 @@ export default {
   },
   watch: {},
   methods: {
+    // 权限转中文字符串
+    role2Str( role ){
+      let str = ''
+      switch (role) {
+        case 0 : str = '访客' ; break ;
+        case 1 : str = '执行者' ; break ;
+        case 2 : str = '发布者' ; break ;
+      }
+      return str
+    },
     defineDate(date) {
       date = parseInt(date);
       return (
@@ -118,28 +132,52 @@ export default {
         new Date(date).getSeconds()
       );
     },
-    _link_to_secondary_comments() {
+    _link_to_secondary_comments( item ) {
+      if( item.replyNum == 0 ){
+        this.$toast.show('暂无评论')
+        return
+      }
       this.$router.push({
         path: "/comment",
         query: {
-          taskId: 0,
-          userId: 0
+          taskId: this.taskId ,
+          commentPid: item.commentPid
         }
-      });
+      })
     },
     link_to_allComments() {
+      const status = this.status
+      if( status == 0 ){
+        this.$toast.show('任务未开始')
+        return
+      }
+      else if( status == 2 ){
+        this.$toast.show('任务已关闭')
+        return
+      }
+
       if( this.members.length == 0 ){
         this.$toast.show('暂无评论', 1000)
         return
       }
-      this.$router.push("comment");
+      this.$router.push("comment?taskId=" + this.taskId );
     },
     closeUserInput() {
       this.showUserInput = false;
       this.$emit("close");
     },
     userInput() {
-      this.showUserInput = true;
+      const status = this.status
+      if( status == 0 ){
+        this.$toast.show('任务未开始')
+      }
+      else if( status == 2 ){
+        this.$toast.show('任务已关闭')
+      }
+      else{
+        this.showUserInput = true;
+      }
+
     },
     add_praise(e, isThumbs, commentId) {
       let thumbs = e.target.getAttribute("isthumbs");
@@ -151,7 +189,6 @@ export default {
         //点赞
         this.thumb(commentId, 1, true);
       } else {
-        return;
         e.target.setAttribute("isthumbs", 0);
         e.target.src = require("@/assets/img/iocn-good.png");
         e.target.parentNode.classList.remove("active");

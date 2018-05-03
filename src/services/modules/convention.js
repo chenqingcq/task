@@ -67,8 +67,8 @@ class Convent {
   /*
    *  对一级留言点赞或取消点赞
    * */
-  thumbs(commentId, opt, isShowFullLoading = false) {
-    const url = `/api/comment/thumbs/${commentId}`
+  thumbs( opt, isShowFullLoading = false) {
+    const url = `/api/comment/thumbs/${opt.commentId}`
     const params = opt || {}
     return post(
       url, params, isShowFullLoading

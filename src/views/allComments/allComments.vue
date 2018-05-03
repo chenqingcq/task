@@ -24,10 +24,16 @@
                     <div class="comments-item">{{item.message}}</div>
                     <div class="comments-callback">
                         <span @touchstart='_look_all_reply'>{{ item.replyNum }}条回复</span>
-                        <div>
-                        <img @touchstart='add_praise(index)' :src="imgUrl"/>
-                        <span ref="goods">{{ item.thumbsNum }}</span>
+                        <div @click="doLike(item)" v-if="item.isThumbs">
+                          <!--<img @touchstart='add_praise(index)'   :src="imgUrl"/>-->
+                          <img  src="../../assets/img/iocn-good2.png" alt="">
+                          <span class="active" >{{ item.thumbsNum }}</span>
                         </div>
+                        <div @click="doLike(item)" v-else>
+                          <img src="../../assets/img/iocn-good.png" alt="">
+                          <span>{{ item.thumbsNum }}</span>
+                        </div>
+
                     </div>
                     </div>
                     <i class="footbar"></i>
@@ -75,7 +81,7 @@ export default {
       comments: "",
       page: {
         pageNum : 1 ,
-        pageSize : 10 ,
+        pageSize : 3 ,
         hasMore : true,
         noDataText : '上拉加载更多'
       },
@@ -88,6 +94,8 @@ export default {
           date: "x年x月x日",
           time: "2018.10.25",
           comments: `关注“失控奔驰车”事件的最新进展。上周，央视新闻频道《法治在线》栏目连续两天播出了针对这一事件调查。`,
+          thumbsNum : 1 ,
+          isThumbs : 0 ,
           imgUrl:
             "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
         }],
@@ -234,6 +242,24 @@ export default {
         }
       })
     },
+    // 点赞或者取消点赞
+    doLike( item, index ){
+      const isThumbs = !item.isThumbs ? 1 : 0
+      const commentId = item.commentId
+      Convent.thumbs({
+        isThumbs ,commentId
+      }).then(res=>{
+        item.isThumbs = isThumbs
+        if( isThumbs == 1 ){
+          this.$toast.show('点赞成功')
+          item.thumbsNum++
+        }
+        else{
+          this.$toast.show('取消点赞')
+          item.thumbsNum--
+        }
+      })
+    },
     // commentPid 二级评论
     addComments( commentPid = null ){
       if(typeof commentPid == 'object') commentPid = null
@@ -246,7 +272,7 @@ export default {
         message
       })
       .then(res=>{
-        this.sendComment()
+        this.successComment()
         this.page = {
           pageNum : 1 ,
             pageSize : 10 ,
@@ -267,7 +293,7 @@ export default {
         }
       });
     },
-    sendComment() {
+    successComment() {
       console.log(this.comments);
       this.$dialog.message({
         message: "评论成功!",

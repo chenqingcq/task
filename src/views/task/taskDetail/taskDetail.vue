@@ -591,12 +591,12 @@ img.partyLogo {
           </div>
         </div>
         <div class="progress-container">
-          <div class="current-progress" v-if="node.length > 1">
+          <div class="current-progress" v-if="currentPoint">
             <div class="left">
-              {{currentNode}}
+              {{ formatDate(currentPoint.pointTime) }}
             </div>
             <div class="right">
-              {{node.pointDesc}}
+              {{currentPoint.pointDesc}}
             </div>
           </div>
         </div>
@@ -614,7 +614,7 @@ img.partyLogo {
         </div>
       </div>
     </div>
-    <comments :members='members' :taskId='taskId' @close='updateComments'></comments>
+    <comments :members='members' :taskId='taskId' @close='updateComments' :status="taskStatus" ></comments>
     <div v-if="role == 'creator' && taskStatus != 2  " class="btn-warp b-LR-8 clearfix">
       <div @click='closeTask' class="btn-normal-warn b_left b-MT-10">
         关闭任务
@@ -644,6 +644,7 @@ import { mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
+      currentPoint : null,
       currentNode:'',
       activeFont: "",
       headImg: "",
@@ -723,7 +724,7 @@ export default {
         vm._getTaskId();
         vm.getData();
         vm.getTaskComment();
-        vm.getThemeList();
+        //vm.getThemeList();
       });
     }
   },
@@ -755,36 +756,13 @@ export default {
     ...mapMutations({
       SET_USER_ROLE: "SET_USER_ROLE"
     }),
-    getThemeList() {
-      let self = this;
-      Convent.sectionList({
-        projectId: self.getProjectId
-      })
-        .then(res => {
-          console.log("list------", res);
-          if (res.code == 1 && res.status == 200) {
-            if (res.data.length > 1) {
-              self.node = res.data[0];
-              self.taskDesc = res.data[0].pointDesc;
-              self.calcuTime();
-            }
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
-    calcuTime() {
-      let m = new Date(parseInt(self.node.createTime)).getMonth() + 1;
-      let d = new Date(parseInt(self.node.createTime)).getDay();
-      self.currentNode = m > 10 ? m : `0${m}` + "/" + d > 10 ? d : `0${m}`;
-    },
+
     getTaskComment() {
       //获取评论
       let self = this;
       Convent.getTaskComments({
         taskId : this.$route.query.taskId ,
-        pageSize: "20"
+        pageSize: 3
       })
         .then(res => {
           console.log(res, "------一级评论------");
@@ -799,6 +777,9 @@ export default {
         this.taskId = window.location.hash.split("?")[1].split("=")[1];
         console.log(this.taskId);
       }
+    },
+    formatDate( dateStr ){
+      return dateStr.substring(5,15).replace('-','/')
     },
     fomatTime() {
       console.log(new Date().getMonth());
@@ -868,6 +849,10 @@ export default {
           this.taskStatus = res.taskStatus
           this.defineRole(res.role);
           this.fomatTime();
+          if( res.currentPoint ){
+            this.currentPoint = res.currentPoint
+          }
+
           if (res.latestProgress) {
             this.items = res.latestProgress.progressImage.map(val => {
               return { imgUrl: val };
