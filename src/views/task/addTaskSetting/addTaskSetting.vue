@@ -534,7 +534,6 @@ export default {
         // console.log(vm.getTaskExecutor); //过滤选中的执行人;
         vm.taskId = to.query.taskId;
         vm.projectId = to.query.projectId;
-        debugger;
         // vm.executor = vm.getTaskExecutor.executor;
         vm.setExcutor();
       });
@@ -542,7 +541,9 @@ export default {
       next(vm => {
         // console.log(executor);
         vm.hasProjectId = true;
-        vm.$refs.exe.classList.add("active_");
+        if (vm.executor) {
+          vm.$refs.exe.classList.add("active_");
+        }
         vm._updateTask(to.query); //重新设置任务
       });
     }
@@ -557,21 +558,9 @@ export default {
           vm.hasProjectId = true;
           vm.taskTheme = vm.getProjectThemeName;
           vm.$refs.taskTheme.setAttribute("disabled", true);
-          vm.taskName = "";
-          vm.taskDesc = "";
-          vm.executor = "";
-          vm.startTime = "";
-          vm.endTime = "";
-          vm.standard = "";
+
         } else {
           vm.hasProjectId = false;
-          vm.taskTheme = "";
-          vm.taskName = "";
-          vm.taskDesc = "";
-          vm.executor = "";
-          vm.startTime = "";
-          vm.endTime = "";
-          vm.standard = "";
         }
       });
     } else {
@@ -827,9 +816,9 @@ export default {
     appointerManager() {
       let self = this;
       this.validate();
-      if(this.executor){
-        this.$toast.show('执行人已存在!')
-        return ;
+      if (this.executor) {
+        this.$toast.show("执行人已存在!");
+        return;
       }
       //验证必选项
       if (!this.check_pass) {
