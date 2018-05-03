@@ -60,7 +60,7 @@ export default {
             self.$emit("close");
           });
       } else if (this.usreInput.length > 200) {
-        debugger;
+        // debugger;
         this.$toast.show("评论字数不得超过200字!", 1500);
       }
     }
