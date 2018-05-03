@@ -954,7 +954,7 @@ export default {
     link_to_taskSetting() {
       let self = this;
       this.$router.push({
-        path: "/addTaskSetting",
+        path: "/updateTaskSetting",
         query: {
           projectId:self.getProjectId,
           taskId:self.taskId
