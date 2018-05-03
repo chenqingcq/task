@@ -535,7 +535,7 @@ img.partyLogo {
           <div class="right">
             <div class="show-task-detail">
               <div class="task-name">{{taskName}}</div>
-              <div class="task-detail" @touchstart='showMoreTaskDesc'>
+              <div class="task-detail" @click='showMoreTaskDesc'>
                 <span class="task-detail-content">
                   {{taskDesc}}
                 </span>
@@ -552,7 +552,7 @@ img.partyLogo {
               </div>
             </div>
             <div class="task-focus">
-              <img @touchstart='link_to_taskSetting' class="focus-star" v-show='role=="creator"' src="@/assets/img/icon-set up.png" />
+              <img @click='link_to_taskSetting' class="focus-star" v-show='role=="creator" && taskStatus != 2 ' src="@/assets/img/icon-set up.png" />
             </div>
           </div>
         </div>
@@ -569,11 +569,11 @@ img.partyLogo {
           </div>
         </div>
         <div class="task-progress">
-          <div class="task-desc" @touchstart='toggleTaskProgress'>
+          <div class="task-desc" @click='toggleTaskProgress'>
             <span>{{taskDesc}}</span>
             <img src="@/assets/img/icon-slide downward.png" />
           </div>
-          <div class="detail-btn" @touchstart='towardsUpdateHistory'>
+          <div class="detail-btn" @click='towardsUpdateHistory'>
             {{ role == 'operator'? '更新进度' : '查看上传历史'  }}
           </div>
         </div>
@@ -589,7 +589,7 @@ img.partyLogo {
       <div class="panel b-MT-10 c_white-bg">
         <div class="b-LR-10 b-T-5 between">
           <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 b_FS-14 c_6 ">主题节点</span></p>
-          <div @touchstart='linkToSection' class="more b_FS-10  c_7">
+          <div @click='linkToSection' class="more b_FS-10  c_7">
             更多项目节点<img src="@/assets/img/icon-right-slide03.png" />
           </div>
         </div>
@@ -618,20 +618,20 @@ img.partyLogo {
       </div>
     </div>
     <comments :members='members' :taskId='taskId' @close='updateComments'></comments>
-    <div v-if="role == 'creator'" class="btn-warp b-LR-8 clearfix">
-      <div @touchstart='closeTask' class="btn-normal-warn b_left b-MT-10">
+    <div v-if="role == 'creator' && taskStatus != 2  " class="btn-warp b-LR-8 clearfix">
+      <div @click='closeTask' class="btn-normal-warn b_left b-MT-10">
         关闭任务
       </div>
-      <div @touchstart='passTask' class="btn-normal-success b_right b-MT-10">
+      <div @click='passTask' class="btn-normal-success b_right b-MT-10">
         验收通过
       </div>
     </div>
     <!-- 执行者 -->
     <div v-if="role == 'operator' && taskStatus == 0 " class="btn-warp b-LR-8 clearfix">
-      <div @touchstart="rejectTask" class="btn-normal-warn b_left b-MT-10 ">
+      <div @click="rejectTask" class="btn-normal-warn b_left b-MT-10 ">
         拒绝任务
       </div>
-      <div @touchstart='recieveTask' class="btn-normal-success b_right b-MT-10">
+      <div @click='recieveTask' class="btn-normal-success b_right b-MT-10">
         接受任务
       </div>
     </div>
@@ -735,8 +735,10 @@ export default {
       this.getComments();
     },
     getComments() {
-      let self = this;
-      Convent.getTaskComments(self.taskId, {
+      const taskId = this.$route.query.taskId;
+      const self = this
+      Convent.getTaskComments( {
+        taskId ,
         pageSize: "10"
       })
         .then(res => {
@@ -783,7 +785,8 @@ export default {
     getTaskComment() {
       //获取评论
       let self = this;
-      Convent.getTaskComments(this.taskId, {
+      Convent.getTaskComments({
+        taskId : this.$route.query.taskId ,
         pageSize: "20"
       })
         .then(res => {
@@ -844,7 +847,7 @@ export default {
       this.SET_USER_ROLE(this.role);
     },
     getData() {
-      const taskId = this.taskId;
+      const taskId = this.$route.query.taskId
       const projectId = this.getProjectId;
       Convent.taskDetail({
         taskId,
@@ -865,8 +868,11 @@ export default {
           this.isLike = res.isStar == "0" ? false : true;
           this.position = res.position;
           this.defineStatus(res.taskStatus);
+          this.taskStatus = res.taskStatus
           this.defineRole(res.role);
           this.fomatTime();
+
+
           if (res.latestProgress) {
             this.items = res.latestProgress.progressImage.map(val => {
               return { imgUrl: val };

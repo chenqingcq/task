@@ -5,7 +5,7 @@
               <!--scroll-->
             <div class="comments-container"
                  v-infinite-scroll="getCommentsList" infinite-scroll-disabled="hasMore" infinite-scroll-distance="60"
-                 ref="scroll"  v-if="members.length>1">
+                 ref="scroll"  >
                 <ul class="comment-panel">
                 <li v-for="(item,index) in members" :key="index" class="lisItem">
                     <div class="left">
@@ -17,22 +17,22 @@
                     <div class="right">
                     <!--测试-->
                     <div class="head">
-                        <div class="role b_FS-12 ">{{item.nickname}}({{item.role}})</div>
+                        <div class="role b_FS-12 ">{{item.nickname}}({{ role2Str(item.role)  }})</div>
                         <!--{{ item.createTime }}-->
                         <div class="time-panel"><span>{{dateFormatInChinese(item.createTime)}}</span></div>
                     </div>
                     <div class="comments-item">{{item.message}}</div>
                     <div class="comments-callback">
-                        <span @touchstart='_look_all_reply'>2条回复</span>
+                        <span @touchstart='_look_all_reply'>{{ item.replyNum }}条回复</span>
                         <div>
                         <img @touchstart='add_praise(index)' :src="imgUrl"/>
-                        <span ref="goods">50</span>
+                        <span ref="goods">{{ item.thumbsNum }}</span>
                         </div>
                     </div>
                     </div>
                     <i class="footbar"></i>
                 </li>
-                <li class="lisItem _all-comments">
+                <li class="lisItem _all-comments" >
                      <div class="comment-content">已显示全部留言</div>
                 </li>
                 </ul>
@@ -52,13 +52,16 @@
                 @focus = 'setPageToBottom'
                 @blur="clearIpt, blurInput"
         >
-        <img @touchstart='sendComment' class="send-comment" src="@/assets/img/iocn.png" />
+        <img @click.prevent='addComments' class="send-comment" src="@/assets/img/iocn.png" />
       </div>
     </div>
 </template>
-<script>
+<script type="text/babel">
 import scroll from "@/common/base/scroll/scroll";
 import  boardfix from '@/mixins/keyboardfix'
+// services
+import { Convent } from '@/services'
+
 import { dateFormatInChinese } from '@/utils/transform'
 export default {
   name: "allComments",
@@ -73,9 +76,11 @@ export default {
       page: {
         pageNum : 1 ,
         pageSize : 10 ,
-        hasMore : true
+        hasMore : true,
+        noDataText : '上拉加载更多'
       },
-      members: [
+      members:
+        [
         {
           //审批留言
           name: "张三",
@@ -85,84 +90,87 @@ export default {
           comments: `关注“失控奔驰车”事件的最新进展。上周，央视新闻频道《法治在线》栏目连续两天播出了针对这一事件调查。`,
           imgUrl:
             "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-        },
-        {
-          name: "李四",
-          role: "执行者",
-          date: "x年x月x日",
-          time: "2018.10.25",
-          comments: "会管家",
-          imgUrl:
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-        },
-        {
-          name: "王五",
-          role: "观察者",
-          date: "x年x月x日",
-          time: "2018.10.25",
-          comments: "会管家",
-          imgUrl:
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-        },
-        {
-          name: "小六",
-          role: "观察者",
-          date: "x年x月x日",
-          time: "2018.10.25",
-          comments: "会管家",
-          imgUrl:
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-        },
-        {
-          name: "小六",
-          role: "观察者",
-          date: "x年x月x日",
-          time: "2018.10.25",
-          comments: "会管家",
-          imgUrl:
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-        },
-        {
-          name: "小六",
-          role: "观察者",
-          date: "x年x月x日",
-          time: "2018.10.25",
-          comments: "会管家",
-          imgUrl:
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-        },
-        {
-          name: "小六",
-          role: "观察者",
-          date: "x年x月x日",
-          time: "2018.10.25",
-          comments: "会管家",
-          imgUrl:
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-        },
-        {
-          name: "小六",
-          role: "观察者",
-          date: "x年x月x日",
-          time: "2018.10.25",
-          comments: "会管家",
-          imgUrl:
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-        },
-        {
-          name: "小eee",
-          role: "观察者",
-          date: "x年x月x日",
-          time: "2018.10.25",
-          comments: "会管家",
-          imgUrl:
-            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
-        }
-      ]
+        }],
+//        {
+//          name: "李四",
+//          role: "执行者",
+//          date: "x年x月x日",
+//          time: "2018.10.25",
+//          comments: "会管家",
+//          imgUrl:
+//            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+//        },
+//        {
+//          name: "王五",
+//          role: "观察者",
+//          date: "x年x月x日",
+//          time: "2018.10.25",
+//          comments: "会管家",
+//          imgUrl:
+//            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+//        },
+//        {
+//          name: "小六",
+//          role: "观察者",
+//          date: "x年x月x日",
+//          time: "2018.10.25",
+//          comments: "会管家",
+//          imgUrl:
+//            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+//        },
+//        {
+//          name: "小六",
+//          role: "观察者",
+//          date: "x年x月x日",
+//          time: "2018.10.25",
+//          comments: "会管家",
+//          imgUrl:
+//            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+//        },
+//        {
+//          name: "小六",
+//          role: "观察者",
+//          date: "x年x月x日",
+//          time: "2018.10.25",
+//          comments: "会管家",
+//          imgUrl:
+//            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+//        },
+//        {
+//          name: "小六",
+//          role: "观察者",
+//          date: "x年x月x日",
+//          time: "2018.10.25",
+//          comments: "会管家",
+//          imgUrl:
+//            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+//        },
+//        {
+//          name: "小六",
+//          role: "观察者",
+//          date: "x年x月x日",
+//          time: "2018.10.25",
+//          comments: "会管家",
+//          imgUrl:
+//            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+//        },
+//        {
+//          name: "小eee",
+//          role: "观察者",
+//          date: "x年x月x日",
+//          time: "2018.10.25",
+//          comments: "会管家",
+//          imgUrl:
+//            "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
+//        }
+//      ]
     };
   },
   props: {},
   components: {
+  },
+  mounted(){
+    //this.
   },
   computed: {
     hasMore(){
@@ -181,12 +189,24 @@ export default {
   },
   methods: {
     dateFormatInChinese : dateFormatInChinese ,
+    // 权限转中文字符串
+    role2Str( role ){
+      let str = ''
+      switch (role) {
+        case 0 : str = '访客' ; break ;
+        case 1 : str = '执行者' ; break ;
+        case 2 : str = '发布者' ; break ;
+      }
+      return str
+    },
+    // 评论列表
     getCommentsList( ){
       const { pageNum, pageSize ,hasMore } = this.page
       if( !hasMore ){
         return
       }
       this.page.hasMore = false
+      this.noDataText = '加载中'
       const taskId = this.$route.query.taskId
       Convent.getTaskComments({
         taskId ,
@@ -198,20 +218,45 @@ export default {
         if(res.data.length){
           newList = oldList.concat( res.data )
           this.members = newList
-
         }
         else{
           this.page.hasMore = false
+          this.noDataText = '已显示全部留言'
           return
         }
         this.page.hasMore = res.page.isLoaded
         if( this.page.hasMore ){
           this.page.pageNum++
+          this.noDataText = '上拉加载更多'
+        }
+        else{
+          this.noDataText = '已显示全部留言'
         }
       })
     },
-    refresh() {
-      console.log("下拉加载");
+    // commentPid 二级评论
+    addComments( commentPid = null ){
+      if(typeof commentPid == 'object') commentPid = null
+      console.log(commentPid)
+      const taskId = this.$route.query.taskId
+      const message	 = this.comments
+      Convent.taskComments({
+        commentPid ,
+        taskId ,
+        message
+      })
+      .then(res=>{
+        this.sendComment()
+        this.page = {
+          pageNum : 1 ,
+            pageSize : 10 ,
+            hasMore : true,
+            noDataText : '上拉加载更多'
+        }
+        this.members = []
+        this.getCommentsList()
+        // 重新加载列表
+      })
     },
     _look_all_reply() {
       this.$router.push({
@@ -229,6 +274,7 @@ export default {
         icon: "pass"
       });
     },
+
     add_praise(index) {
       console.log(index, this.$refs.goods[index]);
       if (!this.$refs.goods[index].getAttribute("class")) {
@@ -270,7 +316,8 @@ export default {
   /*top: 0;*/
   .comment-container {
     position: relative;
-    top: 20px;
+    /*top: 20px;*/
+    padding-top: 20px;
   }
   .comment-panel {
     overflow: hidden;

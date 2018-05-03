@@ -348,7 +348,7 @@
                 pointTime: this.todayDate ,
                 isDoing: false,
                 pointDesc : pointDesc,
-                id : res.data.pointId
+                pointId : res.data.pointId
               })
             })
 

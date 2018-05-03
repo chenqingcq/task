@@ -265,7 +265,7 @@ export default {
             text = '' ,
             dateStr = '' // 时间间隔
         switch (status){
-          case 0: resStatus = 'pending' ;text = '等待接受' ;break;
+          case 0: resStatus = 'pending' ;text = '未指定执行人' ;break;
           case 1: resStatus = 'pending' ;text = '正在进行' ;break;
           case 2: resStatus = 'closed' ;text = '已关闭' ;break ;
           case 3: resStatus = 'rejected' ;text = '已拒绝' ; break ;

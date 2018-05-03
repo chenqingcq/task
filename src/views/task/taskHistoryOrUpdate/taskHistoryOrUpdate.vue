@@ -230,6 +230,8 @@
           list : false
         }).then(res=>{
           console.log(res.data)
+          this.previewImages = []
+          this.imagesFiles = []
           this.getProcessList()
 
         })
