@@ -100,12 +100,14 @@ export const get = function(url, params = {}, isShowFullLoading) {
 }
 
 // 注册自定义deleter请求(不需要的传token, 自动生成token)
-export const deleter = function(url, {id}) {
+export const deleter = function(url,  params = {}) {
     const authorization = UserModel.getSendToken()
+    debugger 
     return new Promise((resolve, reject) => {
-        axiosInstance.delete(url + '/' + id, {
+        axiosInstance.delete(url, params, {
             // 请求头
             headers: {
+                'Content-Type': 'application/json',
                 'Authorization': authorization
             },
         }).then((res) => {

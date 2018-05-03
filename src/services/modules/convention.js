@@ -334,9 +334,10 @@ class Convent {
    * 删除项目成员
    * */
   deleteExcutor(projectId, opt, isShowFullLoading = true) {
-    const url = `/api/project/members/${projectId}`
+    // debugger;
+    const url = `/api/project/member/${projectId}`;
     const params = opt || {}
-    return deleter(
+    return post(
       url, params, isShowFullLoading = false
     )
   }

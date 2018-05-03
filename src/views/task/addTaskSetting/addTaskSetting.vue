@@ -256,7 +256,7 @@ li#allowCreateTask {
 #appointer {
   position: relative;
   height: 100%;
-  width: 224px;
+  min-width: 224px;
   display: flex;
   align-items: center;
   span.name {
@@ -317,7 +317,7 @@ input:disabled {
           />
         </li>
         <ul class="editDeadTime">
-          <li v-if="role == 'creator'" @touchend='editSection'>
+          <li v-if="role == 'creator'" @click='editSection'>
             <img class="editpng" src="@/assets/img/task-edit.png" />
             <div class="editProgress">编辑项目节点</div>
             <div class="editmore">
@@ -388,7 +388,7 @@ input:disabled {
             </div>
             <div class="task-setting" ref="exe">指定执行人</div>
           </label>
-          <div id="appointer" @touchend='appointerManager'>
+          <div id="appointer" @click='appointerManager'>
             <span class="name" ref="executor">{{executor}}</span>
             <span class="arrow">
             <img src="@/assets/img/icon-right-slide03.png" />
@@ -400,7 +400,7 @@ input:disabled {
       <div class="permit-setting"><span>权限设置</span></div>
       <ul class="task-panel permission-setting">
         <li class="task-item">
-          <div v-for="(item,index) in setting" :key="index" @touchend='changeIndex(index,item)'>
+          <div v-for="(item,index) in setting" :key="index" @click='changeIndex(index,item)'>
             <p :class="{active_:currentIndex == index}">{{item.title}} </p>
             <p>
               <span :class='{active :currentIndex == index}'>{{item.detail}}</span>
@@ -408,7 +408,7 @@ input:disabled {
           </div>
         </li>
       </ul>
-      <div @touchend='confirm' class="confirm">确定</div>
+      <div @click='confirm' class="confirm">确定</div>
     </div>
   </div>
 
@@ -591,7 +591,10 @@ export default {
   },
   methods: {
     setExcutor() {
-      Convent.getTaskBasicInfo(this.taskId)
+      let self = this;
+      this.taskId = this.getTaskId;
+      // debugger;
+      Convent.getTaskBasicInfo(self.taskId)
         .then(res => {
           console.log("---基本任务信息--", res);
           if (res.code == 1 && res.status == 200) {
@@ -743,16 +746,16 @@ export default {
             // debugger;
           });
       } else if (this.taskId) {
-        Convent.updateTask(this.taskId, {
-          taskId: this.taskId,
-          projectId: this.projectId,
-          projectName: this.taskTheme,
-          taskName: this.taskName,
-          taskDesc: this.taskDesc,
+        Convent.updateTask(self.taskId, {
+          taskId: self.taskId,
+          projectId: self.getProjectId,
+          projectName: self.taskTheme,
+          taskName: self.taskName,
+          taskDesc: self.taskDesc,
           startTime: +new Date(this.startTime.replace(/\./g, "/")),
           endTime: +new Date(this.endTime.replace(/\./g, "/")),
-          checkStandard: this.standard,
-          isOpen: this.isOpen ? 1 : 0
+          checkStandard: self.standard,
+          isOpen: self.isOpen ? 1 : 0
         })
           .then(res => {
             if (res.code == 1 && res.status == 200) {
