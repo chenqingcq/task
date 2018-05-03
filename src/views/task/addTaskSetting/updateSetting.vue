@@ -1,6 +1,6 @@
 <style lang="less" scoped>
 .task-container {
-  position: fixed;
+  position: relative;
   left: 0;
   top: 0;
   bottom: 0;
@@ -332,7 +332,7 @@ input:disabled {
             </div>
             <div :class="[_tasksetting,{active_:isTaskName}]"> 任务名称</div>
           </label>
-          <input class="userInput" type="text" id="item0" v-model.trim="taskName" maxlength="10" placeholder="添加任务名称" />
+          <input ref="_taskName" class="userInput" type="text" id="item0" v-model.trim="taskName" maxlength="10" placeholder="添加任务名称" />
         </li>
         <li class="task-item">
           <label class="task-desc" for="item1">
@@ -605,6 +605,7 @@ export default {
             }
             self.updateTime(res.data.startTime, res.data.endTime);
             self.taskName = res.data.taskName;
+            self.$refs._taskName.setAttribute("disabled", true);            
             self.taskTheme = res.data.projectName;
             self.$refs.taskTheme.setAttribute("disabled", true);
             self.executor = res.data.executorNickName
@@ -682,6 +683,7 @@ export default {
           if (res.code == 1 && res.status == 200) {
             self.updateTime(res.data.startTime, res.data.endTime);
             self.taskName = res.data.taskName;
+            self.$refs._taskName.setAttribute("disabled", true);           
             self.executor = res.data.executorNickName
               ? res.data.executorNickName
               : undefined;
@@ -692,7 +694,7 @@ export default {
                 self.$refs.taskTheme.setAttribute('disabled',true);
             }
             self.isPublic = res.data.isOpen ? true : false;
-            debugger;
+            // debugger;
           }
         })
         .catch(err => {
@@ -762,7 +764,7 @@ export default {
           });
       } else if (this.taskId) {
           console.log(this.checkStandard);
-          debugger;
+        //   debugger;
         Convent.updateTask(self.taskId, {
           taskId: self.taskId,
           projectId: self.getProjectId,
