@@ -75,8 +75,8 @@ export default function getInstance(options) {
     })
   }
   const instance = dialog.$mount();
-
-  if (instance.$el) {
+  if (document.body.innerHTML.indexOf('confirm-container') < 0) {
     document.body.appendChild(instance.$el);
   }
+  console.log( instance.$el)
 }
