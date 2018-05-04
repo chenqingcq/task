@@ -129,21 +129,26 @@
       left: 10*2px;
       justify-content: center;
       .task-desc {
-        display: block;
-        max-width: 146*2px;
-        margin: 0 auto;
-        text-align: center;
-        font-size: 12px*2;
-        line-height: 18*2px;
-        height: 18*2px;
-        font-family: PingFangSC-Light;
-        color: rgba(102, 102, 102, 1);
         span {
-          display: inline-block;
+          max-width: 146*2px;
+          text-align: center;
+          font-size: 12px*2;
+          line-height: 18*2px;
+          height: 18*2px;
+          font-family: PingFangSC-Light;
+          color: rgba(102, 102, 102, 1);
+          display: block;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          width: auto;
+          position: relative;
+          img {
+            height: 10px;
+            margin-left: 30px;
+            display: inline-block;
+            top:14px;
+            position: absolute;
+          }
         }
       }
       .detail-btn {
@@ -159,11 +164,6 @@
         font-size: 14*2px;
         margin: 0 auto;
         margin-top: 7*2px;
-      }
-      img {
-        height: 10px;
-        margin-left: 20px;
-        margin-bottom: 10px;
       }
     }
   }
@@ -519,7 +519,7 @@ img.partyLogo {
 .bounceIn-leave-active {
   animation: bounceOut 0.5s ease;
 }
-.task-detail-container{
+.task-detail-container {
   overflow: hidden;
 }
 </style>
@@ -570,8 +570,10 @@ img.partyLogo {
         </div>
         <div class="task-progress">
           <div class="task-desc" @click='toggleTaskProgress'>
-            <span>{{progressDesc}}</span>
-            <img v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />
+            <span>
+              {{progressDesc}}
+            <img v-show="progressDesc.length && progressDesc.length > 12 "  src="@/assets/img/icon-slide downward.png" />
+            </span>
           </div>
           <div v-if="taskStatus != 0 &&  taskStatus != 3  " class="detail-btn" @click='towardsUpdateHistory'>
             {{ role == 'operator' && taskStatus != 4 && taskStatus != 5  ? '更新进度' : '查看上传历史'  }}
@@ -1099,14 +1101,18 @@ export default {
         this.$toast.show("暂无更新");
         return;
       }
-      if( this.role != 'operator' && this.items.length == 7 ){
-        this.$toast.show('任务已拒绝')
-        return
+      if (this.role != "operator" && this.items.length == 7) {
+        this.$toast.show("任务已拒绝");
+        return;
       }
 
       const taskId = this.$route.query.taskId;
       //查看历史上传  已完成不能更新只能查看
-      if (this.role == "operator" &&   this.taskStatus != 4 && this.taskStatus != 5  ) {
+      if (
+        this.role == "operator" &&
+        this.taskStatus != 4 &&
+        this.taskStatus != 5
+      ) {
         this.$router.push({
           path: `taskHistoryOrUpdate?taskId=${taskId}&mode=edit`
         });

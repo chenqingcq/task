@@ -487,8 +487,6 @@ export default {
     taskExecutors(newVal) {
       if (newVal.length) {
         this.defineShow(newVal);
-      } else {
-        this.showInvite = true;
       }
     },
     showBtntype(newVal, oldVal) {
@@ -569,9 +567,15 @@ export default {
       // debugger;
       Convent.getExcutorList(id) //项目id
         .then(res => {
+         
           console.log(Object.keys(res.data), Object.values(res.data));
           this.taskExecutors = [...Object.values(res.data)];
           console.log(this.taskExecutors);
+           if(this.taskExecutors && this.taskExecutors.length ){
+            this.showInvite = false; //
+          }else{
+            this.showInvite = true
+          }
           // debugger;
         })
         .catch(err => {
@@ -662,7 +666,6 @@ export default {
     inviteOthers() {
       //分享
       console.log("------------------------->>>");
-      this.showInvite = !this.showInvite;
       this.showShare = !this.showShare;
     },
     commandExcutor() {
@@ -836,11 +839,6 @@ export default {
       document
         .querySelector(".deleteBtn")
         .addEventListener("click", this.deleteExcutor);
-      if (this.taskExecutors.length) {
-        this.showInvite = true;
-      } else {
-        this.showInvite = false;
-      }
       this.isSubShow = new Array(this.taskExecutors.length).fill(false);
       console.log(this.taskExecutors);
     },
