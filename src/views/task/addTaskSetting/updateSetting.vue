@@ -6,6 +6,7 @@
   bottom: 0;
   right: 0;
   height: 100vh;
+  overflow: hidden;
   .task-panel {
     width: 100%;
     li.task-item {

@@ -751,7 +751,6 @@ export default {
           console.log(res, "------一级评论------");
           if (res.code == 1 && res.status == 200) {
             self.members = res.data
-            debugger;
           }
           if (res.code == 603) {
             self.$toast.show("任务暂未开启请勿评论", 1000);
@@ -787,8 +786,8 @@ export default {
         console.log(this.taskId);
       }
     },
-    formatDate( dateStr ){
-      return dateStr.substring(5,15).replace('-','/')
+    formatDate(dateStr) {
+      return dateStr.substring(5, 15).replace("-", "/");
     },
     fomatTime() {
       console.log(new Date().getMonth());
@@ -956,7 +955,11 @@ export default {
       this.showTaskProgress = false;
     },
     toggleTaskProgress() {
-      this.showTaskProgress = !this.showTaskProgress;
+      if (this.progressDesc.length && this.progressDesc.length > 12) {
+        this.showTaskProgress = !this.showTaskProgress;
+      } else {
+        this.showTaskProgress = false;
+      }
     },
     closeDesc() {
       this.showDetail = false;

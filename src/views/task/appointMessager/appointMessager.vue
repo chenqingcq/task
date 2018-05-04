@@ -444,7 +444,7 @@ export default {
       addMember: true, //添加人员
       deleteMember: false, //删除人员
       doNothing: true, //默认,
-      deleteTaskId:'',//关闭任务的id跟当前创建的taski不一样
+      deleteTaskId: "", //关闭任务的id跟当前创建的taski不一样
       showShare: false, //分享
       isExtend: false, //点击显示下拉
       subShow: false,
@@ -528,25 +528,14 @@ export default {
     console.log(to, from);
     if (to.path == "/appointMessager" && from.path == "/addTaskSetting") {
       next(vm => {
-        // if ((vm.projectId = vm.getProjectId)) {
-        //   vm.getExcutorList(vm.projectId);
-        //   // debugger;
-        // }
         if (window.location.hash.includes("projectId")) {
           let reg = /projectId=\d{18}/;
-          vm.projectId = window.location.hash.match(reg)
-            ? window.location.hash.match(reg)[0].split("=")[1]
-            : "";
-          console.log("---pid----", vm.projectId);
+          vm.projectId = to.query.projectId;
           vm.getExcutorList(vm.projectId);
         }
         if (window.location.hash.includes("taskId")) {
           let reg = /taskId=\d{18}/;
-          vm.taskId = window.location.hash.match(reg)
-            ? window.location.hash.match(reg)[0].split("=")[1]
-            : "";
-          console.log("-----hasTaskId-----", vm.taskId);
-          // debugger;
+          vm.taskId = to.query.taskId;
         }
         if (
           !(
@@ -632,7 +621,7 @@ export default {
     },
     selectedSub(e, taskId, userId, mode) {
       console.log(e.target, taskId, userId, mode);
-      this.SET_USER_ID(userId);//设置userid
+      this.SET_USER_ID(userId); //设置userid
       this.mode = mode;
       this.$nextTick(() => {
         let radios = document.querySelectorAll(".select>img"),
@@ -713,8 +702,16 @@ export default {
     commandExcutor() {
       //指定执行人
       console.log(this.mode);
+
       // this.SET_USER_ID(this.userId);
       let self = this;
+      if (!self.taskId) {
+        self.$dialog.message({
+          message: "任务未创建!",
+          icon: "fail"
+        });
+        return;
+      }
       this.$dialog.confirm({
         message: "确定指定该执行人?",
         confirm() {
@@ -728,9 +725,9 @@ export default {
               if (res.code == 1 && res.status == 200) {
                 self.$router.push({
                   path: "/addTaskSetting",
-                  query:{
-                    taskId:self.taskId,
-                    projectId:self.projectId
+                  query: {
+                    taskId: self.taskId,
+                    projectId: self.projectId
                   }
                 });
               }
@@ -766,7 +763,7 @@ export default {
       console.log(self.getUserId, self.projectId);
       let userId = self.getUserId;
       let projectId = self.projectId;
-      if (this.mode == 0 ) {
+      if (this.mode == 0) {
         this.$dialog.confirm({
           message: "确定删除该成员?",
           confirm() {
@@ -780,9 +777,9 @@ export default {
                 // debugger;
                 if (res.code == 1 && res.status == 200) {
                   self.getExcutorList(self.projectId);
-                   self.$dialog.message({
-                    message:"已删除该成员!"
-                  })
+                  self.$dialog.message({
+                    message: "已删除该成员!"
+                  });
                 }
               })
               .catch(err => {
@@ -792,24 +789,27 @@ export default {
           }
         });
       }
-      if(this.mode == 1){
-        let taskId  = this.deleteTaskId ,self = this;
+      if (this.mode == 1) {
+        let taskId = this.deleteTaskId,
+          self = this;
         this.$dialog.confirm({
-          message:"确定关闭该任务?",
-          confirm(){
-            Convent.closeTask(taskId).then((res)=>{
-              console.log(res);
-              if(res.code == 1 && res.status == 200){
+          message: "确定关闭该任务?",
+          confirm() {
+            Convent.closeTask(taskId)
+              .then(res => {
+                console.log(res);
+                if (res.code == 1 && res.status == 200) {
                   self.getExcutorList(self.projectId);
                   self.$dialog.message({
-                    message:"已关闭该任务!"
-                  })
-              }
-            }).catch((err)=>{
-              console.log(err)
-            })
+                    message: "已关闭该任务!"
+                  });
+                }
+              })
+              .catch(err => {
+                console.log(err);
+              });
           }
-        })
+        });
       }
     },
     ...mapMutations({
