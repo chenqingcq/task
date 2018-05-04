@@ -6,6 +6,7 @@
   bottom: 0;
   right: 0;
   height: 100vh;
+  overflow: hidden;
   .task-panel {
     width: 100%;
     li.task-item {
@@ -549,9 +550,12 @@ export default {
     if (from.path == "/appointMessager" && to.path == "/addTaskSetting") {
       next(vm => {
         // console.log(vm.getTaskExecutor); //过滤选中的执行人;
-        vm.taskId = to.query.taskId;
-        vm.projectId = to.query.projectId;
-        // vm.executor = vm.getTaskExecutor.executor;
+        if (window.location.hash.includes("projectId")) {
+          vm.projectId = to.query.projectId;
+        }
+        if (window.location.hash.includes("taskId")) {
+          vm.taskId = to.query.taskId;
+        }
         vm.setExcutor();
       });
     }
@@ -691,7 +695,7 @@ export default {
               : undefined;
             self.taskDesc = res.data.taskDesc;
             self.checkStandard = res.data.checkStandard;
-            self.currentIndex = res.data.isOpen == 1 ? 0 : 1;            
+            self.currentIndex = res.data.isOpen == 1 ? 0 : 1;
           }
         })
         .catch(err => {
@@ -856,16 +860,16 @@ export default {
     appointerManager() {
       let self = this;
       this.validate();
-      if (this.executor) {
-        this.$toast.show("执行人已存在!");
-        return;
-      }
       //验证必选项
-      if (!this.check_pass) {
-        this._validate();
-        return;
-      }
-      if (self.taskId) {
+      if (!this.check_pass && !this.taskId) {
+        //如果
+        self.$router.push({
+          path: "/appointMessager",
+          query: {
+            projectId: self.projectId
+          }
+        });
+      } else if (self.taskId) {
         self.$router.push({
           path: "/appointMessager",
           query: {
