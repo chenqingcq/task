@@ -644,7 +644,7 @@ export default {
       return new Promise((resovle, reject) => {
         // console.log(window.location.hash);
         Convent.createTask({
-          projectId: self.getProjectId,
+          projectId: self.projectId,
           projectName: self.taskTheme,
           taskName: self.taskName,
           taskDesc: self.taskDesc,
@@ -741,7 +741,7 @@ export default {
               path: "/convententry",
               query: {
                 taskId: taskId,
-                projectId: self.getProjectId
+                projectId: self.projectId
               }
             }); //项目创建完毕
             // debugger;
@@ -753,7 +753,7 @@ export default {
       } else if (this.taskId) {
         Convent.updateTask(self.taskId, {
           taskId: self.taskId,
-          projectId: self.getProjectId,
+          projectId: self.projectId,
           projectName: self.taskTheme,
           taskName: self.taskName,
           taskDesc: self.taskDesc,
@@ -768,7 +768,7 @@ export default {
                 path: "/convententry",
                 query: {
                   taskId: self.taskId,
-                  projectId: self.getProjectId
+                  projectId: self.projectId
                 }
               });
             }
@@ -861,7 +861,7 @@ export default {
           path: "/appointMessager",
           query: {
             taskId: self.taskId,
-            projectId: self.getProjectId
+            projectId: self.projectId
           }
         });
       } else if (this.check_pass && !this.taskId) {
@@ -872,7 +872,7 @@ export default {
               path: "/appointMessager",
               query: {
                 taskId: taskId,
-                projectId: self.getProjectId
+                projectId: self.projectId
               }
             }); //项目创建完毕
             // debugger;

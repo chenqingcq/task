@@ -3,6 +3,7 @@
   width: 100%;
   height: 100vh;
   position: relative;
+  overflow: hidden;
   header {
     width: 100%;
     height: 65*2px;
@@ -312,7 +313,7 @@
   }
 }
 
-#name {
+.taskname {
   font-size: 10*2px;
   min-width: 100px;
   max-width: 160px;
@@ -361,7 +362,7 @@
                 </div>
                 <div class="name">
                   <span>{{item[0].nickname}}</span>
-                  <span id="name">{{item[0].taskName}}</span>
+                  <span class="taskname">{{item[0].taskName}}</span>
                 </div>
               </div>
               <div class="update">{{item[0].progressNum}}</div>
@@ -377,7 +378,7 @@
                 <div  class="select">
                   <img @click='selectedSub($event,_item.taskId,_item.userId, 1 )' src="@/assets/img/sign-selected.png" class="radio"/>
                 </div>
-                <div class="name" id="name">{{_item.taskName}}</div>
+                <div class="name taskname" >{{_item.taskName}}</div>
               </div>
               <div class="update">{{_item.progressNum}}</div>
               <div class="comments">{{_item.commentNum}}</div>
