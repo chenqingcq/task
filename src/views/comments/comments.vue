@@ -12,7 +12,7 @@
         <span>暂无评论,点击抢沙发</span>
         <i></i>
       </div>
-      <scroll class="comments-container" ref="scroll" :listenScroll='listenScroll' @scroll='scrolling' @scrollEnd='scrollEnd' v-if="members.length">
+      <div class="comments-container" v-if="members.length">
         <ul class="comment-panel">
           <li v-for="(item,index) in members" :key="index" class="lisItem" :commentPid ='item.commentPid' :commentId ="item.commentId" ref='item'>
             <div class="left">
@@ -29,10 +29,15 @@
               </div>
               <div class="comments-item">{{item.message}}</div>
               <div class="comments-callback">
-                <span @click='_link_to_secondary_comments( item )'>{{`${item.replyNum}`> 0 ? `${item.replyNum}条回复`:`${item.replyNum}条回复`}}</span>
-                <div>
-                  <img @click='add_praise($event, item.isThumbs,item.commentId)'  :isThumbs='item.isThumbs' :src="imgUrl"/>
-                  <span ref="goods">{{item.thumbsNum}}</span>
+                <span @click='_link_to_secondary_comments( item )'>{{item.replyNum }}条回复 </span>
+                <div @click="doLike(item)" v-if="item.isThumbs">
+                  <!--<img @touchstart='add_praise(index)'   :src="imgUrl"/>-->
+                  <img  src="../../assets/img/iocn-good2.png" alt="">
+                  <span class="active" >{{ item.thumbsNum }}</span>
+                </div>
+                <div @click="doLike(item)" v-else>
+                  <img src="../../assets/img/iocn-good.png" alt="">
+                  <span>{{ item.thumbsNum }}</span>
                 </div>
               </div>
             </div>
@@ -42,9 +47,9 @@
             <div class="comment-content">已显示全部留言</div>
           </li>
         </ul>
-      </scroll>
-      <div class="user-input">
-          <input @click="userInput" type="text" placeholder="赶快评论吧~" class="comment_input" disabled>
+      </div>
+      <div class="user-input" @click="userInput">
+          <input  type="text" placeholder="赶快评论吧~" class="comment_input" disabled>
           <img class="icon-input" src="@/assets/img/iocn-pen.png" />
       </div>
     </div>
@@ -59,6 +64,8 @@ export default {
   name: "comments",
   data() {
     return {
+      isOnstar : false , // 是否点赞时提交
+
       listenScroll: true,
       state: false,
       showUserInput: false,
@@ -138,10 +145,10 @@ export default {
 //        return
 //      }
       this.$router.push({
-        path: "/comment",
+        path: "/allReply",
         query: {
           taskId: this.taskId ,
-          commentPid: item.commentPid
+          commentPid: item.commentId
         }
       })
     },
@@ -164,7 +171,7 @@ export default {
     },
     closeUserInput() {
       this.showUserInput = false;
-      this.$emit("close");
+      //this.$emit("close");
     },
     userInput() {
       const status = this.status
@@ -179,6 +186,42 @@ export default {
       }
 
     },
+
+
+
+    // 点赞或者取消点赞
+    doLike( item, index ){
+      if( this.isOnstar  ){
+        this.$toast.show('1秒后才能再次点击', 2000)
+        return
+      }
+      else{
+        this.isOnstar = true
+      }
+      const isThumbs = !item.isThumbs ? 1 : 0
+      const commentId = item.commentId
+
+      Convent.thumbs({
+        isThumbs ,commentId
+      }).then(res=>{
+          item.isThumbs = isThumbs
+        setTimeout(()=>{
+          this.isOnstar = false
+        }, 500)
+
+        if( isThumbs == 1 ){
+          this.$toast.show('点赞成功')
+          item.thumbsNum++
+        }
+        else{
+          this.$toast.show('取消点赞')
+          item.thumbsNum--
+        }
+      })
+    },
+
+
+
     add_praise(e, isThumbs, commentId) {
       let thumbs = e.target.getAttribute("isthumbs");
       console.log(thumbs);
@@ -324,9 +367,9 @@ export default {
 
 .comments-container {
   min-height: 280px;
-  max-height: 465px;
+  /*max-height: 465px;*/
   /*72*3*2*/
-  overflow: hidden;
+  /*overflow: hidden;*/
   .lisItem {
     width: 100%;
     height: auto;
