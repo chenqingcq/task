@@ -111,7 +111,7 @@
           // -1实际上是最后一张图 最后一张图实际是第一张图 重复两张图
           let pageIndex = this.scroll.getCurrentPage().pageX;
           this.currentPageIndex = pageIndex;
-          console.log("before" + this.currentPageIndex);
+          console.log("before" + this.currentPageIndex ,'----------------');
           if (this.currentPageIndex == 0) {
             this.scroll.goToPage(this.children.length - 2, 0, 0);
             // this.currentPageIndex = this.children.length - 2;
@@ -120,7 +120,8 @@
             this.scroll.goToPage(1, 0, 0);
             this.currentPageIndex = 1;
           }
-          console.log("next" + this.currentPageIndex);
+          console.log("next" + this.currentPageIndex, '----------------');
+          this.refresh();
         });
         this.scroll.on("beforeScrollStart", () => {
           if (vm.autoPlay) {

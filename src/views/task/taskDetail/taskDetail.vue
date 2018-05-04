@@ -556,7 +556,7 @@ img.partyLogo {
         <!--轮播图-->
         <slide ref="scroll" :loop='loop' v-if="items.length">
           <div class="slider-item" v-for="(item,index) in items" :key="index">
-            <img @load='loadImage' :src="'\\\\' + item.imgUrl">
+            <img :src="'//'+item.imgUrl" :alt="index">
           </div>
         </slide>
         <div v-else class="no-historyUpdate">
@@ -644,10 +644,10 @@ import { mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   data() {
     return {
-      projectId : 0,
+      projectId: 0,
 
-      currentPoint : null,
-      currentNode:'',
+      currentPoint: null,
+      currentNode: "",
       activeFont: "",
       headImg: "",
       taskDesc: "",
@@ -672,7 +672,7 @@ export default {
       node: " ",
       taskName: "",
       taskDesc: "",
-      taskStatus : -1 ,
+      taskStatus: -1,
       taskId: "",
       active: "",
       deadLine: "暂未设置起止时间",
@@ -730,17 +730,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'setCurrentProject'
-    ]),
+    ...mapActions(["setCurrentProject"]),
     updateComments() {
       this.getComments();
     },
     getComments() {
       const taskId = this.$route.query.taskId;
-      const self = this
-      Convent.getTaskComments( {
-        taskId ,
+      const self = this;
+      Convent.getTaskComments({
+        taskId,
         pageSize: "10"
       })
         .then(res => {
@@ -765,7 +763,7 @@ export default {
       //获取评论
       let self = this;
       Convent.getTaskComments({
-        taskId : this.$route.query.taskId ,
+        taskId: this.$route.query.taskId,
         pageSize: 3
       })
         .then(res => {
@@ -782,8 +780,8 @@ export default {
         console.log(this.taskId);
       }
     },
-    formatDate( dateStr ){
-      return dateStr.substring(5,15).replace('-','/')
+    formatDate(dateStr) {
+      return dateStr.substring(5, 15).replace("-", "/");
     },
     fomatTime() {
       console.log(new Date().getMonth());
@@ -829,8 +827,14 @@ export default {
       this.SET_USER_ROLE(this.role);
     },
     getData() {
-      const taskId = this.$route.query.taskId
-      const projectId = this.projectId;
+      if (this.taskId == "991661158152892418") {
+        var taskId = "991926678957715457";
+        var  projectId = "991565484379873281";
+      } else {
+        var  taskId = this.$route.query.taskId;
+        var  projectId = this.projectId;
+      }
+
       Convent.taskDetail({
         taskId,
         projectId
@@ -850,27 +854,31 @@ export default {
           this.isLike = res.isStar == "0" ? false : true;
           this.position = res.position;
           this.defineStatus(res.taskStatus);
-          this.taskStatus = res.taskStatus
+          this.taskStatus = res.taskStatus;
           this.defineRole(res.role);
           this.fomatTime();
 
           const project = {
-            projectId : res.projectId ,
-            projectName : res.projectName ,
-            role: this.role ,
-            isCreate : res.role == 3 ? true : false
-          }
-      // set Vuex state
-          this.setCurrentProject(project)
+            projectId: res.projectId,
+            projectName: res.projectName,
+            role: this.role,
+            isCreate: res.role == 3 ? true : false
+          };
+          // set Vuex state
+          this.setCurrentProject(project);
 
-          if( res.currentPoint ){
-            this.currentPoint = res.currentPoint
+          if (res.currentPoint) {
+            this.currentPoint = res.currentPoint;
           }
 
           if (res.latestProgress) {
             this.items = res.latestProgress.progressImage.map(val => {
               return { imgUrl: val };
             });
+           let last = this.items[this.items.length-1];
+           let first  = this.items[0];
+           this.items.unshift(last);
+           this.items.push(first);
           } else {
             this.items = [];
           }
@@ -970,8 +978,8 @@ export default {
       this.$router.push({
         path: "/updateTaskSetting",
         query: {
-          projectId:self.projectId,
-          taskId:self.taskId
+          projectId: self.projectId,
+          taskId: self.taskId
         }
       });
     },
@@ -1074,14 +1082,13 @@ export default {
       });
     },
     towardsUpdateHistory() {
-
-      if( this.taskStatus == 0 ){
-        this.$toast.show('任务暂未开始')
-        return
+      if (this.taskStatus == 0) {
+        this.$toast.show("任务暂未开始");
+        return;
       }
-      if( this.role != 'operator' && this.items.length == 0 ){
-        this.$toast.show('暂无更新')
-        return
+      if (this.role != "operator" && this.items.length == 0) {
+        this.$toast.show("暂无更新");
+        return;
       }
       const taskId = this.$route.query.taskId;
       //查看历史上传
@@ -1121,14 +1128,12 @@ export default {
     this.init();
   },
   mounted() {
-    const projectId = this.$route.query.projectId
-    if( projectId ){
-      this.projectId = projectId
+    const projectId = this.$route.query.projectId;
+    if (projectId) {
+      this.projectId = projectId;
+    } else {
+      this.projectId = this.getProjectId;
     }
-    else{
-      this.projectId = this.getProjectId
-    }
-
   },
   beforeDestroy() {
     this.timer = null;

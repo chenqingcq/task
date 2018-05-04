@@ -744,6 +744,8 @@ export default {
                 // debugger;
                 if (res.code == 1 && res.status == 200) {
                   self.getExcutorList(self.projectId);
+                  self.$toast.show('关闭任务成功',500);
+                  debugger;
                 }
               })
               .catch(err => {
