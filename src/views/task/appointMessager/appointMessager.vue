@@ -325,9 +325,9 @@
 .radio {
   opacity: 0;
 }
-.wechat-tip-img{
+.wechat-tip-img {
   width: 593px;
-  height: 896/2px ;
+  height: 896/2px;
   margin-right: 20px;
   margin-top: 10px;
 }
@@ -434,9 +434,9 @@ import share from "./share.vue";
 import { Convent } from "@/services";
 import { mapMutations, mapGetters } from "vuex";
 
-import { WxShareApi2 } from '@/utils/wx.js'
+import { WxShareApi2 } from "@/utils/wx.js";
 
-console.log(WxShareApi2)
+console.log(WxShareApi2);
 
 export default {
   data() {
@@ -527,12 +527,10 @@ export default {
     if (to.path == "/appointMessager" && from.path == "/addTaskSetting") {
       next(vm => {
         if (window.location.hash.includes("projectId")) {
-          let reg = /projectId=\d{18}/;
           vm.projectId = to.query.projectId;
           vm.getExcutorList(vm.projectId);
         }
         if (window.location.hash.includes("taskId")) {
-          let reg = /taskId=\d{18}/;
           vm.taskId = to.query.taskId;
         }
         if (
@@ -544,6 +542,16 @@ export default {
           vm.$toast.show("请重新添加任务!", 500);
           vm.$router.push("addTaskSetting");
         }
+      });
+    } else if (
+      to.path == "/appointMessager" &&
+      from.path == "/updateTaskSetting"
+    ) {
+      next(vm => {
+        vm.projectId = to.query.projectId;
+        vm.taskId = to.query.taskId;
+        vm.getExcutorList(vm.projectId);
+        // debugger
       });
     } else {
       next(vm => {
@@ -574,11 +582,11 @@ export default {
     ...mapMutations({
       SET_USER_ID: "SET_USER_ID"
     }),
-    openPop(){
-      this.$refs.popup.open()
+    openPop() {
+      this.$refs.popup.open();
     },
-    closePop(){
-      this.$refs.popup.close()
+    closePop() {
+      this.$refs.popup.close();
     },
     // debounce(methods){
     //   clearTimeout(methods.timer);
@@ -596,14 +604,13 @@ export default {
       // debugger;
       Convent.getExcutorList(id) //项目id
         .then(res => {
-         
           console.log(Object.keys(res.data), Object.values(res.data));
           this.taskExecutors = [...Object.values(res.data)];
           console.log(this.taskExecutors);
-           if(this.taskExecutors && this.taskExecutors.length ){
+          if (this.taskExecutors && this.taskExecutors.length) {
             this.showInvite = false; //
-          }else{
-            this.showInvite = true
+          } else {
+            this.showInvite = true;
           }
           // debugger;
         })
@@ -614,25 +621,24 @@ export default {
     closeQrcode() {
       this.showQrcode = false;
     },
-    wechatShare(){
-      this.showShare = false
-      this.openPop()
+    wechatShare() {
+      this.showShare = false;
+      this.openPop();
       let shareData = {
-        taskId : '',
-        type : 0 , // id类型 0: 任务ID 1: 项目ID
-        title: '任务接受', // 分享标题
-        desc: '任务接受描述', // 分享描述
-        imgUrl: '../../../assets/img/wxshare-logo.png' // 分享图标
+        taskId: "",
+        type: 0, // id类型 0: 任务ID 1: 项目ID
+        title: "任务接受", // 分享标题
+        desc: "任务接受描述", // 分享描述
+        imgUrl: "../../../assets/img/wxshare-logo.png" // 分享图标
+      };
+      if (this.taskId) {
+        shareData.type = 0;
+        shareData.id = this.taskId;
+      } else {
+        shareData.type = 1;
+        shareData.id = this.projectId;
       }
-      if( this.taskId ){
-        shareData.type = 0
-        shareData.id = this.taskId
-      }
-      else{
-        shareData.type = 1
-        shareData.id = this.projectId
-      }
-      WxShareApi2(shareData)
+      WxShareApi2(shareData);
     },
     face_to_face() {
       this.showShare = !this.showShare;

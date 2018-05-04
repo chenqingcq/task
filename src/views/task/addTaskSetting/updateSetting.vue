@@ -849,7 +849,7 @@ export default {
           path: "/appointMessager",
           query: {
             taskId: self.taskId,
-            project: self.getProjectId
+            projectId: self.getProjectId
           }
         });
       } else if (this.check_pass && !this.taskId) {

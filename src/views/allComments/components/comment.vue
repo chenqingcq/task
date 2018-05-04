@@ -247,6 +247,7 @@ export default {
       });
     },
     successComment() {
+      this.comments = '';
       console.log(this.comments);
       this.$dialog.message({
         message: "评论成功!",
