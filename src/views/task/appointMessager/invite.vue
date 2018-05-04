@@ -154,7 +154,6 @@ export default {
     init() {
       this.$refs.invite.classList.add("active");
       this.$refs.invitemore.classList.add("rotate");
-      this.$refs.close.classList.add("rotate");
     }
   },
   created() {

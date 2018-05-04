@@ -434,7 +434,6 @@ export default {
         }
       ],
       flag: false,
-      hasProjectId: false,
       toastDom: null,
       showToast: true,
       currentIndex: 0,
@@ -513,25 +512,28 @@ export default {
   },
   watch: {
     endTime(newVal) {
-      if (newVal) {
+      if (newVal.length) {
         this.$refs.endDate.classList.add("active_");
         this.check_time();
       } else {
+        this.endTime = '';
         this.$refs.endDate.classList.remove("active_");
       }
     },
     startTime(newVal) {
-      if (newVal) {
+      if (newVal.length) {
         this.$refs.startDate.classList.add("active_");
         this.check_time();
       } else {
+        this.startTime = '';
         this.$refs.startDate.classList.remove("active_");
       }
     },
     executor(newVal) {
-      if (newVal) {
+      if (newVal.length) {
         this.$refs.exe.classList.add("active_");
       } else {
+        this.executor = '';
         this.$refs.exe.classList.remove("active_");
       }
     }
@@ -543,8 +545,7 @@ export default {
         // console.log(executor);
         vm.projectId = to.query.projectId;
         vm.taskId = to.query.taskId;
-        vm.hasProjectId = true;
-        vm._updateTask(); //重新设置任务
+        vm.getData(); //重新获取数据
       });
     }
     if (from.path == "/appointMessager" && to.path == "/addTaskSetting") {
@@ -557,15 +558,10 @@ export default {
           vm.taskId = to.query.taskId;
         }
         vm.setExcutor();
+        vm.getData();
       });
     }
-    if (to.path == "/addTaskSetting" && from.path == "/taskDetail") {
-      next(vm => {
-        // console.log(executor);
-        vm.hasProjectId = true;
-        vm._updateTask(); //重新设置任务
-      });
-    }
+
     if (
       (from.path == "/conventEntry" || from.path == "/convententry") &&
       to.path == "/addTaskSetting"
@@ -574,7 +570,6 @@ export default {
         vm.projectId = to.query.projectId;
         console.log(vm.projectId);
         if (vm.projectId) {
-          vm.hasProjectId = true;
           vm.taskTheme = vm.getProjectThemeName;
           vm.$refs.taskTheme.setAttribute("disabled", true);
           vm.taskName = "";
@@ -584,7 +579,6 @@ export default {
           vm.endTime = "";
           vm.standard = "";
         } else {
-          vm.hasProjectId = false;
           vm.taskTheme = "";
           vm.taskName = "";
           vm.taskDesc = "";
@@ -599,29 +593,37 @@ export default {
     }
   },
   methods: {
+    getData() {
+      let settings = window.sessionStorage.getItem("taskSettings");
+      if (settings.length) {
+        settings = JSON.parse(settings);
+        (this.projectId = settings.projectId),
+          (this.taskTheme = settings.taskTheme),
+          (this.taskName = settings.taskName);
+        this.taskDesc = settings.taskDesc;
+        this.startTime = settings.startTime;
+        this.endTime = settings.endTime;
+        this.standard = settings.standard;
+        this.currentIndex = settings.isOpen == 1 ? 0 : 1;
+      }
+      console.log(settings);
+    },
     setExcutor() {
       let self = this;
-      this.taskId = this.getTaskId;
+      if (!this.taskId) {
+        return;
+      }
       // debugger;
       Convent.getTaskBasicInfo(self.taskId)
         .then(res => {
           console.log("---基本任务信息--", res);
           if (res.code == 1 && res.status == 200) {
             // debugger;
-            if (res.data.executorNickName && res.data.executorNickName.length) {
+            if (res.data.executorNickName.length) {
               this.$refs.exe.classList.add("active_");
               this.executor = res.data.executorNickName;
             }
-            self.updateTime(res.data.startTime, res.data.endTime);
-            self.taskName = res.data.taskName;
-            self.taskTheme = res.data.projectName;
             self.$refs.taskTheme.setAttribute("disabled", true);
-            self.executor = res.data.executorNickName
-              ? res.data.executorNickName
-              : undefined;
-            self.taskDesc = res.data.taskDesc;
-            self.checkStandard = res.data.checkStandard;
-            self.isPublic = res.data.isOpen ? true : false;
           }
         })
         .catch(err => {
@@ -649,7 +651,33 @@ export default {
         path: "taskHistoryOrUpdate"
       }); //编辑项目节点
     },
+    setData() {
+      //缓存已填写的数据
+      let self = this;
+      window.sessionStorage.setItem(
+        "taskSettings",
+        JSON.stringify(
+          Object.assign(
+            {
+              taskId: self.taskId,
+              projectId: self.projectId,
+              projectName: self.projectName,
+              taskTheme: self.taskTheme
+            },
+            {
+              taskName: self.taskName,
+              taskDesc: self.taskDesc,
+              startTime: self.startTime,
+              endTime: self.endTime,
+              standard: self.standard,
+              isOpen: self.currentIndex == 0 ? 1 : 0
+            }
+          )
+        )
+      );
+    },
     editSection() {
+      this.setData();
       this.$router.push({
         path: "/section?mode=edit"
       }); //编辑项目节点
@@ -682,7 +710,6 @@ export default {
     _updateTask() {
       let self = this;
       this.taskTheme = this.getProjectThemeName;
-      console.log(query);
       //任务名称 开始时间结束时间不可更改
       Convent.getTaskBasicInfo(this.taskId)
         .then(res => {
@@ -690,9 +717,7 @@ export default {
           if (res.code == 1 && res.status == 200) {
             self.updateTime(res.data.startTime, res.data.endTime);
             self.taskName = res.data.taskName;
-            self.executor = res.data.executorNickName
-              ? res.data.executorNickName
-              : undefined;
+            self.executor = res.data.executorNickName;
             self.taskDesc = res.data.taskDesc;
             self.checkStandard = res.data.checkStandard;
             self.currentIndex = res.data.isOpen == 1 ? 0 : 1;
@@ -859,9 +884,15 @@ export default {
     },
     appointerManager() {
       let self = this;
+      this.setData();
+      if (this.executor.trim().length) {
+        this.$toast.show("该任务已有执行人!", 1000);
+        return;
+      }
       this.validate();
       //验证必选项
       if (!this.check_pass && !this.taskId) {
+        this.setData();
         //如果
         self.$router.push({
           path: "/appointMessager",
@@ -870,6 +901,7 @@ export default {
           }
         });
       } else if (self.taskId) {
+        this.setData();
         self.$router.push({
           path: "/appointMessager",
           query: {
@@ -878,6 +910,7 @@ export default {
           }
         });
       } else if (this.check_pass && !this.taskId) {
+        this.setData();
         this._getTaskId()
           .then(taskId => {
             self.taskId = taskId;

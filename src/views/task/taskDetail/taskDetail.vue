@@ -129,26 +129,26 @@
       left: 10*2px;
       justify-content: center;
       .task-desc {
-        display: block;
-        width: auto;
-        font-family: PingFangSC-Light;
-        color: rgba(102, 102, 102, 1);
         span {
-          margin: 0 auto;
+          position: relative;
+          max-width: 146*2px;
           text-align: center;
           font-size: 12px*2;
           line-height: 18*2px;
           height: 18*2px;
+          font-family: PingFangSC-Light;
+          color: rgba(102, 102, 102, 1);
           display: block;
+          margin: 0 auto;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          max-width: 146*2px;
           img {
-            display: inline-block;
             height: 10px;
-            margin-bottom: 10px;
-            margin-left: 20px;
+            right: 30px;
+            display: inline-block;
+            top: 14px;
+            position: absolute;
           }
         }
       }
