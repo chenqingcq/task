@@ -169,9 +169,12 @@ export default {
       }
       this.$router.push("comment?taskId=" + this.taskId );
     },
-    closeUserInput() {
+    closeUserInput(message) {
+      console.log(message);
+      if(message){
+      this.$emit("close");
+      }
       this.showUserInput = false;
-      //this.$emit("close");
     },
     userInput() {
       const status = this.status

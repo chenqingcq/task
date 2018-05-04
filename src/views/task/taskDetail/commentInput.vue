@@ -43,7 +43,7 @@ export default {
               self.$toast.show('评论成功！',1000);
               self.usreInput = '';
               //重新刷新列表
-              self.$emit("close");
+              self.$emit("close" ,true);
             } else if (res.code == 603) {
               self.$dialog.message({
                 message: "任务未开启请勿评论!"

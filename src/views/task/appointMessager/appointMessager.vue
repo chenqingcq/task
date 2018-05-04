@@ -744,8 +744,9 @@ export default {
                 // debugger;
                 if (res.code == 1 && res.status == 200) {
                   self.getExcutorList(self.projectId);
-                  self.$toast.show('关闭任务成功',500);
-                  debugger;
+                   self.$dialog.message({
+                    message:"已删除该成员!"
+                  })
                 }
               })
               .catch(err => {
@@ -758,12 +759,15 @@ export default {
       if(this.mode == 1){
         let taskId  = this.deleteTaskId ,self = this;
         this.$dialog.confirm({
-          message:"确定删除该任务?",
+          message:"确定关闭该任务?",
           confirm(){
             Convent.closeTask(taskId).then((res)=>{
               console.log(res);
               if(res.code == 1 && res.status == 200){
                   self.getExcutorList(self.projectId);
+                  self.$dialog.message({
+                    message:"已关闭该任务!"
+                  })
               }
             }).catch((err)=>{
               console.log(err)
