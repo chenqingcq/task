@@ -38,21 +38,24 @@ export default {
       clearInterval(this.stv)
     },
     setToBottom(){
-      //document.getElementById('mao').scrollIntoView(false)
+      document.getElementById('mao').scrollIntoView(false)
       // 设置弹出键盘时工具栏位置
       this.bodyScrol = document.body.scrollTop
     },
     setPageToBottom(){
-      //this.isFocus = true
-      //function isIOS (){
-      //  var u = navigator.userAgent
-      //  var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) //ios终端
-      //  return isiOS
-      //}
-      //this.stv = setInterval(()=>{
-      //  // 让页面滚动到底部
-      //  this.$refs.text.scrollIntoView(isIOS())
-      //},200)
+      this.isFocus = true
+      function isIOS (){
+        var u = navigator.userAgent
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) //ios终端
+        return isiOS
+      }
+      if( isIOS() ){
+        this.stv = setInterval(()=>{
+          // 让页面滚动到底部
+          this.$refs.text.scrollIntoView(true)
+        },200)
+      }
+
       //document.getElementById('mao').scrollIntoView(false)
     },
     isIOS (){

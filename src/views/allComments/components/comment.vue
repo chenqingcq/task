@@ -58,7 +58,7 @@
         <input  type="text" :placeholder="placeholder" class="comment_input" v-model="comments"
                 ref="text"
                 @focus = 'setPageToBottom'
-                max-length = '200'
+                maxlength="200"
                 @blur="clearIpt, blurInput"
         >
         <img @click.prevent="addComments" class="send-comment" src="@/assets/img/iocn.png" />
