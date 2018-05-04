@@ -288,7 +288,7 @@ export const upImage = function(url, { name, e }) {
     }
     // 判断图片大小，超出后直接返回
     const fileSize = file.size
-    if (fileSize > (2 * 1024 * 1024)) {
+    if (fileSize > (5 * 1024 * 1024)) {
         return new Promise((resolve, reject) => {
             reject(ErrorMessage.imageSizeErr)
         })

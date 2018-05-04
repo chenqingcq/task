@@ -6,7 +6,7 @@ import App from './App'
 import router from './router'
 import infiniteScroll from '@/directive'
 import VueLazyLoad from 'vue-lazyload'//图片懒加载
-import wx from '@/utils/wx'
+import { install } from '@/utils/wx'
 import '@/utils/keyBoradFixed.js'
 //import { install ,keyBoradFixed } from '@/utils/index'
 import '@/filters' // 过滤器
@@ -21,7 +21,7 @@ import AppCom from '../src/common/index.js'
 import '@/services/ajax/netaxios.js'
 import axios from 'axios'
 
-wx.install()
+install()
 
 Vue.use(VueLazyLoad,{
   // error:'./static/error.png',

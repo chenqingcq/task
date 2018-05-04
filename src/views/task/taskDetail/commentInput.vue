@@ -43,8 +43,8 @@ export default {
               self.$toast.show('评论成功！',1000);
               self.usreInput = '';
               //重新刷新列表
-              self.$emit("close");
-              self.$router.push("comment?taskId=" + self.taskId );
+              self.$emit("close",true );
+              //self.$router.push("comment?taskId=" + self.taskId );
             } else if (res.code == 603) {
               self.$dialog.message({
                 message: "任务未开启请勿评论!"

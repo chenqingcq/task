@@ -232,7 +232,7 @@
                 @click="sitDownTask( list, index )" >
                 <img class="swiper-img" src="../../assets/img/down.png" alt="">
               </v-swipe-btn >
-              <v-swipe-btn id="4" v-if="role=='creator' && list.taskStatus != 2 " :width="50" type="warn" >
+              <v-swipe-btn @click="closeTask( list )" id="4" v-if="role=='creator' && list.taskStatus != 2 " :width="50" type="warn" >
                 <img class="swiper-img close"  src="../../assets/img/close-task.png" alt="">
               </v-swipe-btn>
             </div>

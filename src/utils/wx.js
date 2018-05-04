@@ -33,7 +33,7 @@ if( !Vue.prototype.$wechat ){
 
 
 //点击图片调用微信预览  默认显示第一张
-const doWechatPreview = function(imglist = [], nowIndx = 0)  {
+export const doWechatPreview = function(imglist = [], nowIndx = 0)  {
   console.log(imglist)
   console.log(nowIndx)
   var urls = []
@@ -85,7 +85,28 @@ const getWechatConfig = function(){
   })
 }
 
-const initWechatConfig = function (JSsdk) {
+export const WxShareApi = function (data ={} ){
+  Wechat.configSign().then(res=>{
+    const wxConfig = res.data.jssdk
+    const wechatConfig = {
+      //debug : true ,
+      appId: wxConfig.AppId, // 必填，企业号的唯一标识，此处填写企业号corpid
+      timestamp: wxConfig.Timestamp, // 必填，生成签名的时间戳
+      nonceStr: wxConfig.NonceStr, // 必填，生成签名的随机串
+      signature: wxConfig.Signature,// 必填，签名，见附录1
+    }
+    const entryURL = res.data.entryUrl
+    Vue.prototype.$wechat.entryURL = entryURL
+    initWechatConfig(wechatConfig ,function(){
+      console.log(data)
+      weChatFX(data)
+    })
+  })
+}
+
+
+
+const initWechatConfig = function (JSsdk ,cb) {
   console.log('开始进行微信初始化')
   // 初始化微信
   wx.config({
@@ -132,21 +153,7 @@ const initWechatConfig = function (JSsdk) {
       }
     }
   })
-  // config成功之后的操作
-  wx.ready(function () {
-    //console.log('微信初始化完成 ---------------------------------------------------------> 1')
-    //console.log('微信初始化完成:' + wxwechat.weChatHandle.isConfig)
-    //// 记录微信config是否执行完成
-    //wxwechat.weChatHandle.isConfig = true
-    //
-    //console.log('微信初始化完成:' + wxwechat.weChatHandle.isConfig)
-    //
-    //wx.getNetworkType({
-    //  success (res) {
-    //    wxwechat.weChatHandle.networkType = res.networkType
-    //  }
-    //})
-  })
+  cb && cb()
 }
 /**
  * 分享给朋友
@@ -188,7 +195,7 @@ const weChatFX =  (data)=> {
 }
 
 
-const install = function(JSsdk={}){
+export const install = function(JSsdk={}){
   initWechatConfig(JSsdk={})
   Vue.prototype.$wechat = {
     install ,
@@ -204,8 +211,9 @@ const install = function(JSsdk={}){
 
   }
 }
-
-export default {
-  install ,
-  doWechatPreview : doWechatPreview
-}
+//
+//export default {
+//  install ,
+//  doWechatPreview : doWechatPreview ,
+//  WxShareApi : WxShareApi
+//}

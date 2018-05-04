@@ -14,7 +14,7 @@
       </div>
       <div class="comments-container" v-if="members.length">
         <ul class="comment-panel">
-          <li v-for="(item,index) in members" :key="index" class="lisItem" :commentPid ='item.commentPid' :commentId ="item.commentId" ref='item'>
+          <li v-for="(item,index) in members" :key="index" v-if="index<3" class="lisItem" :commentPid ='item.commentPid' :commentId ="item.commentId" ref='item'>
             <div class="left">
               <!--测试-->
               <div class="icon">
@@ -44,7 +44,8 @@
             <i class="footbar"></i>
           </li>
           <li class="all-comment">
-            <div class="comment-content">已显示全部留言</div>
+            <div v-if="members.length < 4" class="comment-content">已显示全部留言</div>
+            <div v-else @click="link_to_allComments" class="comment-content">点击查看全部留言</div>
           </li>
         </ul>
       </div>
@@ -189,8 +190,6 @@ export default {
       }
 
     },
-
-
 
     // 点赞或者取消点赞
     doLike( item, index ){

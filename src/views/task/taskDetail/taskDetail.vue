@@ -745,12 +745,12 @@ export default {
       const self = this
       Convent.getTaskComments( {
         taskId ,
-        pageSize: "10"
+        pageSize: "4"
       })
         .then(res => {
           console.log(res, "------一级评论------");
           if (res.code == 1 && res.status == 200) {
-            self.members = res.data.slice(0,3);
+            self.members = res.data
             debugger;
           }
           if (res.code == 603) {
@@ -771,7 +771,7 @@ export default {
       let self = this;
       Convent.getTaskComments({
         taskId : this.$route.query.taskId ,
-        pageSize: 3
+        pageSize: 4
       })
         .then(res => {
           console.log(res, "------一级评论------");
