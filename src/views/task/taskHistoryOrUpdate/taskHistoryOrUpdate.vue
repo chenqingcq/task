@@ -153,7 +153,7 @@
                   {{ initDate(taskDetail.endTime).date }}
                 </div>
                 <div class="b_FS-12"
-                >结果时间</div>
+                >结束时间</div>
               </div>
             </div>
           </div>
@@ -228,7 +228,7 @@
           taskId : this.$route.query.taskId ,
           images : this.imagesFiles,
           list : false
-        }).then(res=>{
+        }, true ).then(res=>{
           console.log(res.data)
           this.previewImages = []
           this.imagesFiles = []

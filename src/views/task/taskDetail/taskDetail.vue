@@ -536,7 +536,7 @@ img.partyLogo {
                 <span class="task-detail-content">
                   {{taskDesc}}
                 </span>
-                <img src="@/assets/img/icon-slide downward.png"  @click='showMoreTaskDesc'/>
+                <img src="@/assets/img/icon-slide downward.png"  @touchend='showMoreTaskDesc'/>
               </div>
               <transition name="bounceIn">
                 <div class="taskDesc-container" v-show="showDetail">
@@ -566,9 +566,9 @@ img.partyLogo {
           </div>
         </div>
         <div class="task-progress">
-          <div class="task-desc" >
-            <span >{{taskDesc}}</span>
-            <img @click='toggleTaskProgress' src="@/assets/img/icon-slide downward.png" />
+          <div class="task-desc" @click='toggleTaskProgress'>
+            <span>{{progressDesc}}</span>
+            <img src="@/assets/img/icon-slide downward.png" />
           </div>
           <div class="detail-btn" @click='towardsUpdateHistory'>
             {{ role == 'operator'? '更新进度' : '查看上传历史'  }}
@@ -644,10 +644,10 @@ import { mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   data() {
     return {
-      projectId: 0,
+      projectId : 0,
 
-      currentPoint: null,
-      currentNode: "",
+      currentPoint : null,
+      currentNode:'',
       activeFont: "",
       headImg: "",
       taskDesc: "",
@@ -672,7 +672,7 @@ export default {
       node: " ",
       taskName: "",
       taskDesc: "",
-      taskStatus: -1,
+      taskStatus : -1 ,
       taskId: "",
       active: "",
       deadLine: "暂未设置起止时间",
@@ -684,6 +684,7 @@ export default {
         "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
       ],
       members: [],
+      progressDesc : '' ,
       items: [
         //轮播图处理时   51 234 51遵守这个有原则
         //            "http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650",
@@ -736,9 +737,9 @@ export default {
     },
     getComments() {
       const taskId = this.$route.query.taskId;
-      const self = this;
-      Convent.getTaskComments({
-        taskId,
+      const self = this
+      Convent.getTaskComments( {
+        taskId ,
         pageSize: "10"
       })
         .then(res => {
@@ -763,7 +764,7 @@ export default {
       //获取评论
       let self = this;
       Convent.getTaskComments({
-        taskId: this.$route.query.taskId,
+        taskId : this.$route.query.taskId ,
         pageSize: 3
       })
         .then(res => {
@@ -780,8 +781,8 @@ export default {
         console.log(this.taskId);
       }
     },
-    formatDate(dateStr) {
-      return dateStr.substring(5, 15).replace("-", "/");
+    formatDate( dateStr ){
+      return dateStr.substring(5,15).replace('-','/')
     },
     fomatTime() {
       console.log(new Date().getMonth());
@@ -827,9 +828,8 @@ export default {
       this.SET_USER_ROLE(this.role);
     },
     getData() {
-      var taskId = this.$route.query.taskId;
-      var projectId = this.projectId;
-
+      const taskId = this.$route.query.taskId
+      const projectId = this.projectId;
       Convent.taskDetail({
         taskId,
         projectId
@@ -849,21 +849,21 @@ export default {
           this.isLike = res.isStar == "0" ? false : true;
           this.position = res.position;
           this.defineStatus(res.taskStatus);
-          this.taskStatus = res.taskStatus;
+          this.taskStatus = res.taskStatus
           this.defineRole(res.role);
           this.fomatTime();
 
           const project = {
-            projectId: res.projectId,
-            projectName: res.projectName,
-            role: this.role,
-            isCreate: res.role == 3 ? true : false
-          };
-          // set Vuex state
-          this.setCurrentProject(project);
+            projectId : res.projectId ,
+            projectName : res.projectName ,
+            role: this.role ,
+            isCreate : res.role == 3 ? true : false
+          }
+      // set Vuex state
+          this.setCurrentProject(project)
 
-          if (res.currentPoint) {
-            this.currentPoint = res.currentPoint;
+          if( res.currentPoint ){
+            this.currentPoint = res.currentPoint
           }
 
           if (res.latestProgress) {
@@ -874,6 +874,8 @@ export default {
             let first = this.items[0];
             this.items.unshift(last);
             this.items.push(first);
+            this.progressDesc = res.latestProgress.progressDesc
+            //this
           } else {
             this.items = [];
           }
@@ -948,7 +950,6 @@ export default {
       this.showTaskProgress = false;
     },
     toggleTaskProgress() {
-      console.log('--------------->>>')
       this.showTaskProgress = !this.showTaskProgress;
     },
     closeDesc() {
@@ -974,8 +975,8 @@ export default {
       this.$router.push({
         path: "/updateTaskSetting",
         query: {
-          projectId: self.projectId,
-          taskId: self.taskId
+          projectId:self.projectId,
+          taskId:self.taskId
         }
       });
     },
@@ -1078,13 +1079,14 @@ export default {
       });
     },
     towardsUpdateHistory() {
-      if (this.taskStatus == 0) {
-        this.$toast.show("任务暂未开始");
-        return;
+
+      if( this.taskStatus == 0 ){
+        this.$toast.show('任务暂未开始')
+        return
       }
-      if (this.role != "operator" && this.items.length == 0) {
-        this.$toast.show("暂无更新");
-        return;
+      if( this.role != 'operator' && this.items.length == 0 ){
+        this.$toast.show('暂无更新')
+        return
       }
       const taskId = this.$route.query.taskId;
       //查看历史上传
@@ -1124,12 +1126,14 @@ export default {
     this.init();
   },
   mounted() {
-    const projectId = this.$route.query.projectId;
-    if (projectId) {
-      this.projectId = projectId;
-    } else {
-      this.projectId = this.getProjectId;
+    const projectId = this.$route.query.projectId
+    if( projectId ){
+      this.projectId = projectId
     }
+    else{
+      this.projectId = this.getProjectId
+    }
+
   },
   beforeDestroy() {
     this.timer = null;

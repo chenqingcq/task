@@ -89,6 +89,8 @@ export default {
         this.transitionName = "slide-left";
       }
       this.$router.isBack = false;
+      // 把所有页面 回到顶部
+      window.scrollTo(0,0);
     }
   }
 };
