@@ -749,7 +749,8 @@ export default {
         .then(res => {
           console.log(res, "------一级评论------");
           if (res.code == 1 && res.status == 200) {
-            self.members = res.data.splice(0,3);
+            self.members = res.data.slice(0,3);
+            debugger;
           }
           if (res.code == 603) {
             self.$toast.show("任务暂未开启请勿评论", 1000);
