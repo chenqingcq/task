@@ -827,13 +827,8 @@ export default {
       this.SET_USER_ROLE(this.role);
     },
     getData() {
-      if (this.taskId == "991661158152892418") {
-        var taskId = "991926678957715457";
-        var  projectId = "991565484379873281";
-      } else {
-        var  taskId = this.$route.query.taskId;
-        var  projectId = this.projectId;
-      }
+      var taskId = this.$route.query.taskId;
+      var projectId = this.projectId;
 
       Convent.taskDetail({
         taskId,
@@ -875,10 +870,10 @@ export default {
             this.items = res.latestProgress.progressImage.map(val => {
               return { imgUrl: val };
             });
-           let last = this.items[this.items.length-1];
-           let first  = this.items[0];
-           this.items.unshift(last);
-           this.items.push(first);
+            let last = this.items[this.items.length - 1];
+            let first = this.items[0];
+            this.items.unshift(last);
+            this.items.push(first);
           } else {
             this.items = [];
           }
