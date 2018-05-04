@@ -336,7 +336,7 @@ img.partyLogo {
   font-family: PingFangSC-Regular;
   color: rgba(255, 255, 255, 1);
   border-radius: 9*2px;
-  width: 55*2px;
+  min-width: 55*2px;
   height: 16*2px;
   text-align: center;
   line-height: 16*2px;
@@ -536,7 +536,7 @@ img.partyLogo {
                 <span class="task-detail-content">
                   {{taskDesc}}
                 </span>
-                <img src="@/assets/img/icon-slide downward.png"  @touchend='showMoreTaskDesc'/>
+                <img  v-show="taskDesc.length &&  taskDesc.length > 10" src="@/assets/img/icon-slide downward.png"  @click='showMoreTaskDesc'/>
               </div>
               <transition name="bounceIn">
                 <div class="taskDesc-container" v-show="showDetail">
@@ -568,7 +568,7 @@ img.partyLogo {
         <div class="task-progress">
           <div class="task-desc" @click='toggleTaskProgress'>
             <span>{{progressDesc}}</span>
-            <img src="@/assets/img/icon-slide downward.png" />
+            <img v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />
           </div>
           <div v-if="taskStatus != 0 &&  taskStatus != 3  " class="detail-btn" @click='towardsUpdateHistory'>
             {{ role == 'operator' && taskStatus != 4 && taskStatus != 5  ? '更新进度' : '查看上传历史'  }}
@@ -750,7 +750,8 @@ export default {
         .then(res => {
           console.log(res, "------一级评论------");
           if (res.code == 1 && res.status == 200) {
-            self.members = res.data;
+            self.members = res.data.slice(0,3);
+            debugger;
           }
           if (res.code == 603) {
             self.$toast.show("任务暂未开启请勿评论", 1000);

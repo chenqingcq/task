@@ -55,7 +55,8 @@
       font-size: 14*2px;
       color: #666666;
       text-align: right;
-      width: 112px*2;
+      min-width: 112px*2;
+      max-width: 320*2px;
       overflow-x: auto;
     }
     .switch-contaiener {
@@ -536,6 +537,15 @@ export default {
   },
   beforeRouteEnter: (to, from, next) => {
     console.log(to, from);
+    if (to.path == "/addTaskSetting" && from.path == "/section") {
+      next(vm => {
+        // console.log(executor);
+        vm.projectId = to.query.projectId;
+        vm.taskId = to.query.taskId;
+        vm.hasProjectId = true;
+        vm._updateTask(); //重新设置任务
+      });
+    }
     if (from.path == "/appointMessager" && to.path == "/addTaskSetting") {
       next(vm => {
         // console.log(vm.getTaskExecutor); //过滤选中的执行人;
@@ -544,11 +554,12 @@ export default {
         // vm.executor = vm.getTaskExecutor.executor;
         vm.setExcutor();
       });
-    } else if (to.path == "/addTaskSetting" && from.path == "/taskDetail") {
+    }
+    if (to.path == "/addTaskSetting" && from.path == "/taskDetail") {
       next(vm => {
         // console.log(executor);
         vm.hasProjectId = true;
-        vm._updateTask(to.query); //重新设置任务
+        vm._updateTask(); //重新设置任务
       });
     }
     if (
@@ -644,7 +655,7 @@ export default {
       return new Promise((resovle, reject) => {
         // console.log(window.location.hash);
         Convent.createTask({
-          projectId: self.getProjectId,
+          projectId: self.projectId,
           projectName: self.taskTheme,
           taskName: self.taskName,
           taskDesc: self.taskDesc,
@@ -664,14 +675,12 @@ export default {
           });
       });
     },
-    _updateTask(query) {
+    _updateTask() {
       let self = this;
       this.taskTheme = this.getProjectThemeName;
-      this.projectId = query.projectId;
-      this.taskId = query.taskId;
       console.log(query);
       //任务名称 开始时间结束时间不可更改
-      Convent.getTaskBasicInfo(query.taskId)
+      Convent.getTaskBasicInfo(this.taskId)
         .then(res => {
           console.log(res);
           if (res.code == 1 && res.status == 200) {
@@ -682,7 +691,7 @@ export default {
               : undefined;
             self.taskDesc = res.data.taskDesc;
             self.checkStandard = res.data.checkStandard;
-            self.isPublic = res.data.isOpen ? true : false;
+            self.currentIndex = res.data.isOpen == 1 ? 0 : 1;            
           }
         })
         .catch(err => {
@@ -741,7 +750,7 @@ export default {
               path: "/convententry",
               query: {
                 taskId: taskId,
-                projectId: self.getProjectId
+                projectId: self.projectId
               }
             }); //项目创建完毕
             // debugger;
@@ -751,16 +760,16 @@ export default {
             // debugger;
           });
       } else if (this.taskId) {
-        Convent.updateTask(self.taskId, {
+        Convent.settingUpdateTask(self.taskId, {
           taskId: self.taskId,
-          projectId: self.getProjectId,
+          projectId: self.projectId,
           projectName: self.taskTheme,
           taskName: self.taskName,
           taskDesc: self.taskDesc,
           startTime: +new Date(this.startTime.replace(/\./g, "/")),
           endTime: +new Date(this.endTime.replace(/\./g, "/")),
           checkStandard: self.standard,
-          isOpen: self.isOpen ? 1 : 0
+          isOpen: self.currentIndex == 0 ? 1 : 0
         })
           .then(res => {
             if (res.code == 1 && res.status == 200) {
@@ -768,7 +777,7 @@ export default {
                 path: "/convententry",
                 query: {
                   taskId: self.taskId,
-                  projectId: self.getProjectId
+                  projectId: self.projectId
                 }
               });
             }
@@ -861,7 +870,7 @@ export default {
           path: "/appointMessager",
           query: {
             taskId: self.taskId,
-            projectId: self.getProjectId
+            projectId: self.projectId
           }
         });
       } else if (this.check_pass && !this.taskId) {
@@ -872,7 +881,7 @@ export default {
               path: "/appointMessager",
               query: {
                 taskId: taskId,
-                projectId: self.getProjectId
+                projectId: self.projectId
               }
             }); //项目创建完毕
             // debugger;

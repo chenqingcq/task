@@ -3,6 +3,7 @@
   width: 100%;
   height: 100vh;
   position: relative;
+  overflow: hidden;
   header {
     width: 100%;
     height: 65*2px;
@@ -12,6 +13,7 @@
       width: 100%;
       height: 100%;
       z-index: 0;
+      pointer-events: none;
     }
     img.invite {
       position: absolute;
@@ -312,7 +314,7 @@
   }
 }
 
-#name {
+.taskname {
   font-size: 10*2px;
   min-width: 100px;
   max-width: 160px;
@@ -361,7 +363,7 @@
                 </div>
                 <div class="name">
                   <span>{{item[0].nickname}}</span>
-                  <span id="name">{{item[0].taskName}}</span>
+                  <span class="taskname">{{item[0].taskName}}</span>
                 </div>
               </div>
               <div class="update">{{item[0].progressNum}}</div>
@@ -377,7 +379,7 @@
                 <div  class="select">
                   <img @click='selectedSub($event,_item.taskId,_item.userId, 1 )' src="@/assets/img/sign-selected.png" class="radio"/>
                 </div>
-                <div class="name" id="name">{{_item.taskName}}</div>
+                <div class="name taskname" >{{_item.taskName}}</div>
               </div>
               <div class="update">{{_item.progressNum}}</div>
               <div class="comments">{{_item.commentNum}}</div>
@@ -402,7 +404,7 @@
       <div v-if="addMember" class="addExcutor" @click='addExcutor'>添加人员</div>
       <div ref="deleteBtn" :class="{deleteBtn:true,deleteExcutor:deleteMember,deleteExcutorDisable :doNothing}" @click='deleteExcutor'>{{deleteText}}</div>
     </div>
-    <invites   :showInvite='taskExecutors.length>0?false:true' ></invites>
+    <invites   :showInvite='showInvite' ></invites>
     <qrcode :showQrcode='showQrcode' @close='closeQrcode' :projectId='projectId' :taskId = 'taskId'></qrcode>  
   </div>
 </template>
@@ -483,7 +485,7 @@ export default {
       }
     },
     taskExecutors(newVal) {
-      if (newVal) {
+      if (newVal.length) {
         this.defineShow(newVal);
       } else {
         this.showInvite = true;
@@ -744,8 +746,9 @@ export default {
                 // debugger;
                 if (res.code == 1 && res.status == 200) {
                   self.getExcutorList(self.projectId);
-                  self.$toast.show('关闭任务成功',500);
-                  debugger;
+                   self.$dialog.message({
+                    message:"已删除该成员!"
+                  })
                 }
               })
               .catch(err => {
@@ -758,12 +761,15 @@ export default {
       if(this.mode == 1){
         let taskId  = this.deleteTaskId ,self = this;
         this.$dialog.confirm({
-          message:"确定删除该任务?",
+          message:"确定关闭该任务?",
           confirm(){
             Convent.closeTask(taskId).then((res)=>{
               console.log(res);
               if(res.code == 1 && res.status == 200){
                   self.getExcutorList(self.projectId);
+                  self.$dialog.message({
+                    message:"已关闭该任务!"
+                  })
               }
             }).catch((err)=>{
               console.log(err)
