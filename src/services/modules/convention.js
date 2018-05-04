@@ -355,6 +355,16 @@ class Convent {
    * 更新进度
    * */
   updateTask(taskId, opt, isShowFullLoading = true) {
+    const url = `/api/task/basic/${taskId}`
+    const params = opt || {}
+    return patch(
+      url, params, isShowFullLoading = false
+    )
+  }
+   /*
+   * 创建时更新进度
+   * */
+  settingUpdateTask(taskId, opt, isShowFullLoading = true) {
     const url = `/api/task/${taskId}`
     const params = opt || {}
     return patch(

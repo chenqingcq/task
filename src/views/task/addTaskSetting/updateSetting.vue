@@ -541,49 +541,27 @@ export default {
         vm.taskId = to.query.taskId;
         vm.projectId = to.query.projectId;
         // vm.executor = vm.getTaskExecutor.executor;
-        console.log(vm.taskId,vm.projectId,'------------------------------')
+        console.log(vm.taskId, vm.projectId, "------------------------------");
         vm.setExcutor();
       });
-    } else if (to.path == "/updateTaskSetting" && from.path == "/taskDetail") {
+    }
+    if (to.path == "/updateTaskSetting" && from.path == "/taskDetail") {
       next(vm => {
         // console.log(executor);
+        vm.projectId = to.query.projectId;
+        vm.taskId = to.query.taskId;
         vm.hasProjectId = true;
-        if (vm.executor) {
-          vm.$refs.exe.classList.add("active_");
-        }
-        vm._updateTask(to.query); //重新设置任务
+        vm._updateTask(); //重新设置任务
       });
     }
-    if (
-      (from.path == "/conventEntry" || from.path == "/convententry") &&
-      to.path == "/addTaskSetting"
-    ) {
+    if (to.path == "/updateTaskSetting" && from.path == "/section") {
       next(vm => {
+        // console.log(executor);
         vm.projectId = to.query.projectId;
-        console.log(vm.projectId);
-        if (vm.projectId) {
-          vm.hasProjectId = true;
-          vm.taskTheme = vm.getProjectThemeName;
-          vm.$refs.taskTheme.setAttribute("disabled", true);
-          vm.taskName = "";
-          vm.taskDesc = "";
-          vm.executor = "";
-          vm.startTime = "";
-          vm.endTime = "";
-          vm.standard = "";
-        } else {
-          vm.hasProjectId = false;
-          vm.taskTheme = "";
-          vm.taskName = "";
-          vm.taskDesc = "";
-          vm.executor = "";
-          vm.startTime = "";
-          vm.endTime = "";
-          vm.standard = "";
-        }
+        vm.taskId = to.query.taskId;
+        vm.hasProjectId = true;
+        vm._updateTask(); //重新设置任务
       });
-    } else {
-      next();
     }
   },
   methods: {
@@ -620,14 +598,7 @@ export default {
     changeIndex(index, item) {
       // console.log(item);
       this.currentIndex = index;
-      if (this.currentIndex == 0) {
-        this.isPublic = true;
-        this.allowedLook = false;
-      }
-      if (this.currentIndex == 1) {
-        this.isPublic = false;
-        this.allowedLook = true;
-      }
+      console.log(this.currentIndex, "----------now Index--------");
     },
     ...mapMutations({
       SET_TASKID: "SET_TASKID",
@@ -668,13 +639,10 @@ export default {
           });
       });
     },
-    _updateTask(query) {
+    _updateTask() {
       let self = this;
-      this.projectId = query.projectId;
-      this.taskId = query.taskId;
-      console.log(query);
       //任务名称 开始时间结束时间不可更改
-      Convent.getTaskBasicInfo(query.taskId)
+      Convent.getTaskBasicInfo(this.taskId)
         .then(res => {
           console.log(res);
           if (res.code == 1 && res.status == 200) {
@@ -693,7 +661,7 @@ export default {
             if (self.taskTheme) {
               self.$refs.taskTheme.setAttribute("disabled", true);
             }
-            self.isPublic = res.data.isOpen ? true : false;
+            self.currentIndex = res.data.isOpen == 1 ? 0 : 1;
             // debugger;
           }
         })
@@ -750,10 +718,10 @@ export default {
           .then(taskId => {
             self.taskId = taskId;
             self.$router.push({
-              path: "/convententry",
+              path: "/taskDetail",
               query: {
                 taskId: taskId,
-                projectId: self.getProjectId
+                projectId: self.projectId
               }
             }); //项目创建完毕
             // debugger;
@@ -767,22 +735,17 @@ export default {
         //   debugger;
         Convent.updateTask(self.taskId, {
           taskId: self.taskId,
-          projectId: self.getProjectId,
-          projectName: self.taskTheme,
-          taskName: self.taskName,
           taskDesc: self.taskDesc,
-          startTime: +new Date(this.startTime.replace(/\./g, "/")),
-          endTime: +new Date(this.endTime.replace(/\./g, "/")),
           checkStandard: self.standard,
-          isOpen: self.isOpen ? 1 : 0
+          isOpen: self.currentIndex == 0 ? 1 : 0
         })
           .then(res => {
             if (res.code == 1 && res.status == 200) {
               this.$router.push({
-                path: "/convententry",
+                path: "/taskDetail",
                 query: {
                   taskId: self.taskId,
-                  projectId: self.getProjectId
+                  projectId: self.projectId
                 }
               });
             }
@@ -964,7 +927,7 @@ export default {
     // }
   },
   mounted() {
-    console.log('=============update====================');
+    console.log("=============update====================");
   }
 };
 </script>

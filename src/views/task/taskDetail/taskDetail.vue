@@ -336,7 +336,7 @@ img.partyLogo {
   font-family: PingFangSC-Regular;
   color: rgba(255, 255, 255, 1);
   border-radius: 9*2px;
-  width: 55*2px;
+  min-width: 55*2px;
   height: 16*2px;
   text-align: center;
   line-height: 16*2px;

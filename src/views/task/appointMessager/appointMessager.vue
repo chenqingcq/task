@@ -13,6 +13,7 @@
       width: 100%;
       height: 100%;
       z-index: 0;
+      pointer-events: none;
     }
     img.invite {
       position: absolute;
@@ -403,7 +404,7 @@
       <div v-if="addMember" class="addExcutor" @click='addExcutor'>添加人员</div>
       <div ref="deleteBtn" :class="{deleteBtn:true,deleteExcutor:deleteMember,deleteExcutorDisable :doNothing}" @click='deleteExcutor'>{{deleteText}}</div>
     </div>
-    <invites   :showInvite='taskExecutors.length>0?false:true' ></invites>
+    <invites   :showInvite='showInvite' ></invites>
     <qrcode :showQrcode='showQrcode' @close='closeQrcode' :projectId='projectId' :taskId = 'taskId'></qrcode>  
   </div>
 </template>
@@ -484,7 +485,7 @@ export default {
       }
     },
     taskExecutors(newVal) {
-      if (newVal) {
+      if (newVal.length) {
         this.defineShow(newVal);
       } else {
         this.showInvite = true;

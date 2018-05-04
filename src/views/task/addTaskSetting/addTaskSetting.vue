@@ -55,7 +55,8 @@
       font-size: 14*2px;
       color: #666666;
       text-align: right;
-      width: 112px*2;
+      min-width: 112px*2;
+      max-width: 320*2px;
       overflow-x: auto;
     }
     .switch-contaiener {
@@ -751,7 +752,7 @@ export default {
             // debugger;
           });
       } else if (this.taskId) {
-        Convent.updateTask(self.taskId, {
+        Convent.settingUpdateTask(self.taskId, {
           taskId: self.taskId,
           projectId: self.projectId,
           projectName: self.taskTheme,
@@ -760,7 +761,7 @@ export default {
           startTime: +new Date(this.startTime.replace(/\./g, "/")),
           endTime: +new Date(this.endTime.replace(/\./g, "/")),
           checkStandard: self.standard,
-          isOpen: self.isOpen ? 1 : 0
+          isOpen: self.currentIndex == 0  ? 1 : 0
         })
           .then(res => {
             if (res.code == 1 && res.status == 200) {
