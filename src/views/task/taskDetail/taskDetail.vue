@@ -83,8 +83,7 @@
             img {
               display: inline-block;
               height: 12px;
-              position: absolute;
-              bottom: 6px;
+              margin-bottom: 4px;
               margin-left: 10*2px;
             }
           }
@@ -159,11 +158,12 @@
         font-family: PingFangSC-Regular;
         font-size: 14*2px;
         margin: 0 auto;
-        margin-top: 5*2px;
+        margin-top: 7*2px;
       }
       img {
         height: 10px;
         margin-left: 20px;
+        margin-bottom: 10px;
       }
     }
   }
@@ -536,7 +536,7 @@ img.partyLogo {
                 <span class="task-detail-content">
                   {{taskDesc}}
                 </span>
-                <img src="@/assets/img/icon-slide downward.png"  @touchend='showMoreTaskDesc'/>
+                <img src="@/assets/img/icon-slide downward.png"  @click='showMoreTaskDesc'/>
               </div>
               <transition name="bounceIn">
                 <div class="taskDesc-container" v-show="showDetail">
@@ -566,16 +566,16 @@ img.partyLogo {
           </div>
         </div>
         <div class="task-progress">
-          <div class="task-desc" @click='toggleTaskProgress'>
-            <span>{{taskDesc}}</span>
-            <img src="@/assets/img/icon-slide downward.png" />
+          <div class="task-desc" >
+            <span >{{taskDesc}}</span>
+            <img @click='toggleTaskProgress' src="@/assets/img/icon-slide downward.png" />
           </div>
           <div class="detail-btn" @click='towardsUpdateHistory'>
             {{ role == 'operator'? '更新进度' : '查看上传历史'  }}
           </div>
         </div>
         <transition name="bounceIn">
-          <div class="taskProgress" v-show="showTaskProgress">
+          <div class="taskProgress" v-if="showTaskProgress">
             <detail :taskDesc='taskDesc' @close='closeTaskProgress'></detail>
           </div>
         </transition>
@@ -948,6 +948,7 @@ export default {
       this.showTaskProgress = false;
     },
     toggleTaskProgress() {
+      console.log('--------------->>>')
       this.showTaskProgress = !this.showTaskProgress;
     },
     closeDesc() {

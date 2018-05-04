@@ -51,7 +51,7 @@
           this.setSliderWidth(true);
           this.scroll.refresh();
         });
-      }, 20);
+      }, 200);
     },
     methods: {
       addIndex() {
