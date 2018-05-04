@@ -87,6 +87,7 @@
       caculateMenuWidth (direction) {
         const list = this.$slots[`${direction}-menu`][0].children.filter(one => one.tag)
         let width = 0
+        //console.log('list>>>', list)
         list.forEach(one => {
           const propsData = one.componentOptions ? one.componentOptions.propsData : {}
           width += propsData.width || 80

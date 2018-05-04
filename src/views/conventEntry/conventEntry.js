@@ -265,7 +265,7 @@ export default {
             text = '' ,
             dateStr = '' // 时间间隔
         switch (status){
-          case 0: resStatus = 'pending' ;text = '未指定执行人' ;break;
+          case 0: resStatus = 'pending' ;text = '未开始' ;break;
           case 1: resStatus = 'pending' ;text = '正在进行' ;break;
           case 2: resStatus = 'closed' ;text = '已关闭' ;break ;
           case 3: resStatus = 'rejected' ;text = '已拒绝' ; break ;
@@ -281,12 +281,13 @@ export default {
         val.passTime = Number( val.passTime )
         if( resStatus == 'aheadCompleted' ){
           // 天数
-          dateStr = numberTransformChinese( parseInt(( val.completeDate - val.startTime )/86400000 ))
+          dateStr = numberTransformChinese( parseInt(( val.endTime - val.completeDate )/86400000 ))
+          console.log( dateStr , val.completeDate , val.startTime ,'tiqian')
           text = `提前${dateStr}天完成`
         }
         else if( resStatus == 'outDate' ){
           // 天数
-          dateStr = numberTransformChinese( parseInt(( (+new Date()) - val.startTime )/86400000 ))
+          dateStr = numberTransformChinese( parseInt(( (+new Date()) - val.endTime )/86400000 ))
           text = `超时${dateStr}天`
         }
         val.text = text

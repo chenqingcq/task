@@ -5,7 +5,7 @@
               <img src="@/assets/img/icon-close.png" />
           </div>
           <textarea ref="ipt" autofocus=true  @keyup.enter='sendComments' name="userIpt" id="userIpt" placeholder="说点什么吧..." v-model.trim="usreInput" maxlength="200">
-              
+
           </textarea>
           <div @click='sendComments' class="comment-btn">评论</div>
       </div>
@@ -43,7 +43,8 @@ export default {
               self.$toast.show('评论成功！',1000);
               self.usreInput = '';
               //重新刷新列表
-              self.$emit("close" ,true);
+              self.$emit("close");
+              self.$router.push("comment?taskId=" + self.taskId );
             } else if (res.code == 603) {
               self.$dialog.message({
                 message: "任务未开启请勿评论!"
@@ -66,7 +67,7 @@ export default {
     }
   },
   mounted(){
-    
+
   }
 };
 </script>

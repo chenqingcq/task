@@ -32,11 +32,11 @@
                 <span @click='_link_to_secondary_comments( item )'>{{item.replyNum }}条回复 </span>
                 <div @click="doLike(item)" v-if="item.isThumbs">
                   <!--<img @touchstart='add_praise(index)'   :src="imgUrl"/>-->
-                  <img  src="../../assets/img/iocn-good2.png" alt="">
+                  <img  src="@/assets/img/iocn-good2.png" alt="">
                   <span class="active" >{{ item.thumbsNum }}</span>
                 </div>
                 <div @click="doLike(item)" v-else>
-                  <img src="../../assets/img/iocn-good.png" alt="">
+                  <img src="@/assets/img/iocn-good.png" alt="">
                   <span>{{ item.thumbsNum }}</span>
                 </div>
               </div>

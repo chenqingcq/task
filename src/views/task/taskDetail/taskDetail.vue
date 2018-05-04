@@ -573,8 +573,8 @@ img.partyLogo {
             <span>{{progressDesc}}</span>
             <img v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />
           </div>
-          <div class="detail-btn" @click='towardsUpdateHistory'>
-            {{ role == 'operator'? '更新进度' : '查看上传历史'  }}
+          <div v-if="taskStatus != 0 &&  taskStatus != 3  " class="detail-btn" @click='towardsUpdateHistory'>
+            {{ role == 'operator' && taskStatus != 4 && taskStatus != 5  ? '更新进度' : '查看上传历史'  }}
           </div>
         </div>
         <transition name="bounceIn">
@@ -617,8 +617,9 @@ img.partyLogo {
         </div>
       </div>
     </div>
-    <comments :members='members' :taskId='taskId' @close='updateComments' :status="taskStatus" ></comments>
-    <div v-if="role == 'creator' && taskStatus != 2  " class="btn-warp b-LR-8 clearfix">
+    <comments v-if="taskStatus!= 0" :members='members' :taskId='taskId' @close='updateComments' :status="taskStatus" ></comments>
+    <!--创建者 关闭 未开始 已拒绝 未开始且拒绝-->
+    <div v-if="role == 'creator' && ( taskStatus == 1 || taskStatus == 6 ) " class="btn-warp b-LR-8 clearfix">
       <div @click='closeTask' class="btn-normal-warn b_left b-MT-10">
         关闭任务
       </div>
@@ -626,8 +627,8 @@ img.partyLogo {
         验收通过
       </div>
     </div>
-    <!-- 执行者 -->
-    <div v-if="role == 'operator' && taskStatus == 0 " class="btn-warp b-LR-8 clearfix">
+    <!-- 执行者   -->
+    <div v-if="role == 'operator' && taskStatus == 0  " class="btn-warp b-LR-8 clearfix">
       <div @click="rejectTask" class="btn-normal-warn b_left b-MT-10 ">
         拒绝任务
       </div>
@@ -639,7 +640,7 @@ img.partyLogo {
   </div>
 </template>
 <script>
-import comments from "@/views/comments/comments";
+import comments from "@/views/task/taskDetail/components/comments.vue";
 import Slide from "@/common/base/slide/slide.vue";
 import Detail from "./detail";
 import { Convent } from "@/services";
@@ -795,11 +796,11 @@ export default {
       console.log(new Date().getMonth());
       let startTime_y = new Date(parseInt(this.startTime)).getFullYear();
       let startTime_m = new Date(parseInt(this.startTime)).getMonth() + 1;
-      let startTime_d = new Date(parseInt(this.startTime)).getDay();
+      let startTime_d = new Date(parseInt(this.startTime)).getDate();
 
       let endTime_y = new Date(parseInt(this.endTime)).getFullYear();
       let endTime_m = new Date(parseInt(this.endTime)).getMonth() + 1;
-      let endTime_d = new Date(parseInt(this.endTime)).getDay();
+      let endTime_d = new Date(parseInt(this.endTime)).getDate();
 
       startTime_y = startTime_y < 10 ? `0${startTime_y}` : startTime_y;
       startTime_m = startTime_m < 10 ? `0${startTime_m}` : startTime_m;
@@ -1098,9 +1099,14 @@ export default {
         this.$toast.show("暂无更新");
         return;
       }
+      if( this.role != 'operator' && this.items.length == 7 ){
+        this.$toast.show('任务已拒绝')
+        return
+      }
+
       const taskId = this.$route.query.taskId;
-      //查看历史上传
-      if (this.role == "operator") {
+      //查看历史上传  已完成不能更新只能查看
+      if (this.role == "operator" &&   this.taskStatus != 4 && this.taskStatus != 5  ) {
         this.$router.push({
           path: `taskHistoryOrUpdate?taskId=${taskId}&mode=edit`
         });

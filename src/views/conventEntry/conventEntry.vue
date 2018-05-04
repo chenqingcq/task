@@ -113,7 +113,7 @@
                            v-if=" computedIsOutDateAfterEndTime(list, dayItem) "
                            :class="[list.status == 'outDate' && 'outDate']"
                         >
-                          <span class="week-in-chinese b_FS-5 c_7" :class="[dayItem.week == 6 ||dayItem.week == 0  ? 'c_12': 'c_6' ]">
+                          <span class="week-in-chinese b_FS-4 c_7" :class="[dayItem.week == 6 ||dayItem.week == 0  ? 'c_12': 'c_6' ]">
                             {{ weekStrArr[dayItem.week] }}
                           </span>
                         </p>
@@ -216,22 +216,25 @@
 
             </div>
             <div slot = 'right-menu'>
-              <v-swipe-btn v-if="list.position == 1" :width="50" @click="standUpTask( list, index )" >
+              <v-swipe-btn v-if="list.position == 0" id="0" :width="50" @click="standUpTask( list, index )" >
                 <img class="swiper-img" src="../../assets/img/top-cancel.png" alt="">
               </v-swipe-btn>
-              <v-swipe-btn v-if="list.position != 1" :width="50" @click="standUpTask( list, index )" >
+              <v-swipe-btn v-if="list.position != 0" id="1" :width="50" @click="standUpTask( list, index )" >
                 <img class="swiper-img" src="../../assets/img/top.png" alt="">
-                <v-swipe-btn v-if="list.position == 2" :width="50" @click="standUpTask( list, index )" >
+              </v-swipe-btn >
+                <v-swipe-btn v-if="list.position == 2" id="2" :width="50" @click="standUpTask( list, index )" >
                   <img class="swiper-img" src="../../assets/img/down-cancel.png" alt="">
                 </v-swipe-btn>
-              </v-swipe-btn ><v-swipe-btn
+              <v-swipe-btn
                 :width="50"
+                id="3"
                 v-if="list.position != 2"
                 @click="sitDownTask( list, index )" >
                 <img class="swiper-img" src="../../assets/img/down.png" alt="">
-              </v-swipe-btn ><v-swipe-btn v-if="role== 'creator' " :width="50" type="warn" >
-              <img class="swiper-img close"  src="../../assets/img/close-task.png" alt="">
-            </v-swipe-btn>
+              </v-swipe-btn >
+              <v-swipe-btn id="4" v-if="role=='creator' && list.taskStatus != 2 " :width="50" type="warn" >
+                <img class="swiper-img close"  src="../../assets/img/close-task.png" alt="">
+              </v-swipe-btn>
             </div>
           </v-swipeout>
         </template>
