@@ -216,13 +216,13 @@
 
             </div>
             <div slot = 'right-menu'>
-              <v-swipe-btn v-if="list.position == 0" id="0" :width="50" @click="standUpTask( list, index )" >
+              <v-swipe-btn v-if="list.position == 0" id="0" :width="50" @click="recoverTask( list, index )" >
                 <img class="swiper-img" src="../../assets/img/top-cancel.png" alt="">
               </v-swipe-btn>
               <v-swipe-btn v-if="list.position != 0" id="1" :width="50" @click="standUpTask( list, index )" >
                 <img class="swiper-img" src="../../assets/img/top.png" alt="">
               </v-swipe-btn >
-                <v-swipe-btn v-if="list.position == 2" id="2" :width="50" @click="standUpTask( list, index )" >
+                <v-swipe-btn v-if="list.position == 2" id="2" :width="50" @click="recoverTask( list, index )" >
                   <img class="swiper-img" src="../../assets/img/down-cancel.png" alt="">
                 </v-swipe-btn>
               <v-swipe-btn

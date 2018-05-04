@@ -193,26 +193,58 @@ export default {
         return val
       })
     },
+    // 更新列表
+    updateTaskList(){
+      this.page =  {
+        pageNum : 1 ,
+        pageSize : 10 ,
+        hasMore : true
+      }
+      this.taskList = []
+      this.getTasksList()
+    },
+    // 置顶
     standUpTask(list , index){
       const taskId = list.taskId
       Convent.standUpTask(taskId)
       .then(res=>{
-        const c_task = this.taskList[index]
-        c_task.position = '1'
-        this.taskList.splice(index, 1)
-        this.taskList.unshift(c_task)
+        //const c_task = this.taskList[index]
+        //c_task.position = '1'
+        //this.taskList.splice(index, 1)
+        //this.taskList.unshift(c_task)
+        this.$toast.show('置顶成功')
+        this.updateTaskList()
       })
     },
+    // 置底
     sitDownTask(list, index){
       const taskId = list.taskId
       Convent.sitDownTask(taskId)
       .then(res=>{
-        const c_task = this.taskList[index]
-        c_task.position = '2'
-        this.taskList.splice(index, 1)
-        this.taskList.push(c_task)
+        this.$toast.show('置底成功')
+        //const c_task = this.taskList[index]
+        //c_task.position = '2'
+        //this.taskList.splice(index, 1)
+        //this.taskList.push(c_task)
+        this.updateTaskList()
       })
     },
+    // 取消置顶或者置顶
+    recoverTask( list ){
+      const taskId = list.taskId
+      const position = list.position
+      Convent.recoverTask(taskId)
+        .then(res=>{
+          if( position == 0 ) {
+            this.$toast.show('取消置顶')
+          }
+          else{
+            this.$toast.show('取消置底')
+          }
+          this.updateTaskList()
+        })
+    },
+    // 关闭任务
     closeTask( list ){
       let self = this
       const taskId = list.taskId
@@ -227,12 +259,7 @@ export default {
                   title: "该任务已关闭",
                   task: self.taskName
                 });
-                this.page =  {
-                  pageNum : 1 ,
-                    pageSize : 10 ,
-                    hasMore : true
-                }
-                this.getTasksList()
+              this.updateTaskList()
             })
             .catch(err => {
               self.$toast.show("提交失败!", 1000);
