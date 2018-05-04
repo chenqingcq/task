@@ -500,7 +500,7 @@
             })
             else if( text && text.length  > 10 ) {
               this.$dialog.message({
-                message: `项目名称不能超过10个字符`
+                message: `不能超过10个字符`
               })
             }
             else{

@@ -75,6 +75,9 @@
         // 选择之后关闭父组件的右边 nav
         if (this.$parent.$options._componentTag === 'v-swipeout') {
           this.$parent.onItemClick(this.text)
+          setTimeout(()=>{
+            this.$parent.render()
+          },1000)
         }
         this.$emit('click')
       }

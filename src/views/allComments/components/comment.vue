@@ -86,7 +86,7 @@ export default {
       comments: "",
       page: {
         pageNum : 1 ,
-        pageSize : 3 ,
+        pageSize : 10 ,
         hasMore : true,
       },
       placeholder: '赶快评论吧~' ,
