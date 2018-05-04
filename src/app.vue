@@ -32,10 +32,10 @@ export default {
     this.getToken();
   },
   mounted() {
-    setTimeout(() => {
-      console.log("存起来的微信配置信息 ------------------------》");
-      this.$wechat.getWechatConfig(); // 会自动 wx.config
-    }, 1500);
+//    setTimeout(() => {
+//      console.log("存起来的微信配置信息 ------------------------》");
+//      this.$wechat.getWechatConfig(); // 会自动 wx.config
+//    }, 1500);
   },
   methods: {
     getToken() {

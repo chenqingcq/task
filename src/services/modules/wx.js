@@ -37,6 +37,12 @@ class Wechat {
       currentUrl : location.origin + location.pathname
     })
   }
+
+  wechatShare(opt){
+    const url = '/api/wx/share/wx'
+    const params = opt || {}
+    return post(url, params)
+  }
 }
 export  default new Wechat()
 /*

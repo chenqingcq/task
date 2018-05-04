@@ -104,13 +104,35 @@ export const WxShareApi = function (data ={} ){
   })
 }
 
+export const WxShareApi2 = function (data ={} ){
+  Wechat.wechatShare({
+    currentUrl : location.origin + location.pathname ,
+    type : data.type ,
+    id : data.id
+  }).then(res=>{
+    const wxConfig = res.data.jssdk
+    const wechatConfig = {
+      debug : true ,
+      appId: wxConfig.AppId, // 必填，企业号的唯一标识，此处填写企业号corpid
+      timestamp: wxConfig.Timestamp, // 必填，生成签名的时间戳
+      nonceStr: wxConfig.NonceStr, // 必填，生成签名的随机串
+      signature: wxConfig.Signature,// 必填，签名，见附录1
+    }
+    const entryURL = res.data.shareUrl
+    Vue.prototype.$wechat.entryURL = entryURL
+    initWechatConfig(wechatConfig ,function(){
+      console.log(data)
+      weChatFX(data)
+    })
+  })
+}
 
 
 const initWechatConfig = function (JSsdk ,cb) {
   console.log('开始进行微信初始化')
   // 初始化微信
   wx.config({
-    //debug: true ,
+    debug: true ,
     ...JSsdk ,
     //...store.getters.weChatConfig, jdk
     jsApiList: [
@@ -118,7 +140,7 @@ const initWechatConfig = function (JSsdk ,cb) {
       'checkJsApi',
       'showAllNonBaseMenuItem',
       'hideAllNonBaseMenuItem',
-      //'onMenuShareTimeline',
+      'onMenuShareTimeline',
       'onMenuShareAppMessage',
       'previewImage',
       //'chooseImage',

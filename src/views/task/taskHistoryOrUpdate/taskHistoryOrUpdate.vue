@@ -339,8 +339,8 @@
           console.log(file)
           console.log(file.type)
           if (file.type.indexOf("image") == 0) {
-            if (file.size >= 5 * 1024 * 1024) { // 2MB
-              this.$toast.show('您上传的"第'+ chinese[i] +'"张图片大小过大，应小于5M，请重新上传', 2000)
+            if (file.size >=  5 * 1024 * 1024) { // 2MB
+              this.$toast.show('您上传的第'+ chinese[i] +'张图片大小过大，应小于5M，请重新上传', 3000)
               isMatch = false
             }
           } else {

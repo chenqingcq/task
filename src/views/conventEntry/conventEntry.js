@@ -11,7 +11,9 @@ import { numberTransformChinese } from '@/utils/transform'
 import { mapGetters } from 'vuex'
 // services
 import { Convent } from '@/services'
-
+// 微信分享
+import { WxShareApi } from '@/utils/wx.js'
+// vm
 export default {
   mixins:[proccesComputed],
   data(){
@@ -43,7 +45,11 @@ export default {
   },
   mounted(){
     this.getTasksList()
-    this.$wechat.weChatShare({
+    //this.$wechat.weChatShare({
+    //  title: '测试标题',
+    //  desc: '分享描述'
+    //})
+    WxShareApi({
       title: '测试标题',
       desc: '分享描述'
     })

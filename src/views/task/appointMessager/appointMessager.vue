@@ -420,7 +420,7 @@
     <!--</div>-->
     <v-pop  ref="popup" animate="top">
       <div class="text-right">
-        <img class="wechat-tip-img" src="@/assets/img/wechatShare.png" alt="">
+        <img class="wechat-tip-img" @click="closePop" src="@/assets/img/wechatShare.png" alt="">
       </div>
 
     </v-pop>
@@ -434,9 +434,9 @@ import share from "./share.vue";
 import { Convent } from "@/services";
 import { mapMutations, mapGetters } from "vuex";
 
-import { WxShareApi } from '@/utils/wx.js'
+import { WxShareApi2 } from '@/utils/wx.js'
 
-console.log(WxShareApi)
+console.log(WxShareApi2)
 
 export default {
   data() {
@@ -613,7 +613,22 @@ export default {
     wechatShare(){
       this.showShare = false
       this.openPop()
-      WxShareApi()
+      let shareData = {
+        taskId : '',
+        type : 0 , // id类型 0: 任务ID 1: 项目ID
+        title: '任务接受', // 分享标题
+        desc: '任务接受描述', // 分享描述
+        imgUrl: '../../../assets/img/wxshare-logo.png' // 分享图标
+      }
+      if( this.taskId ){
+        shareData.type = 0
+        shareData.id = this.taskId
+      }
+      else{
+        shareData.type = 1
+        shareData.id = this.projectId
+      }
+      WxShareApi2(shareData)
     },
     face_to_face() {
       this.showShare = !this.showShare;
