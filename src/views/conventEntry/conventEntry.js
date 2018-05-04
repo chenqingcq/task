@@ -11,7 +11,9 @@ import { numberTransformChinese } from '@/utils/transform'
 import { mapGetters } from 'vuex'
 // services
 import { Convent } from '@/services'
-
+// 微信分享
+import { WxShareApi } from '@/utils/wx.js'
+// vm
 export default {
   mixins:[proccesComputed],
   data(){
@@ -43,7 +45,11 @@ export default {
   },
   mounted(){
     this.getTasksList()
-    this.$wechat.weChatShare({
+    //this.$wechat.weChatShare({
+    //  title: '测试标题',
+    //  desc: '分享描述'
+    //})
+    WxShareApi({
       title: '测试标题',
       desc: '分享描述'
     })
@@ -150,114 +156,7 @@ export default {
       this.swipeOutIndex = -1
     },
     dealWithTaskList( taskList = [] ){
-      const data = [{
-        taskId: 0 ,
-        nickname : 'paul' ,
-        headImage : 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-        // 进行中
-        startTime : +new Date('2018-04-01') , // 开始时间
-        endTime : +new Date('2018-04-24'),  // 结束时间
-        completeDate : +new Date('2018-04-24'),  // 结束时间
-        //status : 'pending' , // 状态
-        taskStatus : 0 ,
-        process : 30,   // 进度
-        taskName : '会展任务一',
-        text : '正在进行',  // 文案
-        isBrowse	 : false ,  // 是否已经查看
-        isStar : true , // 是否已经关注 isStar	Integer	是否关注任务 0:否 1:是
-      },
-        {
-          taskId: 1 ,
-          nickname : 'paul' ,
-          headImage : 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-          // 提前完成
-          startTime : +new Date('2018-04-02') ,
-          endTime : +new Date('2018-04-13'),
-          completeDate: +new Date('2018-04-03'),
-          //status : 'aheadCompleted' ,
-          taskStatus : 2 ,
-          process : 90,
-          taskName : '会展任务一',
-          text : '提前一天通过',
-          isBrowse	 : true ,
-          isStar : true
-        },
-        {
-          taskId: 2 ,
-          nickname : 'paul' ,
-          headImage : 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-          // 超时
-          startTime : +new Date('2018-04-03') ,
-          endTime : +new Date('2018-04-13'),
-          status : 'outDate' ,
-          text : '超时一天',
-          process : 100,
-          taskStatus : 3 ,
-          taskName : '会展任务一',
-          isBrowse	 : false ,
-          isStar : false , // 是否已经关注
-        },
-        {
-          taskId: 3 ,
-          nickname : 'paul' ,
-          headImage : 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-          // 超时
-          startTime : +new Date('2018-04-01') ,
-          endTime : +new Date('2018-04-07'),
-          //status : 'outDate' ,
-          taskStatus : 3 ,
-          text : '超时五天',
-          process : 100,
-          taskName : '会展任务一',
-          isBrowse	 : false ,
-          isStar : false , // 是否已经关注
-        },
-        {
-          taskId: 3 ,
-          nickname : 'paul' ,
-          headImage : 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-          // 超时
-          startTime : +new Date('2018-04-01') ,
-          endTime : +new Date('2018-04-09'),
-          //status : 'outDate' ,
-          taskStatus : 3 ,
-          text : '超时五天',
-          process : 100,
-          taskName : '会展任务一',
-          isBrowse	 : false ,
-          isStar : false , // 是否已经关注
-        },
-        {
-          taskId: 4 ,
-          nickname : 'paul' ,
-          headImage : 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-          // 关闭
-          startTime : +new Date('2018-04-01') ,
-          endTime : +new Date('2018-04-07'),
-          //status : 'closed' ,
-          taskStatus : 4 ,
-          text : '已关闭',
-          process : 100,
-          taskName : '会展任务一',
-          isBrowse	 : false ,
-          isStar : false , // 是否已经关注
-        },
-
-        {
-          taskId: 5 ,
-          nickname : 'paul' ,
-          headImage : 'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
-          // 按时完成
-          startTime : +new Date('2018-04-06') ,
-          endTime : +new Date('2018-04-13'),
-          //status : 'completed' ,
-          taskStatus : 1 ,
-          process : 100,
-          taskName : '会展任务一',
-          isBrowse	 : true ,
-          isStar : false , // 是否已经关注
-        }]
-
+      const data = []
       const target = taskList
       return target.map((val,key)=>{
         const status = val.taskStatus
@@ -294,36 +193,79 @@ export default {
         return val
       })
     },
+    // 更新列表
+    updateTaskList(){
+      this.page =  {
+        pageNum : 1 ,
+        pageSize : 10 ,
+        hasMore : true
+      }
+      this.taskList = []
+      this.getTasksList()
+    },
+    // 置顶
     standUpTask(list , index){
       const taskId = list.taskId
       Convent.standUpTask(taskId)
       .then(res=>{
-        const c_task = this.taskList[index]
-        c_task.position = '1'
-        this.taskList.splice(index, 1)
-        this.taskList.unshift(c_task)
+        //const c_task = this.taskList[index]
+        //c_task.position = '1'
+        //this.taskList.splice(index, 1)
+        //this.taskList.unshift(c_task)
+        this.$toast.show('置顶成功')
+        this.updateTaskList()
       })
     },
+    // 置底
     sitDownTask(list, index){
       const taskId = list.taskId
       Convent.sitDownTask(taskId)
       .then(res=>{
-        const c_task = this.taskList[index]
-        c_task.position = '2'
-        this.taskList.splice(index, 1)
-        this.taskList.push(c_task)
+        this.$toast.show('置底成功')
+        //const c_task = this.taskList[index]
+        //c_task.position = '2'
+        //this.taskList.splice(index, 1)
+        //this.taskList.push(c_task)
+        this.updateTaskList()
       })
     },
-    closeTask( list, index ){
+    // 取消置顶或者置顶
+    recoverTask( list ){
       const taskId = list.taskId
+      const position = list.position
       Convent.recoverTask(taskId)
-      .then(res=>{
-          this.page =  {
-            pageNum : 1 ,
-              pageSize : 10 ,
-              hasMore : true
+        .then(res=>{
+          if( position == 0 ) {
+            this.$toast.show('取消置顶')
           }
-          this.getTasksList()
+          else{
+            this.$toast.show('取消置底')
+          }
+          this.updateTaskList()
+        })
+    },
+    // 关闭任务
+    closeTask( list ){
+      let self = this
+      const taskId = list.taskId
+      this.$dialog.confirm({
+        message: "确定关闭该任务?",
+        confirm() {
+          Convent.closeTask(taskId)
+            .then(res => {
+              console.log(res);
+                self.$dialog.notice({
+                  state: "pass",
+                  title: "该任务已关闭",
+                  task: self.taskName
+                });
+              this.updateTaskList()
+            })
+            .catch(err => {
+              self.$toast.show("提交失败!", 1000);
+              self.$router.push("conventEntry"); //提交失败之后跳转至首页?
+            });
+        }
       })
     }
   }

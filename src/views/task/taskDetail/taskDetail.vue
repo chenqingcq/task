@@ -520,9 +520,6 @@ img.partyLogo {
 .bounceIn-leave-active {
   animation: bounceOut 0.5s ease;
 }
-.task-detail-container {
-  overflow: hidden;
-}
 </style>
 <template>
   <div class="task-detail-container">
@@ -651,10 +648,10 @@ import { mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   data() {
     return {
-      projectId: 0,
+      projectId : 0,
 
-      currentPoint: null,
-      currentNode: "",
+      currentPoint : null,
+      currentNode:'',
       activeFont: "",
       headImg: "",
       taskDesc: "",
@@ -679,7 +676,7 @@ export default {
       node: " ",
       taskName: "",
       taskDesc: "",
-      taskStatus: -1,
+      taskStatus : -1 ,
       taskId: "",
       active: "",
       deadLine: "暂未设置起止时间",
@@ -691,7 +688,7 @@ export default {
         "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
       ],
       members: [],
-      progressDesc: "",
+      progressDesc : '' ,
       items: [
         //轮播图处理时   51 234 51遵守这个有原则
         //            "http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650",
@@ -738,25 +735,25 @@ export default {
     }
   },
   methods: {
+
     ...mapActions(["setCurrentProject"]),
     updateComments() {
       this.getComments();
     },
-    doWechatPreview(items, index) {
-      this.$wechat.doWechatPreview(items, index);
+    doWechatPreview(items, index){
+      this.$wechat.doWechatPreview(items, index)
     },
     getComments() {
       const taskId = this.$route.query.taskId;
-      const self = this;
-      Convent.getTaskComments({
-        taskId,
-        pageSize: "10"
+      const self = this
+      Convent.getTaskComments( {
+        taskId ,
+        pageSize: "4"
       })
         .then(res => {
           console.log(res, "------一级评论------");
           if (res.code == 1 && res.status == 200) {
-            self.members = res.data.slice(0, 3);
-            debugger;
+            self.members = res.data
           }
           if (res.code == 603) {
             self.$toast.show("任务暂未开启请勿评论", 1000);
@@ -775,8 +772,8 @@ export default {
       //获取评论
       let self = this;
       Convent.getTaskComments({
-        taskId: this.$route.query.taskId,
-        pageSize: 3
+        taskId : this.$route.query.taskId ,
+        pageSize: 4
       })
         .then(res => {
           console.log(res, "------一级评论------");
@@ -839,7 +836,7 @@ export default {
       this.SET_USER_ROLE(this.role);
     },
     getData() {
-      const taskId = this.$route.query.taskId;
+      const taskId = this.$route.query.taskId
       const projectId = this.projectId;
       Convent.taskDetail({
         taskId,
@@ -860,21 +857,21 @@ export default {
           this.isLike = res.isStar == "0" ? false : true;
           this.position = res.position;
           this.defineStatus(res.taskStatus);
-          this.taskStatus = res.taskStatus;
+          this.taskStatus = res.taskStatus
           this.defineRole(res.role);
           this.fomatTime();
 
           const project = {
-            projectId: res.projectId,
-            projectName: res.projectName,
-            role: this.role,
-            isCreate: res.role == 3 ? true : false
-          };
-          // set Vuex state
-          this.setCurrentProject(project);
+            projectId : res.projectId ,
+            projectName : res.projectName ,
+            role: this.role ,
+            isCreate : res.role == 3 ? true : false
+          }
+      // set Vuex state
+          this.setCurrentProject(project)
 
-          if (res.currentPoint) {
-            this.currentPoint = res.currentPoint;
+          if( res.currentPoint ){
+            this.currentPoint = res.currentPoint
           }
 
           if (res.latestProgress) {
@@ -885,7 +882,7 @@ export default {
             let first = this.items[0];
             this.items.unshift(last);
             this.items.push(first);
-            this.progressDesc = res.latestProgress.progressDesc;
+            this.progressDesc = res.latestProgress.progressDesc
             //this
           } else {
             this.items = [];
@@ -990,8 +987,8 @@ export default {
       this.$router.push({
         path: "/updateTaskSetting",
         query: {
-          projectId: self.projectId,
-          taskId: self.taskId
+          projectId:self.projectId,
+          taskId:self.taskId
         }
       });
     },
@@ -1094,13 +1091,14 @@ export default {
       });
     },
     towardsUpdateHistory() {
-      if (this.taskStatus == 0) {
-        this.$toast.show("任务暂未开始");
-        return;
+
+      if( this.taskStatus == 0 ){
+        this.$toast.show('任务暂未开始')
+        return
       }
-      if (this.role != "operator" && this.items.length == 0) {
-        this.$toast.show("暂无更新");
-        return;
+      if( this.role != 'operator' && this.items.length == 0 ){
+        this.$toast.show('暂无更新')
+        return
       }
       if (this.role != "operator" && this.items.length == 7) {
         this.$toast.show("任务已拒绝");
@@ -1149,13 +1147,15 @@ export default {
     this.init();
   },
   mounted() {
-    const projectId = this.$route.query.projectId;
-    this.taskId = this.$route.query.taskId;
-    if (projectId) {
-      this.projectId = projectId;
-    } else {
-      this.projectId = this.getProjectId;
+    const projectId = this.$route.query.projectId
+    this.taskId = this.$route.query.taskId
+    if( projectId ){
+      this.projectId = projectId
     }
+    else{
+      this.projectId = this.getProjectId
+    }
+
   },
   beforeDestroy() {
     this.timer = null;

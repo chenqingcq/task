@@ -15,7 +15,7 @@ const axiosInstance = axios.create({
     // baseURL: '//rk4k3z.natappfree.cc/v1/', //微信测试,
     // baseURL: '//192.168.0.126:8087/v1/', //测试服务器
     // baseURL: '//bf4c5e.natappfree.cc/v1/', //测试服务器
-    //  baseURL: '//192.168.0.115:3010/taskapi/v1/',
+    // baseURL: '//192.168.0.115:3010/taskapi/v1/',
     baseURL: 'http://dis.ccnfgame.com/taskapi/v1/',
     //baseURL: '//share.s1.natapp.cc/v1/', //测试服务器
     timeout: 15000
@@ -288,7 +288,7 @@ export const upImage = function(url, { name, e }) {
     }
     // 判断图片大小，超出后直接返回
     const fileSize = file.size
-    if (fileSize > (2 * 1024 * 1024)) {
+    if (fileSize > (5 * 1024 * 1024)) {
         return new Promise((resolve, reject) => {
             reject(ErrorMessage.imageSizeErr)
         })

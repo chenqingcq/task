@@ -325,6 +325,12 @@
 .radio {
   opacity: 0;
 }
+.wechat-tip-img{
+  width: 593px;
+  height: 896/2px ;
+  margin-right: 20px;
+  margin-top: 10px;
+}
 </style>
 <template>
 
@@ -344,7 +350,7 @@
       <share :showShare='showShare'>
         <ul class="share-items">
           <div class="arrow"></div>
-          <li><img src="@/assets/img/01.png" />微信分发</li>
+          <li @click="wechatShare" ><img src="@/assets/img/01.png" />微信分发</li>
           <li @click='face_to_face'><img src="@/assets/img/02.png" />面对面发</li>
         </ul>
       </share>
@@ -385,7 +391,7 @@
               <div class="comments">{{_item.commentNum}}</div>
               <div class="progress">{{_item.progress}}</div>
               <div class="arrow" >
-                
+
                 </div>
             </li>
           </div>
@@ -404,8 +410,20 @@
       <div v-if="addMember" class="addExcutor" @click='addExcutor'>添加人员</div>
       <div ref="deleteBtn" :class="{deleteBtn:true,deleteExcutor:deleteMember,deleteExcutorDisable :doNothing}" @click='deleteExcutor'>{{deleteText}}</div>
     </div>
-    <invites   :showInvite='showInvite' ></invites>
-    <qrcode :showQrcode='showQrcode' @close='closeQrcode' :projectId='projectId' :taskId = 'taskId'></qrcode>  
+    <invites :showInvite='showInvite' ></invites>
+    <qrcode :showQrcode='showQrcode' @close='closeQrcode' :projectId='projectId' :taskId = 'taskId'></qrcode>
+    <!--微信分发&#45;&#45; 三点分享-->
+    <!--<div class="wechatShare-b" >-->
+      <!--<div class="mask">-->
+      <!--</div>-->
+      <!--<img src="@/assets/img/wechatShare.png" alt="">-->
+    <!--</div>-->
+    <v-pop  ref="popup" animate="top">
+      <div class="text-right">
+        <img class="wechat-tip-img" @click="closePop" src="@/assets/img/wechatShare.png" alt="">
+      </div>
+
+    </v-pop>
   </div>
 </template>
 <script>
@@ -415,6 +433,11 @@ import invites from "./invite.vue";
 import share from "./share.vue";
 import { Convent } from "@/services";
 import { mapMutations, mapGetters } from "vuex";
+
+import { WxShareApi2 } from '@/utils/wx.js'
+
+console.log(WxShareApi2)
+
 export default {
   data() {
     return {
@@ -551,6 +574,12 @@ export default {
     ...mapMutations({
       SET_USER_ID: "SET_USER_ID"
     }),
+    openPop(){
+      this.$refs.popup.open()
+    },
+    closePop(){
+      this.$refs.popup.close()
+    },
     // debounce(methods){
     //   clearTimeout(methods.timer);
     //   methods.timer = setTimeout(()=>{
@@ -584,6 +613,26 @@ export default {
     },
     closeQrcode() {
       this.showQrcode = false;
+    },
+    wechatShare(){
+      this.showShare = false
+      this.openPop()
+      let shareData = {
+        taskId : '',
+        type : 0 , // id类型 0: 任务ID 1: 项目ID
+        title: '任务接受', // 分享标题
+        desc: '任务接受描述', // 分享描述
+        imgUrl: '../../../assets/img/wxshare-logo.png' // 分享图标
+      }
+      if( this.taskId ){
+        shareData.type = 0
+        shareData.id = this.taskId
+      }
+      else{
+        shareData.type = 1
+        shareData.id = this.projectId
+      }
+      WxShareApi2(shareData)
     },
     face_to_face() {
       this.showShare = !this.showShare;

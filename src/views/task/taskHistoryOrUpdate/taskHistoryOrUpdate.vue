@@ -43,7 +43,6 @@
                 <img class="img" src="../../../assets/img/icon-add01.png" alt="">
                 <input type="file" accept="image/gif,image/jpg,image/jpeg,image/bmp,image/png" @change ="selectImages($event)" multiple="multiple">
               </div>
-
             </div>
             <div @click="addTaskProcess" class="btn-small-primary b-MT-5" >提交</div>
           </div>
@@ -232,8 +231,12 @@
           console.log(res.data)
           this.previewImages = []
           this.imagesFiles = []
+          this.newSectionVal = ''
           this.getProcessList()
 
+        })
+        .catch(res=>{
+          this.$toast.show(res.msg,2000)
         })
       },
       // 获取进度列表后的处理
@@ -326,16 +329,18 @@
       imageFilter(files){
         // 是否符合的图片格式和大小
         let isMatch = true
+        const chinese = ['一','二','三','四']
         if( files.length > 4 || (files.length + this.imagesFiles.length ) >4){
           this.$toast.show('最多只能上传4张图片', 2000)
           return false
         }
+
         for (var i = 0, file; file = files[i]; i++) {
           console.log(file)
           console.log(file.type)
           if (file.type.indexOf("image") == 0) {
-            if (file.size >= 2 * 1024 * 1024) { // 2MB
-              this.$toast.show('您这张"' + file.name + '"图片大小过大，应小于2M，请重新上传', 2000)
+            if (file.size >=  5 * 1024 * 1024) { // 2MB
+              this.$toast.show('您上传的第'+ chinese[i] +'张图片大小过大，应小于5M，请重新上传', 3000)
               isMatch = false
             }
           } else {

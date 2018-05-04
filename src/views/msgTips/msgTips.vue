@@ -33,6 +33,7 @@
 <template>
     <div class="text-center " style="position: relative">
       <img v-if="type==701" class='bg2' src="../../assets/img/error701.png" alt="">
+      <img v-else-if="type==702" class='bg2' src="../../assets/img/error702.png" alt="">
       <img v-else class='bg' src="../../assets/img/image-background02.png" alt="">
       <div class=" b_FS-16 c_7" :class=" type==701 ?'flexible-text-701':'flexible-text'">
         {{text}}
@@ -44,6 +45,7 @@
            {{ type== 1? '返回项目管理':'' }}
            {{ type== 2? '返回参展管理':'' }}
            {{ type== 701? '返回':'' }}
+           {{ type== 702? '返回':'' }}
         </div>
       </div>
 
@@ -67,6 +69,7 @@
             case '1' : this.text = '提交成功哦';titleEl.innerHTML = '提交';break ;
             case '2' : this.text = '提交成功哦';titleEl.innerHTML = '任务约定';break ;
             case '701' : this.text = '该任务已经被领取';titleEl.innerHTML = '任务约定';break ;
+            case '702' : this.text = '不能给自己指派任务';titleEl.innerHTML = '任务约定';break ;
             default : this.text = '提交成功哦';titleEl.innerHTML = '该任务已经被领取';break ;
           }
         },

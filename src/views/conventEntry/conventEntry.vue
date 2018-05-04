@@ -216,13 +216,13 @@
 
             </div>
             <div slot = 'right-menu'>
-              <v-swipe-btn v-if="list.position == 0" id="0" :width="50" @click="standUpTask( list, index )" >
+              <v-swipe-btn v-if="list.position == 0" id="0" :width="50" @click="recoverTask( list, index )" >
                 <img class="swiper-img" src="../../assets/img/top-cancel.png" alt="">
               </v-swipe-btn>
               <v-swipe-btn v-if="list.position != 0" id="1" :width="50" @click="standUpTask( list, index )" >
                 <img class="swiper-img" src="../../assets/img/top.png" alt="">
               </v-swipe-btn >
-                <v-swipe-btn v-if="list.position == 2" id="2" :width="50" @click="standUpTask( list, index )" >
+                <v-swipe-btn v-if="list.position == 2" id="2" :width="50" @click="recoverTask( list, index )" >
                   <img class="swiper-img" src="../../assets/img/down-cancel.png" alt="">
                 </v-swipe-btn>
               <v-swipe-btn
@@ -232,7 +232,7 @@
                 @click="sitDownTask( list, index )" >
                 <img class="swiper-img" src="../../assets/img/down.png" alt="">
               </v-swipe-btn >
-              <v-swipe-btn id="4" v-if="role=='creator' && list.taskStatus != 2 " :width="50" type="warn" >
+              <v-swipe-btn @click="closeTask( list )" id="4" v-if="role=='creator' && list.taskStatus != 2 " :width="50" type="warn" >
                 <img class="swiper-img close"  src="../../assets/img/close-task.png" alt="">
               </v-swipe-btn>
             </div>
