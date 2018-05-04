@@ -37,6 +37,7 @@ export default function getInstance(options) {
           type: options.type,
           placeholder: options.placeholder || '请输入内容',
           show: true,
+          length:options.length || 10,
           operate: options.operate || function (text) { //回调函数
             console.log(text)
           }

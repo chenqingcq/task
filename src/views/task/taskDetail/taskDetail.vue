@@ -536,7 +536,7 @@ img.partyLogo {
                 <span class="task-detail-content">
                   {{taskDesc}}
                 </span>
-                <img src="@/assets/img/icon-slide downward.png"  @touchend='showMoreTaskDesc'/>
+                <img  v-show="taskDesc.length &&  taskDesc.length > 10" src="@/assets/img/icon-slide downward.png"  @click='showMoreTaskDesc'/>
               </div>
               <transition name="bounceIn">
                 <div class="taskDesc-container" v-show="showDetail">
@@ -568,7 +568,7 @@ img.partyLogo {
         <div class="task-progress">
           <div class="task-desc" @click='toggleTaskProgress'>
             <span>{{progressDesc}}</span>
-            <img src="@/assets/img/icon-slide downward.png" />
+            <img v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />
           </div>
           <div class="detail-btn" @click='towardsUpdateHistory'>
             {{ role == 'operator'? '更新进度' : '查看上传历史'  }}
