@@ -214,10 +214,7 @@ li#allowCreateTask {
 }
 
 .confirm {
-  position: fixed;
-  bottom: 8*2px;
-  right: 8*2px;
-  left: 8*2px;
+  margin-top: 240px;
   height: 44*2px;
   background: #fff;
   background-image: linear-gradient(-180deg, #86c0f8 0%, #4e8cee 100%);
@@ -864,7 +861,7 @@ export default {
           path: "/appointMessager",
           query: {
             taskId: self.taskId,
-            project: self.getProjectId
+            projectId: self.getProjectId
           }
         });
       } else if (this.check_pass && !this.taskId) {

@@ -214,11 +214,7 @@ li#allowCreateTask {
 }
 
 .confirm {
-  position: fixed;
-  bottom: 8*2px;
-  right: 8*2px;
-  left: 8*2px;
-  height: 44*2px;
+  margin-top: 240px;
   background: #fff;
   background-image: linear-gradient(-180deg, #86c0f8 0%, #4e8cee 100%);
   box-shadow: 0 2*2px 4px 0 rgba(0, 0, 0, 0.38);
@@ -539,12 +535,13 @@ export default {
   },
   beforeRouteEnter: (to, from, next) => {
     console.log(to, from);
-    if (from.path == "/appointMessager" && to.path == "/addTaskSetting") {
+    if (from.path == "/appointMessager" && to.path == "/updateTaskSetting") {
       next(vm => {
         // console.log(vm.getTaskExecutor); //过滤选中的执行人;
         vm.taskId = to.query.taskId;
         vm.projectId = to.query.projectId;
         // vm.executor = vm.getTaskExecutor.executor;
+        console.log(vm.taskId,vm.projectId,'------------------------------')
         vm.setExcutor();
       });
     } else if (to.path == "/updateTaskSetting" && from.path == "/taskDetail") {
@@ -967,7 +964,7 @@ export default {
     // }
   },
   mounted() {
-    console.log(this.projectId);
+    console.log('=============update====================');
   }
 };
 </script>
