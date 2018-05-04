@@ -40,7 +40,12 @@ const doWechatPreview = function(imglist = [], nowIndx = 0)  {
   var current = ''
   var _self = this
   imglist.forEach(function (value, index) {
-    urls.push(value)
+    if( typeof  value == 'object' && 'imgUrl' in value ){
+      urls.push( location.protocol + '//'+ value.imgUrl )
+    }else{
+      urls.push( location.protocol + '//'+ value)
+    }
+
     //urls.push(  sysConfig.baseImgUrl  + value.url + '?imageView2/2/w/' + value.width + '/h/' + value.height + '/q/85!')
   })
   current = urls[nowIndx]
@@ -185,19 +190,19 @@ const weChatFX =  (data)=> {
 
 const install = function(JSsdk={}){
   initWechatConfig(JSsdk={})
-}
-Vue.prototype.$wechat = {
-  install ,
-  getWechatConfig ,
-  weChatShare: weChatFX ,
-  weChatHandle: {
-    isConfig: false,
-    errorCount: 0,
-    networkType: null,
-    trace: '' // 同于统计的标示参数
-  },
-  doWechatPreview: doWechatPreview ,
+  Vue.prototype.$wechat = {
+    install ,
+    getWechatConfig ,
+    weChatShare: weChatFX ,
+    weChatHandle: {
+      isConfig: false,
+      errorCount: 0,
+      networkType: null,
+      trace: '' // 同于统计的标示参数
+    },
+    doWechatPreview: doWechatPreview ,
 
+  }
 }
 
 export default {

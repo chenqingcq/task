@@ -554,9 +554,9 @@ img.partyLogo {
           </div>
         </div>
         <!--轮播图-->
-        <slide ref="scroll" :loop='loop' v-if="items.length">
+        <slide ref="scroll" :loop='loop' v-if="items.length"   >
           <div class="slider-item" v-for="(item,index) in items" :key="index">
-            <img :src="'//'+item.imgUrl" :alt="index">
+            <img @click = "doWechatPreview(items, index)" :src="'//'+item.imgUrl" :alt="index">
           </div>
         </slide>
         <div v-else class="no-historyUpdate">
@@ -718,22 +718,26 @@ export default {
     console.log(to, from);
     if (to.path == "/taskDetail" && from.path == "/conventEntry") {
       next(vm => {
-        vm._getTaskId();
+        // vm._getTaskId(); 有bug
         vm.getData();
         vm.getTaskComment();
       });
     } else {
       next(vm => {
-        vm._getTaskId();
+        // vm._getTaskId();
         vm.getData();
         vm.getTaskComment();
       });
     }
   },
   methods: {
+
     ...mapActions(["setCurrentProject"]),
     updateComments() {
       this.getComments();
+    },
+    doWechatPreview(items, index){
+      this.$wechat.doWechatPreview(items, index)
     },
     getComments() {
       const taskId = this.$route.query.taskId;
@@ -1127,6 +1131,7 @@ export default {
   },
   mounted() {
     const projectId = this.$route.query.projectId
+    this.taskId = this.$route.query.taskId
     if( projectId ){
       this.projectId = projectId
     }
