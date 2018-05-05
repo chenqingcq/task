@@ -241,7 +241,7 @@ export default {
         path: "/allReply",
         query:{
           commentPid : item.commentId ,
-          taskId: this.$route.query.taskId ,
+          taskId: this.$route.query.taskId ,//测
           nickName : item.nickname
         }
       });
