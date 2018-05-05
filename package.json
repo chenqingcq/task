@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "cos-js-sdk-v5": "^0.4.5",
     "lib-flexible": "^0.3.2",
     "qrcode": "^1.2.0",
     "vue": "^2.5.2",

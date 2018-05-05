@@ -5,10 +5,11 @@ import Demo from './modules/demo'
 import Wechat from './modules/wx'
 import User from './modules/user'
 import Convent from './modules/convention'
-
+import Cos from './modules/cos'
 export {
   Demo ,
   Wechat ,
   User ,
   Convent,
+  Cos
 }

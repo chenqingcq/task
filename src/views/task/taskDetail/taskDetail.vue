@@ -569,8 +569,8 @@ img.partyLogo {
         <div class="task-progress">
           <div class="task-desc" @click='toggleTaskProgress'>
             <span>
-              {{progressDesc}} 
-            <img v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />       
+              {{progressDesc}}
+            <img v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />
             </span>
           </div>
           <div v-if="taskStatus != 0 &&  taskStatus != 3  " class="detail-btn" @click='towardsUpdateHistory'>
@@ -946,7 +946,7 @@ export default {
         }
         case 7: {
           this.active = "overDeadLined";
-          this.activeFont = "未接受且超时";
+          this.activeFont = "超时未接受";
           break;
         }
       }

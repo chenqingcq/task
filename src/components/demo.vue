@@ -212,28 +212,7 @@
           showToast(){
             this.$toast.show('操作成功')
           },
-          uploadImage(e){
-            //上传图片
-            console.log(e)
-            // this.option.img
-            let files = e.target.files
-            Convent.addTaskProcess({
-              progressDesc: '1235',
-              taskId : 988694283851055106 ,
-              list : false ,
-              images : files
-            })
-            .then(res=>{
-              console.log(res)
-            })
-            .catch(res=>{
-              console.log('error', res)
-            })
 
-
-            // 转化为blob
-
-          }
         },
     }
 </script>
