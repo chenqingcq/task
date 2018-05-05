@@ -149,7 +149,8 @@ export default {
         path: "/allReply",
         query: {
           taskId: this.taskId ,
-          commentPid: item.commentId
+          commentPid: item.commentId,
+          nickName : item.nickname
         }
       })
     },
