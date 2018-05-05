@@ -20,7 +20,7 @@
       right: 10*2px;
       top: 10*2px;
       height: 15*2px;
-      padding:10px;
+      padding: 10px;
       box-sizing: content-box;
       z-index: 1;
     }
@@ -360,7 +360,7 @@
       </share>
     </header>
     <div class="editDeadTime" ref="lisItem" :style='styleObj'>
-      <scroll >
+      <scroll ref="scroll" >
         <ul>
           <div v-for="(item,index) in taskExecutors" :key="index">
             <li :userId='item[0].userId' :sex='item[0].sex'>
@@ -379,8 +379,8 @@
               <div class="update">{{item[0].progressNum}}</div>
               <div class="comments">{{item[0].commentNum}}</div>
               <div class="progress">{{item[0].progress}}</div>
-              <div class="arrow" @click='showSub(index)'>
-                <img :src="imgUrl(index)" v-show="item.length>1" />
+              <div class="arrow" @click='showSub($event,index)'>
+                <img :src="imgUrl" v-if="item.length>1" />
               </div>
             </li>
             <li class="sub-item" v-for="(_item,_index) in item"  :key="_index" v-show="computedShow && index == currentIndex_" >
@@ -494,7 +494,7 @@ export default {
       getTaskExecutor: "getTaskExecutor",
       getUserId: "getUserId"
     }),
-    computedShow(){
+    computedShow() {
       return this.showSub_[this.currentIndex_];
     },
     styleObj() {
@@ -506,6 +506,17 @@ export default {
         return {
           background: ` rgb(244, 244, 244)`
         };
+      }
+    },
+    imgUrl() {
+      console.log(
+        this.showSub_[this.currentIndex_],
+        "-----------------------------"
+      );
+      if (this.showSub_[this.currentIndex_]) {
+        return require("@/assets/img/05.png");
+      } else {
+        return require("@/assets/img/04.png");
       }
     }
   },
@@ -527,6 +538,12 @@ export default {
       } else {
         this.$refs.deleteBtn.addEventListener("click", this.deleteExcutor);
       }
+    },
+    currentIndex_: {
+      handler(newValue, oldValue) {
+        console.log(newValue, oldValue, "------currendtIndex------");
+      },
+      deep: true
     }
   },
   beforeRouteEnter: (to, from, next) => {
@@ -714,18 +731,13 @@ export default {
     progress(item) {
       return "100%";
     },
-    imgUrl(index) {
-      if (this.showSub_[index]) {
-        return require("@/assets/img/05.png");
-      } else {
-        return require("@/assets/img/04.png");
-      }
-    },
-    showSub(index) {
+    showSub(e,index) {
+      this.$refs.scroll.refresh();
+      this.$nextTick(() => {
         this.currentIndex_ = index;
-        console.log(index, this.showSub_);
-        this.showSub_[index] = !this.showSub_[index];
-        this.subShow = this.showSub_[index];
+        this.showSub_[this.currentIndex_] = !this.showSub_[this.currentIndex_];
+        console.log(e,index, this.showSub_[this.currentIndex_]);
+      });
     },
     inviteOthers() {
       //分享

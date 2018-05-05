@@ -145,9 +145,9 @@
           white-space: nowrap;
           img {
             height: 10px;
-            right: 30px;
             display: inline-block;
             top: 14px;
+            float: right;
             position: absolute;
           }
         }
@@ -520,6 +520,16 @@ img.partyLogo {
 .bounceIn-leave-active {
   animation: bounceOut 0.5s ease;
 }
+.taskDetail_ {
+  padding: 4*2px 10*2px 8*2px 20*2px;
+  height: auto;
+  width: 100%;
+  font-size: 12px*2;
+  word-break: break-all;
+  font-family: PingFangSC-Medium;
+  color: rgba(51, 51, 51, 1);
+  line-height: 17*2px;
+}
 </style>
 <template>
   <div class="task-detail-container">
@@ -605,17 +615,34 @@ img.partyLogo {
         </div>
       </div>
     </div>
+    <!-- 任务标准 -->
+    <div class="project-party">
+      <div class="b-LR-10">
+        <div class="panel b-MT-10 c_white-bg">
+          <div class="b-LR-10 b-T-5 between ">
+            <p class="middle b_FS-14 c_6 "><span class="dot success"></span><span class="b-L-4">验收标准</span></p>
+          </div>
+          <div  class="taskDetail_" v-if="checkStandard.length">
+           {{checkStandard}}
+          </div>
+          <div  class="taskDetail_" style="textAlign:center;color:#999" v-else>
+           暂未设置验收标准
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="project-party">
       <div class="b-LR-10">
         <div class="panel b-MT-10 c_white-bg">
           <div class="b-LR-10 b-T-5 between ">
             <p class="middle b_FS-14 c_6 "><span class="dot success"></span><span class="b-L-4">进入项目群</span></p>
-            <div class="entry-project-party">
-              <img class="partyLogo" :src="item" v-for="item in parties" :key="item.id" />
+            <div class="entry-project-party" v-show="parties.length" @click="goToGroup">
+              <a href=""></a><img class="partyLogo" :src="item" v-for="item in parties" :key="item.id" />
             </div>
           </div>
         </div>
       </div>
+      <!--  -->
     </div>
     <comments v-if="taskStatus!= 0 && taskStatus != 7 " :members='members' :taskId='taskId' @close='updateComments' :status="taskStatus" ></comments>
     <!--创建者 关闭 未开始 已拒绝 未开始且拒绝-->
@@ -648,10 +675,10 @@ import { mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   data() {
     return {
-      projectId : 0,
+      projectId: 0,
 
-      currentPoint : null,
-      currentNode:'',
+      currentPoint: null,
+      currentNode: "",
       activeFont: "",
       headImg: "",
       taskDesc: "",
@@ -676,7 +703,7 @@ export default {
       node: " ",
       taskName: "",
       taskDesc: "",
-      taskStatus : -1 ,
+      taskStatus: -1,
       taskId: "",
       active: "",
       deadLine: "暂未设置起止时间",
@@ -688,7 +715,7 @@ export default {
         "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
       ],
       members: [],
-      progressDesc : '' ,
+      progressDesc: "",
       items: [
         //轮播图处理时   51 234 51遵守这个有原则
         //            "http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650",
@@ -728,32 +755,30 @@ export default {
       });
     } else {
       next(vm => {
-        // vm._getTaskId();
         vm.getData();
         vm.getTaskComment();
       });
     }
   },
   methods: {
-
     ...mapActions(["setCurrentProject"]),
     updateComments() {
       this.getComments();
     },
-    doWechatPreview(items, index){
-      this.$wechat.doWechatPreview(items, index)
+    doWechatPreview(items, index) {
+      this.$wechat.doWechatPreview(items, index);
     },
     getComments() {
       const taskId = this.$route.query.taskId;
-      const self = this
-      Convent.getTaskComments( {
-        taskId ,
+      const self = this;
+      Convent.getTaskComments({
+        taskId,
         pageSize: "4"
       })
         .then(res => {
           console.log(res, "------一级评论------");
           if (res.code == 1 && res.status == 200) {
-            self.members = res.data
+            self.members = res.data;
           }
           if (res.code == 603) {
             self.$toast.show("任务暂未开启请勿评论", 1000);
@@ -772,7 +797,7 @@ export default {
       //获取评论
       let self = this;
       Convent.getTaskComments({
-        taskId : this.$route.query.taskId ,
+        taskId: this.$route.query.taskId,
         pageSize: 4
       })
         .then(res => {
@@ -835,8 +860,20 @@ export default {
       //存取角色
       this.SET_USER_ROLE(this.role);
     },
+    goToGroup() {
+      console.log("---gotoGroup---");
+      let self = this;
+      Convent.goToGroup(this.projectId)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+          this.$toast.show("跳转失败...");
+        });
+    },
     getData() {
-      const taskId = this.$route.query.taskId
+      const taskId = this.$route.query.taskId;
       const projectId = this.projectId;
       Convent.taskDetail({
         taskId,
@@ -854,24 +891,25 @@ export default {
           this.isBrowse = res.isBrowse;
           this.isOpen = res.isOpen;
           this.isPass = res.isPass;
+          this.progressDesc = res.latestProgress.progressDesc;
           this.isLike = res.isStar == "0" ? false : true;
           this.position = res.position;
           this.defineStatus(res.taskStatus);
-          this.taskStatus = res.taskStatus
+          this.taskStatus = res.taskStatus;
           this.defineRole(res.role);
           this.fomatTime();
 
           const project = {
-            projectId : res.projectId ,
-            projectName : res.projectName ,
-            role: this.role ,
-            isCreate : res.role == 3 ? true : false
-          }
-      // set Vuex state
-          this.setCurrentProject(project)
+            projectId: res.projectId,
+            projectName: res.projectName,
+            role: this.role,
+            isCreate: res.role == 3 ? true : false
+          };
+          // set Vuex state
+          this.setCurrentProject(project);
 
-          if( res.currentPoint ){
-            this.currentPoint = res.currentPoint
+          if (res.currentPoint) {
+            this.currentPoint = res.currentPoint;
           }
 
           if (res.latestProgress) {
@@ -882,7 +920,6 @@ export default {
             let first = this.items[0];
             this.items.unshift(last);
             this.items.push(first);
-            this.progressDesc = res.latestProgress.progressDesc
             //this
           } else {
             this.items = [];
@@ -890,7 +927,7 @@ export default {
         })
         .catch(err => {
           if (err) {
-            this.$toast.show("发送请求失败!"), 500;
+            // this.$toast.show("发送请求失败!",500);
           }
         });
       //获取群头像
@@ -987,8 +1024,8 @@ export default {
       this.$router.push({
         path: "/updateTaskSetting",
         query: {
-          projectId:self.projectId,
-          taskId:self.taskId
+          projectId: self.projectId,
+          taskId: self.taskId
         }
       });
     },
@@ -1091,14 +1128,13 @@ export default {
       });
     },
     towardsUpdateHistory() {
-
-      if( this.taskStatus == 0 ){
-        this.$toast.show('任务暂未开始')
-        return
+      if (this.taskStatus == 0) {
+        this.$toast.show("任务暂未开始");
+        return;
       }
-      if( this.role != 'operator' && this.items.length == 0 ){
-        this.$toast.show('暂无更新')
-        return
+      if (this.role != "operator" && this.items.length == 0) {
+        this.$toast.show("暂无更新");
+        return;
       }
       if (this.role != "operator" && this.items.length == 7) {
         this.$toast.show("任务已拒绝");
@@ -1147,15 +1183,13 @@ export default {
     this.init();
   },
   mounted() {
-    const projectId = this.$route.query.projectId
-    this.taskId = this.$route.query.taskId
-    if( projectId ){
-      this.projectId = projectId
+    const projectId = this.$route.query.projectId;
+    this.taskId = this.$route.query.taskId;
+    if (projectId) {
+      this.projectId = projectId;
+    } else {
+      this.projectId = this.getProjectId;
     }
-    else{
-      this.projectId = this.getProjectId
-    }
-
   },
   beforeDestroy() {
     this.timer = null;
