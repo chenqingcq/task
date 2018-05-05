@@ -879,7 +879,6 @@ export default {
         });
     },
     jumpToGroup(){
-      debugger;
       window.location.href = this.groupUrl
     },
     getData() {
