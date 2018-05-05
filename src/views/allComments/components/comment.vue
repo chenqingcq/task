@@ -241,12 +241,13 @@ export default {
         path: "/allReply",
         query:{
           commentPid : item.commentId ,
-          taskId: this.$route.query.taskId ,
+          taskId: this.$route.query.taskId ,//测
           nickName : item.nickname
         }
       });
     },
     successComment() {
+      this.comments = '';
       console.log(this.comments);
       this.$dialog.message({
         message: "评论成功!",

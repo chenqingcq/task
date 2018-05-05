@@ -325,9 +325,9 @@
 .radio {
   opacity: 0;
 }
-.wechat-tip-img{
+.wechat-tip-img {
   width: 593px;
-  height: 896/2px ;
+  height: 896/2px;
   margin-right: 20px;
   margin-top: 10px;
 }
@@ -481,7 +481,8 @@ export default {
       showArr: [],
       showSub_: [],
       deletSubArr: [],
-      mode: 2
+      mode: 2,
+      entry: 0,//默认入口为任务添加页面 0 更新页 1  其他 2
     };
   },
   computed: {
@@ -510,8 +511,6 @@ export default {
     taskExecutors(newVal) {
       if (newVal.length) {
         this.defineShow(newVal);
-      } else {
-        this.showInvite = true;
       }
     },
     showBtntype(newVal, oldVal) {
@@ -528,8 +527,8 @@ export default {
     console.log(to, from);
     if (to.path == "/appointMessager" && from.path == "/addTaskSetting") {
       next(vm => {
+        vm.entry = 0;
         if (window.location.hash.includes("projectId")) {
-          let reg = /projectId=\d{18}/;
           vm.projectId = to.query.projectId;
           vm.getExcutorList(vm.projectId);
         }
@@ -547,8 +546,20 @@ export default {
           vm.$router.push("addTaskSetting");
         }
       });
+    } else if (
+      to.path == "/appointMessager" &&
+      from.path == "/updateTaskSetting"
+    ) {
+      next(vm => {
+        vm.entry = 1;
+        vm.projectId = to.query.projectId;
+        vm.taskId = to.query.taskId;
+        vm.getExcutorList(vm.projectId);
+        // debugger
+      });
     } else {
       next(vm => {
+        vm.entry = 2 ;
         if (window.location.hash.includes("projectId")) {
           let reg = /projectId=\d{18}/;
           vm.projectId = window.location.hash.match(reg)
@@ -601,6 +612,11 @@ export default {
           console.log(Object.keys(res.data), Object.values(res.data));
           this.taskExecutors = [...Object.values(res.data)];
           console.log(this.taskExecutors);
+          if (this.taskExecutors && this.taskExecutors.length) {
+            this.showInvite = false; //
+          } else {
+            this.showInvite = true;
+          }
           // debugger;
         })
         .catch(err => {
@@ -711,7 +727,6 @@ export default {
     inviteOthers() {
       //分享
       console.log("------------------------->>>");
-      this.showInvite = !this.showInvite;
       this.showShare = !this.showShare;
     },
     commandExcutor() {
@@ -739,7 +754,7 @@ export default {
               console.log(res);
               if (res.code == 1 && res.status == 200) {
                 self.$router.push({
-                  path: "/addTaskSetting",
+                  path: self.entry == 0 ? "/addTaskSetting" : self.entry == 1 ?  'updateTaskSetting' : 'convententry',
                   query: {
                     taskId: self.taskId,
                     projectId: self.projectId
@@ -760,7 +775,7 @@ export default {
           isSelected
         });
         this.$router.push({
-          path: "/addTaskSetting",
+          path: self.entry == 0 ? "/addTaskSetting" : self.entry == 1 ?  'updateTaskSetting' : 'convententry',
           query: {
             taskId: this.taskId
           }
@@ -885,11 +900,6 @@ export default {
       document
         .querySelector(".deleteBtn")
         .addEventListener("click", this.deleteExcutor);
-      if (this.taskExecutors.length) {
-        this.showInvite = true;
-      } else {
-        this.showInvite = false;
-      }
       this.isSubShow = new Array(this.taskExecutors.length).fill(false);
       console.log(this.taskExecutors);
     },

@@ -124,7 +124,7 @@
 
 .selectEndTime,
 .selectStartTime {
-  margin-right: 52px !important;
+  margin-right: 30px !important;
   display: flex !important;
   justify-content: flex-end;
   align-items: center;
@@ -345,14 +345,16 @@ input:disabled {
             <div class="icon">
               <img src="@/assets/img/icon-start time.png" />
             </div>
-            <div ref="startDate" class="task-setting">开始时间<img class="time-logo" src="@/assets/img/icon-right-slide03.png"/></div>
+            <div ref="startDate" class="task-setting">开始时间<img class="time-logo" style="display:none" src="@/assets/img/icon-right-slide03.png"/></div>
           </label>
 
-          <v-datetime ref="startTime" id="selectStartTime" class="userInput selectStartTime " format="YYYY.MM.DD" @on-change="startDate_change"
+          <!-- <v-datetime ref="startTime" id="selectStartTime" class="userInput selectStartTime " format="YYYY.MM.DD" @on-change="startDate_change"
             placeholder="开始时间">
-            <!-- 开始时间 -->
             <span :style='styleStart'>{{startTime}}</span>
-          </v-datetime>
+          </v-datetime> -->
+          <div id="selectStartTime" class="userInput selectStartTime ">
+            <span :style='styleStart'>{{startTime}}</span>
+          </div>
 
         </li>
         <li class="task-item time-logo-container">
@@ -360,14 +362,19 @@ input:disabled {
             <div class="icon">
               <img src="@/assets/img/icon-end time.png" />
             </div>
-            <div  ref="endDate" class="task-setting" >结束时间 <img class="time-logo" src="@/assets/img/icon-right-slide03.png"/></div>
+            <div  ref="endDate" class="task-setting" >结束时间 <img class="time-logo"  style="display:none" src="@/assets/img/icon-right-slide03.png"/></div>
           </label>
-          <v-datetime ref="endTime" id="selectEndTime" class="userInput selectEndTime " v-model="endTime" format="YYYY.MM.DD" @on-change="endDatechange"
+          <!-- <v-datetime ref="endTime" id="selectEndTime" class="userInput selectEndTime " v-model="endTime" format="YYYY.MM.DD" @on-change="endDatechange"
             placeholder="结束时间">
             <span :style='styleEnd'>
             {{endTime}}
             </span>
-          </v-datetime>
+          </v-datetime> -->
+          <div  id="selectEndTime" class="userInput selectEndTime " >
+            <span :style='styleEnd'>
+            {{endTime}}
+            </span>
+          </div>
         </li>
         <li class="task-item">
           <label class="task-desc" for="item4">
@@ -432,6 +439,7 @@ export default {
         }
       ],
       flag: false,
+      lockTime: true,
       hasProjectId: false,
       toastDom: null,
       showToast: true,
@@ -543,6 +551,7 @@ export default {
         vm.projectId = to.query.projectId;
         // vm.executor = vm.getTaskExecutor.executor;
         console.log(vm.taskId, vm.projectId, "------------------------------");
+        vm.getData();
         vm.setExcutor();
       });
     }
@@ -551,7 +560,6 @@ export default {
         // console.log(executor);
         vm.projectId = to.query.projectId;
         vm.taskId = to.query.taskId;
-        vm.hasProjectId = true;
         vm._updateTask(); //重新设置任务
       });
     }
@@ -560,36 +568,70 @@ export default {
         // console.log(executor);
         vm.projectId = to.query.projectId;
         vm.taskId = to.query.taskId;
-        vm.hasProjectId = true;
-        vm._updateTask(); //重新设置任务
+        vm.getData(); //重新获取数据
       });
     }
   },
   methods: {
+    setData() {
+      //缓存已填写的数据
+      let self = this;
+      window.sessionStorage.setItem(
+        "updatting",
+        JSON.stringify(
+          Object.assign(
+            {
+              taskId: self.taskId,
+              projectId: self.projectId,
+              projectName: self.projectName,
+              taskTheme: self.taskTheme
+            },
+            {
+              taskName: self.taskName,
+              taskDesc: self.taskDesc,
+              startTime: self.startTime,
+              endTime: self.endTime,
+              standard: self.standard,
+              executor: self.executor,
+              isOpen: self.currentIndex == 0 ? 1 : 0
+            }
+          )
+        )
+      );
+    },
+    getData() {
+      let settings = window.sessionStorage.getItem("updatting");
+      if (settings.length) {
+        settings = JSON.parse(settings);
+        (this.projectId = settings.projectId),
+          (this.taskTheme = settings.taskTheme),
+          (this.taskName = settings.taskName);
+        this.taskDesc = settings.taskDesc;
+        this.startTime = settings.startTime;
+        this.endTime = settings.endTime;
+        this.standard = settings.standard;
+        this.executor = settings.executor;
+        this.currentIndex = settings.isOpen == 1 ? 0 : 1;
+      }
+      console.log(settings);
+    },
     setExcutor() {
       let self = this;
-      this.taskId = this.getTaskId;
+      if (this.executor) {
+        return;
+      }
       // debugger;
       Convent.getTaskBasicInfo(self.taskId)
         .then(res => {
           console.log("---基本任务信息--", res);
           if (res.code == 1 && res.status == 200) {
             // debugger;
-            if (res.data.executorNickName && res.data.executorNickName.length) {
+            if (res.data.executorNickName.length) {
               this.$refs.exe.classList.add("active_");
               this.executor = res.data.executorNickName;
             }
-            self.updateTime(res.data.startTime, res.data.endTime);
-            self.taskName = res.data.taskName;
             self.$refs._taskName.setAttribute("disabled", true);
-            self.taskTheme = res.data.projectName;
             self.$refs.taskTheme.setAttribute("disabled", true);
-            self.executor = res.data.executorNickName
-              ? res.data.executorNickName
-              : undefined;
-            self.taskDesc = res.data.taskDesc;
-            self.checkStandard = res.data.checkStandard;
-            self.isPublic = res.data.isOpen ? true : false;
           }
         })
         .catch(err => {
@@ -611,6 +653,7 @@ export default {
       }); //编辑项目节点
     },
     editSection() {
+      this.setData();
       this.$router.push({
         path: "/section?mode=edit"
       }); //编辑项目节点
@@ -711,52 +754,26 @@ export default {
     },
     confirm() {
       let self = this;
-      this.validate();
-      if (!this.check_pass && !this.taskId) {
-        this._validate();
-      } else if (this.check_pass && !this.taskId) {
-        this._getTaskId()
-          .then(taskId => {
-            self.taskId = taskId;
-            self.$router.push({
+      Convent.updateTask(self.taskId, {
+        taskId: self.taskId,
+        taskDesc: self.taskDesc,
+        checkStandard: self.standard,
+        isOpen: self.currentIndex == 0 ? 1 : 0
+      })
+        .then(res => {
+          if (res.code == 1 && res.status == 200) {
+            this.$router.push({
               path: "/taskDetail",
               query: {
-                taskId: taskId,
+                taskId: self.taskId,
                 projectId: self.projectId
               }
-            }); //项目创建完毕
-            // debugger;
-          })
-          .catch(err => {
-            console.log(err);
-            // debugger;
-          });
-      } else if (this.taskId) {
-        console.log(this.checkStandard);
-        //   debugger;
-        Convent.updateTask(self.taskId, {
-          taskId: self.taskId,
-          taskDesc: self.taskDesc,
-          checkStandard: self.standard,
-          isOpen: self.currentIndex == 0 ? 1 : 0
+            });
+          }
         })
-          .then(res => {
-            if (res.code == 1 && res.status == 200) {
-              this.$router.push({
-                path: "/taskDetail",
-                query: {
-                  taskId: self.taskId,
-                  projectId: self.projectId
-                }
-              });
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      } else if (this.check_pass && !this.taskId) {
-        this._createTask();
-      }
+        .catch(err => {
+          console.log(err);
+        });
     },
     check_time() {
       if (this.startTime && this.endTime) {
@@ -824,25 +841,28 @@ export default {
     },
     appointerManager() {
       let self = this;
-      this.validate();
       if (this.executor) {
         this.$toast.show("执行人已存在!");
         return;
       }
+      
+      this.validate();
       //验证必选项
       if (!this.check_pass) {
         this._validate();
         return;
       }
       if (self.taskId) {
+        this.setData();
         self.$router.push({
           path: "/appointMessager",
           query: {
             taskId: self.taskId,
-            project: self.getProjectId
+            projectId: self.getProjectId
           }
         });
       } else if (this.check_pass && !this.taskId) {
+        this.setData();
         this._getTaskId()
           .then(taskId => {
             self.taskId = taskId;
