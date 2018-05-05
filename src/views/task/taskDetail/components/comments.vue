@@ -159,10 +159,10 @@ export default {
         this.$toast.show('任务未开始')
         return
       }
-      else if( status == 2 ){
-        this.$toast.show('任务已关闭')
-        return
-      }
+//      else if( status == 2 ){
+//        this.$toast.show('任务已关闭')
+//        return
+//      }
 
       if( this.members.length == 0 ){
         this.$toast.show('暂无评论', 1000)

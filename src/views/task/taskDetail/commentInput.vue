@@ -58,6 +58,9 @@ export default {
               self.$toast.show("任务未开启请勿评论!",1000);
               self.usreInput = ''
             }
+            else{
+              self.$toast.show(res.msg,2000)
+            }
             self.$emit("close");
           });
       } else if (this.usreInput.length > 200) {
