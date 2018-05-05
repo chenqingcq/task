@@ -40,7 +40,6 @@ ToastConstructor.prototype.close = function() {
   let duration = options.duration || 3000;
 
   let instance = getAnInstance();
-  console.log(instance)
   //instance.$mount(document.createElement('div'))
   instance.closed = false;
   clearTimeout(instance.timer);

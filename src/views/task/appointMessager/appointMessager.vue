@@ -618,7 +618,7 @@ export default {
         type : 0 , // id类型 0: 任务ID 1: 项目ID
         title: '任务接受', // 分享标题
         desc: '任务接受描述', // 分享描述
-        imgUrl: '../../../assets/img/wxshare-logo.png' // 分享图标
+        imgUrl: location.protocol + '//task-1256472463.cos.ap-guangzhou.myqcloud.com/wxshare-logo.png' // 分享图标
       }
       if( this.taskId ){
         shareData.type = 0
