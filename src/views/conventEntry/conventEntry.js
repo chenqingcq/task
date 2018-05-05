@@ -51,7 +51,8 @@ export default {
     //})
     WxShareApi({
       title: '测试标题',
-      desc: '分享描述'
+      desc: '分享描述',
+      imgUrl: location.protocol + '//task-1256472463.cos.ap-guangzhou.myqcloud.com/wxshare-logo.png' // 分享图标
     })
     //this.taskList = this.dealWithTaskList()
   },

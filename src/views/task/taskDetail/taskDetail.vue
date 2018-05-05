@@ -550,7 +550,7 @@ img.partyLogo {
               </div>
             </div>
             <div class="task-focus">
-              <img @click='link_to_taskSetting' class="focus-star" v-show='role=="creator" && taskStatus != 2 ' src="@/assets/img/icon-set up.png" />
+              <img @click='link_to_taskSetting' class="focus-star" v-show='role=="creator" && taskStatus != 2 &&  taskStatus != 7 ' src="@/assets/img/icon-set up.png" />
             </div>
           </div>
         </div>
@@ -617,7 +617,7 @@ img.partyLogo {
         </div>
       </div>
     </div>
-    <comments v-if="taskStatus!= 0" :members='members' :taskId='taskId' @close='updateComments' :status="taskStatus" ></comments>
+    <comments v-if="taskStatus!= 0 && taskStatus != 7 " :members='members' :taskId='taskId' @close='updateComments' :status="taskStatus" ></comments>
     <!--创建者 关闭 未开始 已拒绝 未开始且拒绝-->
     <div v-if="role == 'creator' && ( taskStatus == 1 || taskStatus == 6 ) " class="btn-warp b-LR-8 clearfix">
       <div @click='closeTask' class="btn-normal-warn b_left b-MT-10">

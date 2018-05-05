@@ -434,9 +434,9 @@ import share from "./share.vue";
 import { Convent } from "@/services";
 import { mapMutations, mapGetters } from "vuex";
 
-import { WxShareApi2 } from "@/utils/wx.js";
+import { WxShareApi2 } from '@/utils/wx.js'
 
-console.log(WxShareApi2);
+console.log(WxShareApi2)
 
 export default {
   data() {
@@ -533,6 +533,7 @@ export default {
           vm.getExcutorList(vm.projectId);
         }
         if (window.location.hash.includes("taskId")) {
+          let reg = /taskId=\d{18}/;
           vm.taskId = to.query.taskId;
         }
         if (
@@ -550,7 +551,7 @@ export default {
       from.path == "/updateTaskSetting"
     ) {
       next(vm => {
-        vm.entry = 1;        
+        vm.entry = 1;
         vm.projectId = to.query.projectId;
         vm.taskId = to.query.taskId;
         vm.getExcutorList(vm.projectId);
@@ -586,11 +587,11 @@ export default {
     ...mapMutations({
       SET_USER_ID: "SET_USER_ID"
     }),
-    openPop() {
-      this.$refs.popup.open();
+    openPop(){
+      this.$refs.popup.open()
     },
-    closePop() {
-      this.$refs.popup.close();
+    closePop(){
+      this.$refs.popup.close()
     },
     // debounce(methods){
     //   clearTimeout(methods.timer);
@@ -625,24 +626,25 @@ export default {
     closeQrcode() {
       this.showQrcode = false;
     },
-    wechatShare() {
-      this.showShare = false;
-      this.openPop();
+    wechatShare(){
+      this.showShare = false
+      this.openPop()
       let shareData = {
-        taskId: "",
-        type: 0, // id类型 0: 任务ID 1: 项目ID
-        title: "任务接受", // 分享标题
-        desc: "任务接受描述", // 分享描述
-        imgUrl: "../../../assets/img/wxshare-logo.png" // 分享图标
-      };
-      if (this.taskId) {
-        shareData.type = 0;
-        shareData.id = this.taskId;
-      } else {
-        shareData.type = 1;
-        shareData.id = this.projectId;
+        taskId : '',
+        type : 0 , // id类型 0: 任务ID 1: 项目ID
+        title: '任务接受', // 分享标题
+        desc: '任务接受描述', // 分享描述
+        imgUrl: location.protocol + '//task-1256472463.cos.ap-guangzhou.myqcloud.com/wxshare-logo.png' // 分享图标
       }
-      WxShareApi2(shareData);
+      if( this.taskId ){
+        shareData.type = 0
+        shareData.id = this.taskId
+      }
+      else{
+        shareData.type = 1
+        shareData.id = this.projectId
+      }
+      WxShareApi2(shareData)
     },
     face_to_face() {
       this.showShare = !this.showShare;
