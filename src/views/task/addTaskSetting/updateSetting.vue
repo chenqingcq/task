@@ -124,7 +124,7 @@
 
 .selectEndTime,
 .selectStartTime {
-  margin-right: 52px !important;
+  margin-right: 30px !important;
   display: flex !important;
   justify-content: flex-end;
   align-items: center;
@@ -345,14 +345,16 @@ input:disabled {
             <div class="icon">
               <img src="@/assets/img/icon-start time.png" />
             </div>
-            <div ref="startDate" class="task-setting">开始时间<img class="time-logo" src="@/assets/img/icon-right-slide03.png"/></div>
+            <div ref="startDate" class="task-setting">开始时间<img class="time-logo" style="display:none" src="@/assets/img/icon-right-slide03.png"/></div>
           </label>
 
-          <v-datetime ref="startTime" id="selectStartTime" class="userInput selectStartTime " format="YYYY.MM.DD" @on-change="startDate_change"
+          <!-- <v-datetime ref="startTime" id="selectStartTime" class="userInput selectStartTime " format="YYYY.MM.DD" @on-change="startDate_change"
             placeholder="开始时间">
-            <!-- 开始时间 -->
             <span :style='styleStart'>{{startTime}}</span>
-          </v-datetime>
+          </v-datetime> -->
+          <div id="selectStartTime" class="userInput selectStartTime ">
+            <span :style='styleStart'>{{startTime}}</span>
+          </div>
 
         </li>
         <li class="task-item time-logo-container">
@@ -360,14 +362,19 @@ input:disabled {
             <div class="icon">
               <img src="@/assets/img/icon-end time.png" />
             </div>
-            <div  ref="endDate" class="task-setting" >结束时间 <img class="time-logo" src="@/assets/img/icon-right-slide03.png"/></div>
+            <div  ref="endDate" class="task-setting" >结束时间 <img class="time-logo"  style="display:none" src="@/assets/img/icon-right-slide03.png"/></div>
           </label>
-          <v-datetime ref="endTime" id="selectEndTime" class="userInput selectEndTime " v-model="endTime" format="YYYY.MM.DD" @on-change="endDatechange"
+          <!-- <v-datetime ref="endTime" id="selectEndTime" class="userInput selectEndTime " v-model="endTime" format="YYYY.MM.DD" @on-change="endDatechange"
             placeholder="结束时间">
             <span :style='styleEnd'>
             {{endTime}}
             </span>
-          </v-datetime>
+          </v-datetime> -->
+          <div  id="selectEndTime" class="userInput selectEndTime " >
+            <span :style='styleEnd'>
+            {{endTime}}
+            </span>
+          </div>
         </li>
         <li class="task-item">
           <label class="task-desc" for="item4">
@@ -432,6 +439,7 @@ export default {
         }
       ],
       flag: false,
+      lockTime: true,
       hasProjectId: false,
       toastDom: null,
       showToast: true,
@@ -833,11 +841,11 @@ export default {
     },
     appointerManager() {
       let self = this;
-      this.setData();
       if (this.executor) {
         this.$toast.show("执行人已存在!");
         return;
       }
+      
       this.validate();
       //验证必选项
       if (!this.check_pass) {
@@ -845,6 +853,7 @@ export default {
         return;
       }
       if (self.taskId) {
+        this.setData();
         self.$router.push({
           path: "/appointMessager",
           query: {
@@ -853,6 +862,7 @@ export default {
           }
         });
       } else if (this.check_pass && !this.taskId) {
+        this.setData();
         this._getTaskId()
           .then(taskId => {
             self.taskId = taskId;
