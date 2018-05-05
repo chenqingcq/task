@@ -129,8 +129,10 @@
       left: 10*2px;
       justify-content: center;
       .task-desc {
+        position: relative;
+        width: 146px*2px;
+        margin: 0 auto;
         span {
-          position: relative;
           max-width: 146*2px;
           text-align: center;
           font-size: 12px*2;
@@ -143,13 +145,13 @@
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          img {
-            height: 10px;
-            display: inline-block;
-            top: 14px;
-            float: right;
-            position: absolute;
-          }
+        }
+        img {
+          height: 10px;
+          display: inline-block;
+          top: 14px;
+          right: -25px;
+          position: absolute;
         }
       }
       .detail-btn {
@@ -580,8 +582,8 @@ img.partyLogo {
           <div class="task-desc" @click='toggleTaskProgress'>
             <span>
               {{progressDesc}} 
-            <img v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />       
             </span>
+            <img v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />                   
           </div>
           <div v-if="taskStatus != 0 &&  taskStatus != 3  " class="detail-btn" @click='towardsUpdateHistory'>
             {{ role == 'operator' && taskStatus != 4 && taskStatus != 5  ? '更新进度' : '查看上传历史'  }}
