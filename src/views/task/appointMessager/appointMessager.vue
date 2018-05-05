@@ -199,6 +199,8 @@
 .arrow {
   width: 26*2px;
   height: 100%;
+  box-sizing: content-box;
+  padding: 10px;
   text-align: center;
   img {
     display: inline-block;
@@ -381,7 +383,7 @@
                 <img :src="imgUrl(index)" v-show="item.length>1" />
               </div>
             </li>
-            <li class="sub-item" v-for="(_item,_index) in item"  :key="_index" v-show="subShow" >
+            <li class="sub-item" v-for="(_item,_index) in item"  :key="_index" v-show="computedShow && index == currentIndex_" >
               <!--下拉可见-->
               <div class="user">
                 <div  class="select">
@@ -492,6 +494,9 @@ export default {
       getTaskExecutor: "getTaskExecutor",
       getUserId: "getUserId"
     }),
+    computedShow(){
+      return this.showSub_[this.currentIndex_];
+    },
     styleObj() {
       if (this.taskExecutors.length >= 6) {
         return {

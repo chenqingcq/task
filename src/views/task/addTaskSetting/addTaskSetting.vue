@@ -467,7 +467,7 @@ export default {
       getUserRole: "getUserRole"
     }),
     styleStart() {
-      if (!!this.startTime && window.sessionStorage.getItem("flag")) {
+      if (!!this.startTime) {
         return {
           color: "#666"
         };
@@ -478,7 +478,7 @@ export default {
       }
     },
     styleEnd() {
-      if (!!this.endTime && window.sessionStorage.getItem("flag")) {
+      if (!!this.endTime ) {
         return {
           color: "#666"
         };
