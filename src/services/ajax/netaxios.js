@@ -373,5 +373,3 @@ const uploadProcess = function( number ){
   },500)
 }
 
-
-

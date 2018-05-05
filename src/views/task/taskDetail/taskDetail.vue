@@ -129,8 +129,10 @@
       left: 10*2px;
       justify-content: center;
       .task-desc {
+        position: relative;
+        width: 146px*2px;
+        margin: 0 auto;
         span {
-          position: relative;
           max-width: 146*2px;
           text-align: center;
           font-size: 12px*2;
@@ -143,13 +145,13 @@
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          img {
-            height: 10px;
-            right: 30px;
-            display: inline-block;
-            top: 14px;
-            position: absolute;
-          }
+        }
+        img {
+          height: 10px;
+          display: inline-block;
+          top: 14px;
+          right: -25px;
+          position: absolute;
         }
       }
       .detail-btn {
@@ -520,6 +522,16 @@ img.partyLogo {
 .bounceIn-leave-active {
   animation: bounceOut 0.5s ease;
 }
+.taskDetail_ {
+  padding: 4*2px 10*2px 8*2px 20*2px;
+  height: auto;
+  width: 100%;
+  font-size: 12px*2;
+  word-break: break-all;
+  font-family: PingFangSC-Medium;
+  color: rgba(51, 51, 51, 1);
+  line-height: 17*2px;
+}
 </style>
 <template>
   <div class="task-detail-container">
@@ -570,8 +582,8 @@ img.partyLogo {
           <div class="task-desc" @click='toggleTaskProgress'>
             <span>
               {{progressDesc}}
-            <img v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />
             </span>
+            <img v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />
           </div>
           <div v-if="taskStatus != 0 &&  taskStatus != 3  " class="detail-btn" @click='towardsUpdateHistory'>
             {{ role == 'operator' && taskStatus != 4 && taskStatus != 5  ? '更新进度' : '查看上传历史'  }}
@@ -605,12 +617,28 @@ img.partyLogo {
         </div>
       </div>
     </div>
+    <!-- 任务标准 -->
     <div class="project-party">
       <div class="b-LR-10">
         <div class="panel b-MT-10 c_white-bg">
           <div class="b-LR-10 b-T-5 between ">
+            <p class="middle b_FS-14 c_6 "><span class="dot success"></span><span class="b-L-4">验收标准</span></p>
+          </div>
+          <div  class="taskDetail_" v-if="checkStandard.length">
+           {{checkStandard}}
+          </div>
+          <div  class="taskDetail_" style="textAlign:center;color:#999" v-else>
+           暂未设置验收标准
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="project-party">
+      <div class="b-LR-10" @click="goToGroup">
+        <div class="panel b-MT-10 c_white-bg">
+          <div class="b-LR-10 b-T-5 between ">
             <p class="middle b_FS-14 c_6 "><span class="dot success"></span><span class="b-L-4">进入项目群</span></p>
-            <div class="entry-project-party">
+            <div class="entry-project-party" v-show="parties.length" >
               <img class="partyLogo" :src="item" v-for="item in parties" :key="item.id" />
             </div>
           </div>
@@ -835,6 +863,25 @@ export default {
       //存取角色
       this.SET_USER_ROLE(this.role);
     },
+    goToGroup() {//跳转项目群
+      console.log("---gotoGroup---",);
+      let self = this;
+      Convent.goToGroup(this.projectId)
+        .then(res => {
+          if(res.code == 1 && res.status == 200){
+            console.log(res.data);
+            self.groupUrl = res.data
+            self.jumpToGroup()
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          this.$toast.show("跳转失败...");
+        });
+    },
+    jumpToGroup(){
+      window.location.href = this.groupUrl
+    },
     getData() {
       const taskId = this.$route.query.taskId
       const projectId = this.projectId;
@@ -854,6 +901,7 @@ export default {
           this.isBrowse = res.isBrowse;
           this.isOpen = res.isOpen;
           this.isPass = res.isPass;
+          this.progressDesc = res.latestProgress.progressDesc;
           this.isLike = res.isStar == "0" ? false : true;
           this.position = res.position;
           this.defineStatus(res.taskStatus);
@@ -882,7 +930,6 @@ export default {
             let first = this.items[0];
             this.items.unshift(last);
             this.items.push(first);
-            this.progressDesc = res.latestProgress.progressDesc
             //this
           } else {
             this.items = [];
@@ -890,7 +937,7 @@ export default {
         })
         .catch(err => {
           if (err) {
-            this.$toast.show("发送请求失败!"), 500;
+            // this.$toast.show("发送请求失败!",500);
           }
         });
       //获取群头像
@@ -946,7 +993,7 @@ export default {
         }
         case 7: {
           this.active = "overDeadLined";
-          this.activeFont = "超时未接受";
+          this.activeFont = "未接受且超时";
           break;
         }
       }
@@ -987,8 +1034,8 @@ export default {
       this.$router.push({
         path: "/updateTaskSetting",
         query: {
-          projectId:self.projectId,
-          taskId:self.taskId
+          projectId: self.projectId,
+          taskId: self.taskId
         }
       });
     },

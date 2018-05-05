@@ -215,6 +215,16 @@ class Convent {
       url, params, isShowFullLoading
     )
   }
+   /*
+   * 跳转到项目群
+   * */
+  goToGroup(projectId, opt, isShowFullLoading = false) {
+    const url = `/api/task/group/${projectId}`
+    const params = opt || {}
+    return get(
+      url, params, isShowFullLoading
+    )
+  }
 
   /*
    * 修改任务
