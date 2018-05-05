@@ -20,6 +20,8 @@
       right: 10*2px;
       top: 10*2px;
       height: 15*2px;
+      padding:10px;
+      box-sizing: content-box;
       z-index: 1;
     }
     ul.list-items {
@@ -59,7 +61,7 @@
   }
   .editDeadTime {
     width: 100%;
-    height: 500*2px;
+    height: 550*2px;
     overflow: hidden;
     background: linear-gradient(
       to bottom,
