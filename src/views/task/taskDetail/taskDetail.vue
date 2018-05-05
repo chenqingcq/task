@@ -862,7 +862,7 @@ export default {
       //存取角色
       this.SET_USER_ROLE(this.role);
     },
-    goToGroup() {
+    goToGroup() {//跳转项目群
       console.log("---gotoGroup---",);
       let self = this;
       Convent.goToGroup(this.projectId)
