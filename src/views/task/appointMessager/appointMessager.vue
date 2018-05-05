@@ -1,6 +1,6 @@
 <style lang="less" scoped>
 .appointer-container {
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   position: relative;
   overflow: hidden;
@@ -379,7 +379,7 @@
                 <img :src="imgUrl(index)" v-show="item.length>1" />
               </div>
             </li>
-            <li class="sub-item" v-for="(_item,_index) in item"  :key="_index" v-show="subShow">
+            <li class="sub-item" v-for="(_item,_index) in item"  :key="_index" v-show="subShow" >
               <!--下拉可见-->
               <div class="user">
                 <div  class="select">
@@ -434,9 +434,9 @@ import share from "./share.vue";
 import { Convent } from "@/services";
 import { mapMutations, mapGetters } from "vuex";
 
-import { WxShareApi2 } from '@/utils/wx.js'
+import { WxShareApi2 } from "@/utils/wx.js";
 
-console.log(WxShareApi2)
+console.log(WxShareApi2);
 
 export default {
   data() {
@@ -482,7 +482,7 @@ export default {
       showSub_: [],
       deletSubArr: [],
       mode: 2,
-      entry: 0,//默认入口为任务添加页面 0 更新页 1  其他 2
+      entry: 0 //默认入口为任务添加页面 0 更新页 1  其他 2
     };
   },
   computed: {
@@ -559,7 +559,7 @@ export default {
       });
     } else {
       next(vm => {
-        vm.entry = 2 ;
+        vm.entry = 2;
         if (window.location.hash.includes("projectId")) {
           let reg = /projectId=\d{18}/;
           vm.projectId = window.location.hash.match(reg)
@@ -587,19 +587,12 @@ export default {
     ...mapMutations({
       SET_USER_ID: "SET_USER_ID"
     }),
-    openPop(){
-      this.$refs.popup.open()
+    openPop() {
+      this.$refs.popup.open();
     },
-    closePop(){
-      this.$refs.popup.close()
+    closePop() {
+      this.$refs.popup.close();
     },
-    // debounce(methods){
-    //   clearTimeout(methods.timer);
-    //   methods.timer = setTimeout(()=>{
-    //     console.log(methods);
-    //     methods();
-    //   },1500)
-    // },
     defineShow(arr) {
       console.log(arr);
       this.showArr = new Array(arr.length).fill(false);
@@ -611,7 +604,12 @@ export default {
         .then(res => {
           console.log(Object.keys(res.data), Object.values(res.data));
           this.taskExecutors = [...Object.values(res.data)];
-          console.log(this.taskExecutors);
+          this.showSub_ = new Array(this.taskExecutors.length).fill(false);
+          console.log(
+            this.taskExecutors,
+            this.showSub_,
+            "---------------//成员//------------------------"
+          );
           if (this.taskExecutors && this.taskExecutors.length) {
             this.showInvite = false; //
           } else {
@@ -626,25 +624,26 @@ export default {
     closeQrcode() {
       this.showQrcode = false;
     },
-    wechatShare(){
-      this.showShare = false
-      this.openPop()
+    wechatShare() {
+      this.showShare = false;
+      this.openPop();
       let shareData = {
-        taskId : '',
-        type : 0 , // id类型 0: 任务ID 1: 项目ID
-        title: '任务接受', // 分享标题
-        desc: '任务接受描述', // 分享描述
-        imgUrl: location.protocol + '//task-1256472463.cos.ap-guangzhou.myqcloud.com/wxshare-logo.png' // 分享图标
+        taskId: "",
+        type: 0, // id类型 0: 任务ID 1: 项目ID
+        title: "任务接受", // 分享标题
+        desc: "任务接受描述", // 分享描述
+        imgUrl:
+          location.protocol +
+          "//task-1256472463.cos.ap-guangzhou.myqcloud.com/wxshare-logo.png" // 分享图标
+      };
+      if (this.taskId) {
+        shareData.type = 0;
+        shareData.id = this.taskId;
+      } else {
+        shareData.type = 1;
+        shareData.id = this.projectId;
       }
-      if( this.taskId ){
-        shareData.type = 0
-        shareData.id = this.taskId
-      }
-      else{
-        shareData.type = 1
-        shareData.id = this.projectId
-      }
-      WxShareApi2(shareData)
+      WxShareApi2(shareData);
     },
     face_to_face() {
       this.showShare = !this.showShare;
@@ -716,13 +715,10 @@ export default {
       }
     },
     showSub(index) {
-      this.currentIndex_ = index;
-      console.log(index);
-      this.showSub_[index] = !this.showSub_[index];
-      console.log(this.showSub_[index]);
-      this.subShow = this.showSub_[index];
-      return this.showSub_[index];
-      // debugger;
+        this.currentIndex_ = index;
+        console.log(index, this.showSub_);
+        this.showSub_[index] = !this.showSub_[index];
+        this.subShow = this.showSub_[index];
     },
     inviteOthers() {
       //分享
@@ -754,7 +750,10 @@ export default {
               console.log(res);
               if (res.code == 1 && res.status == 200) {
                 self.$router.push({
-                  path: self.entry == 0 ? "/addTaskSetting" : self.entry == 1 ?  'updateTaskSetting' : 'convententry',
+                  path:
+                    self.entry == 0
+                      ? "/addTaskSetting"
+                      : self.entry == 1 ? "updateTaskSetting" : "convententry",
                   query: {
                     taskId: self.taskId,
                     projectId: self.projectId
@@ -775,7 +774,10 @@ export default {
           isSelected
         });
         this.$router.push({
-          path: self.entry == 0 ? "/addTaskSetting" : self.entry == 1 ?  'updateTaskSetting' : 'convententry',
+          path:
+            self.entry == 0
+              ? "/addTaskSetting"
+              : self.entry == 1 ? "updateTaskSetting" : "convententry",
           query: {
             taskId: this.taskId
           }
