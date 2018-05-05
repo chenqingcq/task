@@ -634,12 +634,12 @@ img.partyLogo {
       </div>
     </div>
     <div class="project-party">
-      <div class="b-LR-10">
+      <div class="b-LR-10" @click="goToGroup">
         <div class="panel b-MT-10 c_white-bg">
           <div class="b-LR-10 b-T-5 between ">
             <p class="middle b_FS-14 c_6 "><span class="dot success"></span><span class="b-L-4">进入项目群</span></p>
-            <div class="entry-project-party" v-show="parties.length" @click="goToGroup">
-              <a href=""></a><img class="partyLogo" :src="item" v-for="item in parties" :key="item.id" />
+            <div class="entry-project-party" v-show="parties.length" >
+              <img class="partyLogo" :src="item" v-for="item in parties" :key="item.id" />
             </div>
           </div>
         </div>
@@ -863,16 +863,23 @@ export default {
       this.SET_USER_ROLE(this.role);
     },
     goToGroup() {
-      console.log("---gotoGroup---");
+      console.log("---gotoGroup---",);
       let self = this;
       Convent.goToGroup(this.projectId)
         .then(res => {
-          console.log(res);
+          if(res.code == 1 && res.status == 200){
+            console.log(res.data);
+            self.groupUrl = res.data
+            self.jumpToGroup()
+          } 
         })
         .catch(err => {
           console.log(err);
           this.$toast.show("跳转失败...");
         });
+    },
+    jumpToGroup(){
+      window.location.href = this.groupUrl
     },
     getData() {
       const taskId = this.$route.query.taskId;
