@@ -145,7 +145,7 @@
                 <div class="c_white-bg  b_FS-18 b_font-PFR text-center" :class="[section.isDoing ? 'c_primary' : 'c_7']">
                   {{ formatDate(section.pointTime) }}
                 </div>
-                <div class="b_FS-10 c_7 b_font-PFR text-center b_lineH-28" v-if="section.isDoing">运行中</div>
+                <div class="b_FS-10 c_7 b_font-PFR text-center b_lineH-28" v-if="section.isDoing">进行中</div>
                 <div class="light" :class="[section.isDoing? 'doing': 'pass']"></div>
               </div>
               <div class="panel panel-conf">
@@ -276,7 +276,8 @@
                   'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
                   'https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b',
                 ]
-              }]
+              }],
+              isCompareDoing : false
             }
         },
         computed:{
@@ -304,10 +305,25 @@
                 if(this.$route.query.role == 'operator') this.mode = 'edit'
                 return
               }
-              this.sectionDataLook = res.data
-
+              let sectionList = Array.prototype.map.call( res.data, (section)=>{
+                section.isDoing = this.sectionFilter( Number(section.pointTimeStamp) )
+                return section
+              })
+              this.sectionDataLook = sectionList.reverse()
             })
-            //sectionDataLook
+
+          },
+          // 计算 '进行中' 状态的节点
+          sectionFilter(sectionTime){
+            const now = +new Date()
+            // 找到第一个进行中的节点
+            if( now < sectionTime && !this.isCompareDoing ){
+              this.isCompareDoing = true
+              return true
+            }
+            else{
+              return false
+            }
           },
           initDate(){
             var d = new Date()

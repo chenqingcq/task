@@ -234,6 +234,8 @@ export default {
         this.members = []
         this.getCommentsList()
         // 重新加载列表
+      }).catch(res=>{
+        this.$toast.show(res.msg, 2000)
       })
     },
     _look_all_reply(item) {
