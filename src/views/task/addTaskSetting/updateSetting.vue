@@ -215,7 +215,7 @@ li#allowCreateTask {
 }
 
 .confirm {
-  margin-top: 240px;
+  margin-top: 100px;
   background: #fff;
   background-image: linear-gradient(-180deg, #86c0f8 0%, #4e8cee 100%);
   box-shadow: 0 2*2px 4px 0 rgba(0, 0, 0, 0.38);
