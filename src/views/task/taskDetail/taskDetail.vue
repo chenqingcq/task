@@ -149,9 +149,11 @@
         img {
           height: 10px;
           display: inline-block;
-          top: 14px;
+          top: 6px;
           right: -25px;
           position: absolute;
+          box-sizing: content-box;
+          padding: 10px;
         }
       }
       .detail-btn {
@@ -224,6 +226,7 @@
   width: 608px;
   height: 382px;
   float: left;
+  border: none;
   img {
     display: block;
     height: 100%;
@@ -549,7 +552,7 @@ img.partyLogo {
                 <span class="task-detail-content">
                   {{taskDesc}}
                 </span>
-                <img  v-show="taskDesc.length &&  taskDesc.length > 10" src="@/assets/img/icon-slide downward.png"  @click='showMoreTaskDesc'/>
+                <img  v-show="taskDesc.length &&  taskDesc.length > 12" src="@/assets/img/icon-slide downward.png"  @click='showMoreTaskDesc'/>
               </div>
               <transition name="bounceIn">
                 <div class="taskDesc-container" v-show="showDetail">
@@ -579,11 +582,11 @@ img.partyLogo {
           </div>
         </div>
         <div class="task-progress">
-          <div class="task-desc" @click='toggleTaskProgress'>
+          <div class="task-desc">
             <span>
               {{progressDesc}}
             </span>
-            <img v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />
+            <img  @click='toggleTaskProgress' v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />                   
           </div>
           <div v-if="taskStatus != 0 &&  taskStatus != 3  " class="detail-btn" @click='towardsUpdateHistory'>
             {{ role == 'operator' && taskStatus != 4 && taskStatus != 5  ? '更新进度' : '查看上传历史'  }}
@@ -591,7 +594,7 @@ img.partyLogo {
         </div>
         <transition name="bounceIn">
           <div class="taskProgress" v-if="showTaskProgress">
-            <detail :taskDesc='taskDesc' @close='closeTaskProgress'></detail>
+            <detail :taskDesc='progressDesc' @close='closeTaskProgress'></detail>
           </div>
         </transition>
       </div>
@@ -633,8 +636,8 @@ img.partyLogo {
         </div>
       </div>
     </div>
-    <div class="project-party">
-      <div class="b-LR-10" @click="goToGroup">
+    <div class="project-party" @click="goToGroup">
+      <div class="b-LR-10" >
         <div class="panel b-MT-10 c_white-bg">
           <div class="b-LR-10 b-T-5 between ">
             <p class="middle b_FS-14 c_6 "><span class="dot success"></span><span class="b-L-4">进入项目群</span></p>
