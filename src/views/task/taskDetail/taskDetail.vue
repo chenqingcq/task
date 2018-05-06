@@ -224,6 +224,7 @@
   width: 608px;
   height: 382px;
   float: left;
+  border: none;
   img {
     display: block;
     height: 100%;
@@ -591,7 +592,7 @@ img.partyLogo {
         </div>
         <transition name="bounceIn">
           <div class="taskProgress" v-if="showTaskProgress">
-            <detail :taskDesc='taskDesc' @close='closeTaskProgress'></detail>
+            <detail :taskDesc='progressDesc' @close='closeTaskProgress'></detail>
           </div>
         </transition>
       </div>
@@ -633,8 +634,8 @@ img.partyLogo {
         </div>
       </div>
     </div>
-    <div class="project-party">
-      <div class="b-LR-10" @click="goToGroup">
+    <div class="project-party" @click="goToGroup">
+      <div class="b-LR-10" >
         <div class="panel b-MT-10 c_white-bg">
           <div class="b-LR-10 b-T-5 between ">
             <p class="middle b_FS-14 c_6 "><span class="dot success"></span><span class="b-L-4">进入项目群</span></p>
