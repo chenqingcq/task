@@ -149,9 +149,11 @@
         img {
           height: 10px;
           display: inline-block;
-          top: 14px;
+          top: 6px;
           right: -25px;
           position: absolute;
+          box-sizing: content-box;
+          padding: 10px;
         }
       }
       .detail-btn {
@@ -550,7 +552,7 @@ img.partyLogo {
                 <span class="task-detail-content">
                   {{taskDesc}}
                 </span>
-                <img  v-show="taskDesc.length &&  taskDesc.length > 10" src="@/assets/img/icon-slide downward.png"  @click='showMoreTaskDesc'/>
+                <img  v-show="taskDesc.length &&  taskDesc.length > 12" src="@/assets/img/icon-slide downward.png"  @click='showMoreTaskDesc'/>
               </div>
               <transition name="bounceIn">
                 <div class="taskDesc-container" v-show="showDetail">
@@ -580,11 +582,11 @@ img.partyLogo {
           </div>
         </div>
         <div class="task-progress">
-          <div class="task-desc" @click='toggleTaskProgress'>
+          <div class="task-desc">
             <span>
               {{progressDesc}} 
             </span>
-            <img v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />                   
+            <img  @click='toggleTaskProgress' v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />                   
           </div>
           <div v-if="taskStatus != 0 &&  taskStatus != 3  " class="detail-btn" @click='towardsUpdateHistory'>
             {{ role == 'operator' && taskStatus != 4 && taskStatus != 5  ? '更新进度' : '查看上传历史'  }}
