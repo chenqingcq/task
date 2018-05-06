@@ -732,7 +732,7 @@ export default {
       return "100%";
     },
     showSub(e, index) {
-      // this.$refs.scroll.refresh(); //这里肯定很卡
+      // this.$refs.scroll.refresh(); 
       console.log(e.target.parentNode.parentNode.parentNode,index,'----this define show or hidden----');
       let neededShowItems = e.target.parentNode.parentNode.parentNode.children,i = 1;
       this.SUBISSHOW = !this.SUBISSHOW;

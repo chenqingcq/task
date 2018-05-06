@@ -75,7 +75,7 @@ export default {
             me.$emit("scroll", pos);
           });
           this.scroll.on("scrollEnd", pos => {
-            this.refresh();
+            this.refresh();            
             me.$emit("scrollEnd", pos);
           });
         });
@@ -117,7 +117,7 @@ export default {
         this.refresh();
       }, this.refreshDelay);
     }
-  }
+  },
 };
 </script>
 
