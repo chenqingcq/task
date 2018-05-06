@@ -71,12 +71,11 @@ export default {
       if (this.listenScroll) {
         let me = this;
         this.$nextTick(() => {
-          this.scroll.on("scroll", pos => {
+          this.scroll.on("scroll", pos => {           
             me.$emit("scroll", pos);
           });
           this.scroll.on("scrollEnd", pos => {
-            this.refresh();            
-            me.$emit("scrollEnd", pos);
+            me.$emit("scrollEnd", pos);             
           });
         });
       }

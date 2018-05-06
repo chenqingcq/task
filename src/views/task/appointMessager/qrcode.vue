@@ -85,7 +85,7 @@
              <div class="qrcode_panel">
                  <div class="tilte">面对面分发</div>
                  <div class="qrcodeImg_container">
-                     <canvas class="img"></canvas>
+                     <canvas ref="canvas" class="img"></canvas>
                  </div>
                  <div class="countdown">{{expire}}s</div>
              </div>
@@ -120,9 +120,11 @@ export default {
       _projectId: "",
       _taskId: "",
       isInvalid: true,
+      starter: false,
       startCount: false,
       countDowner: null,
-      expire: ""
+      expire: "",
+      context:''
     };
   },
   watch: {
@@ -131,24 +133,22 @@ export default {
       this.expire = this.expires;
       let self = this;
       if (newVal) {
-        self.time();
         Convent.sharefacetoface({
           id: self.taskId ? self.taskId : self.projectId,
           type: self.taskId ? 0 : 1
         })
           .then(res => {
-            console.log(res.shareUrl);
+            console.log(res.data.shareUrl);
             if (res.code == 1 && res.status == 200) {
               self.key = res.data.key;
               QRcode.toCanvas(
-                document.querySelector("canvas.img"),
+                self.$refs.canvas
+               ,
                 res.data.shareUrl,
                 function(error, url) {
                   if (!error) {
-                    if (self.countDowner) {
-                      self.countDowner = null;
-                    } else {
-                    }
+                    self.starter = true;
+                    self.time()
                   }
                 }
               );
@@ -158,6 +158,9 @@ export default {
             console.log(err);
           });
       }
+    },
+    starter(newVal, oldVal) {
+      console.log(newVal, oldVal, "------------开始计时----------");
     },
     isInvalid(newVal) {
       if (!newVal) {
@@ -203,20 +206,16 @@ export default {
     },
     close($ev) {
       if ($ev.target.className == "qr_container") {
-        console.log(this.$el);
-        this.$el.parentNode.removeChild(this.$el);
         this.$emit("closeQrcode");
         clearTimeout(this.countDowner);
         this.countDowner = null;
       }
     },
-    count(_res) {}
   },
   beforeDestroy() {
     clearInterval(this.countDowner);
     this.countDowner = null;
-  },
-  mounted() {}
+  }
 };
 </script>
 

@@ -337,7 +337,7 @@
   margin-right: 20px;
   margin-top: 10px;
 }
-.showOrhidden{
+.showOrhidden {
   display: none !important;
 }
 </style>
@@ -358,7 +358,7 @@
       <img @click='inviteOthers' class="invite" src="@/assets/img/icon-menu.png">
       <share  :showShare='showShare'>
         <ul slot="share" class="share-items">
-          <div class="arrow"></div>
+          <div id="arrow"></div>
           <li @click="wechatShare" ><img src="@/assets/img/01.png" />微信分发</li>
           <li @click='face_to_face'><img src="@/assets/img/02.png" />面对面发</li>
         </ul>
@@ -450,7 +450,7 @@ console.log(WxShareApi2);
 export default {
   data() {
     return {
-      SUBISSHOW:true,
+      SUBISSHOW: true, //点击显示隐藏列表
       addMember: true, //添加人员
       deleteMember: false, //删除人员
       doNothing: true, //默认,
@@ -673,6 +673,17 @@ export default {
       this.showShare = !this.showShare;
       this.showQrcode = !this.showQrcode;
     },
+    debounce(delay, fn) {
+      let _this = this;
+      if (this.Share) {
+        clearTimeout(this.Share);
+      }
+
+      this.Share = setTimeout(() => {
+        // fn()
+        _this.showShare = !_this.showShare;
+      }, delay);
+    },
     selectedSub(e, taskId, userId, mode) {
       console.log(e.target, taskId, userId, mode);
       this.SET_USER_ID(userId); //设置userid
@@ -732,17 +743,22 @@ export default {
       return "100%";
     },
     showSub(e, index) {
-      // this.$refs.scroll.refresh(); 
-      console.log(e.target.parentNode.parentNode.parentNode,index,'----this define show or hidden----');
-      let neededShowItems = e.target.parentNode.parentNode.parentNode.children,i = 1;
+      this.$refs.scroll.refresh();
+      console.log(
+        e.target.parentNode.parentNode.parentNode,
+        index,
+        "----this define show or hidden----"
+      );
+      let neededShowItems = e.target.parentNode.parentNode.parentNode.children,
+        i = 1;
       this.SUBISSHOW = !this.SUBISSHOW;
-      console.log(this.SUBISSHOW)
-      if(neededShowItems.length>1){
-        for(i ; i < neededShowItems.length ; i ++){
-          if(neededShowItems[i].classList.contains('showOrhidden')){
-            neededShowItems[i].classList.remove('showOrhidden');
-          }else{
-            neededShowItems[i].classList.add('showOrhidden')            
+      console.log(this.SUBISSHOW);
+      if (neededShowItems.length > 1) {
+        for (i; i < neededShowItems.length; i++) {
+          if (neededShowItems[i].classList.contains("showOrhidden")) {
+            neededShowItems[i].classList.remove("showOrhidden");
+          } else {
+            neededShowItems[i].classList.add("showOrhidden");
           }
         }
       }
@@ -750,7 +766,10 @@ export default {
     inviteOthers() {
       //分享
       console.log("------------------------->>>");
+      let self = this;
       this.showShare = !this.showShare;
+
+      // this.debounce(200);
     },
     commandExcutor() {
       //指定执行人
@@ -775,7 +794,8 @@ export default {
               if (res.code == 1 && res.status == 200) {
                 self
                   .refreshExcutor()
-                  .then(res => {//再次刷新列表
+                  .then(res => {
+                    //再次刷新列表
                     self.$router.push({
                       path:
                         self.entry == 0
@@ -789,7 +809,8 @@ export default {
                       }
                     });
                   })
-                  .catch(err => {//请求失败
+                  .catch(err => {
+                    //请求失败
                     self.$router.push({
                       path:
                         self.entry == 0
@@ -805,7 +826,8 @@ export default {
                   });
               }
             })
-            .catch(err => {//请求失败
+            .catch(err => {
+              //请求失败
               self.$router.push({
                 path:
                   self.entry == 0
