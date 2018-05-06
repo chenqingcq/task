@@ -63,17 +63,17 @@ export default {
            Cos.getTecentCos().then(res=>{
             const { data } = res
             this.cosConfigObj = data
-             console.log( {
-               SecretId: data.credentials.tmpSecretId,
-               SecretKey: data.credentials.tmpSecretKey,
-               XCosSecurityToken: data.credentials.sessionToken,
-               ExpiredTime: data.expiredTime
+             console.log({
+               Authorization: data.tempKeys.Authorization,
+               XCosSecurityToken: data.tempKeys.XCosSecurityToken
              })
             callback({
-              SecretId: data.credentials.tmpSecretId,
-              SecretKey: data.credentials.tmpSecretKey,
-              XCosSecurityToken: data.credentials.sessionToken,
-              ExpiredTime: data.expiredTime
+              //SecretId: data.credentials.tmpSecretId,
+              //SecretKey: data.credentials.tmpSecretKey,
+              //XCosSecurityToken: data.credentials.sessionToken,
+              //ExpiredTime: data.expiredTime
+              Authorization: data.tempKeys.Authorization,
+              XCosSecurityToken: data.tempKeys.XCosSecurityToken
             });
           })
         }
@@ -81,13 +81,17 @@ export default {
     },
     uploadToCloud( blob, name ){
       return new Promise((resolve, reject)=>{
-        const { Bucket ,Region } = this.cosConfigObj
+
+        const Region= 'ap-guangzhou', Bucket = 'task-1256472463'
+        //const { Bucket ,Region } = this.cosConfigObj
         console.log( {
           Bucket: Bucket,
           Region: Region,
           Key: name,
           Body: blob,
         } )
+
+
         // 分片上传文件
         this.cosInstance.sliceUploadFile({
           Bucket: Bucket,
@@ -267,7 +271,6 @@ export default {
       })
     },
     dataURLtoBlob( dataUrl ){
-      console.log( dataUrl )
       return  new Promise((resolve, reject)=>{
       //  var arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
       //    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
@@ -286,9 +289,6 @@ export default {
       }
 
       var blob = new Blob([intArray], { type:  mimeString }); //转成blob
-
-
-
       //return blob
       resolve(blob)
 
