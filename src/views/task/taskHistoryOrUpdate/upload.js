@@ -29,6 +29,8 @@ export default {
     return {
       imagesFiles:[] , // e.target.files
       previewImages : [] , // window.uril.createOBjUrl
+      submitImages: [] ,
+
       cosData: {
         bucket: 'webstatic',
         sid: '',
@@ -60,24 +62,38 @@ export default {
       this.cosInstance = new CosCloud({
         getAuthorization: function (options, callback) {
 
-           Cos.getTecentCos().then(res=>{
+           //Cos.getTecentCos().then(res=>{
+           Cos.getStaticCos().then(res=>{
             const { data } = res
             this.cosConfigObj = data
-             console.log({
-               Authorization: data.tempKeys.Authorization,
-               XCosSecurityToken: data.tempKeys.XCosSecurityToken
-             })
+             //console.log({
+             //  Authorization: data.tempKeys.Authorization,
+             //  XCosSecurityToken: data.tempKeys.XCosSecurityToken
+             //})
             callback({
+              SecretId: data.SecretId,
+              SecretKey: data.SecretKey,
+
               //SecretId: data.credentials.tmpSecretId,
               //SecretKey: data.credentials.tmpSecretKey,
               //XCosSecurityToken: data.credentials.sessionToken,
               //ExpiredTime: data.expiredTime
-              Authorization: data.tempKeys.Authorization,
-              XCosSecurityToken: data.tempKeys.XCosSecurityToken
+              //Authorization: data.tempKeys.Authorization,
+              //XCosSecurityToken: data.tempKeys.XCosSecurityToken
             });
           })
         }
       });
+    },
+    initCos2(){
+      Cos.getStaticCos().then(res=>{
+        const { data } = res
+        this.cosConfigObj = data
+          this.cosInstance = new CosCloud({
+            SecretId: data.SecretId,
+            SecretKey: data.SecretKey,
+          })
+      })
     },
     uploadToCloud( blob, name ){
       return new Promise((resolve, reject)=>{
@@ -105,8 +121,10 @@ export default {
             console.log('上传中', JSON.stringify(progressData));
           },
         }, function (err, data) {
-          console.log(err, data);
-          resolve(data)
+          console.log(data);
+          if( typeof data == 'object' && 'Location' in data ){
+            resolve(data.Location)
+          }
 
         });
       })

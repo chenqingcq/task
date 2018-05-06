@@ -8,7 +8,6 @@ import {
   put,
   upImage,
   deleter,
-  formDataPost,
   patch
 } from '@/services/ajax/netaxios'
 
@@ -286,7 +285,7 @@ class Convent {
   addTaskProcess(opt, isShowFullLoading = false) {
     const url = '/api/task/schedule/add'
     const params = opt || {}
-    return formDataPost(
+    return post(
       url, params, isShowFullLoading
     )
   }

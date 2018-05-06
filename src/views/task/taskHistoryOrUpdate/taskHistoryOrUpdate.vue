@@ -194,12 +194,12 @@
       if(mode) this.mode = mode
       this.getProcessList()
 
-      this.initCos()
-
-      Cos.getTecentCos().then(res=>{
-        const { data } = res
-        this.cosConfigObj = data
-      })
+      //this.initCos()
+      this.initCos2()
+//      Cos.getTecentCos().then(res=>{
+//        const { data } = res
+//        this.cosConfigObj = data
+//      })
     },
     methods:{
 
@@ -231,29 +231,33 @@
         if( !this.imagesFiles.length ){ this.$toast.show('请上传图片'); return }
 
           // from upload.js
-          let image = []
+          var image = []
           this.imagesFiles.forEach(async (val,key)=>{
 
-            var newUrl = await this.uploadToCloud(val.blob, val.name)
+            let newUrl = await this.uploadToCloud(val.blob, val.name)
             image.push(newUrl)
-          })
+            if( key == (this.imagesFiles.length -1 ) ){
+              Convent.addTaskProcess({
+                progressDesc : this.newSectionVal ,
+                taskId : this.$route.query.taskId ,
+                images : image,
+                list : false
+              }, true ).then(res=>{
+                  console.log(res.data)
+                  this.previewImages = []
+                  this.imagesFiles = []
+                  this.newSectionVal = ''
+                  this.getProcessList()
 
-//        Convent.addTaskProcess({
-//          progressDesc : this.newSectionVal ,
-//          taskId : this.$route.query.taskId ,
-//          images : this.imagesFiles,
-//          list : false
-//        }, true ).then(res=>{
-//          console.log(res.data)
-//          this.previewImages = []
-//          this.imagesFiles = []
-//          this.newSectionVal = ''
-//          this.getProcessList()
-//
-//        })
-//        .catch(res=>{
-//          this.$toast.show(res.msg,2000)
-//        })
+                })
+                .catch(res=>{
+                  this.$toast.show(res.msg,2000)
+                })
+            }
+          })
+          console.log( image )
+
+
       },
       // 获取进度列表后的处理
       getProcessList(){

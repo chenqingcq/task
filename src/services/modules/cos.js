@@ -13,6 +13,13 @@ class Cos {
     const url = '/api/task/tx/config'
     return get(url,{})
   }
+  // 写死的 签名
+  getStaticCos(){
+
+    const url = '/api/task/config'
+    return get(url,{})
+  }
+
 }
 
 export default new Cos()
