@@ -51,7 +51,7 @@
 }
 
 .active {
-  animation: rotateInDownLeft .5s linear;
+  animation: rotateInDownLeft 0.5s linear;
 }
 
 .active_ {
@@ -71,7 +71,7 @@
   }
   50% {
     -webkit-transform: rotate3d(0, 0, 1, 0deg);
-    transform: scale(1, 1) rotate3d(0, 0, 1,0deg);
+    transform: scale(1, 1) rotate3d(0, 0, 1, 0deg);
     opacity: 1;
   }
   75% {
@@ -102,7 +102,7 @@
   }
 }
 
-@keyframes rotate {
+@keyframes _scale {
   0% {
     opacity: 0;
   }
@@ -116,15 +116,15 @@
 }
 
 .rotate {
-  animation: rotate 1s linear;
+  animation: _scale 1s linear;
 }
 </style>
 <template>
   <transition name="rotate">
-    <div class="invite-container" v-show="!show">
+    <div class="invite-container" v-show="showInvite">
       <div class="invite-panel">
         <div class="invite-img" ref="invite">
-          <img @touchstart='close' ref="close" class="close-img" src="@/assets/img/icon-close01.png" />
+          <img @click='close' ref="close" class="close-img" src="@/assets/img/icon-close01.png" />
           <img src="@/assets/img/image-popup.png" />
           <div ref="invitemore" class="invite-more">点击邀请更多好友</div>
           <div class="invite-fast">还不是好友赶快邀请</div>
@@ -146,22 +146,25 @@ export default {
       default: false
     }
   },
+  watch: {
+    showInvite(newVal) {
+      if (newVal) {
+        this.init();
+      }
+    }
+  },
   methods: {
     close() {
-      this.show = !this.show;
-      this.$refs.invite.classList.add("active_");     
+      this.$emit('closeInvite');
+      this.$refs.invite.classList.add("active_");
     },
     init() {
       this.$refs.invite.classList.add("active");
-      this.$refs.invitemore.classList.add("rotate");
+      this.$refs.invitemore.classList.add("_scale");
     }
   },
-  created() {
-    this.show = this.showInvite;
-  },
-  mounted() {
-    this.init();
-  },
+  created() {},
+  mounted() {},
   beforeDestroy() {
     this.timer = null;
   }

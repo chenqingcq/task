@@ -1,6 +1,6 @@
 <template>
   <div class="share-container" v-show="showShare">
-    <slot></slot>
+    <slot name="share"></slot>
   </div>
 </template>
 <script>
@@ -21,20 +21,10 @@
       showShare(newVal, oldVal) {
         if (newVal) {
           document.querySelector('ul.share-items').classList.add('active');
-          return;
         } else {
           document.querySelector('ul.share-items').classList.add('kill');
-          return;
         }
       }
-    },
-    methods: {
-      init() {}
-    },
-    mounted() {
-      this.$nextTick(() => {
-        this.init()
-      })
     }
   }
 
