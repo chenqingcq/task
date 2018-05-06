@@ -27,7 +27,7 @@
             </template>
           </div>
           <div class="panel panel-conf edit">
-            <textarea class="input" v-model="newSectionVal" name="" placeholder="记录一下吧" id="" cols="30" ></textarea>
+            <textarea class="input" v-model="newSectionVal" maxlength="35" name="" placeholder="记录一下吧" id="" cols="30" ></textarea>
             <!--<img v-if="newSectionVal.length ==0" class="placeholder-icon" src="../../../assets/img/icon-edit02.png" alt="">-->
             <div class="imgs-wrap b_FS-0 edit">
               <!--<img  src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">-->
@@ -169,7 +169,8 @@
 <script type="text/babel">
 
   // services
-  import { Convent } from '@/services'
+  import { Convent, Cos } from '@/services'
+  import upload from './upload'
   export default{
     data(){
       return{
@@ -180,10 +181,10 @@
         processData:[],
         isShowAllTask : false ,
         taskDetail : {}, // 任务详情
-        imagesFiles:[] , // e.target.files
-        previewImages : [] , // window.uril.createOBjUrl
+
       }
     },
+    mixins:[ upload ] ,
     mounted(){
       var dateObj = this.initDate()
       this.todayDate = dateObj.date
@@ -192,6 +193,13 @@
       const mode = this.$route.query.mode
       if(mode) this.mode = mode
       this.getProcessList()
+
+      this.initCos()
+
+      Cos.getTecentCos().then(res=>{
+        const { data } = res
+        this.cosConfigObj = data
+      })
     },
     methods:{
 
@@ -216,28 +224,36 @@
         }
 //        return ( m <10 ? ('0'+ m ): m )+ '/' + (day < 10 ? ('0' + day) : day)
       },
-      addTaskProcess(){
+       addTaskProcess(){
         const progressDesc =  this.newSectionVal
         // 表单验证
         if( !progressDesc ){ this.$toast.show('请填写文字') ; return }
         if( !this.imagesFiles.length ){ this.$toast.show('请上传图片'); return }
 
-        Convent.addTaskProcess({
-          progressDesc : this.newSectionVal ,
-          taskId : this.$route.query.taskId ,
-          images : this.imagesFiles,
-          list : false
-        }, true ).then(res=>{
-          console.log(res.data)
-          this.previewImages = []
-          this.imagesFiles = []
-          this.newSectionVal = ''
-          this.getProcessList()
+          // from upload.js
+          let image = []
+          this.imagesFiles.forEach(async (val,key)=>{
 
-        })
-        .catch(res=>{
-          this.$toast.show(res.msg,2000)
-        })
+            var newUrl = await this.uploadToCloud(val.blob, val.name)
+            image.push(newUrl)
+          })
+
+//        Convent.addTaskProcess({
+//          progressDesc : this.newSectionVal ,
+//          taskId : this.$route.query.taskId ,
+//          images : this.imagesFiles,
+//          list : false
+//        }, true ).then(res=>{
+//          console.log(res.data)
+//          this.previewImages = []
+//          this.imagesFiles = []
+//          this.newSectionVal = ''
+//          this.getProcessList()
+//
+//        })
+//        .catch(res=>{
+//          this.$toast.show(res.msg,2000)
+//        })
       },
       // 获取进度列表后的处理
       getProcessList(){
@@ -279,77 +295,7 @@
           this.processData.splice(key,1 )
         })
       },
-      async selectImages(e){
-        const files = e.target.files
-        if (this.imageFilter(files) == false) {
-          return false;
-        }
-        // 存放 files 数组
-        this.imagesFiles.push.apply(this.imagesFiles, Array.prototype.map.call(files,(file)=>file ))
-        console.log(this.imagesFiles)
-        this.previewImages = await this.previewImage(files)  // 预览 转url
-      },
-      // 取消某一张的上传
-      giveUpANIamge(index){
-        this.previewImages.splice(index, 1)
-        this.imagesFiles.splice(index, 1)
-      },
-      // 上传后的图片预览展示
-       previewImage(files){
-        const FILES = files
-        // e.target.files 不是数组 不能用map，只能用for 直接便利
-        return this.previewImages.concat(Array.prototype.map.call(FILES,(image, key)=>
-        {
-          let url = this.getObjectURL(image)
-          console.log(`>>>第 ${key} 张图：${url} `)
-          const img = new Image()
-          img.onload = ()=>{
-            this.revokeObjectURL(url)
-          }
-          return url
-        }))
-      },
-      // 释放内存中指定的文件对象
-      revokeObjectURL(file){
-        window.URL.revokeObjectURL(objectURL);
-      },
-      // 获取 url 在内存的片段url
-      getObjectURL(file){
-        let url = null
-        // URL.createObjectURL() 静态方法会创建一个 DOMString，其中包含一个表示参数中给出的对象的URL
-        if (window.createObjectURL != undefined) { // basic
-          url = window.createObjectURL(file);
-        } else if (window.URL != undefined) { // mozilla(firefox)
-          url = window.URL.createObjectURL(file);
-        } else if (window.webkitURL ) { // webkit or chrome
-          url = window.webkitURL.createObjectURL(file);
-        }
-        return url
-      },
-      imageFilter(files){
-        // 是否符合的图片格式和大小
-        let isMatch = true
-        const chinese = ['一','二','三','四']
-        if( files.length > 4 || (files.length + this.imagesFiles.length ) >4){
-          this.$toast.show('最多只能上传4张图片', 2000)
-          return false
-        }
 
-        for (var i = 0, file; file = files[i]; i++) {
-          console.log(file)
-          console.log(file.type)
-          if (file.type.indexOf("image") == 0) {
-            if (file.size >=  5 * 1024 * 1024) { // 2MB
-              this.$toast.show('您上传的第'+ chinese[i] +'张图片大小过大，应小于5M，请重新上传', 3000)
-              isMatch = false
-            }
-          } else {
-            this.$toast.show('文件"' + file.name + '"不是图片。请重新上传', 2000)
-            isMatch = false
-          }
-        }
-        return isMatch
-      }
     }
 
   }
