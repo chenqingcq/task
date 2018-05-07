@@ -605,7 +605,7 @@ img.partyLogo {
         <!--轮播图-->
         <slide ref="scroll" :loop='loop' v-if="items.length"  >
           <div class="slider-item" v-for="(item,index) in items" :key="index">
-            <img @click = "doWechatPreview(items, index)" :src="'//'+item.imgUrl" :alt="index">
+            <img @touchend = "doWechatPreview($event,items, index)" :src="'//'+item.imgUrl" :alt="index">
           </div>
         </slide>
         <div v-else class="no-historyUpdate">
@@ -835,7 +835,8 @@ export default {
     updateComments() {
       this.getComments();
     },
-    doWechatPreview(items, index) {
+    doWechatPreview(e,items, index) {
+      console.log(e,items,index)
       this.$wechat.doWechatPreview(items, index);
     },
     getComments() {
