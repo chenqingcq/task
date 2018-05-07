@@ -965,6 +965,14 @@ export default {
             self.active = "overDeadLined";
             self.activeFont = "超时未接受";
           }
+          if (res.role == 0) {
+            //定义人物角色
+            self.role = "visitor";
+          } else if (res.role == 2) {
+            self.role = "operator";
+          } else if (res.role == 3) {
+            self.role = "creator";
+          }
           self.taskName = res.taskName;
           self.headImg = res.headImage;
           self.taskDesc = res.taskDesc;
@@ -996,14 +1004,6 @@ export default {
             isCreate: res.role == 3 ? true : false
           };
           self.setCurrentProject(project);
-          if (res.role == 0) {
-            //定义人物角色
-            self.role = "visitor";
-          } else if (res.role == 2) {
-            self.role = "operator";
-          } else if (res.role == 3) {
-            self.role = "creator";
-          }
         })
         .catch(err => {
           if (err) {
