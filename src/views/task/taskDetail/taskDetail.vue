@@ -340,9 +340,9 @@ img.partyLogo {
   display: inline-block;
   font-size: 10px*2;
   font-family: PingFangSC-Regular;
-  color: rgba(255, 255, 255, 1);
   border-radius: 9*2px;
   min-width: 55*2px;
+  color: #fff;
   height: 16*2px;
   text-align: center;
   line-height: 16*2px;
@@ -565,7 +565,7 @@ img.partyLogo {
               </div>
             </div>
             <div class="task-focus">
-              <img @click='link_to_taskSetting' class="focus-star" v-show='role=="creator" && taskStatus != 2 &&  taskStatus != 7 ' src="@/assets/img/icon-set up.png" />
+              <img @click='link_to_taskSetting' class="focus-star"  v-show='role=="creator" && taskStatus != 2 &&  taskStatus != 7 '  src="@/assets/img/icon-set up.png" />
             </div>
           </div>
         </div>
@@ -679,10 +679,11 @@ import { mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   data() {
     return {
-      projectId : 0,
-
-      currentPoint : null,
-      currentNode:'',
+      projectId: 0,
+      hasSetTime: false,
+      status: "",
+      currentPoint: null,
+      currentNode: "",
       activeFont: "",
       headImg: "",
       taskDesc: "",
@@ -707,10 +708,8 @@ export default {
       node: " ",
       taskName: "",
       taskDesc: "",
-      taskStatus : -1 ,
       taskId: "",
       active: "",
-      deadLine: "暂未设置起止时间",
       taskProgressContent: `任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情`,
       //项目群
       parties: [
@@ -719,7 +718,7 @@ export default {
         "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b"
       ],
       members: [],
-      progressDesc : '' ,
+      progressDesc: "",
       items: [
         //轮播图处理时   51 234 51遵守这个有原则
         //            "http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650",
@@ -742,6 +741,30 @@ export default {
     },
     common() {
       return "common";
+    },
+    deadLine() {
+      if (this.startTime && this.endTime) {
+        console.log(new Date().getMonth());
+        let startTime_y = new Date(parseInt(this.startTime)).getFullYear();
+        let startTime_m = new Date(parseInt(this.startTime)).getMonth() + 1;
+        let startTime_d = new Date(parseInt(this.startTime)).getDate();
+
+        let endTime_y = new Date(parseInt(this.endTime)).getFullYear();
+        let endTime_m = new Date(parseInt(this.endTime)).getMonth() + 1;
+        let endTime_d = new Date(parseInt(this.endTime)).getDate();
+
+        startTime_y = startTime_y < 10 ? `0${startTime_y}` : startTime_y;
+        startTime_m = startTime_m < 10 ? `0${startTime_m}` : startTime_m;
+        startTime_d = startTime_d < 10 ? `0${startTime_d}` : startTime_d;
+
+        endTime_y = endTime_y < 10 ? `0${endTime_y}` : endTime_y;
+        endTime_m = endTime_m < 10 ? `0${endTime_m}` : endTime_m;
+        endTime_d = endTime_d < 10 ? `0${endTime_d}` : endTime_d;
+        return `${startTime_m}/${startTime_d}-${endTime_m}/${endTime_d}`;
+        console.log(this.deadLine);
+      } else {
+        return "暂未设置起始日期";
+      }
     }
   },
   components: {
@@ -749,6 +772,7 @@ export default {
     Slide,
     Detail
   },
+
   beforeRouteEnter: (to, from, next) => {
     console.log(to, from);
     if (to.path == "/taskDetail" && from.path == "/conventEntry") {
@@ -766,25 +790,24 @@ export default {
     }
   },
   methods: {
-
     ...mapActions(["setCurrentProject"]),
     updateComments() {
       this.getComments();
     },
-    doWechatPreview(items, index){
-      this.$wechat.doWechatPreview(items, index)
+    doWechatPreview(items, index) {
+      this.$wechat.doWechatPreview(items, index);
     },
     getComments() {
       const taskId = this.$route.query.taskId;
-      const self = this
-      Convent.getTaskComments( {
-        taskId ,
+      const self = this;
+      Convent.getTaskComments({
+        taskId,
         pageSize: "4"
       })
         .then(res => {
           console.log(res, "------一级评论------");
           if (res.code == 1 && res.status == 200) {
-            self.members = res.data
+            self.members = res.data;
           }
           if (res.code == 603) {
             self.$toast.show("任务暂未开启请勿评论", 1000);
@@ -803,7 +826,7 @@ export default {
       //获取评论
       let self = this;
       Convent.getTaskComments({
-        taskId : this.$route.query.taskId ,
+        taskId: this.$route.query.taskId,
         pageSize: 4
       })
         .then(res => {
@@ -866,15 +889,16 @@ export default {
       //存取角色
       this.SET_USER_ROLE(this.role);
     },
-    goToGroup() {//跳转项目群
-      console.log("---gotoGroup---",);
+    goToGroup() {
+      //跳转项目群
+      console.log("---gotoGroup---");
       let self = this;
       Convent.goToGroup(this.projectId)
         .then(res => {
-          if(res.code == 1 && res.status == 200){
+          if (res.code == 1 && res.status == 200) {
             console.log(res.data);
-            self.groupUrl = res.data
-            self.jumpToGroup()
+            self.groupUrl = res.data;
+            self.jumpToGroup();
           }
         })
         .catch(err => {
@@ -882,60 +906,61 @@ export default {
           this.$toast.show("跳转失败...");
         });
     },
-    jumpToGroup(){
-      window.location.href = this.groupUrl
+    jumpToGroup() {
+      window.location.href = this.groupUrl;
     },
     getData() {
-      const taskId = this.$route.query.taskId
+      const taskId = this.$route.query.taskId;
       const projectId = this.projectId;
+      let self = this;
       Convent.taskDetail({
         taskId,
         projectId
       })
         .then(res => {
-          console.log(res);
+          self.defineStatus(res.data.taskStatus);          
           res = res.data;
-          this.taskName = res.taskName;
-          this.headImg = res.headImage;
-          this.taskDesc = res.taskDesc;
-          this.endTime = res.endTime;
-          this.startTime = res.startTime;
-          this.checkStandard = res.checkStandard;
-          this.isBrowse = res.isBrowse;
-          this.isOpen = res.isOpen;
-          this.isPass = res.isPass;
-          this.progressDesc = res.latestProgress.progressDesc;
-          this.isLike = res.isStar == "0" ? false : true;
-          this.position = res.position;
-          this.defineStatus(res.taskStatus);
-          this.taskStatus = res.taskStatus
-          this.defineRole(res.role);
-          this.fomatTime();
-
+          self.taskName = res.taskName;
+          self.headImg = res.headImage;
+          self.taskDesc = res.taskDesc;
+          self.endTime = res.endTime;
+          self.startTime = res.startTime;
+          self.checkStandard = res.checkStandard;
+          self.isBrowse = res.isBrowse;
+          self.isOpen = res.isOpen;
+          self.isPass = res.isPass;
+          self.progressDesc = res.latestProgress.progressDesc;
+          self.isLike = res.isStar == "0" ? false : true;
+          self.position = res.position;
+          self.status = res.taskStatus;
+          console.log(self.status, "---------////////////////////////");
+          self.taskStatus = res.taskStatus;
+          self.defineRole(res.role);
+          self.hasSetTime = true;
           const project = {
-            projectId : res.projectId ,
-            projectName : res.projectName ,
-            role: this.role ,
-            isCreate : res.role == 3 ? true : false
-          }
-      // set Vuex state
-          this.setCurrentProject(project)
+            projectId: res.projectId,
+            projectName: res.projectName,
+            role: self.role,
+            isCreate: res.role == 3 ? true : false
+          };
+          // set Vuex state
+          self.setCurrentProject(project);
 
-          if( res.currentPoint ){
-            this.currentPoint = res.currentPoint
+          if (res.currentPoint) {
+            self.currentPoint = res.currentPoint;
           }
 
           if (res.latestProgress) {
-            this.items = res.latestProgress.progressImage.map(val => {
+            self.items = res.latestProgress.progressImage.map(val => {
               return { imgUrl: val };
             });
-            let last = this.items[this.items.length - 1];
-            let first = this.items[0];
-            this.items.unshift(last);
-            this.items.push(first);
+            let last = self.items[this.items.length - 1];
+            let first = self.items[0];
+            self.items.unshift(last);
+            self.items.push(first);
             //this
           } else {
-            this.items = [];
+            self.items = [];
           }
         })
         .catch(err => {
@@ -944,9 +969,9 @@ export default {
           }
         });
       //获取群头像
-      Convent.getGroupAvatar(this.projectId)
+      Convent.getGroupAvatar(self.projectId)
         .then(res => {
-          this.parties = res.data;
+          self.parties = res.data;
           console.log(res);
         })
         .catch(err => {
@@ -961,42 +986,47 @@ export default {
       // 5	提前完成
       // 6	超时
       // 7	未接受且超时
-      console.log(status, "===================>>>>>");
-
+      console.log(status,'-----stauts-----')
+      let self = this;
       switch (status) {
+        case 0: {
+          self.active = "isCompleted";
+          self.activeFont = "暂未设置起始日期";
+          break;
+        }
         case 1: {
-          this.active = "isInProgress";
-          this.activeFont = "进行中";
+          self.active = "isInProgress";
+          self.activeFont = "进行中";
           break;
         }
         case 2: {
-          this.active = "isCompleted";
-          this.activeFont = "关闭";
+          self.active = "isCompleted";
+          self.activeFont = "关闭";
           break;
         }
         case 3: {
-          this.active = "overDeadLined";
-          this.activeFont = "拒绝";
+          self.active = "overDeadLined";
+          self.activeFont = "拒绝";
           break;
         }
         case 4: {
-          this.active = "isCompleted";
-          this.activeFont = "已完成";
+          self.active = "isCompleted";
+          self.activeFont = "已完成";
           break;
         }
         case 5: {
-          this.active = "isCompleted";
-          this.activeFont = "提前完成";
+          self.active = "isCompleted";
+          self.activeFont = "提前完成";
           break;
         }
         case 6: {
-          this.activeFont = "overDeadLined";
-          this.activeFont = "超时";
+          self.activeFont = "overDeadLined";
+          self.activeFont = "超时";
           break;
         }
         case 7: {
-          this.active = "overDeadLined";
-          this.activeFont = "未接受且超时";
+          self.active = "overDeadLined";
+          self.activeFont = "未接受且超时";
           break;
         }
       }
@@ -1141,14 +1171,13 @@ export default {
       });
     },
     towardsUpdateHistory() {
-
-      if( this.taskStatus == 0 ){
-        this.$toast.show('任务暂未开始')
-        return
+      if (this.taskStatus == 0) {
+        this.$toast.show("任务暂未开始");
+        return;
       }
-      if( this.role != 'operator' && this.items.length == 0 ){
-        this.$toast.show('暂无更新')
-        return
+      if (this.role != "operator" && this.items.length == 0) {
+        this.$toast.show("暂无更新");
+        return;
       }
       if (this.role != "operator" && this.items.length == 7) {
         this.$toast.show("任务已拒绝");
@@ -1197,15 +1226,13 @@ export default {
     this.init();
   },
   mounted() {
-    const projectId = this.$route.query.projectId
-    this.taskId = this.$route.query.taskId
-    if( projectId ){
-      this.projectId = projectId
+    const projectId = this.$route.query.projectId;
+    this.taskId = this.$route.query.taskId;
+    if (projectId) {
+      this.projectId = projectId;
+    } else {
+      this.projectId = this.getProjectId;
     }
-    else{
-      this.projectId = this.getProjectId
-    }
-
   },
   beforeDestroy() {
     this.timer = null;
