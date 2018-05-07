@@ -512,9 +512,9 @@ export default {
     },
     imgUrl() {
       // if (this.SUBISSHOW) {
-      return require("@/assets/img/05.png");
+      // return require("@/assets/img/05.png");
       // } else {
-      // return require("@/assets/img/04.png");
+      return require("@/assets/img/04.png");
       // }
     }
   },
@@ -762,10 +762,10 @@ export default {
       console.log(e, "----this define show or hidden----");
       if (e.target.classList.contains("arrow-up")) {
         e.target.classList.remove("arrow-up");
-        e.target.src = require("@/assets/img/05.png");      
+        e.target.src = require("@/assets/img/04.png");                
       } else {
         e.target.classList.add("arrow-up");
-        e.target.src = require("@/assets/img/04.png");        
+        e.target.src = require("@/assets/img/05.png");              
       }
       let neededShowItems = e.target.parentNode.parentNode.parentNode.children,
         i = 1;

@@ -47,6 +47,13 @@
           }
         }
       }
+      .setting{
+        display: flex;
+        flex-direction: column;
+        p{
+          flex: 1;
+        }
+      }
     }
     .userInput {
       margin-right: 15*2px;
@@ -217,7 +224,7 @@ li#allowCreateTask {
 }
 
 .confirm {
-  margin-top: 100px;
+  margin:100px  16px 0px 16px;
   height: 44*2px;
   background: #fff;
   background-image: linear-gradient(-180deg, #86c0f8 0%, #4e8cee 100%);
@@ -400,7 +407,7 @@ input:disabled {
       <div class="permit-setting"><span>权限设置</span></div>
       <ul class="task-panel permission-setting">
         <li class="task-item">
-          <div v-for="(item,index) in setting" :key="index" @click='changeIndex(index,item)'>
+          <div class="setting" v-for="(item,index) in setting" :key="index" @click='changeIndex(index,item)'>
             <p :class="{active_:currentIndex == index}">{{item.title}} </p>
             <p>
               <span :class='{active :currentIndex == index}'>{{item.detail}}</span>

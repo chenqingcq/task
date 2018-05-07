@@ -72,10 +72,10 @@ export default {
         let me = this;
         this.$nextTick(() => {
           this.scroll.on("scroll", pos => {           
-            me.$emit("scroll", pos);
+            me.$emit("scroll", pos);     
           });
           this.scroll.on("scrollEnd", pos => {
-            me.$emit("scrollEnd", pos);             
+            me.$emit("scrollEnd", pos);   
           });
         });
       }
