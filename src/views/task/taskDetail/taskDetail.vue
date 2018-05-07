@@ -997,7 +997,7 @@ export default {
       // 6	超时
       // 7	未接受且超时
       console.log(status, "===================>>>>>");
-
+      let self = this;
       switch (status) {
         case 0: {
           self.active = "isCompleted";
