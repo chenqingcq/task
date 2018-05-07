@@ -995,7 +995,7 @@ export default {
       switch (status) {
         case 0: {
           self.active = "isCompleted";
-          self.activeFont = "暂未设置起始日期";
+          self.activeFont = "未接受";
           break;
         }
         case 1: {
