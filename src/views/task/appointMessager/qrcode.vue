@@ -124,7 +124,7 @@ export default {
       startCount: false,
       countDowner: null,
       expire: "",
-      context:''
+      context: ""
     };
   },
   watch: {
@@ -132,6 +132,7 @@ export default {
       console.log(newVal, oldVal);
       this.expire = this.expires;
       let self = this;
+      self.time();
       if (newVal) {
         Convent.sharefacetoface({
           id: self.taskId ? self.taskId : self.projectId,
@@ -141,17 +142,14 @@ export default {
             console.log(res.data.shareUrl);
             if (res.code == 1 && res.status == 200) {
               self.key = res.data.key;
-              QRcode.toCanvas(
-                self.$refs.canvas
-               ,
-                res.data.shareUrl,
-                function(error, url) {
-                  if (!error) {
-                    self.starter = true;
-                    self.time()
-                  }
+              QRcode.toCanvas(self.$refs.canvas, res.data.shareUrl, function(
+                error,
+                url
+              ) {
+                if (!error) {
+                  self.starter = true;
                 }
-              );
+              });
             }
           })
           .catch(err => {
@@ -210,11 +208,14 @@ export default {
         clearTimeout(this.countDowner);
         this.countDowner = null;
       }
-    },
+    }
   },
   beforeDestroy() {
     clearInterval(this.countDowner);
     this.countDowner = null;
+  },
+  mounted() {
+    console.log("<<<<<<qrcode>>>>");
   }
 };
 </script>
