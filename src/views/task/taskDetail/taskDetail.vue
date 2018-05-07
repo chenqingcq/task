@@ -366,6 +366,8 @@ img.partyLogo {
 
 .deadline {
   font-size: 10*2px;
+  height: 32px;
+  line-height: 32px;
   font-family: PingFangSC-Regular;
   color: rgba(102, 102, 102, 1);
   margin-left: 15*2px;
@@ -593,7 +595,7 @@ img.partyLogo {
             <img  @click='toggleTaskProgress' v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />                   
           </div>
           <div v-if="taskStatus != 0 &&  taskStatus != 3  " class="detail-btn" @click='towardsUpdateHistory'>
-            {{ role == 'operator' && taskStatus != 4 && taskStatus != 5  ? '更新进度' : '查看上传历史'  }}
+            {{ role == 'operator' && taskStatus != 4 && taskStatus != 5  ? '更新进度' : '查看历史上传'  }}
           </div>
         </div>
         <transition name="bounceIn">
