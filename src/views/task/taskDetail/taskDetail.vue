@@ -1004,7 +1004,6 @@ export default {
           } else if (res.role == 3) {
             self.role = "creator";
           }
-          debugger;
         })
         .catch(err => {
           if (err) {
