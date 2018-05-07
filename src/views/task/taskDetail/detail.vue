@@ -22,7 +22,7 @@
     bottom: -8px;
     box-sizing: content-box;
     padding: 10px;
-    transform: rotate(90deg)
+    transform: rotate(-90deg)
   }
 }
 
@@ -32,9 +32,9 @@
 </style>
 
 <template>
-  <div class="taskDetailContainer" >
+  <div class="taskDetailContainer" @touchstart='close'>
     {{taskDesc}}
-      <img @touchstart='close' src="@/assets/img/icon-right-slide03.png" >
+      <img  src="@/assets/img/icon-right-slide03.png" >
   </div>
 </template>
 <script>
