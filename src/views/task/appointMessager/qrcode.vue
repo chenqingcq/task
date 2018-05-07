@@ -56,7 +56,7 @@
         margin-top: 10*2px;
         font-size: 16px*2;
         font-family: PingFangSC-Medium;
-        color: rgba(255, 115, 100, 1);
+        color: #999;
         line-height: 2*22px;
       }
     }
@@ -87,7 +87,7 @@
                  <div class="qrcodeImg_container">
                      <canvas ref="canvas" class="img"></canvas>
                  </div>
-                 <div class="countdown">{{expire}}s</div>
+                 <div class="countdown">{{expire}}</div>
              </div>
          </div>
         </div>
@@ -123,16 +123,14 @@ export default {
       starter: false,
       startCount: false,
       countDowner: null,
-      expire: "",
+      expire: "有效期为60秒",
       context: ""
     };
   },
   watch: {
     showQrcode(newVal, oldVal) {
       console.log(newVal, oldVal);
-      this.expire = this.expires;
       let self = this;
-      self.time();
       if (newVal) {
         Convent.sharefacetoface({
           id: self.taskId ? self.taskId : self.projectId,
@@ -148,6 +146,9 @@ export default {
               ) {
                 if (!error) {
                   self.starter = true;
+                  self.time();
+                } else {
+                  self.starter = false;
                 }
               });
             }
@@ -171,36 +172,35 @@ export default {
   methods: {
     time() {
       let self = this;
-      if (this.expire == 0) {
-        this.expire = "";
-        self.countDowner = null;
-        self.$emit("closeQrcode");
-        clearTimeout(this.countDowner);
-      } else {
-        this.countDowner = setTimeout(() => {
-          this.expire--;
-          console.log(this.expire);
-          //递减
-          Convent.checkValid({
-            key: self.key
+      this.countDowner = setTimeout(() => {
+        //递减
+        Convent.checkValid({
+          key: self.key
+        })
+          .then(res => {
+            console.log(res);
+            if (res.code == 1 && res.status == 200) {
+              self.isInvalid = res.data.isValid;
+            }
+            if (!self.isInvalid) {
+              // clearTimeout(self.countDowner);
+              // self.countDowner = null;
+              self.$router.push({
+                path: "/addTaskSetting",
+                query: {
+                  [self.taskId ? "taskId" : ""]: self.taskId,
+                  projectId: self.projectId
+                }
+              });
+              self.$emit("closeQrcode");
+            } else {
+              self.$emit("closeQrcode");
+            }
           })
-            .then(res => {
-              console.log(res);
-              if (res.code == 1 && res.status == 200) {
-                self.isInvalid = res.data.isValid;
-              }
-              if (!self.isInvalid) {
-                clearTimeout(self.countDowner);
-                self.countDowner = null;
-                self.$emit("closeQrcode");
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            });
-          this.time();
-        }, 1000); //倒计时
-      }
+          .catch(err => {
+            console.log(err);
+          });
+      }, 60000); //60s后刷新
     },
     close($ev) {
       if ($ev.target.className == "qr_container") {
@@ -213,9 +213,6 @@ export default {
   beforeDestroy() {
     clearInterval(this.countDowner);
     this.countDowner = null;
-  },
-  mounted() {
-    console.log("<<<<<<qrcode>>>>");
   }
 };
 </script>

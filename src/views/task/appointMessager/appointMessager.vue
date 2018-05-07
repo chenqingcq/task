@@ -420,7 +420,7 @@
       <div ref="deleteBtn" :class="{deleteBtn:true,deleteExcutor:deleteMember,deleteExcutorDisable :doNothing}" @click='deleteExcutor'>{{deleteText}}</div>
     </div>
     <invites :showInvite='showInvite' @closeInvite='closeInvite' ></invites>
-    <qrcode :showQrcode='showQrcode' @closeQrcode='closeQrcode' :projectId='projectId' :taskId = 'taskId'></qrcode>
+    <qrcode :showQrcode='showQrcode' @closeQrcode='closeQrcode' :projectId='projectId' :expires='expires' :taskId = 'taskId'></qrcode>
     <!--微信分发&#45;&#45; 三点分享-->
     <!--<div class="wechatShare-b" >-->
       <!--<div class="mask">-->
@@ -451,6 +451,7 @@ export default {
   data() {
     return {
       SUBISSHOW: true, //点击显示隐藏列表
+      expires:60,
       addMember: true, //添加人员
       deleteMember: false, //删除人员
       doNothing: true, //默认,
@@ -704,7 +705,6 @@ export default {
       }
 
       this.Share = setTimeout(() => {
-        // fn()
         _this.showShare = !_this.showShare;
       }, delay);
     },
@@ -819,6 +819,9 @@ export default {
       let self = this;
       if (!self.taskId) {
         self.showToast("任务未创建!").then(res => {
+          setTimeout(() => {
+            self.$dialog.close();
+          });
         });
         return;
       }
