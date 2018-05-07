@@ -92,7 +92,7 @@
             height: 16*2px;
             display: flex;
             flex-wrap: nowrap;
-            span{
+            span {
               padding: 0px 8px;
               box-sizing: content-box;
             }
@@ -162,7 +162,7 @@
       }
       .detail-btn {
         width: 124*2px;
-        padding: 14px 0 ;
+        padding: 14px 0;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -332,6 +332,18 @@
 
 .between {
   padding-top: 16px !important;
+  display: flex;
+  align-items: center;
+  position: relative;
+  .toParty{
+    display: inline-block;
+    height: 20px;
+    position: absolute;
+    top:14px;
+    right: 18px;
+    padding: 8px;
+    box-sizing: content-box;
+  }
 }
 
 img.partyLogo {
@@ -545,6 +557,16 @@ img.partyLogo {
   color: rgba(51, 51, 51, 1);
   line-height: 17*2px;
 }
+.toParty {
+  display: inline-block;
+  height: 8px;
+}
+.entry-project-party{
+  margin-right: 24px;
+}
+.success{
+  line-height: 18px !important;
+}
 </style>
 <template>
   <div class="task-detail-container">
@@ -646,13 +668,14 @@ img.partyLogo {
         </div>
       </div>
     </div>
-    <div class="project-party" @click="goToGroup">
+    <div class="project-party">
       <div class="b-LR-10" >
         <div class="panel b-MT-10 c_white-bg">
           <div class="b-LR-10 b-T-5 between ">
             <p class="middle b_FS-14 c_6 "><span class="dot success"></span><span class="b-L-4">进入项目群</span></p>
             <div class="entry-project-party" v-show="parties.length" >
               <img class="partyLogo" :src="item" v-for="item in parties" :key="item.id" />
+              <img class="toParty"  @click="goToGroup" src="@/assets/img/icon-right-slide03.png" />
             </div>
           </div>
         </div>
@@ -718,7 +741,7 @@ export default {
       node: " ",
       taskName: "",
       taskDesc: "",
-      taskStatus : -1 ,
+      taskStatus: -1,
       taskId: "",
       active: "",
       taskProgressContent: `任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情`,
@@ -804,20 +827,20 @@ export default {
     updateComments() {
       this.getComments();
     },
-    doWechatPreview(items, index){
-      this.$wechat.doWechatPreview(items, index)
+    doWechatPreview(items, index) {
+      this.$wechat.doWechatPreview(items, index);
     },
     getComments() {
       const taskId = this.$route.query.taskId;
-      const self = this
-      Convent.getTaskComments( {
-        taskId ,
+      const self = this;
+      Convent.getTaskComments({
+        taskId,
         pageSize: "4"
       })
         .then(res => {
           console.log(res, "------一级评论------");
           if (res.code == 1 && res.status == 200) {
-            self.members = res.data
+            self.members = res.data;
           }
           if (res.code == 603) {
             self.$toast.show("任务暂未开启请勿评论", 1000);
@@ -836,7 +859,7 @@ export default {
       //获取评论
       let self = this;
       Convent.getTaskComments({
-        taskId : this.$route.query.taskId ,
+        taskId: this.$route.query.taskId,
         pageSize: 4
       })
         .then(res => {
@@ -905,10 +928,10 @@ export default {
       let self = this;
       Convent.goToGroup(this.projectId)
         .then(res => {
-          if(res.code == 1 && res.status == 200){
+          if (res.code == 1 && res.status == 200) {
             console.log(res.data);
-            self.groupUrl = res.data
-            self.jumpToGroup()
+            self.groupUrl = res.data;
+            self.jumpToGroup();
           }
         })
         .catch(err => {
@@ -916,8 +939,8 @@ export default {
           this.$toast.show("跳转失败...");
         });
     },
-    jumpToGroup(){
-      window.location.href = this.groupUrl
+    jumpToGroup() {
+      window.location.href = this.groupUrl;
     },
     getData() {
       const taskId = this.$route.query.taskId;
@@ -1233,13 +1256,12 @@ export default {
     this.init();
   },
   mounted() {
-    const projectId = this.$route.query.projectId
-    this.taskId = this.$route.query.taskId
-    if( projectId ){
-      this.projectId = projectId
-    }
-    else{
-      this.projectId = this.getProjectId
+    const projectId = this.$route.query.projectId;
+    this.taskId = this.$route.query.taskId;
+    if (projectId) {
+      this.projectId = projectId;
+    } else {
+      this.projectId = this.getProjectId;
     }
   },
   beforeDestroy() {

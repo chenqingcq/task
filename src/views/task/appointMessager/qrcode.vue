@@ -146,7 +146,7 @@ export default {
               ) {
                 if (!error) {
                   self.starter = true;
-                  self.time();
+                  self.time();//开始轮询二维码
                 } else {
                   self.starter = false;
                 }
