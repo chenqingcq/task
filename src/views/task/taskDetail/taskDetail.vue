@@ -92,6 +92,10 @@
             height: 16*2px;
             display: flex;
             flex-wrap: nowrap;
+            span{
+              padding: 0px 8px;
+              box-sizing: content-box;
+            }
           }
         }
         .task-focus {
