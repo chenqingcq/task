@@ -63,23 +63,15 @@ export default {
         getAuthorization: function (options, callback) {
 
            //Cos.getTecentCos().then(res=>{
-           Cos.getStaticCos().then(res=>{
+           Cos.getTecentCos().then(res=>{
             const { data } = res
+             const { tempKeys } = data
             this.cosConfigObj = data
-             //console.log({
-             //  Authorization: data.tempKeys.Authorization,
-             //  XCosSecurityToken: data.tempKeys.XCosSecurityToken
-             //})
             callback({
-              SecretId: data.SecretId,
-              SecretKey: data.SecretKey,
-
-              //SecretId: data.credentials.tmpSecretId,
-              //SecretKey: data.credentials.tmpSecretKey,
-              //XCosSecurityToken: data.credentials.sessionToken,
-              //ExpiredTime: data.expiredTime
-              //Authorization: data.tempKeys.Authorization,
-              //XCosSecurityToken: data.tempKeys.XCosSecurityToken
+              TmpSecretId: tempKeys.credentials && tempKeys.credentials.tmpSecretId,
+              TmpSecretKey: tempKeys.credentials && tempKeys.credentials.tmpSecretKey,
+              XCosSecurityToken: tempKeys.credentials && tempKeys.credentials.sessionToken,
+              ExpiredTime: tempKeys.expiredTime
             });
           })
         }
@@ -99,14 +91,12 @@ export default {
       return new Promise((resolve, reject)=>{
 
         const Region= 'ap-guangzhou', Bucket = 'task-1256472463'
-        //const { Bucket ,Region } = this.cosConfigObj
         console.log( {
           Bucket: Bucket,
           Region: Region,
           Key: name,
           Body: blob,
-        } )
-
+        })
 
         // 分片上传文件
         this.cosInstance.sliceUploadFile({
@@ -121,48 +111,13 @@ export default {
             console.log('上传中', JSON.stringify(progressData));
           },
         }, function (err, data) {
-          console.log(data);
+          console.log(err, data);
           if( typeof data == 'object' && 'Location' in data ){
             resolve(data.Location)
           }
 
         });
       })
-    },
-    async getCos(){
-
-      const { data } = await Cos.getTecentCos()
-      this.cosData = data
-      if (this.cosData.cosObject == null) {
-        console.warn("===获取cos签名与cos对象===");
-        var _self = this;
-        var cosObject = new CosCloud({
-          appid: this.cosData.appid,// APPID 必填参数
-          bucket: this.cosData.bucket,//bucketName 必填参数
-          region: this.cosData.region,
-          getAppSign: function (callback) {
-            var signCode = "";
-
-            Cos.getTecentCos().then(res=>{
-
-              signCode = res.data.periodSign;
-              callback(signCode);
-            })
-
-          },
-          getAppSignOnce: function (callback) {
-            var signCode = "";
-
-            Cos.getTecentCos().then(res=>{
-              console.log(res.data);
-              signCode = res.data.onceSign;
-              callback(signCode);
-            })
-          }
-        });
-
-        this.cosData.cosObject = cosObject;
-      }
     },
     //上传到腾讯云
     uploadImageToCos(){

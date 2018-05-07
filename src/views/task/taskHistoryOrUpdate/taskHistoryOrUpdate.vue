@@ -194,8 +194,8 @@
       if(mode) this.mode = mode
       this.getProcessList()
 
-      //this.initCos()
-      this.initCos2()
+      this.initCos()
+      //this.initCos2()
 //      Cos.getTecentCos().then(res=>{
 //        const { data } = res
 //        this.cosConfigObj = data
