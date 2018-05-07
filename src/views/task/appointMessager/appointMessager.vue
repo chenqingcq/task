@@ -565,9 +565,9 @@ export default {
           )
         ) {
           vm.$dialog.message({
-            message:"请重新添加任务!",
-            icon:'fail'
-          })
+            message: "请重新添加任务!",
+            icon: "fail"
+          });
           vm.$router.push("addTaskSetting");
         }
       });
@@ -603,9 +603,9 @@ export default {
         }
         if (!vm.projectId && !vm.taskId) {
           vm.$dialog.message({
-            message:"请重新添加任务!",
-            icon:'fail'
-          })
+            message: "请重新添加任务!",
+            icon: "fail"
+          });
           vm.$router.push("addTaskSetting");
         }
       });
@@ -628,9 +628,9 @@ export default {
         .catch(err => {
           console.log(err);
           this.$dialog.message({
-            message:"跳转失败...",
-            icon:'fail'
-          })
+            message: "跳转失败...",
+            icon: "fail"
+          });
         });
     },
     closeInvite() {
@@ -802,12 +802,12 @@ export default {
       return new Promise((resolve, reject) => {
         if (true) {
           self.$dialog.message({
-            message:message,
-            icon:"fail"
+            message: message,
+            icon: "fail"
           });
           resolve();
-        }else{
-          reject()
+        } else {
+          reject();
         }
       });
     },
@@ -818,8 +818,8 @@ export default {
       // this.SET_USER_ID(this.userId);
       let self = this;
       if (!self.taskId) {
-        self.showToast("任务未创建!").then((res)=>{      
-        })
+        self.showToast("任务未创建!").then(res => {
+        });
         return;
       }
       this.$dialog.confirm({
