@@ -335,11 +335,11 @@
   display: flex;
   align-items: center;
   position: relative;
-  .toParty{
+  .toParty {
     display: inline-block;
     height: 20px;
     position: absolute;
-    top:14px;
+    top: 14px;
     right: 18px;
     padding: 8px;
     box-sizing: content-box;
@@ -562,10 +562,10 @@ img.partyLogo {
   display: inline-block;
   height: 8px;
 }
-.entry-project-party{
+.entry-project-party {
   margin-right: 24px;
 }
-.success{
+.success {
   line-height: 18px !important;
 }
 </style>
@@ -603,7 +603,7 @@ img.partyLogo {
           </div>
         </div>
         <!--轮播图-->
-        <slide ref="scroll" :loop='loop' v-if="items.length"   >
+        <slide ref="scroll" :loop='loop' v-if="items.length"  >
           <div class="slider-item" v-for="(item,index) in items" :key="index">
             <img @click = "doWechatPreview(items, index)" :src="'//'+item.imgUrl" :alt="index">
           </div>
@@ -621,6 +621,7 @@ img.partyLogo {
             </span>
             <img  @click='toggleTaskProgress' v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />
           </div>
+
           <div v-if="taskStatus != 0 &&  taskStatus != 3  " class="detail-btn" @click='towardsUpdateHistory'>
             {{ role == 'operator' && taskStatus != 4 && taskStatus != 5  ? '更新进度' : '查看历史上传'  }}
           </div>
@@ -714,7 +715,6 @@ export default {
   data() {
     return {
       projectId: 0,
-      hasSetTime: false,
       status: "",
       currentPoint: null,
       currentNode: "",
@@ -728,8 +728,7 @@ export default {
       isOpen: "",
       isPass: "",
       position: "",
-      role: 0,
-      taskStatus: "",
+      role: '',
       loop: true,
       showSlide: true,
       currentIndex: 0,
@@ -763,6 +762,11 @@ export default {
         //            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg"
       ]
     };
+  },
+  watch: {
+    $route(to, from) {
+      console.log(newVal, oldVal);
+    }
   },
   computed: {
     // ...mapGetters(['getTaskHistoryOrUpdate']),//获取上传的轮播图图片
@@ -807,22 +811,23 @@ export default {
     Slide,
     Detail
   },
-  beforeRouteEnter: (to, from, next) => {
-    console.log(to, from);
-    if (to.path == "/taskDetail" && from.path == "/conventEntry") {
-      next(vm => {
-        // vm._getTaskId(); 有bug
-        vm.getData();
-        vm.getTaskComment();
-      });
-    } else {
-      next(vm => {
-        // vm._getTaskId();
-        vm.getData();
-        vm.getTaskComment();
-      });
-    }
-  },
+  // beforeRouteEnter: (to, from, next) => {
+  //   console.log(to, from);
+  //   if (to.path == "/taskDetail" && from.path == "/conventEntry") {
+  //     next(vm => {
+  //       // vm._getTaskId(); 有bug
+  //       vm.getData();
+  //       vm.getTaskComment();
+  //     });
+  //   } else {
+  //     next(vm => {
+  //       // vm._getTaskId();
+  //       vm.getData();
+  //       vm.getTaskComment();
+  //     });
+  //   }
+  // },
+
   methods: {
     ...mapActions(["setCurrentProject"]),
     updateComments() {
@@ -900,29 +905,6 @@ export default {
       this.deadLine = `${startTime_m}/${startTime_d}-${endTime_m}/${endTime_d}`;
       console.log(this.deadLine);
     },
-    defineRole(role) {
-      switch (role) {
-        case 3: {
-          this.role = "creator";
-          break;
-        }
-        case 2: {
-          this.role = "operator";
-          break;
-        }
-        case 1: {
-          this.role = "noTaskor";
-          break;
-        }
-        case 0: {
-          this.role = "visitor";
-          break;
-        }
-      }
-      console.log(this.role);
-      //存取角色
-      this.SET_USER_ROLE(this.role);
-    },
     goToGroup() {
       //跳转项目群
       console.log("---gotoGroup---");
@@ -952,8 +934,41 @@ export default {
         projectId
       })
         .then(res => {
-          self.defineStatus(res.data.taskStatus);
           res = res.data;
+          self.taskStatus = res.taskStatus;
+          if (res.taskStatus == 0) {
+            //定义任务状态
+            self.active = "isCompleted";
+            self.activeFont = "未开始";
+          } else if (res.taskStatus == 1) {
+            self.active = "isInProgress";
+            self.activeFont = "进行中";
+          } else if (res.taskStatus == 2) {
+            self.active = "isCompleted";
+            self.activeFont = "关闭";
+          } else if (res.taskStatus == 3) {
+            self.active = "overDeadLined";
+            self.activeFont = "拒绝";
+          } else if (res.taskStatus == 4) {
+            self.active = "isCompleted";
+            self.activeFont = "已完成";
+          } else if (res.taskStatus == 5) {
+            self.active = "isCompleted";
+            self.activeFont = "提前完成";
+          } else if (res.taskStatus == 6) {
+            self.active = "overDeadLined";
+            self.activeFont = "超时";
+          } else if (res.taskStatus == 7) {
+            self.active = "overDeadLined";
+            self.activeFont = "超时未接受";
+          }
+          if (res.role == 0) {//定义人物角色
+              this.role = "visitor";
+          }else if(res.role == 2){
+              this.role = "operator";
+          }else if(res.role == 3){
+              this.role = "creator";
+          }
           self.taskName = res.taskName;
           self.headImg = res.headImage;
           self.taskDesc = res.taskDesc;
@@ -966,11 +981,6 @@ export default {
           self.progressDesc = res.latestProgress.progressDesc;
           self.isLike = res.isStar == "0" ? false : true;
           self.position = res.position;
-          self.status = res.taskStatus;
-          console.log(self.status, "---------////////////////////////");
-          self.taskStatus = res.taskStatus;
-          self.defineRole(res.role);
-          self.hasSetTime = true;
           const project = {
             projectId: res.projectId,
             projectName: res.projectName,
@@ -1011,59 +1021,6 @@ export default {
         .catch(err => {
           console.log(err);
         });
-    },
-    defineStatus(status) {
-      // 1	进行中(接受)
-      // 2	关闭
-      // 3	拒绝
-      // 4	已完成
-      // 5	提前完成
-      // 6	超时
-      // 7	未接受且超时
-      console.log(status, "===================>>>>>");
-      let self = this;
-      switch (status) {
-        case 0: {
-          self.active = "isCompleted";
-          self.activeFont = "未开始";
-          break;
-        }
-        case 1: {
-          self.active = "isInProgress";
-          self.activeFont = "进行中";
-          break;
-        }
-        case 2: {
-          self.active = "isCompleted";
-          self.activeFont = "关闭";
-          break;
-        }
-        case 3: {
-          self.active = "overDeadLined";
-          self.activeFont = "拒绝";
-          break;
-        }
-        case 4: {
-          self.active = "isCompleted";
-          self.activeFont = "已完成";
-          break;
-        }
-        case 5: {
-          self.active = "isCompleted";
-          self.activeFont = "提前完成";
-          break;
-        }
-        case 6: {
-          self.active = "overDeadLined";
-          self.activeFont = "超时";
-          break;
-        }
-        case 7: {
-          self.active = "overDeadLined";
-          self.activeFont = "超时未接受";
-          break;
-        }
-      }
     },
     closeTaskProgress() {
       this.showTaskProgress = false;
@@ -1264,6 +1221,8 @@ export default {
     } else {
       this.projectId = this.getProjectId;
     }
+    this.getData();
+    this.getTaskComment();
   },
   beforeDestroy() {
     this.timer = null;

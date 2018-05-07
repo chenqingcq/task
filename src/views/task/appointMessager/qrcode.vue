@@ -54,7 +54,7 @@
         height: 22*2px;
         text-align: center;
         margin-top: 10*2px;
-        font-size: 16px*2;
+        font-size: 14px*2;
         font-family: PingFangSC-Medium;
         color: #999;
         line-height: 2*22px;
