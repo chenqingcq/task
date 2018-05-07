@@ -209,7 +209,7 @@
     margin-top: 50%;
     transform: translateY(-50%);
     box-sizing: content-box;
-    padding: 10px;
+    padding: 20px;
   }
 }
 
@@ -511,11 +511,11 @@ export default {
       }
     },
     imgUrl() {
-      if (this.SUBISSHOW) {
-        return require("@/assets/img/05.png");
-      } else {
-        return require("@/assets/img/04.png");
-      }
+      // if (this.SUBISSHOW) {
+      return require("@/assets/img/05.png");
+      // } else {
+      // return require("@/assets/img/04.png");
+      // }
     }
   },
   watch: {
@@ -744,16 +744,17 @@ export default {
     },
     showSub(e, index) {
       this.$refs.scroll.refresh();
-      console.log(
-        e.target.parentNode.parentNode.parentNode,
-        index,
-        "----this define show or hidden----"
-      );
+      console.log(e, "----this define show or hidden----");
+      if (e.target.classList.contains("arrow-up")) {
+        e.target.classList.remove("arrow-up");
+        e.target.src = require("@/assets/img/05.png");      
+      } else {
+        e.target.classList.add("arrow-up");
+        e.target.src = require("@/assets/img/04.png");        
+      }
       let neededShowItems = e.target.parentNode.parentNode.parentNode.children,
         i = 1;
-      this.SUBISSHOW = !this.SUBISSHOW;
-      console.log(this.SUBISSHOW);
-      if (neededShowItems.length > 1) {
+      if (neededShowItems.length > 1) {//显示子列表
         for (i; i < neededShowItems.length; i++) {
           if (neededShowItems[i].classList.contains("showOrhidden")) {
             neededShowItems[i].classList.remove("showOrhidden");
