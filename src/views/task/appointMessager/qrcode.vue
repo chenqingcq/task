@@ -44,8 +44,8 @@
         align-items: center;
         .img {
           display: inline-block;
-          width: 100%;
-          height: 100%;
+          width: 233px*2 !important;
+          height: 220px*2 !important;
           color: #999;
         }
       }
@@ -80,12 +80,12 @@
 
 <template>
     <transition name="show">
-        <div class="qr_container" v-if="showQrcode" @click='close'>
+        <div class="qr_container" v-show="showQrcode" @click='close'>
              <div class="qrcode_container" >
              <div class="qrcode_panel">
                  <div class="tilte">面对面分发</div>
                  <div class="qrcodeImg_container">
-                     <canvas class="img"></canvas>
+                     <canvas ref="canvas" class="img"></canvas>
                  </div>
                  <div class="countdown">{{expire}}s</div>
              </div>
@@ -120,9 +120,11 @@ export default {
       _projectId: "",
       _taskId: "",
       isInvalid: true,
+      starter: false,
       startCount: false,
       countDowner: null,
-      expire: ""
+      expire: "",
+      context:''
     };
   },
   watch: {
@@ -131,24 +133,22 @@ export default {
       this.expire = this.expires;
       let self = this;
       if (newVal) {
-        self.time();
         Convent.sharefacetoface({
           id: self.taskId ? self.taskId : self.projectId,
           type: self.taskId ? 0 : 1
         })
           .then(res => {
-            console.log(res.shareUrl);
+            console.log(res.data.shareUrl);
             if (res.code == 1 && res.status == 200) {
               self.key = res.data.key;
               QRcode.toCanvas(
-                document.querySelector("canvas.img"),
+                self.$refs.canvas
+               ,
                 res.data.shareUrl,
                 function(error, url) {
                   if (!error) {
-                    if (self.countDowner) {
-                      self.countDowner = null;
-                    } else {
-                    }
+                    self.starter = true;
+                    self.time()
                   }
                 }
               );
@@ -159,11 +159,14 @@ export default {
           });
       }
     },
+    starter(newVal, oldVal) {
+      console.log(newVal, oldVal, "------------开始计时----------");
+    },
     isInvalid(newVal) {
       if (!newVal) {
         clearInterval(this.countDowner);
         this.countDowner = null;
-        this.$emit("close");
+        this.$emit("closeQrcode");
       }
     }
   },
@@ -173,7 +176,7 @@ export default {
       if (this.expire == 0) {
         this.expire = "";
         self.countDowner = null;
-        self.$emit("close");
+        self.$emit("closeQrcode");
         clearTimeout(this.countDowner);
       } else {
         this.countDowner = setTimeout(() => {
@@ -191,7 +194,7 @@ export default {
               if (!self.isInvalid) {
                 clearTimeout(self.countDowner);
                 self.countDowner = null;
-                self.$emit("close");
+                self.$emit("closeQrcode");
               }
             })
             .catch(err => {
@@ -203,20 +206,16 @@ export default {
     },
     close($ev) {
       if ($ev.target.className == "qr_container") {
-        console.log(this.$el);
-        this.$el.parentNode.removeChild(this.$el);
-        this.$emit("close");
+        this.$emit("closeQrcode");
         clearTimeout(this.countDowner);
         this.countDowner = null;
       }
     },
-    count(_res) {}
   },
   beforeDestroy() {
     clearInterval(this.countDowner);
     this.countDowner = null;
-  },
-  mounted() {}
+  }
 };
 </script>
 

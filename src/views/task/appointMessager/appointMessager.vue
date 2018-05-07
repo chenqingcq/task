@@ -208,6 +208,8 @@
     width: 10*2px;
     margin-top: 50%;
     transform: translateY(-50%);
+    box-sizing: content-box;
+    padding: 10px;
   }
 }
 
@@ -335,6 +337,9 @@
   margin-right: 20px;
   margin-top: 10px;
 }
+.showOrhidden {
+  display: none !important;
+}
 </style>
 <template>
 
@@ -351,9 +356,9 @@
         <li></li>
       </ul>
       <img @click='inviteOthers' class="invite" src="@/assets/img/icon-menu.png">
-      <share :showShare='showShare'>
-        <ul class="share-items">
-          <div class="arrow"></div>
+      <share  :showShare='showShare'>
+        <ul slot="share" class="share-items">
+          <div id="arrow"></div>
           <li @click="wechatShare" ><img src="@/assets/img/01.png" />微信分发</li>
           <li @click='face_to_face'><img src="@/assets/img/02.png" />面对面发</li>
         </ul>
@@ -369,7 +374,7 @@
                   <img @click='selectedSub($event,item[0].taskId,item[0].userId, 0 )' src="@/assets/img/sign-selected.png" class='radio' />
                 </div>
                 <div class="icon">
-                  <img v-lazy="item[0].headImage">
+                  <img :src="item[0].headImage">
                 </div>
                 <div class="name">
                   <span>{{item[0].nickname}}</span>
@@ -379,12 +384,12 @@
               <div class="update">{{item[0].progressNum}}</div>
               <div class="comments">{{item[0].commentNum}}</div>
               <div class="progress">{{item[0].progress}}</div>
-              <div class="arrow" @click='showSub($event,index)'>
-                <img :src="imgUrl" v-if="item.length>1" />
+              <div class="arrow" >
+                <img @click='showSub($event,index)' :src="imgUrl" v-if="item.length>1" />
               </div>
             </li>
-            <li class="sub-item" v-for="(_item,_index) in item"  :key="_index" v-show="computedShow && index == currentIndex_" >
-              <!--下拉可见-->
+            <li class="sub-item showOrhidden" v-for="(_item,_index) in item"  v-if="item.length > 1" :key="_index"  >
+              <!--点击可见-->
               <div class="user">
                 <div  class="select">
                   <img @click='selectedSub($event,_item.taskId,_item.userId, 1 )' src="@/assets/img/sign-selected.png" class="radio"/>
@@ -414,8 +419,8 @@
       <div v-if="addMember" class="addExcutor" @click='addExcutor'>添加人员</div>
       <div ref="deleteBtn" :class="{deleteBtn:true,deleteExcutor:deleteMember,deleteExcutorDisable :doNothing}" @click='deleteExcutor'>{{deleteText}}</div>
     </div>
-    <invites :showInvite='showInvite' ></invites>
-    <qrcode :showQrcode='showQrcode' @close='closeQrcode' :projectId='projectId' :taskId = 'taskId'></qrcode>
+    <invites :showInvite='showInvite' @closeInvite='closeInvite' ></invites>
+    <qrcode :showQrcode='showQrcode' @closeQrcode='closeQrcode' :projectId='projectId' :taskId = 'taskId'></qrcode>
     <!--微信分发&#45;&#45; 三点分享-->
     <!--<div class="wechatShare-b" >-->
       <!--<div class="mask">-->
@@ -445,6 +450,7 @@ console.log(WxShareApi2);
 export default {
   data() {
     return {
+      SUBISSHOW: true, //点击显示隐藏列表
       addMember: true, //添加人员
       deleteMember: false, //删除人员
       doNothing: true, //默认,
@@ -483,7 +489,6 @@ export default {
       nowIndex: 0,
       taskExecutors: [],
       showArr: [],
-      showSub_: [],
       deletSubArr: [],
       mode: 2,
       entry: 0 //默认入口为任务添加页面 0 更新页 1  其他 2
@@ -494,9 +499,6 @@ export default {
       getTaskExecutor: "getTaskExecutor",
       getUserId: "getUserId"
     }),
-    computedShow() {
-      return this.showSub_[this.currentIndex_];
-    },
     styleObj() {
       if (this.taskExecutors.length >= 6) {
         return {
@@ -509,11 +511,7 @@ export default {
       }
     },
     imgUrl() {
-      console.log(
-        this.showSub_[this.currentIndex_],
-        "-----------------------------"
-      );
-      if (this.showSub_[this.currentIndex_]) {
+      if (this.SUBISSHOW) {
         return require("@/assets/img/05.png");
       } else {
         return require("@/assets/img/04.png");
@@ -611,6 +609,10 @@ export default {
     ...mapMutations({
       SET_USER_ID: "SET_USER_ID"
     }),
+    closeInvite() {
+      this.showInvite = !this.showInvite;
+      console.log("------------closeInvite------------------");
+    },
     openPop() {
       this.$refs.popup.open();
     },
@@ -628,10 +630,8 @@ export default {
         .then(res => {
           console.log(Object.keys(res.data), Object.values(res.data));
           this.taskExecutors = [...Object.values(res.data)];
-          this.showSub_ = new Array(this.taskExecutors.length).fill(false);
           console.log(
             this.taskExecutors,
-            this.showSub_,
             "---------------//成员//------------------------"
           );
           if (this.taskExecutors && this.taskExecutors.length) {
@@ -672,6 +672,17 @@ export default {
     face_to_face() {
       this.showShare = !this.showShare;
       this.showQrcode = !this.showQrcode;
+    },
+    debounce(delay, fn) {
+      let _this = this;
+      if (this.Share) {
+        clearTimeout(this.Share);
+      }
+
+      this.Share = setTimeout(() => {
+        // fn()
+        _this.showShare = !_this.showShare;
+      }, delay);
     },
     selectedSub(e, taskId, userId, mode) {
       console.log(e.target, taskId, userId, mode);
@@ -731,18 +742,34 @@ export default {
     progress(item) {
       return "100%";
     },
-    showSub(e,index) {
+    showSub(e, index) {
       this.$refs.scroll.refresh();
-      this.$nextTick(() => {
-        this.currentIndex_ = index;
-        this.showSub_[this.currentIndex_] = !this.showSub_[this.currentIndex_];
-        console.log(e,index, this.showSub_[this.currentIndex_]);
-      });
+      console.log(
+        e.target.parentNode.parentNode.parentNode,
+        index,
+        "----this define show or hidden----"
+      );
+      let neededShowItems = e.target.parentNode.parentNode.parentNode.children,
+        i = 1;
+      this.SUBISSHOW = !this.SUBISSHOW;
+      console.log(this.SUBISSHOW);
+      if (neededShowItems.length > 1) {
+        for (i; i < neededShowItems.length; i++) {
+          if (neededShowItems[i].classList.contains("showOrhidden")) {
+            neededShowItems[i].classList.remove("showOrhidden");
+          } else {
+            neededShowItems[i].classList.add("showOrhidden");
+          }
+        }
+      }
     },
     inviteOthers() {
       //分享
       console.log("------------------------->>>");
+      let self = this;
       this.showShare = !this.showShare;
+
+      // this.debounce(200);
     },
     commandExcutor() {
       //指定执行人
@@ -751,10 +778,7 @@ export default {
       // this.SET_USER_ID(this.userId);
       let self = this;
       if (!self.taskId) {
-        self.$dialog.message({
-          message: "任务未创建!",
-          icon: "fail"
-        });
+        self.$toast.show("任务未创建!", 500);
         return;
       }
       this.$dialog.confirm({
@@ -768,20 +792,76 @@ export default {
             .then(res => {
               console.log(res);
               if (res.code == 1 && res.status == 200) {
-                self.$router.push({
-                  path:
-                    self.entry == 0
-                      ? "/addTaskSetting"
-                      : self.entry == 1 ? "updateTaskSetting" : "convententry",
-                  query: {
-                    taskId: self.taskId,
-                    projectId: self.projectId
-                  }
-                });
+                self
+                  .refreshExcutor()
+                  .then(res => {
+                    //再次刷新列表
+                    self.$router.push({
+                      path:
+                        self.entry == 0
+                          ? "/addTaskSetting"
+                          : self.entry == 1
+                            ? "updateTaskSetting"
+                            : "convententry",
+                      query: {
+                        taskId: self.taskId,
+                        projectId: self.projectId
+                      }
+                    });
+                  })
+                  .catch(err => {
+                    //请求失败
+                    self.$router.push({
+                      path:
+                        self.entry == 0
+                          ? "/addTaskSetting"
+                          : self.entry == 1
+                            ? "updateTaskSetting"
+                            : "convententry",
+                      query: {
+                        taskId: self.taskId,
+                        projectId: self.projectId
+                      }
+                    });
+                  });
               }
             })
-            .catch(err => {});
+            .catch(err => {
+              //请求失败
+              self.$router.push({
+                path:
+                  self.entry == 0
+                    ? "/addTaskSetting"
+                    : self.entry == 1 ? "updateTaskSetting" : "convententry",
+                query: {
+                  taskId: self.taskId,
+                  projectId: self.projectId
+                }
+              });
+            });
         }
+      });
+    },
+    refreshExcutor() {
+      let self = this;
+      return new Promise((resolve, reject) => {
+        Convent.getExcutorList(self.projectId) //项目id
+          .then(res => {
+            if (res.code == 1 && res.status == 200) {
+              console.log(Object.keys(res.data), Object.values(res.data));
+              this.taskExecutors = [...Object.values(res.data)];
+              console.log(
+                this.taskExecutors,
+                "---------------刷新成员------------------------"
+              );
+              resolve();
+            } else {
+              reject();
+            }
+          })
+          .catch(err => {
+            reject();
+          });
       });
     },
     addExcutor() {
