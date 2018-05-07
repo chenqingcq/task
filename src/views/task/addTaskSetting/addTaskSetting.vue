@@ -790,6 +790,7 @@ export default {
             // debugger;
           });
       } else if (this.taskId) {
+        debugger;
         Convent.settingUpdateTask(self.taskId, {
           taskId: self.taskId,
           projectId: self.projectId,
