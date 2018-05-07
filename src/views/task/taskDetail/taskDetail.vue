@@ -637,6 +637,7 @@ img.partyLogo {
     <div class="b-LR-10">
       <div class="panel b-MT-10 c_white-bg">
         <div class="b-LR-10 b-T-5 between">
+          <!-- 字体已加粗 -->
           <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 b_FS-14 c_6 ">主题节点</span></p>
           <div @click='linkToSection' class="more b_FS-10  c_7">
             更多项目节点<img src="@/assets/img/icon-right-slide03.png" />
@@ -644,7 +645,7 @@ img.partyLogo {
         </div>
         <div class="progress-container">
           <div class="current-progress" v-if="currentPoint">
-            <div class="left">
+            <div class="left f-bold-5">
               {{ formatDate(currentPoint.pointTime) }}
             </div>
             <div class="right">
@@ -659,7 +660,7 @@ img.partyLogo {
       <div class="b-LR-10">
         <div class="panel b-MT-10 c_white-bg">
           <div class="b-LR-10 b-T-5 between ">
-            <p class="middle b_FS-14 c_6 "><span class="dot success"></span><span class="b-L-4">验收标准</span></p>
+            <p class="middle b_FS-14 c_6 "><span class="dot success"></span><span class="b-L-4 ">验收标准</span></p>
           </div>
           <div  class="taskDetail_" v-if="checkStandard.length">
            {{checkStandard}}
@@ -674,7 +675,7 @@ img.partyLogo {
       <div class="b-LR-10" >
         <div class="panel b-MT-10 c_white-bg">
           <div class="b-LR-10 b-T-5 between ">
-            <p class="middle b_FS-14 c_6 "><span class="dot success"></span><span class="b-L-4">进入项目群</span></p>
+            <p class="middle b_FS-14 c_6 "><span class="dot success"></span><span class="b-L-4 ">进入项目群</span></p>
             <div class="entry-project-party" v-show="parties.length" >
               <img class="partyLogo" :src="item" v-for="item in parties" :key="item.id" />
               <img class="toParty"  @click="goToGroup" src="@/assets/img/icon-right-slide03.png" />
@@ -716,7 +717,7 @@ export default {
     return {
       projectId: 0,
       status: "",
-      currentPoint: null,
+      currentPoint: "",
       currentNode: "",
       activeFont: "",
       headImg: "",
@@ -728,7 +729,7 @@ export default {
       isOpen: "",
       isPass: "",
       position: "",
-      role: '',
+      role: "",
       loop: true,
       showSlide: true,
       currentIndex: 0,
@@ -766,6 +767,7 @@ export default {
   watch: {
     $route(to, from) {
       console.log(newVal, oldVal);
+      alert(to);
     }
   },
   computed: {
@@ -935,6 +937,7 @@ export default {
       })
         .then(res => {
           res = res.data;
+          self.currentPoint = res.currentPoint;
           self.taskStatus = res.taskStatus;
           if (res.taskStatus == 0) {
             //定义任务状态
@@ -962,13 +965,6 @@ export default {
             self.active = "overDeadLined";
             self.activeFont = "超时未接受";
           }
-          if (res.role == 0) {//定义人物角色
-              this.role = "visitor";
-          }else if(res.role == 2){
-              this.role = "operator";
-          }else if(res.role == 3){
-              this.role = "creator";
-          }
           self.taskName = res.taskName;
           self.headImg = res.headImage;
           self.taskDesc = res.taskDesc;
@@ -979,21 +975,7 @@ export default {
           self.isOpen = res.isOpen;
           self.isPass = res.isPass;
           self.progressDesc = res.latestProgress.progressDesc;
-          self.isLike = res.isStar == "0" ? false : true;
           self.position = res.position;
-          const project = {
-            projectId: res.projectId,
-            projectName: res.projectName,
-            role: self.role,
-            isCreate: res.role == 3 ? true : false
-          };
-          // set Vuex state
-          self.setCurrentProject(project);
-
-          if (res.currentPoint) {
-            self.currentPoint = res.currentPoint;
-          }
-
           if (res.latestProgress) {
             self.items = res.latestProgress.progressImage.map(val => {
               return { imgUrl: val };
@@ -1006,6 +988,23 @@ export default {
           } else {
             self.items = [];
           }
+          // set Vuex state
+          const project = {
+            projectId: res.projectId,
+            projectName: res.projectName,
+            role: self.role,
+            isCreate: res.role == 3 ? true : false
+          };
+          self.setCurrentProject(project);
+          if (res.role == 0) {
+            //定义人物角色
+            self.role = "visitor";
+          } else if (res.role == 2) {
+            self.role = "operator";
+          } else if (res.role == 3) {
+            self.role = "creator";
+          }
+          debugger;
         })
         .catch(err => {
           if (err) {
