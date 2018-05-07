@@ -1,13 +1,12 @@
 <template>
     <div class="_comments-container"
-         :style="{minHeight: isIOS() ? '110vh' : '100vh'  }"
-         v-infinite-scroll="getCommentsList" infinite-scroll-disabled="hasMore" infinite-scroll-distance="60"
+         :style="{minHeight: isIOSPhone ? '110vh' : '100vh'  }"
+         v-infinite-scroll="getCommentsList" infinite-scroll-disabled="hasMore" infinite-scroll-distance="70"
          ref="scroll" >
          <div class="b-LR-10 comment-container">
             <div class="panel b-P-10 " style="background:#fff;overflow-x: hidden;">
               <!--scroll-->
-            <div class="comments-container"
-                  >
+            <div class="comments-container">
                 <ul class="comment-panel">
                 <li v-for="(item,index) in members" :key="index" class="lisItem">
                     <div class="left">
@@ -48,13 +47,13 @@
             </div>
             </div>
         </div>
-      <div v-if="isFocus"
+      <div v-if="isFocus && isIOSPhone"
            class="user-input-mask"
            @touchmove.prevent
            @scroll.prevent
            @touchstart.prevent="blurInput">
       </div>
-      <div class="user-input" :class="[ !isFocus? 'is-fixed' : 'no-fixed']">
+      <div class="user-input" :class="[ !isFocus || !isIOSPhone  ? 'is-fixed' : 'no-fixed']">
         <input  type="text" :placeholder="placeholder" class="comment_input" v-model="comments"
                 ref="text"
                 @focus = 'setPageToBottom'
@@ -141,7 +140,7 @@ export default {
       return str
     },
     // 评论列表
-    getCommentsList( ){
+    async getCommentsList( ){
       const { pageNum, pageSize ,hasMore } = this.page
       if( !hasMore ){
         return
@@ -158,27 +157,29 @@ export default {
         // 二级评论 传commentPid
         submitData.commentPid = this.current_commentId
       }
-      Convent.getTaskComments(submitData).then(res=>{
-        let oldList = this.members , newList = []
+      var res = await Convent.getTaskComments(submitData)
+      let oldList = this.members , newList = []
 
-        if(res.data.length){
-          newList = oldList.concat( res.data )
-          this.members = newList
-        }
-        else{
-          this.page.hasMore = false
-          this.noDataText = '已显示全部留言'
-          return
-        }
-        this.page.hasMore = res.page.isLoaded
-        if( this.page.hasMore ){
-          this.page.pageNum++
-          this.noDataText = '上拉加载更多'
-        }
-        else{
-          this.noDataText = '已显示全部留言'
-        }
-      })
+      if(res.data.length){
+        newList = oldList.concat( res.data )
+        this.members = newList
+      }
+      else{
+        this.page.hasMore = false
+        this.noDataText = '已显示全部留言'
+        return
+      }
+      this.page.hasMore = res.page.isLoaded
+      if( this.page.hasMore ){
+        this.page.pageNum++
+        this.noDataText = '上拉加载更多'
+      }
+      else{
+        this.noDataText = '已显示全部留言'
+      }
+
+
+
     },
     // 点赞或者取消点赞
     doLike( item, index ){
@@ -325,19 +326,27 @@ export default {
        bottom: 0px;
     }
     width: 100%;
-    height: 54*2px;
+    /*height: 54*2px;*/
     padding: 10*2px 20*2px;
     // overflow: hidden;
     position: absolute;
     bottom: 0;
     z-index: 9;
     background: #fff;
+      >input::-webkit-input-placeholder {
+       font-size: 24px;
+       line-height: normal;
+       //padding-top: 8px;
+      }
     .comment_input {
       display: inline-block;
-      height: 34*2px;
+      /*height: 34*2px;*/
       width: 100%;
+      padding: 16px;
+      line-height: 100%;
       padding-left: 18*2px;
       padding-right: 35*2px;
+
       background: rgba(244, 244, 244, 1);
       border-radius: 19px*2;
       color: rgba(186, 186, 186, 1);

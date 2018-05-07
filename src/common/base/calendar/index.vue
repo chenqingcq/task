@@ -64,7 +64,7 @@
         },
         data(){
             return{
-              isMonth : true ,
+              isMonth : false ,
               activeDates:['1-7','8-14','15-21','22-28','29-31'], // ,'29-31'
               _activeWeekDays : [{
                 date: 1,

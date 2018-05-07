@@ -224,7 +224,7 @@ export default {
             image.push({blob, name})
           }
         }
-        return image
+        return this.imagesFiles.concat( image )
     },
     readerAndCompress(file){
       var self = this

@@ -162,9 +162,13 @@
       }
       .detail-btn {
         width: 124*2px;
-        height: 28*2px;
+        padding: 14px 0 ;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /*line-height: 1.2;*/
         text-align: center;
-        line-height: 28*2px;
+        /*line-height: 26px;*/
         background-image: linear-gradient(0deg, #0093ff 0%, #1de0fd 100%);
         box-shadow: 0 2px 4px 0 rgba(23, 209, 254, 0.46);
         border-radius: 28*2px;
@@ -172,7 +176,7 @@
         font-family: PingFangSC-Regular;
         font-size: 14*2px;
         margin: 0 auto;
-        margin-top: 7*2px;
+        margin-top: 5px;
       }
     }
   }
@@ -592,7 +596,7 @@ img.partyLogo {
             <span>
               {{progressDesc}}
             </span>
-            <img  @click='toggleTaskProgress' v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />                   
+            <img  @click='toggleTaskProgress' v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />
           </div>
           <div v-if="taskStatus != 0 &&  taskStatus != 3  " class="detail-btn" @click='towardsUpdateHistory'>
             {{ role == 'operator' && taskStatus != 4 && taskStatus != 5  ? '更新进度' : '查看历史上传'  }}
@@ -714,6 +718,7 @@ export default {
       node: " ",
       taskName: "",
       taskDesc: "",
+      taskStatus : -1 ,
       taskId: "",
       active: "",
       taskProgressContent: `任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情`,
@@ -769,7 +774,7 @@ export default {
         return `${startTime_m}/${startTime_d}-${endTime_m}/${endTime_d}`;
         console.log(this.deadLine);
       } else {
-        return "暂未设置起始日期";
+        return "";
       }
     }
   },
@@ -778,7 +783,6 @@ export default {
     Slide,
     Detail
   },
-
   beforeRouteEnter: (to, from, next) => {
     console.log(to, from);
     if (to.path == "/taskDetail" && from.path == "/conventEntry") {
@@ -800,20 +804,20 @@ export default {
     updateComments() {
       this.getComments();
     },
-    doWechatPreview(items, index) {
-      this.$wechat.doWechatPreview(items, index);
+    doWechatPreview(items, index){
+      this.$wechat.doWechatPreview(items, index)
     },
     getComments() {
       const taskId = this.$route.query.taskId;
-      const self = this;
-      Convent.getTaskComments({
-        taskId,
+      const self = this
+      Convent.getTaskComments( {
+        taskId ,
         pageSize: "4"
       })
         .then(res => {
           console.log(res, "------一级评论------");
           if (res.code == 1 && res.status == 200) {
-            self.members = res.data;
+            self.members = res.data
           }
           if (res.code == 603) {
             self.$toast.show("任务暂未开启请勿评论", 1000);
@@ -832,7 +836,7 @@ export default {
       //获取评论
       let self = this;
       Convent.getTaskComments({
-        taskId: this.$route.query.taskId,
+        taskId : this.$route.query.taskId ,
         pageSize: 4
       })
         .then(res => {
@@ -901,10 +905,10 @@ export default {
       let self = this;
       Convent.goToGroup(this.projectId)
         .then(res => {
-          if (res.code == 1 && res.status == 200) {
+          if(res.code == 1 && res.status == 200){
             console.log(res.data);
-            self.groupUrl = res.data;
-            self.jumpToGroup();
+            self.groupUrl = res.data
+            self.jumpToGroup()
           }
         })
         .catch(err => {
@@ -912,8 +916,8 @@ export default {
           this.$toast.show("跳转失败...");
         });
     },
-    jumpToGroup() {
-      window.location.href = this.groupUrl;
+    jumpToGroup(){
+      window.location.href = this.groupUrl
     },
     getData() {
       const taskId = this.$route.query.taskId;
@@ -924,7 +928,7 @@ export default {
         projectId
       })
         .then(res => {
-          self.defineStatus(res.data.taskStatus);          
+          self.defineStatus(res.data.taskStatus);
           res = res.data;
           self.taskName = res.taskName;
           self.headImg = res.headImage;
@@ -977,7 +981,7 @@ export default {
       //获取群头像
       Convent.getGroupAvatar(self.projectId)
         .then(res => {
-          self.parties = res.data;
+          this.parties = res.data;
           console.log(res);
         })
         .catch(err => {
@@ -992,8 +996,8 @@ export default {
       // 5	提前完成
       // 6	超时
       // 7	未接受且超时
-      console.log(status,'-----stauts-----')
-      let self = this;
+      console.log(status, "===================>>>>>");
+
       switch (status) {
         case 0: {
           self.active = "isCompleted";
@@ -1026,7 +1030,7 @@ export default {
           break;
         }
         case 6: {
-          self.activeFont = "overDeadLined";
+          self.active = "overDeadLined";
           self.activeFont = "超时";
           break;
         }
@@ -1229,12 +1233,13 @@ export default {
     this.init();
   },
   mounted() {
-    const projectId = this.$route.query.projectId;
-    this.taskId = this.$route.query.taskId;
-    if (projectId) {
-      this.projectId = projectId;
-    } else {
-      this.projectId = this.getProjectId;
+    const projectId = this.$route.query.projectId
+    this.taskId = this.$route.query.taskId
+    if( projectId ){
+      this.projectId = projectId
+    }
+    else{
+      this.projectId = this.getProjectId
     }
   },
   beforeDestroy() {
