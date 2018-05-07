@@ -409,7 +409,7 @@
     </div>
     <div check= 'checked'></div>
     <div class="operate">
-      <div class="chat">
+      <div class="chat" @click="link_to_groupChat">
         <div class="chat-">
           <img src="@/assets/img/groups.png">
           <p>群聊</p>
@@ -609,6 +609,21 @@ export default {
     ...mapMutations({
       SET_USER_ID: "SET_USER_ID"
     }),
+    link_to_groupChat(){
+      console.log(this.projectId);
+      let self = this;
+       Convent.goToGroup(this.projectId)
+        .then(res => {
+          if (res.code == 1 && res.status == 200) {
+            console.log(res.data);
+            window.location.href = res.data;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          this.$toast.show("跳转失败...");
+        });
+    },
     closeInvite() {
       this.showInvite = !this.showInvite;
       console.log("------------closeInvite------------------");
