@@ -99,7 +99,7 @@
           }
         }
         .task-focus {
-          width: 80*2px;
+          width: auto;
           height: 32*2px;
           position: relative;
           margin-right: 9*2px;
@@ -388,6 +388,7 @@ img.partyLogo {
   color: rgba(102, 102, 102, 1);
   margin-left: 15*2px;
   width: auto;
+  white-space: nowrap;
   display: inline-block;
 }
 
@@ -1059,7 +1060,7 @@ export default {
         }
         case 7: {
           self.active = "overDeadLined";
-          self.activeFont = "未接受且超时";
+          self.activeFont = "超时未接受";
           break;
         }
       }
