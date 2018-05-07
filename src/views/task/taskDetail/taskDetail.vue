@@ -1037,9 +1037,6 @@ export default {
         }
       }
     },
-    taskDescActive() {
-      console.log(11111);
-    },
     closeTaskProgress() {
       this.showTaskProgress = false;
     },

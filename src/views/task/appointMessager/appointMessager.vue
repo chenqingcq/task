@@ -564,7 +564,10 @@ export default {
             window.location.hash.includes("taskId")
           )
         ) {
-          vm.$toast.show("请重新添加任务!", 500);
+          vm.$dialog.message({
+            message:"请重新添加任务!",
+            icon:'fail'
+          })
           vm.$router.push("addTaskSetting");
         }
       });
@@ -599,7 +602,10 @@ export default {
           // debugger;
         }
         if (!vm.projectId && !vm.taskId) {
-          vm.$toast.show("请重新添加任务!", 500);
+          vm.$dialog.message({
+            message:"请重新添加任务!",
+            icon:'fail'
+          })
           vm.$router.push("addTaskSetting");
         }
       });
@@ -609,10 +615,10 @@ export default {
     ...mapMutations({
       SET_USER_ID: "SET_USER_ID"
     }),
-    link_to_groupChat(){
+    link_to_groupChat() {
       console.log(this.projectId);
       let self = this;
-       Convent.goToGroup(this.projectId)
+      Convent.goToGroup(this.projectId)
         .then(res => {
           if (res.code == 1 && res.status == 200) {
             console.log(res.data);
@@ -621,7 +627,10 @@ export default {
         })
         .catch(err => {
           console.log(err);
-          this.$toast.show("跳转失败...");
+          this.$dialog.message({
+            message:"跳转失败...",
+            icon:'fail'
+          })
         });
     },
     closeInvite() {
@@ -762,14 +771,15 @@ export default {
       console.log(e, "----this define show or hidden----");
       if (e.target.classList.contains("arrow-up")) {
         e.target.classList.remove("arrow-up");
-        e.target.src = require("@/assets/img/04.png");                
+        e.target.src = require("@/assets/img/04.png");
       } else {
         e.target.classList.add("arrow-up");
-        e.target.src = require("@/assets/img/05.png");              
+        e.target.src = require("@/assets/img/05.png");
       }
       let neededShowItems = e.target.parentNode.parentNode.parentNode.children,
         i = 1;
-      if (neededShowItems.length > 1) {//显示子列表
+      if (neededShowItems.length > 1) {
+        //显示子列表
         for (i; i < neededShowItems.length; i++) {
           if (neededShowItems[i].classList.contains("showOrhidden")) {
             neededShowItems[i].classList.remove("showOrhidden");
@@ -787,6 +797,20 @@ export default {
 
       // this.debounce(200);
     },
+    showToast(message) {
+      let self = this;
+      return new Promise((resolve, reject) => {
+        if (true) {
+          self.$dialog.message({
+            message:message,
+            icon:"fail"
+          });
+          resolve();
+        }else{
+          reject()
+        }
+      });
+    },
     commandExcutor() {
       //指定执行人
       console.log(this.mode);
@@ -794,7 +818,8 @@ export default {
       // this.SET_USER_ID(this.userId);
       let self = this;
       if (!self.taskId) {
-        self.$toast.show("任务未创建!", 500);
+        self.showToast("任务未创建!").then((res)=>{      
+        })
         return;
       }
       this.$dialog.confirm({
