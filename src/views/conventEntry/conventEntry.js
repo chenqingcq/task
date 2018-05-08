@@ -21,7 +21,7 @@ export default {
 
       isShowSlideBar : false ,
       // 是否月模式
-      isMonthMode :true ,
+      isMonthMode :false ,
       // 准时完成
       completeLogo: require('@/assets/img/image-trophy.png') ,
       // 提前完成
@@ -172,7 +172,7 @@ export default {
           case 4: resStatus = 'completed';text = '完成通过';break;
           case 5: resStatus = 'aheadCompleted';break;
           case 6: resStatus = 'outDate' ;break;
-          case 7: resStatus = 'outDate' ;break;
+          case 7: resStatus = 'outDate' ;text = '超时未接受';break;
         }
         val.status = resStatus
         val.completeDate = Number(val.passTime)
@@ -183,9 +183,9 @@ export default {
           // 天数
           dateStr = numberTransformChinese( parseInt(( val.endTime - val.completeDate )/86400000 ))
           console.log( dateStr , val.completeDate , val.startTime ,'tiqian')
-          text = `提前${dateStr}天完成`
+          text = `提前${dateStr}天通过`
         }
-        else if( resStatus == 'outDate' ){
+        else if( resStatus == 'outDate' && status != 7  ){
           // 天数
           dateStr = numberTransformChinese( parseInt(( (+new Date()) - val.endTime )/86400000 ))
           text = `超时${dateStr}天`

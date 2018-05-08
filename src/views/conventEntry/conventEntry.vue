@@ -36,10 +36,9 @@
               slot="content"
               @click="linkToTaskDetail(list)"
               class="panel b-MT-10"
-              :class="[list.isStar ? 'isLike-bg' : 'c_white-bg', swipeOutIndex == index && 'on-open-Swipe' ]">
+              :class="[list.position == 0 ? 'isLike-bg' : 'c_white-bg', swipeOutIndex == index && 'on-open-Swipe' ]">
 
               <div
-
                 class="b-LR-10 b-T-5"
                 style="height: 140px">
                 <span class="left-dot dot " :class="[list.isBrowse	 ? 'info': 'warn']" ></span>

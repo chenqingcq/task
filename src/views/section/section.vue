@@ -46,6 +46,8 @@
           width: 470px;
           line-height:40px;
           font-size: 28px;
+          font-family: PingFangSC;
+          font-weight: 500;
         }
         &.edit{
            height: 192px;
@@ -149,7 +151,7 @@
                 <div class="light" :class="[section.isDoing? 'doing': 'pass']"></div>
               </div>
               <div class="panel panel-conf">
-                <div class="text c_11">
+                <div class="text " :class="[section.isDoing ? 'c_11' : 'c_6']" >
                   {{ section.pointDesc }}
                 </div>
               </div>
@@ -198,7 +200,7 @@
             <div class="panel panel-conf edit">
               <textarea class="input" v-model="newSectionVal" name="" maxlength="30" placeholder="这里填写节点" id="" cols="30" ></textarea>
               <img v-if="newSectionVal.length ==0" class="placeholder-icon" src="../../assets/img/icon-edit02.png" alt="">
-              <div @click="newSection" class="btn-small-primary b-MT-5">提交</div>
+              <div @click="newSection" class="btn-small-primary b-MT-5">添加节点</div>
             </div>
           </div>
           <div class="timer-shaft">
@@ -209,15 +211,15 @@
           <template v-for="(section,key) in sectionDataLook">
             <div class=" b_d-flex b_flex-center" :class="[ section.isDoing ? 'doing-section' : 'complete-section' ]">
               <div class="timer-shaft">
-                <div class="c_white-bg c_7 b_FS-18 b_font-PFR text-center" >
+                <div class="c_white-bg b_FS-18 b_font-PFR text-center" :class="[section.isDoing ? 'c_primary' : 'c_7']" >
                   {{ formatDate(section.pointTime) }}
                 </div>
-                <!--<div class="b_FS-10 c_7 b_font-PFR text-center b_lineH-28" v-if="section.isDoing">运行中</div>-->
+                <div class="b_FS-10 c_7 b_font-PFR text-center b_lineH-28" v-if="section.isDoing">进行中</div>
                 <div v-if="key != (sectionDataLook.length -1)" class="light" :class="[section.isDoing? 'doing': 'pass']"></div>
               </div>
               <div class="panel panel-conf">
                 <img @click="deleteSect( key, section.pointId )" class = "delete"  src="../../assets/img/icon-close.png" alt="">
-                <div class="text c_11">
+                <div class="text " :class="[section.isDoing ? 'c_11' : 'c_6']" >
                   {{ section.pointDesc }}
                 </div>
               </div>
@@ -301,15 +303,37 @@
             })
             .then(res=>{
               if( !res.data.length ){
-
                 if(this.$route.query.role == 'operator') this.mode = 'edit'
                 return
               }
-              let sectionList = Array.prototype.map.call( res.data, (section)=>{
-                section.isDoing = this.sectionFilter( Number(section.pointTimeStamp) )
+              let res_data
+
+              res_data = res.data.reverse()
+              let flag = true
+              let sectionList = Array.prototype.map.call( res_data, (section, key)=>{
+                console.log(key)
+
+                if( section.flag == '1' && flag ){
+                  section.isDoing = true
+                  flag = false
+                  //section.isDoing = this.sectionFilter( Number(section.pointTimeStamp) )
+                }else{
+                  section.isDoing = false
+                }
+
                 return section
               })
-              this.sectionDataLook = sectionList.reverse()
+
+              if( this.mode == 'look' ) {
+                this.sectionDataLook = sectionList
+              }
+              else{
+                this.sectionDataLook = sectionList.reverse()
+              }
+
+
+
+
             })
 
           },

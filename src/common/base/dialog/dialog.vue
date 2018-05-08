@@ -53,8 +53,8 @@
         </div>
       </template>
     </div>
-    <template v-if="type === 'message'">
-      <div class="messageBox">
+    <template v-show="type === 'message'">
+      <div class="messageBox" @click='closeMessage($event)'>
         <div class="box">
           <div class="icon">
             <img :src='messageIcon' />
@@ -109,6 +109,12 @@
     },
 
     methods: {
+      closeMessage(e){
+        console.log(e.target);
+        if(e.target.className == 'messageBox'){
+          this.show = false
+        }
+      },
       close() {
         this.show = false;
       },
@@ -134,9 +140,8 @@
       fadeOut() {
         console.log(this.icon)
         setTimeout(() => {
-          document.querySelector(".messageBox").parentNode.removeChild(this.$el);
           this.show = false;
-        }, 1500);
+        }, 1000);
       },
       _confirm() {
         this.show = false;
@@ -284,6 +289,7 @@
     top: 0;
     right: 0;
     bottom: 0;
+    font-weight: 500;
     left: 0;
     background: rgba(99, 99, 99, 0.6);
     display: flex;
@@ -308,7 +314,7 @@
         align-items: center;
         img {
           display:inline-block;
-          width: 45*2px;        
+          width: 60*2px;        
         }
       }
       .message {

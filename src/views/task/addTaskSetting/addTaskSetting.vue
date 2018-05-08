@@ -49,6 +49,7 @@
       }
       .setting{
         display: flex;
+        height: 100%;
         flex-direction: column;
         p{
           flex: 1;
@@ -86,7 +87,6 @@
         p {
           text-align: center;
           &:first-of-type {
-            margin-top: 4*2px;
             height: 22*2px;
             font-size: 16*2px;
             font-family: PingFangSC-Regular;

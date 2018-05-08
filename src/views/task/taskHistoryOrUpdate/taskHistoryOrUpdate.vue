@@ -224,7 +224,7 @@
         }
 //        return ( m <10 ? ('0'+ m ): m )+ '/' + (day < 10 ? ('0' + day) : day)
       },
-       addTaskProcess(){
+      async addTaskProcess(){
         const progressDesc =  this.newSectionVal
         // 表单验证
         if( !progressDesc ){ this.$toast.show('请填写文字') ; return }
@@ -232,29 +232,29 @@
 
           // from upload.js
           var image = []
-          this.imagesFiles.forEach(async (val,key)=>{
-
-            let newUrl = await this.uploadToCloud(val.blob, val.name)
+          for( let i = 0; i< this.imagesFiles.length ;i++ ) {
+            let img = this.imagesFiles[i]
+            let newUrl = await this.uploadToCloud(img.blob, img.name)
             image.push(newUrl)
-            if( key == (this.imagesFiles.length -1 ) ){
-              Convent.addTaskProcess({
-                progressDesc : this.newSectionVal ,
-                taskId : this.$route.query.taskId ,
-                images : image,
-                list : false
-              }, true ).then(res=>{
-                  console.log(res.data)
-                  this.previewImages = []
-                  this.imagesFiles = []
-                  this.newSectionVal = ''
-                  this.getProcessList()
+          }
 
-                })
-                .catch(res=>{
-                  this.$toast.show(res.msg,2000)
-                })
-            }
-          })
+         //alert(JSON.stringify(image))
+         Convent.addTaskProcess({
+           progressDesc : this.newSectionVal ,
+           taskId : this.$route.query.taskId ,
+           images : image,
+           list : false
+         }, true ).then(res=>{
+           console.log(res.data)
+           this.previewImages = []
+           this.imagesFiles = []
+           this.newSectionVal = ''
+           this.getProcessList()
+
+         })
+         .catch(res=>{
+           this.$toast.show(res.msg,2000)
+         })
           console.log( image )
 
 

@@ -19,6 +19,9 @@ export default {
         bottom: '-' + this.bodyScrol + 'px',
         stv : null
       }
+    },
+    isIOSPhone() {
+      return this.isIOS()
     }
   },
   beforeDestroy(){

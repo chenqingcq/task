@@ -4,7 +4,7 @@
       <div class="b-LR-10 b-T-5 between " ref="banner">
         <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 c_6 b_FS-14">审批留言</span></p>
         <div class=" b_FS-10 c_7 commenthint" @click='link_to_allComments'>
-          查看全部<img class="comments-icon" :src='commentImgUrl' />
+          查看全部<img class="comments-icon" src="@/assets/img/icon-right-slide03.png" />
         </div>
       </div>
       <div class="comments-container_" v-if="members.length<=0">
@@ -346,14 +346,14 @@ export default {
 .commenthint {
   display: flex;
   align-items: center;
-  ont-family: PingFangSC-Medium;
+  font-family: PingFangSC-Medium;
   font-size: 10*2px;
   color: #999999;
   .comments-icon {
     display: inline-block;
-    width: 12*2px;
-    /*height: 12px*2;*/
-    margin-left: 4px;
+    height: 8*2px;
+    margin-left: 10px;
+    margin-right: 6px;
   }
 }
 
