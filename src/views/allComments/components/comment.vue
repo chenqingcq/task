@@ -1,68 +1,74 @@
 <template>
-    <div class="_comments-container"
-         :style="{minHeight: isIOSPhone ? '110vh' : '100vh'  }"
-         v-infinite-scroll="getCommentsList" infinite-scroll-disabled="hasMore" infinite-scroll-distance="70"
-         ref="scroll" >
-         <div class="b-LR-10 comment-container">
-            <div class="panel b-P-10 " style="background:#fff;overflow-x: hidden;">
-              <!--scroll-->
-            <div class="comments-container">
-                <ul class="comment-panel">
-                <li v-for="(item,index) in members" :key="index" class="lisItem">
-                    <div class="left">
-                    <!--测试-->
-                    <div class="icon">
-                        <img :src="item.headImage" alt="icon" class='iconImg'>
-                    </div>
-                    </div>
-                    <div class="right">
-                    <!--测试-->
-                    <div class="head">
-                        <div class="role b_FS-12 ">{{item.nickname}}({{ role2Str(item.role)  }})</div>
-                        <!--{{ item.createTime }}-->
-                        <div class="time-panel"><span>{{dateFormatInChinese(item.createTime)}}</span></div>
-                    </div>
-                    <div class="comments-item">{{item.message}}</div>
-                    <div class="comments-callback" v-if="level != 'second'" >
-                        <span @click='_look_all_reply(item)'>{{ item.replyNum }}条回复</span>
-                        <div @click="doLike(item)" v-if="item.isThumbs">
-                          <!--<img @click='add_praise(index)'   :src="imgUrl"/>-->
-                          <img  src="../../../assets/img/iocn-good2.png" alt="">
-                          <span class="active" >{{ item.thumbsNum }}</span>
+      <div>
+          <div class="_comments-container"
+               :style="{minHeight: isIOSPhone ? '110vh' : '100vh'  }"
+               v-infinite-scroll="getCommentsList"
+               infinite-scroll-disabled="hasMore"
+               infinite-scroll-distance="60"
+               infinite-scroll-throttle-delay="200"
+               ref="scroll" >
+            <div class="b-LR-10 comment-container">
+              <div class="panel b-P-10 " style="background:#fff;overflow-x: hidden;">
+                <!--scroll-->
+                <div class="comments-container">
+                  <ul class="comment-panel">
+                    <li v-for="(item,index) in members" :key="index" class="lisItem">
+                      <div class="left">
+                        <!--测试-->
+                        <div class="icon">
+                          <img :src="item.headImage" alt="icon" class='iconImg'>
                         </div>
-                        <div @click="doLike(item)" v-else>
-                          <img src="../../../assets/img/iocn-good.png" alt="">
-                          <span>{{ item.thumbsNum }}</span>
+                      </div>
+                      <div class="right">
+                        <!--测试-->
+                        <div class="head">
+                          <div class="role b_FS-12 ">{{item.nickname}}({{ role2Str(item.role)  }})</div>
+                          <!--{{ item.createTime }}-->
+                          <div class="time-panel"><span>{{dateFormatInChinese(item.createTime)}}</span></div>
                         </div>
+                        <div class="comments-item">{{item.message}}</div>
+                        <div class="comments-callback" v-if="level != 'second'" >
+                          <span @click='_look_all_reply(item)'>{{ item.replyNum }}条回复</span>
+                          <div @click="doLike(item)" v-if="item.isThumbs">
+                            <!--<img @click='add_praise(index)'   :src="imgUrl"/>-->
+                            <img  src="../../../assets/img/iocn-good2.png" alt="">
+                            <span class="active" >{{ item.thumbsNum }}</span>
+                          </div>
+                          <div @click="doLike(item)" v-else>
+                            <img src="../../../assets/img/iocn-good.png" alt="">
+                            <span>{{ item.thumbsNum }}</span>
+                          </div>
 
-                    </div>
-                    </div>
-                    <i class="footbar"></i>
-                </li>
-                <li class="lisItem _all-comments" >
-                     <div class="comment-content">{{ noDataText }}</div>
-                </li>
-                </ul>
-              <!--scroll-->
+                        </div>
+                      </div>
+                      <i class="footbar"></i>
+                    </li>
+                    <li class="lisItem _all-comments" >
+                      <div class="comment-content">{{ noDataText }}</div>
+                    </li>
+                  </ul>
+                  <!--scroll-->
+                </div>
+              </div>
             </div>
+            <div v-if="isFocus && isIOSPhone"
+                 class="user-input-mask"
+                 @touchmove.prevent
+                 @scroll.prevent
+                 @touchstart.prevent="blurInput">
             </div>
-        </div>
-      <div v-if="isFocus && isIOSPhone"
-           class="user-input-mask"
-           @touchmove.prevent
-           @scroll.prevent
-           @touchstart.prevent="blurInput">
+            <div class="user-input" :class="[ !isFocus || !isIOSPhone  ? 'is-fixed' : 'no-fixed']">
+              <input  type="text" :placeholder="placeholder" class="comment_input" v-model="comments"
+                      ref="text"
+                      @focus = 'setPageToBottom'
+                      maxlength="200"
+                      @blur="clearIpt, blurInput"
+              >
+              <img @click.prevent="addComments" class="send-comment" src="@/assets/img/iocn.png" />
+            </div>
+          </div>
       </div>
-      <div class="user-input" :class="[ !isFocus || !isIOSPhone  ? 'is-fixed' : 'no-fixed']">
-        <input  type="text" :placeholder="placeholder" class="comment_input" v-model="comments"
-                ref="text"
-                @focus = 'setPageToBottom'
-                maxlength="200"
-                @blur="clearIpt, blurInput"
-        >
-        <img @click.prevent="addComments" class="send-comment" src="@/assets/img/iocn.png" />
-      </div>
-    </div>
+
 </template>
 <script type="text/babel">
 //import scroll from "@/common/base/scroll/scroll";
@@ -111,6 +117,7 @@ export default {
       this.placeholder = `回复${ nickName }`
     }
 
+    this.getCommentsList()
   },
   computed: {
     hasMore(){
@@ -146,6 +153,7 @@ export default {
         return
       }
       this.page.hasMore = false
+
       this.noDataText = '加载中'
       const taskId = this.$route.query.taskId
       let submitData = {
@@ -163,13 +171,15 @@ export default {
       if(res.data.length){
         newList = oldList.concat( res.data )
         this.members = newList
+        this.page.hasMore = true
+        //this.page.hasMore = res.page.isLoaded
       }
       else{
         this.page.hasMore = false
         this.noDataText = '已显示全部留言'
         return
       }
-      this.page.hasMore = res.page.isLoaded
+
       if( this.page.hasMore ){
         this.page.pageNum++
         this.noDataText = '上拉加载更多'
@@ -177,9 +187,6 @@ export default {
       else{
         this.noDataText = '已显示全部留言'
       }
-
-
-
     },
     // 点赞或者取消点赞
     doLike( item, index ){
@@ -295,7 +302,7 @@ export default {
 ._comments-container {
   width: 100%;
   min-height: 110vh;
-  overflow-y: auto;
+  /*overflow-y: auto;*/
   position: relative;
   /*top: 0;*/
   .comment-container {

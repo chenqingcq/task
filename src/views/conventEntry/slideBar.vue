@@ -192,7 +192,7 @@
             <div class="panel c_white-bg"
                  v-infinite-scroll="getProjectList"
                  infinite-scroll-disabled="hasMore"
-                 infinite-scroll-distance="30"
+                 infinite-scroll-distance="60"
                  infinite-scroll-throttle-delay="300"
                  @scroll.self
             >

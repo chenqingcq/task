@@ -234,7 +234,7 @@
           </template>
         </div>
       </div>
-      <img src="../../assets/img/image-background.png" alt="" class="bottom-bg">
+      <img @click.prevent src="../../assets/img/image-background.png" alt="" class="bottom-bg">
     </div>
 
 </template>

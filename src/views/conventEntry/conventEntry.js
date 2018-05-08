@@ -112,6 +112,7 @@ export default {
     },
     getTasksList(){
       const { pageNum, pageSize ,hasMore } = this.page
+
       if( !hasMore ){
         return
       }
@@ -160,10 +161,17 @@ export default {
       const data = []
       const target = taskList
       return target.map((val,key)=>{
-        const status = val.taskStatus
+        var status = val.taskStatus
         let resStatus = '',
             text = '' ,
             dateStr = '' // 时间间隔
+        const serverTime = Number(val.serverTime)
+        const endTime = Number(val.endTime)
+
+        if( status == 1 && serverTime > endTime  ){
+          status = 8
+        }
+
         switch (status){
           case 0: resStatus = 'pending' ;text = '未开始' ;break;
           case 1: resStatus = 'pending' ;text = '正在进行' ;break;
@@ -171,8 +179,9 @@ export default {
           case 3: resStatus = 'rejected' ;text = '已拒绝' ; break ;
           case 4: resStatus = 'completed';text = '完成通过';break;
           case 5: resStatus = 'aheadCompleted';break;
-          case 6: resStatus = 'outDate' ;break;
+          case 6: resStatus = 'outDate' ;text = '超时完成';break;
           case 7: resStatus = 'outDate' ;text = '超时未接受';break;
+          case 8: resStatus = 'outDate' ;break;
         }
         val.status = resStatus
         val.completeDate = Number(val.passTime)
@@ -185,7 +194,7 @@ export default {
           console.log( dateStr , val.completeDate , val.startTime ,'tiqian')
           text = `提前${dateStr}天通过`
         }
-        else if( resStatus == 'outDate' && status != 7  ){
+        else if( resStatus == 'outDate' && status != 7 && status == 8 ){
           // 天数
           dateStr = numberTransformChinese( parseInt(( (+new Date()) - val.endTime )/86400000 ))
           text = `超时${dateStr}天`

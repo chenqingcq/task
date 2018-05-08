@@ -88,6 +88,7 @@ export default {
       })
     },
     uploadToCloud( blob, name, index ){
+      console.log('name>>>', name)
       var chinese = ['一','二','三','四']
       const self = this
       return new Promise((resolve, reject)=>{

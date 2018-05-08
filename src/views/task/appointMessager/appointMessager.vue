@@ -345,7 +345,7 @@
 
   <div class="appointer-container">
     <header ref="banner">
-      <img class="bg" src='@/assets/img/appointer.png' />
+      <img @click.prevent class="bg" src='@/assets/img/appointer.png' />
       <ul class="list-items">
         <li class="lists">
           <span>成员列表</span>

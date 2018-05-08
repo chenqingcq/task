@@ -946,8 +946,16 @@ export default {
             self.active = "isCompleted";
             self.activeFont = "未开始";
           } else if (res.taskStatus == 1) {
-            self.active = "isInProgress";
-            self.activeFont = "进行中";
+            const serverTime = Number(res.serverTime)
+            const endTime = Number(res.endTime)
+            if( res.taskStatus == 1 && serverTime > endTime  ){
+              self.active = "overDeadLined";
+              self.activeFont = "超时"
+            }
+            else{
+              self.active = "isInProgress";
+              self.activeFont = "进行中"
+            }
           } else if (res.taskStatus == 2) {
             self.active = "isCompleted";
             self.activeFont = "关闭";
@@ -962,7 +970,7 @@ export default {
             self.activeFont = "提前完成";
           } else if (res.taskStatus == 6) {
             self.active = "overDeadLined";
-            self.activeFont = "超时";
+            self.activeFont = "超时完成";
           } else if (res.taskStatus == 7) {
             self.active = "overDeadLined";
             self.activeFont = "超时未接受";
