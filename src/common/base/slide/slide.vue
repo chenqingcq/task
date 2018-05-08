@@ -2,10 +2,10 @@
   <div class="slide_box">
     <div class="task-slide">
       <div class="arrow">
-        <div class="left-arrow" @touchstart='minusIndex'>
+        <div class="left-arrow" @click='minusIndex'>
           <img src="@/assets/img/icon-right-slide03.png" />
         </div>
-        <div class="right-arrow" @touchstart='addIndex '>
+        <div class="right-arrow" @click='addIndex '>
           <img src="@/assets/img/icon-right-slide03.png" />
         </div>
       </div>
@@ -33,6 +33,10 @@
       interval: {
         type: Number,
         default: 1000
+      },
+      click:{
+        type:Boolean,
+        default:true
       }
     },
     data() {
@@ -122,6 +126,7 @@
           }
           console.log("next" + this.currentPageIndex, '----------------');
           this.refresh();
+          this.$emit('changeIndex',this.currentPageIndex);
         });
         this.scroll.on("beforeScrollStart", () => {
           if (vm.autoPlay) {
