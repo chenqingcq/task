@@ -2,10 +2,10 @@
   <div class="slide_box">
     <div class="task-slide">
       <div class="arrow">
-        <div class="left-arrow" @click='minusIndex'>
+        <div class="left-arrow" @touchstart='minusIndex'>
           <img src="@/assets/img/icon-right-slide03.png" />
         </div>
-        <div class="right-arrow" @click='addIndex '>
+        <div class="right-arrow" @touchstart='addIndex '>
           <img src="@/assets/img/icon-right-slide03.png" />
         </div>
       </div>
@@ -173,6 +173,8 @@
           display: inline-block;
           height: 100%;
           transform: rotate(-180deg);
+          box-sizing: content-box;
+          padding: 10px;
         }
       }
       .right-arrow {
@@ -183,6 +185,8 @@
           display: inline-block;
           height: 100%;
           float: right;
+          box-sizing: content-box;
+          padding: 10px;
         }
       }
     }
