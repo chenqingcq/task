@@ -145,10 +145,7 @@ export default {
                 url
               ) {
                 if (!error) {
-                  self.starter = true;
-                  self.time();//开始轮询二维码
-                } else {
-                  self.starter = false;
+                  self.countDown(); //开始轮询二维码
                 }
               });
             }
@@ -170,6 +167,40 @@ export default {
     }
   },
   methods: {
+    countDown() {
+      let self = this;
+      /* 封装 WebSocket 实例化的方法  */
+      var CreateWebSocket = (function() {
+        return function(urlValue) {
+          if (window.WebSocket) return new WebSocket(urlValue);
+          if (window.MozWebSocket) return new MozWebSocket(urlValue);
+          return false;
+        };
+      })();
+      /* 实例化 WebSocket 连接对象, 地址为 ws 协议 */
+      var webSocket = CreateWebSocket(
+        "ws://dis.ccnfgame.com/taskapi/v1/socket/check"
+      );
+      self.countDowner = setInterval(() => {
+        if (webSocket.readyState === 1) {
+          webSocket.send(self.key);
+        } else {
+          console.log("not ready");
+        }
+      }, 1000);
+      /* 接收到服务端的消息时 */
+      webSocket.onmessage = function(msg) {
+        console.log("服务端说:" + msg.data);
+        if (msg.data === "failure") {
+          clearInterval(self.countDowner);
+          self.$emit("closeQrcode");
+        }
+      };
+      /* 关闭时 */
+      webSocket.onclose = function() {
+        console.log("关闭连接");
+      };
+    },
     time() {
       let self = this;
       this.countDowner = setTimeout(() => {
