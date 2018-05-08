@@ -5,7 +5,7 @@
         <div class="left-arrow" @touchstart='minusIndex'>
           <img src="@/assets/img/icon-right-slide03.png" />
         </div>
-        <div class="right-arrow" @toustart='addIndex '>
+        <div class="right-arrow" @touchstart='addIndex '>
           <img src="@/assets/img/icon-right-slide03.png" />
         </div>
       </div>
