@@ -232,12 +232,12 @@
         // 表单验证
         if( !progressDesc ){ this.$toast.show('请填写文字') ; return }
         if( !this.imagesFiles.length ){ this.$toast.show('请上传图片'); return }
-
           // from upload.js
           var image = []
           for( let i = 0; i< this.imagesFiles.length ;i++ ) {
             let img = this.imagesFiles[i]
-            let newUrl = await this.uploadToCloud(img.blob, img.name)
+            let index= i
+            let newUrl = await this.uploadToCloud(img.blob, img.name, index)
             image.push(newUrl)
           }
          Convent.addTaskProcess({

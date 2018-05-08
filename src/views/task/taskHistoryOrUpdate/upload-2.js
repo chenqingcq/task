@@ -87,15 +87,12 @@ export default {
           })
       })
     },
-    uploadToCloud( blob, name ){
+    uploadToCloud( blob, name, index ){
+      var chinese = ['一','二','三','四']
+      const self = this
       return new Promise((resolve, reject)=>{
         const Region= 'ap-guangzhou', Bucket = 'task-1256472463'
-        console.log( {
-          Bucket: Bucket,
-          Region: Region,
-          Key: name,
-          Body: blob,
-        })
+
 
         // 分片上传文件
         this.cosInstance.sliceUploadFile({
@@ -108,6 +105,12 @@ export default {
           },
           onProgress: function (progressData) {
             console.log('上传中', JSON.stringify(progressData));
+            const percent = progressData.percent
+            if( percent == 1 ){
+              //self.$toast.close()
+            }else{
+              self.$toast.show(`正在上传第${chinese[index]}张 ${percent *100 }%`)
+            }
           },
         }, function (err, data) {
           console.log(err, data);
