@@ -56,7 +56,7 @@
         margin-top: 10*2px;
         font-size: 14px*2;
         font-family: PingFangSC-Medium;
-        color: rgba(255, 115, 100, 1);
+        color: #999;
         line-height: 2*22px;
       }
     }
@@ -87,7 +87,7 @@
                  <div class="qrcodeImg_container">
                      <canvas ref="canvas" class="img"></canvas>
                  </div>
-                 <div class="countdown">{{expire}}s</div>
+                 <div class="countdown">有效期为60s</div>
              </div>
          </div>
         </div>
@@ -124,53 +124,24 @@ export default {
       startCount: false,
       countDowner: null,
       expire: 60,
-      context: ""
+      context: "",
+      CreateWebSocket: "",
+      webSocket: ""
     };
   },
   watch: {
     showQrcode(newVal, oldVal) {
-      console.log(newVal, oldVal);
-      let self = this;
       if (newVal) {
-        Convent.sharefacetoface({
-          id: self.taskId ? self.taskId : self.projectId,
-          type: self.taskId ? 0 : 1
-        })
-          .then(res => {
-            console.log(res.data.shareUrl);
-            if (res.code == 1 && res.status == 200) {
-              self.key = res.data.key;
-              QRcode.toCanvas(self.$refs.canvas, res.data.shareUrl, function(
-                error,
-                url
-              ) {
-                if (!error) {
-                  self.countDown(); //开始轮询二维码
-                }
-              });
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }
-    },
-    starter(newVal, oldVal) {
-      console.log(newVal, oldVal, "------------开始计时----------");
-    },
-    isInvalid(newVal) {
-      if (!newVal) {
-        clearInterval(this.countDowner);
-        this.countDowner = null;
-        this.$emit("closeQrcode");
+        this.face();
       }
     }
   },
   methods: {
-    countDown() {
+    face() {
       let self = this;
-      self.expire = self.expires;
+
       /* 封装 WebSocket 实例化的方法  */
+
       var CreateWebSocket = (function() {
         return function(urlValue) {
           if (window.WebSocket) return new WebSocket(urlValue);
@@ -178,71 +149,61 @@ export default {
           return false;
         };
       })();
-      /* 实例化 WebSocket 连接对象, 地址为 ws 协议 */
-      var webSocket = CreateWebSocket(
-        "ws://dis.ccnfgame.com/taskapi/v1/socket/check"
-      );
-      self.countDowner = setInterval(() => {
-        if (webSocket.readyState === 1) {
-          console.log(self.key, "------------key-----------------");
-          webSocket.send(self.key);
-          self.expire--;
-        } else {
-          console.log("not ready");
-        }
-      }, 1000);
-      /* 接收到服务端的消息时 */
-      webSocket.onmessage = function(msg) {
-        console.log("服务端说:" + msg.data);
-        if (msg.data === "failure") {
-          clearInterval(self.countDowner);
-          self.$emit("closeQrcode");
-          webSocket.close();
-        } else {
-          //return ok
-        }
-        if (self.expire <= 0) {
-          clearInterval(self.countDowner);
-          self.$emit("closeQrcode");
-          webSocket.close();
-        }
-      };
-      /* 关闭时 */
-      webSocket.onclose = function() {
-        console.log("关闭连接");
-      };
-    },
-    time() {
-      let self = this;
-      this.countDowner = setTimeout(() => {
-        //递减
-        Convent.checkValid({
-          key: self.key
+
+      Convent.sharefacetoface({
+        id: self.taskId ? self.taskId : self.projectId,
+        type: self.taskId ? 0 : 1
+      })
+        .then(res => {
+          console.log(res.data.shareUrl);
+          if (res.code == 1 && res.status == 200) {
+            QRcode.toCanvas(self.$refs.canvas, res.data.shareUrl, function(
+              error,
+              url
+            ) {
+              if (!error) {
+                /* 实例化 WebSocket 连接对象, 地址为 ws 协议 */
+                self.webSocket = CreateWebSocket(
+                  // `ws://${host}/taskapi/v1/socket/check/${key}`
+                  `ws://dis.ccnfgame.com/taskapi/v1/socket/check${res.data.key}`
+                );
+                /* 关闭时 */
+                self.webSocket.onclose = function() {
+                  console.log("关闭连接");
+                };
+                /* 接受信息 */
+
+                self.webSocket.onmessage = function(msg) {
+                  console.log("服务端说:" + msg.data);
+                  if (msg.data === "failure") {
+                    // self.$router.push({
+                    //   path:'addTaskSetting',
+                    //   [self.taskId?'taskId':undefined]:self.taskId,
+                    //   projectId:self.projectIda
+                    // })
+                    self.$emit("closeQrcode");
+                  }
+                };
+                //60s后刷新
+                clearTimeout(self.countDowner);
+                self.countDowner = setTimeout(() => {
+                  // if (self.webSocket.readyState === 1) {
+                  //   console.log(key, "------------key-----------------");
+                  //   self.webSocket.send(key);
+                  //   /* 接收到服务端的消息时 */
+                  // } else {
+                  //   console.log("not ready");
+                  // }
+                  self.face();
+                }, 2000);
+                // self.countDown(window.location.host, self.key);
+              }
+            });
+          }
         })
-          .then(res => {
-            console.log(res);
-            if (res.code == 1 && res.status == 200) {
-              self.isInvalid = res.data.isValid;
-            }
-            if (!self.isInvalid) {
-              // clearTimeout(self.countDowner);
-              // self.countDowner = null;
-              self.$router.push({
-                path: "/addTaskSetting",
-                query: {
-                  [self.taskId ? "taskId" : ""]: self.taskId,
-                  projectId: self.projectId
-                }
-              });
-              self.$emit("closeQrcode");
-            } else {
-              self.$emit("closeQrcode");
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }, 60000); //60s后刷新
+        .catch(err => {
+          console.log(err);
+        });
     },
     close($ev) {
       if ($ev.target.className == "qr_container") {
@@ -255,7 +216,8 @@ export default {
   beforeDestroy() {
     clearInterval(this.countDowner);
     this.countDowner = null;
-  }
+  },
+  mounted() {}
 };
 </script>
 

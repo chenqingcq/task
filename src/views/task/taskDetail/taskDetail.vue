@@ -603,9 +603,9 @@ img.partyLogo {
           </div>
         </div>
         <!--轮播图-->
-        <slide ref="scroll" :loop='loop' v-if="items.length"  >
+        <slide @changeIndex='changeIndex' ref="scroll" :loop='loop' v-if="items.length"  >
           <div class="slider-item" v-for="(item,index) in items" :key="index">
-            <img @touchend = "doWechatPreview($event,items, index)" :src="'//'+item.imgUrl" :alt="index">
+            <img @touchend= "doWechatPreview($event,items, index)" :src="'//'+item.imgUrl" :alt="index">
           </div>
         </slide>
         <div v-else class="no-historyUpdate">
@@ -761,7 +761,8 @@ export default {
         //            "http://bpic.588ku.com/element_origin_min_pic/16/06/20/165767ab7a315bd.jpg",
         //            "http://bpic.588ku.com/element_origin_min_pic/18/03/24/494a50847f3dbef27c31355f35d0393d.jpg" ,
         //            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg"
-      ]
+      ],
+      currentIndex_: 1
     };
   },
   watch: {
@@ -835,10 +836,17 @@ export default {
     updateComments() {
       this.getComments();
     },
-    doWechatPreview(e,items, index) {
-      console.log(e,items,index)
-      items = items.slice(1,items.length-2);
-      this.$wechat.doWechatPreview(items, index);
+    changeIndex(index) {
+      console.log(index, ">>>>>>>>>");
+      this.currentIndex_ = index;
+    },
+    doWechatPreview(e, items, index) {
+      console.log(e)
+      e.stoppropagation();
+      e.preventDefault();
+      this.$nextTick(() => {
+        this.$wechat.doWechatPreview(items, this.currentIndex_);
+      });
     },
     getComments() {
       const taskId = this.$route.query.taskId;
