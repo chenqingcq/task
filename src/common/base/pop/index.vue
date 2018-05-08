@@ -88,10 +88,16 @@
   .mask-leave-to{
     .animate-fadeOut ;
   }
+
+</style>
+<style>
+  .noscroll {
+    position: fixed!important
+  }
 </style>
 <template>
     <div>
-      <transition name="mask">
+      <transition name="mask" >
         <div v-if="isShow" class="mask" @touchstart="isShow = false" ></div>
       </transition>
       <transition :name = 'animateName' >
@@ -103,7 +109,7 @@
       </transition>
     </div>
 </template>
-<script>
+<script type="text/babel">
     export default{
         name : 'VPop' ,
         props:{
@@ -114,7 +120,8 @@
         },
         data(){
             return{
-              isShow : false
+              isShow : false ,
+              scrollTop : 0
             }
         },
         computed:{
@@ -125,9 +132,22 @@
         methods:{
           open(){
             this.isShow = true
+            this.scrollTop = window.scrollY
+            var page = document.getElementsByTagName('body')[0]
+//禁止页面滚动
+            page.classList.add('noscroll')
+
           },
           close(){
             this.isShow = false
+            var page = document.getElementsByTagName('body')[0]
+            //恢复页面滚动
+            page.classList.remove('noscroll')
+            //setTimeout(()=>{
+              console.log(222)
+              window.scrollTo( 0, this.scrollTop )
+            //}, 1000)
+
             this.closeCb()
           },
           closeCb(){

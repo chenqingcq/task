@@ -167,7 +167,11 @@
 
 <style lang='less' scoped>
   .confirm-container {
+    /*position: absolute;*/
+    left: 50%;
+    top: 50% ;
     position: absolute;
+    transform: translate(-50%,-50%);
     font-family: PingFangSC-Regula;
     z-index: 99999999;
     width: 208*2px;
@@ -206,7 +210,8 @@
             font-weight: 500;
             font-size: 14*2px;
             color: rgba(153, 153, 153, 1);
-            line-height: 20px;
+            /*line-height: 20px;*/
+            line-height: normal;
           }
         }
         &:last-of-type {
@@ -215,13 +220,14 @@
           width: 100%;
           div {
             width: 50%;
-            height: 100%;
+            padding:28px 0 ;
+            /*height: 100%;*/
             justify-content: center;
             display: flex;
             align-items: center;
             font-weight: 500;
             font-size: 16*2px;
-            line-height: 22px;
+            line-height: normal;
             &:first-of-type {
               border-right: 1px solid rgba(153, 153, 153, 1);
               color: rgba(102, 102, 102, 1);
@@ -350,10 +356,10 @@
     bottom: 0;
     left: 0;
     background: rgba(99, 99, 99, 0.5);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
+    /*display: flex;*/
+    /*flex-wrap: wrap;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
     .panel-notice {
       animation: scale 0.5s ease;
       min-width: 212*2px;
@@ -428,7 +434,12 @@
       height: 133px*2;
       background-color: #fff;
       border-radius: 4px*2;
-      position: relative;
+
+      top: 50% ;
+      left: 50% ;
+      position: absolute;
+      transform: translate(-50%, -50%);
+
       display: flex;
       justify-content: center;
       img.close {

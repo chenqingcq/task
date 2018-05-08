@@ -304,11 +304,12 @@ export default {
   min-height: 110vh;
   /*overflow-y: auto;*/
   position: relative;
+  z-index: 10;
   /*top: 0;*/
   .comment-container {
     position: relative;
     /*top: 20px;*/
-    margin-bottom: 120px;
+    padding-bottom: 120px;
     padding-top: 20px;
   }
   .comment-panel {

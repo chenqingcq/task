@@ -622,8 +622,8 @@ img.partyLogo {
             <img  @click='toggleTaskProgress' v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />
           </div>
 
-          <div v-if="taskStatus != 0 &&  taskStatus != 3  " class="detail-btn" @click='towardsUpdateHistory'>
-            {{ role == 'operator' && taskStatus != 4 && taskStatus != 5  ? '更新进度' : '查看历史上传'  }}
+          <div v-if="taskStatus != 0 &&  taskStatus != 3 && taskStatus != 7 && !(taskStatus == 2 && role == 'operator' )" class="detail-btn" @click='towardsUpdateHistory'>
+            {{ role == 'operator' && taskStatus != 4 && taskStatus != 5 &&  taskStatus != 6  ? '更新进度' : '查看历史上传'  }}
           </div>
         </div>
         <transition name="bounceIn">
@@ -1177,12 +1177,16 @@ export default {
         this.$toast.show("任务暂未开始");
         return;
       }
-      if (this.role != "operator" && this.items.length == 0) {
+      if ( this.taskStatus == 2 && this.role == "operator" ) {
+        this.$toast.show("任务已关闭");
+        return;
+      }
+      if (this.role != "operator" && this.taskStatus == 0) {
         this.$toast.show("暂无更新");
         return;
       }
-      if (this.role != "operator" && this.items.length == 7) {
-        this.$toast.show("任务已拒绝");
+      if (this.role != "operator" && this.taskStatus == 7) {
+        this.$toast.show("任务未领取");
         return;
       }
 
@@ -1191,7 +1195,8 @@ export default {
       if (
         this.role == "operator" &&
         this.taskStatus != 4 &&
-        this.taskStatus != 5
+        this.taskStatus != 5 &&
+        this.taskStatus != 6
       ) {
         this.$router.push({
           path: `taskHistoryOrUpdate?taskId=${taskId}&mode=edit`
