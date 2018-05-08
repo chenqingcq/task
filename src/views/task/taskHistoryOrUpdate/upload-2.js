@@ -3,8 +3,8 @@
  */
 
 /*
- * lrz upload images to tecent cloud server
- * **/
+* lrz upload images to tecent cloud server
+* **/
 //引入 tecent SDK
 //import CosCloud from "@/assets/js/cos-js-sdk-v4.js"
 import CosCloud from 'cos-js-sdk-v5'
@@ -62,10 +62,10 @@ export default {
       this.cosInstance = new CosCloud({
         getAuthorization: function (options, callback) {
 
-          //Cos.getTecentCos().then(res=>{
-          Cos.getTecentCos().then(res=>{
+           //Cos.getTecentCos().then(res=>{
+           Cos.getTecentCos().then(res=>{
             const { data } = res
-            const { tempKeys } = data
+             const { tempKeys } = data
             this.cosConfigObj = data
             callback({
               TmpSecretId: tempKeys.credentials && tempKeys.credentials.tmpSecretId,
@@ -81,15 +81,14 @@ export default {
       Cos.getStaticCos().then(res=>{
         const { data } = res
         this.cosConfigObj = data
-        this.cosInstance = new CosCloud({
-          SecretId: data.SecretId,
-          SecretKey: data.SecretKey,
-        })
+          this.cosInstance = new CosCloud({
+            SecretId: data.SecretId,
+            SecretKey: data.SecretKey,
+          })
       })
     },
     uploadToCloud( blob, name ){
       return new Promise((resolve, reject)=>{
-
         const Region= 'ap-guangzhou', Bucket = 'task-1256472463'
         console.log( {
           Bucket: Bucket,
@@ -123,10 +122,8 @@ export default {
     uploadImageToCos(){
       var _self = this;
       console.warn("===上传文件到腾讯云===");
-
       for (var i in this.data.tempList) {
         var fileName = _self.cosData.fileName();
-        // alert(fileName);
         this.cosData.cosObject.uploadFile(
           _self.successCallBack,
           _self.errorCallBack,
@@ -139,18 +136,19 @@ export default {
       }
 
     },
-    async selectImages(e){
+     selectImages(e){
       const files = e.target.files
       const isPass = this.imageFilter(files)
       if ( isPass == false) {
         return false;
       }
-      this.previewImages = this.previewImage(files)  // 预览 转url
+      //this.previewImages = this.previewImage(files)  // 预览 转url
       // 存放 files 数组
       //this.imagesFiles.push.apply(this.imagesFiles, Array.prototype.map.call(files,(file)=>file ))
-      const imageBlob = await this.mapImages(files)
-      // 清空input
-      this.imagesFiles = imageBlob
+      const filesArray =  Array.prototype.map.call(files,(file)=>file )
+
+       this.mapImages(filesArray)
+
     },
     // 取消某一张的上传
     giveUpANIamge(index){
@@ -189,7 +187,7 @@ export default {
       }
       return url
     },
-    imageFilter(files){
+     imageFilter(files){
       // 是否符合的图片格式和大小
       let isMatch = true
       const chinese = ['一','二','三','四']
@@ -212,106 +210,189 @@ export default {
       }
       return isMatch
     },
-    async mapImages(files){
+    mapImages(files){
+      const self  = this
+      var image = []
+      var len = files.length
+        //for (let i = 0, file; file = files[i]; i++) {
 
-      let image = []
-      for (let i = 0, file; file = files[i]; i++) {
-        const name = file.name
-        if (file.type.indexOf("image") == 0) {
-          const a = await this.readerAndCompress(file)
-          const b = await this.compress(a.img, a.w, a.h)
-          const blob = await this.dataURLtoBlob(b)
-          image.push({blob, name})
+      var flag = 0
+      async function mapIt(flag){
+          if(flag == len){
+            return
+          }
+          const file = files[flag]
+          const name = file.name
+          if (file.type.indexOf("image") == 0) {
+            var result = await self.imgReady(file)
+            self.imagesFiles.push({
+              blob: result.bigPic ,
+              name :name
+            })
+            if( flag == len -1  ){
+              if( self.$refs && self.$refs.fileinput ){
+                self.$refs.fileinput.value = ''
+              }
+              return
+            }
+            else{
+              flag+=1
+              mapIt(flag)
+            }
+          }
         }
-      }
-      return this.imagesFiles.concat( image )
+      mapIt(flag)
     },
     readerAndCompress(file){
       var self = this
       console.log( file.size )
+      let reader = new FileReader(), img = new Image()
+      reader.readAsDataURL(file);
       return new Promise((resolve, reject)=>{
-        const reader = new FileReader(), img = new Image()
-        reader.readAsDataURL(file);
+
+
         // 读文件成功的回调
         reader.onload = function(e) {
           // e.target.result就是图片的base64地址信息
           img.src = e.target.result;
           //self.previewImages.push(e.target.result)
         };
-        img.onload = function(){
-          resolve({img, w:this.width, h:this.height  })
+        img.onload = async function(){
+          var data =  await self.compress(img,this.width, this.height  )
+          console.log(data)
+          resolve(data)
         }
+
       })
     },
+  //  dataURLtoBlob(dataurl){
+  //  var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+  //    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+  //  while (n--) {
+  //    u8arr[n] = bstr.charCodeAt(n);
+  //  }
+  //  return new Blob([u8arr], { type: mime });
+  //},
     dataURLtoBlob( dataUrl ){
-      return  new Promise((resolve, reject)=>{
-        //  var arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-        //    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-        //  while(n--){
-        //    u8arr[n] = bstr.charCodeAt(n);
-        //  }
-        //  var b = new Blob([u8arr], {type:mime})
-        //  console.log( b.size)
-
-        var mimeString =  dataUrl.split(',')[0].split(':')[1].split(';')[0]; // mime类型
-        var byteString = atob(dataUrl.split(',')[1]); //base64 解码
-        var arrayBuffer = new ArrayBuffer(byteString.length); //创建缓冲数组
-        var intArray = new Uint8Array(arrayBuffer); //创建视图
-        for ( let i = 0; i < byteString.length; i += 1) {
-          intArray[i] = byteString.charCodeAt(i);
-        }
-
-        var blob = new Blob([intArray], { type:  mimeString }); //转成blob
-        //return blob
-        resolve(blob)
-
-
-      })
-
+      var mimeString =  dataUrl.split(',')[0].split(':')[1].split(';')[0]; // mime类型
+      var byteString = atob(dataUrl.split(',')[1]); //base64 解码
+      var arrayBuffer = new ArrayBuffer(byteString.length); //创建缓冲数组
+      var intArray = new Uint8Array(arrayBuffer); //创建视图
+      for ( let i = 0; i < byteString.length; i += 1) {
+        intArray[i] = byteString.charCodeAt(i);
+      }
+      var blob = new Blob([intArray], { type:  mimeString }); //转成blob
+      return blob
     },
-    compress(img , width , height ){
-      return  new Promise((resolve, reject)=>{
-        // 缩放图片需要的canvas
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        // 图片原始尺寸
-        var originWidth = width;
-        var originHeight = height;
-        // 最大尺寸限制，可通过国设置宽高来实现图片压缩程度
-        var maxWidth = 500,
-          maxHeight = 500
-        // 目标尺寸
-        var targetWidth = originWidth,
-          targetHeight = originHeight;
-
-        // 图片尺寸超过400x400的限制
-        if(originWidth > maxWidth || originHeight > maxHeight) {
-          if(originWidth / originHeight > maxWidth / maxHeight) {
-            // 更宽，按照宽度限定尺寸
-            targetWidth = maxWidth;
-            targetHeight = Math.round(maxWidth * (originHeight / originWidth));
-          } else {
-            targetHeight = maxHeight;
-            targetWidth = Math.round(maxHeight * (originWidth / originHeight));
-          }
+    rotateImg (img, direction, canvas, fileType, compressRate = 600) {
+      let min_step = 0;
+      let max_step = 3;
+      if (img == null) return;
+      //img的高度和宽度不能在img元素隐藏后获取，否则会出错
+      let height = img.height;
+      let width = img.width;
+      //分辨比率压缩
+      if (width > compressRate  || height > compressRate * 2) {
+        let picRate = parseInt(width / compressRate);
+        width /= picRate;
+        height /= picRate;
+      }
+      let step = 2;
+      if (step == null) {
+        step = min_step;
+      }
+      if (direction == 'right') {
+        step++;
+        //旋转到原位置，即超过最大值
+        step > max_step && (step = min_step);
+      }else if(direction == ''){
+        step = 0;
+      }else if(direction == 'bottomRight'){
+        step = 2;
+      } else {
+        step--;
+        step < min_step && (step = max_step);
+      }
+      let degree = step * 90 * Math.PI / 180;
+      let ctx = canvas.getContext('2d');
+      switch (step) {
+        case 0:
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+          break;
+        case 1:
+          canvas.width = height;
+          canvas.height = width;
+          ctx.rotate(degree);
+          ctx.drawImage(img, 0, -height, width, height);
+          break;
+        case 2:
+          canvas.width = width;
+          canvas.height = height;
+          ctx.rotate(degree);
+          ctx.drawImage(img, -width, -height, width, height);
+          break;
+        case 3:
+          canvas.width = height;
+          canvas.height = width;
+          ctx.rotate(degree);
+          ctx.drawImage(img, -width, 0, width, height);
+          break;
+      }
+      return canvas.toDataURL(fileType, 0.8);
+    },
+    imgReady(obj) {
+      let self = this
+      let reader = new FileReader();
+      reader.readAsDataURL(obj);
+      return new Promise((resolve, reject) => {
+        reader.onload = function (f) {
+          let res = this.result;
+          let img = new Image();
+          img.onload = async () => {
+              let compressedData = await self.compress2(img, obj.type);
+              let bigFile = self.dataURLtoBlob(compressedData.bigPic);
+              let smallFile = self.dataURLtoBlob(compressedData.smallPic);
+              self.previewImages.push(compressedData.smallPic)
+              console.log(bigFile, smallFile)
+              resolve({ bigPic: bigFile, smallPic: smallFile });
+              img = null;
+          };
+          img.src = res;
         }
-        // canvas对图片进行缩放
-        canvas.width = targetWidth;
-        canvas.height = targetHeight;
-        // 清除画布
-        context.clearRect(0, 0, targetWidth, targetHeight);
-        // 图片压缩
-        context.drawImage(img, 0, 0, targetWidth, targetHeight);
-        /*第一个参数是创建的img对象；第二个参数是左上角坐标，后面两个是画布区域宽高*/
-        //压缩后的图片base64 url
-        /*canvas.toDataURL(mimeType, qualityArgument),mimeType 默认值是'image/jpeg';
-         * qualityArgument表示导出的图片质量，只要导出为jpg和webp格式的时候此参数才有效果，默认值是0.92*/
-        const newUrl = canvas.toDataURL('image/jpeg', 0.92);//base64 格式
-        resolve(newUrl)
-
-      })
+      });
+    },
+     compress2 (img, fileType){
+      let canvas = document.createElement("canvas");
+      let rotateshow, smallshow;
+      const rotateImg = this.rotateImg
+      return new Promise((resolve, reject) => {
+        // 判断照片 横竖屏
+        EXIF.getData(img, () => {
+          EXIF.getAllTags(img);
+          let Orientation = EXIF.getTag(img, 'Orientation');
+          switch (Orientation) {
+              case 6:
+                rotateshow = rotateImg(img, 'left', canvas, fileType);
+                smallshow = rotateImg(img, 'left', canvas, fileType, 250);
+                break;
+              case 8:
+                rotateshow = rotateImg(img, 'right', canvas, fileType);
+                smallshow = rotateImg(img, 'right', canvas, fileType, 250);
+                break;
+              case 3:
+                rotateImg(img, 'bottomRight', canvas, fileType);
+                rotateshow = rotateImg(img, 'bottomRight', canvas, fileType);
+                smallshow = rotateImg(img, 'bottomRight', canvas, fileType, 250);
+                break;
+              default:
+                rotateshow = rotateImg(img, '', canvas, fileType);//img.src;
+                smallshow = rotateImg(img, '', canvas, fileType, 250);
+          }
+          resolve({ bigPic: rotateshow, smallPic: smallshow });
+        });
+      });
     }
-
-
   }
 }

@@ -30,6 +30,7 @@
             <textarea class="input" v-model="newSectionVal" maxlength="35" name="" placeholder="记录一下吧" id="" cols="30" ></textarea>
             <!--<img v-if="newSectionVal.length ==0" class="placeholder-icon" src="../../../assets/img/icon-edit02.png" alt="">-->
             <div class="imgs-wrap b_FS-0 edit">
+
               <!--<img  src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">-->
               <!--<img  src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">-->
               <!--<img  src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">-->
@@ -41,8 +42,9 @@
               </template>
               <div class="img-out" v-if="previewImages.length <4">
                 <img class="img" src="../../../assets/img/icon-add01.png" alt="">
-                <input type="file" accept="image/gif,image/jpg,image/jpeg,image/bmp,image/png" @change ="selectImages($event)" multiple="multiple">
+                <input ref="fileinput" type="file" accept="image/gif,image/jpg,image/jpeg,image/bmp,image/png" @change ="selectImages($event)" multiple="multiple">
               </div>
+
             </div>
             <div @click="addTaskProcess" class="btn-small-primary b-MT-5" >提交</div>
           </div>
@@ -170,7 +172,8 @@
 
   // services
   import { Convent, Cos } from '@/services'
-  import upload from './upload'
+  // modules " upload image"
+  import upload from './upload-2.js'
   export default{
     data(){
       return{
@@ -237,15 +240,13 @@
             let newUrl = await this.uploadToCloud(img.blob, img.name)
             image.push(newUrl)
           }
-
-         //alert(JSON.stringify(image))
          Convent.addTaskProcess({
            progressDesc : this.newSectionVal ,
            taskId : this.$route.query.taskId ,
            images : image,
            list : false
          }, true ).then(res=>{
-           console.log(res.data)
+
            this.previewImages = []
            this.imagesFiles = []
            this.newSectionVal = ''
@@ -267,12 +268,11 @@
         }).then(res=>{
           const processData = res.data.taskList
           this.taskDetail = res.data.taskDetil
-          console.log(res.data)
+
           this.processData =  processData.map((process, key)=>{
             const createTime = new Date( Number(process.updateTime) )
             const { time ,date } =  this.initDate(createTime)
             const _imgsStr = process.progressImage
-            console.log(key)
             var _imgs
             try{
               // 旧数据错误

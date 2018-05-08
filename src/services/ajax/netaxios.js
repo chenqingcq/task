@@ -17,8 +17,8 @@ const axiosInstance = axios.create({
   // baseURL: '//rk4k3z.natappfree.cc/v1/', //微信测试,
   // baseURL: '//192.168.0.126:8087/v1/', //测试服务器
   // baseURL: '//bf4c5e.natappfree.cc/v1/', //测试服务器
-  baseURL: '//192.168.0.118:3010/taskapi/v1/',
-  //baseURL: 'http://dis.ccnfgame.com/taskapi/v1/',
+  //baseURL: '//192.168.0.121:3010/taskapi/v1/',
+  baseURL: 'http://dis.ccnfgame.com/taskapi/v1/',
   //baseURL: '//share.s1.natapp.cc/v1/', //测试服务器
   timeout: 15000
 })

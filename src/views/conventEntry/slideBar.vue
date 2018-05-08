@@ -198,8 +198,8 @@
             >
 
               <template v-for="(project, key) in projectList">
-                <v-swipeout contentBg="#f4f4f4" >
-                  <div slot="content" class="item" :class="[ key == 0 && 'is-first']" @click = "selectProject(project)" >
+
+                  <div class="item" :class="[ key == 0 && 'is-first']" @click = "selectProject(project)" >
                     <p class="left-photo"  >
                       <img :src="project.headImage" alt="">
                     </p>
@@ -207,12 +207,7 @@
                       {{ project.projectName }}
                     </p>
                   </div>
-                  <div slot = 'right-menu' class="b_FS-14">
-                    <v-swipe-btn :width="70" type="warn" >
-                      删除
-                    </v-swipe-btn>
-                  </div>
-                </v-swipeout>
+
                 <div class="c_white-bg text-center" style="position: relative;z-index: 2">
                   <div class="bar"></div>
                 </div>
