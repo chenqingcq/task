@@ -314,7 +314,7 @@
         align-items: center;
         img {
           display:inline-block;
-          width: 60*2px;        
+          width: 60*2px;
         }
       }
       .message {
@@ -448,7 +448,12 @@
         text-align: center;
         font-size: 16px*2;
         color: #999999;
+        /*position: relative;*/
         position: absolute;
+        left: 0;
+        width: 100%;
+        margin: auto;
+        height: 39px;
         bottom: 79px*2;
       }
       .bar {
