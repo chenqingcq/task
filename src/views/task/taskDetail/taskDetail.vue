@@ -605,7 +605,7 @@ img.partyLogo {
         <!--轮播图-->
         <slide @changeIndex='changeIndex' ref="scroll" :loop='loop' v-if="items.length"  >
           <div class="slider-item" v-for="(item,index) in items" :key="index">
-            <img @touchend= "doWechatPreview($event,items, index)" :src="'//'+item.imgUrl" :alt="index">
+            <img @click= "doWechatPreview($event,items, index)" :src="'//'+item.imgUrl" :alt="index">
           </div>
         </slide>
         <div v-else class="no-historyUpdate">
@@ -671,14 +671,14 @@ img.partyLogo {
         </div>
       </div>
     </div>
-    <div class="project-party">
+    <div class="project-party" @click="goToGroup">
       <div class="b-LR-10" >
         <div class="panel b-MT-10 c_white-bg">
           <div class="b-LR-10 b-T-5 between ">
             <p class="middle b_FS-14 c_6 "><span class="dot success"></span><span class="b-L-4 ">进入项目群</span></p>
             <div class="entry-project-party" v-show="parties.length" >
               <img class="partyLogo" :src="item" v-for="item in parties" :key="item.id" />
-              <img class="toParty"  @click="goToGroup" src="@/assets/img/icon-right-slide03.png" />
+              <img class="toParty"   src="@/assets/img/icon-right-slide03.png" />
             </div>
           </div>
         </div>
@@ -842,8 +842,6 @@ export default {
     },
     doWechatPreview(e, items, index) {
       console.log(e)
-      e.stoppropagation();
-      e.preventDefault();
       this.$nextTick(() => {
         this.$wechat.doWechatPreview(items, this.currentIndex_);
       });

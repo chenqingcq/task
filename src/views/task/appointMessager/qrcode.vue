@@ -195,7 +195,7 @@ export default {
                   //   console.log("not ready");
                   // }
                   self.face();
-                }, 2000);
+                }, 60000);
                 // self.countDown(window.location.host, self.key);
               }
             });
