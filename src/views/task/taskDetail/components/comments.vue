@@ -269,8 +269,8 @@ export default {
   position: absolute;
   width: auto;
   height: auto;
-  top:-30px;
-  right: 40px;
+  top:-35px;
+  right: 35px;
   opacity: 0;
   animation: _zoom 0.4s linear;
 }
