@@ -239,8 +239,11 @@
   img {
     display: block;
     // height: 100%;
-    max-width: 608px;
-    min-width: 608px;
+    // max-width: 608px;
+    // min-width: 608px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
 
@@ -812,14 +815,14 @@ export default {
     },
     changeIndex(index) {
       this.currentIndex_ = index;
-      console.log(index)
+      console.log(index);
     },
     doWechatPreview(e, items) {
       if (items.length) {
         items = items.slice(1, items.length - 1);
         console.log(this.items[this.currentIndex_].imgUrl);
         if (this.currentIndex_ == 0) {
-          this.currentIndex_ = items.length ;
+          this.currentIndex_ = items.length;
           console.log(items[this.currentIndex_ - 1].imgUrl);
         }
         this.$wechat.doWechatPreview(items, this.currentIndex_ - 1);

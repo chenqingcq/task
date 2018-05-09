@@ -177,7 +177,7 @@ export default {
         box-sizing: content-box;
         padding: 10px;
         float: left;
-        margin-left: -10px;
+        margin-left: -15px;
       }
     }
     .right-arrow {
@@ -190,7 +190,7 @@ export default {
         float: right;
         box-sizing: content-box;
         padding: 10px;
-        margin-right: -10px;        
+        margin-right: -15px;        
       }
     }
   }

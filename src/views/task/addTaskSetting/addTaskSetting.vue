@@ -271,7 +271,7 @@ li#allowCreateTask {
 #appointer {
   position: relative;
   height: 100%;
-  flex:1;
+  flex: 1;
   display: flex;
   align-items: center;
   span.name {
@@ -313,16 +313,16 @@ input:disabled {
 
 .active {
   color: rgba(107, 167, 243, 1) !important;
-  border-bottom: 2*2px solid rgba(107, 167, 243, 1);
+  border-bottom: 4*2px solid rgba(107, 167, 243, 1);
 }
-.selectStartTime  {
-  flex:1;
+.selectStartTime {
+  flex: 1;
 }
-.selectEndTime  {
-  flex:1
+.selectEndTime {
+  flex: 1;
 }
-.userInput{
-  flex:1
+.userInput {
+  flex: 1;
 }
 </style>
 <template>
@@ -351,7 +351,7 @@ input:disabled {
         <li class="task-item">
           <label class="task-desc" for="item0">
             <div class="icon">
-              <img src="@/assets/img/icon-project.png" />
+              <img src="@/assets/img/icon-task.png" />
             </div>
             <div :class="[_tasksetting,{active_:isTaskName}]"> 任务名称</div>
           </label>
@@ -581,8 +581,11 @@ export default {
         if (window.location.hash.includes("taskId")) {
           vm.taskId = to.query.taskId;
         }
-        vm.setExcutor();
-        vm.getData();
+        try {
+          vm.setExcutor();
+          vm.getData();      
+        } catch (err) {
+        }
       });
     }
 
@@ -621,9 +624,9 @@ export default {
       let settings = window.sessionStorage.getItem("taskSettings");
       if (settings.length) {
         settings = JSON.parse(settings);
-        (this.projectId = settings.projectId),
-          (this.taskTheme = settings.taskTheme),
-          (this.taskName = settings.taskName);
+        this.projectId = settings.projectId;
+        this.taskTheme = settings.taskTheme;
+        this.taskName = settings.taskName;
         this.taskDesc = settings.taskDesc;
         this.startTime = settings.startTime;
         this.endTime = settings.endTime;
@@ -926,7 +929,7 @@ export default {
           }
         });
       } else if (self.taskId) {
-        this.setData();
+        self.setData();
         self.$router.push({
           path: "/appointMessager",
           query: {
