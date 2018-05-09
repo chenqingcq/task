@@ -31,6 +31,7 @@
               <div class="comments-callback">
                 <span @click='_link_to_secondary_comments( item )'>{{item.replyNum }}条回复 </span>
                 <div @click="doLike(item)" v-if="item.isThumbs">
+                    <!-- 点赞+1 -->
                      <span class="plus" >+1</span>                  
                   <img  src="@/assets/img/iocn-good2.png" alt="">
                   <span class="active" >{{ item.thumbsNum }}</span>
