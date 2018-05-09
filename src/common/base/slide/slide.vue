@@ -5,7 +5,7 @@
         <div class="left-arrow" @touchstart='minusIndex'>
           <img src="@/assets/img/icon-right-slide03.png" />
         </div>
-        <div class="right-arrow" @touchstart='addIndex '>
+        <div class="right-arrow" @touchstart='addIndex'>
           <img src="@/assets/img/icon-right-slide03.png" />
         </div>
       </div>
@@ -37,7 +37,7 @@ export default {
     click: {
       type: Boolean,
       default: true
-    },
+    }
   },
   data() {
     return {
@@ -62,19 +62,23 @@ export default {
       this.scroll && this.scroll.goToPage(++this.currentPageIndex, 0, 0);
       if (this.currentPageIndex == this.children.length - 1) {
         this.scroll.goToPage(1, 0, 0);
-        setTimeout(() => {
-          this.currentPageIndex = 1;
-        }, 20);
+        // setTimeout(() => {
+        this.currentPageIndex = 1;
+        // }, 20)
+        this.$emit("changeIndex", this.currentPageIndex);
       }
+      this.$emit("changeIndex", this.currentPageIndex);
     },
     minusIndex() {
       this.scroll && this.scroll.goToPage(--this.currentPageIndex, 0, 0);
       if (this.currentPageIndex == 0) {
         this.scroll.goToPage(this.children.length - 2, 0, 0);
-        setTimeout(() => {
-          this.currentPageIndex = this.children.length - 2;
-        }, 20);
+        // setTimeout(() => {
+        this.currentPageIndex = this.children.length - 2;
+        // }, 20);
+        this.$emit("changeIndex", this.currentPageIndex);
       }
+      this.$emit("changeIndex", this.currentPageIndex);
     },
     setSliderWidth(isResize) {
       this.children = this.$refs.slideGroup.children;
@@ -102,11 +106,16 @@ export default {
         snap: true, //隔断（翻页）
         snapLoop: this.loop, //无限滚动
         snapThreshold: 0,
-        snapSpeed: 400 //滑动的时间
+        snapSpeed: 400, //滑动的时间,
+        click: true
       });
       this.scroll.goToPage(this.currentPageIndex, 0, 0);
 
       this.scroll.on("scrollEnd", e => {
+        console.log(this.$el); //移除touchend事件
+        this.$el.removeEventListener("touchend", () => {
+          console.log("success");
+        });
         // -1实际上是最后一张图 最后一张图实际是第一张图 重复两张图
         let pageIndex = this.scroll.getCurrentPage().pageX;
         this.currentPageIndex = pageIndex;
@@ -119,7 +128,7 @@ export default {
           this.currentPageIndex = 1;
         }
         this.refresh();
-        this.$emit("changeIndex", {index:this.currentPageIndex,isScroll:true});
+        this.$emit("changeIndex", this.currentPageIndex);
       });
       this.scroll.on("beforeScrollStart", () => {
         if (vm.autoPlay) {
@@ -151,7 +160,7 @@ export default {
   height: 100%;
   .arrow {
     position: absolute;
-    height: 21*2px;
+    height: 52px;
     top: 50%;
     z-index: 0;
     transform: translateY(-50%);
@@ -167,6 +176,8 @@ export default {
         transform: rotate(-180deg);
         box-sizing: content-box;
         padding: 10px;
+        float: left;
+        margin-left: -10px;
       }
     }
     .right-arrow {
@@ -179,6 +190,7 @@ export default {
         float: right;
         box-sizing: content-box;
         padding: 10px;
+        margin-right: -10px;        
       }
     }
   }

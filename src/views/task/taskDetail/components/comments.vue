@@ -223,25 +223,6 @@ export default {
       })
     },
 
-
-
-    add_praise(e, isThumbs, commentId) {
-      let thumbs = e.target.getAttribute("isthumbs");
-      console.log(thumbs);
-      if (thumbs == 0) {
-        e.target.setAttribute("isthumbs", 1);
-        e.target.src = require("@/assets/img/iocn-good2.png");
-        e.target.parentNode.classList.add("active");
-        //点赞
-        this.thumb(commentId, 1, true);
-      } else {
-        e.target.setAttribute("isthumbs", 0);
-        e.target.src = require("@/assets/img/iocn-good.png");
-        e.target.parentNode.classList.remove("active");
-        this.thumb(commentId, 0, false);
-      }
-    },
-
     thumb(commentId, isThumbs, mode) {
       Convent.thumbs(commentId, {
         commentId: commentId,
@@ -326,10 +307,11 @@ export default {
     height: 30*2px;
     width: 100%;
     margin-top: 18px;
-    padding-left: 16*2px+19*2px;
+    padding-left: 16*2px+19*2px+10px;
     background: rgba(244, 244, 244, 1);
     border-radius: 19px*2;
-    color: rgba(186, 186, 186, 1);
+    color: #333;
+    line-height: 60px;
   }
   .icon-input {
     display: inline-block;
@@ -338,6 +320,7 @@ export default {
     top: 18px+15px;
     left: 31*2px;
     z-index: 9;
+    opacity: .5;
   }
 }
 .active {

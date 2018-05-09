@@ -235,11 +235,12 @@
   height: 382px;
   float: left;
   border: none;
+  overflow: hidden;
   img {
     display: block;
-    height: 100%;
-    width: 100%;
-    padding: 2px;
+    // height: 100%;
+    max-width: 608px;
+    min-width: 608px;
   }
 }
 
@@ -603,9 +604,9 @@ img.partyLogo {
           </div>
         </div>
         <!--轮播图-->
-        <slide :isClick='isClick'  @changeIndex='changeIndex' ref="scroll" :loop='loop' v-if="items.length"  >
+        <slide   @changeIndex='changeIndex' ref="scroll" :loop='loop' v-if="items.length"  >
           <div class="slider-item" v-for="(item,index) in items" :key="index">
-            <img @touchend= "doWechatPreview($event,items, index)" :src="'//'+item.imgUrl" :alt="index">
+            <img @click= "doWechatPreview($event,items, index)" :src="'//'+item.imgUrl" :alt="index">
           </div>
         </slide>
         <div v-else class="no-historyUpdate">
@@ -634,18 +635,18 @@ img.partyLogo {
       </div>
     </div>
     <!--查看当前节点-->
-    <div class="b-LR-10">
+    <div class="b-LR-10" @click='linkToSection'>
       <div class="panel b-MT-10 c_white-bg">
         <div class="b-LR-10 b-T-5 between">
           <!-- 字体已加粗 -->
           <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 b_FS-14 c_6 ">主题节点</span></p>
-          <div @click='linkToSection' class="more b_FS-10  c_7">
+          <div  class="more b_FS-10  c_7">
             更多项目节点<img src="@/assets/img/icon-right-slide03.png" />
           </div>
         </div>
         <div class="progress-container">
           <div class="current-progress" v-if="currentPoint">
-            <div class="left f-bold-5">
+            <div class="left f-bold-8">
               {{ formatDate(currentPoint.pointTime) }}
             </div>
             <div class="right">
@@ -746,7 +747,7 @@ export default {
       taskStatus: -1,
       taskId: "",
       active: "",
-      taskProgressContent: `任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情`,
+      taskProgressContent: ``,
       //项目群
       parties: [
         "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
@@ -760,15 +761,6 @@ export default {
       ],
       currentIndex_: 1
     };
-  },
-  watch: {
-    isClick(newVal, oldVal) {
-      if (newVal) {
-        this.$nextTick(() => {
-          this.$wechat.doWechatPreview(this.items, this.currentIndex_);
-        });
-      }
-    }
   },
   computed: {
     // ...mapGetters(['getTaskHistoryOrUpdate']),//获取上传的轮播图图片
@@ -818,14 +810,20 @@ export default {
     updateComments() {
       this.getComments();
     },
-    changeIndex(message) {
-      this.currentIndex_ = message.index;
-      console.log(message, this.currentIndex_);
-      this.isClick = false;
+    changeIndex(index) {
+      this.currentIndex_ = index;
+      console.log(index)
     },
     doWechatPreview(e, items) {
-      console.log(e,items);
-      this.isClick = true;
+      if (items.length) {
+        items = items.slice(1, items.length - 1);
+        console.log(this.items[this.currentIndex_].imgUrl);
+        if (this.currentIndex_ == 0) {
+          this.currentIndex_ = items.length ;
+          console.log(items[this.currentIndex_ - 1].imgUrl);
+        }
+        this.$wechat.doWechatPreview(items, this.currentIndex_ - 1);
+      }
     },
     getComments() {
       const taskId = this.$route.query.taskId;
@@ -1157,7 +1155,7 @@ export default {
         this.$toast.show("任务暂未开始");
         return;
       }
-      if ( this.taskStatus == 2 && this.role == "operator" ) {
+      if (this.taskStatus == 2 && this.role == "operator") {
         this.$toast.show("任务已关闭");
         return;
       }
@@ -1201,16 +1199,7 @@ export default {
     },
     taskHistoryOrUpdate() {
       this.$router.push("taskHistoryOrUpdate");
-    },
-    init() {
-      console.log(this.getTaskHistoryOrUpdate); //获取历史上传图片
-      if (!this.getTaskHistoryOrUpdate) {
-        // this.showSlide = false;
-      }
     }
-  },
-  created() {
-    this.init();
   },
   mounted() {
     const projectId = this.$route.query.projectId;
