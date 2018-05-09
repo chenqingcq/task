@@ -32,7 +32,7 @@
                           <span @click='_look_all_reply(item)'>{{ item.replyNum }}条回复</span>
                           <div @click="doLike(item)" v-if="item.isThumbs">
                             <!--<img @click='add_praise(index)'   :src="imgUrl"/>-->
-                              <span class="plus" >+1</span>                                              
+                              <span class="plus" v-if="flag" >+1</span>                                              
                             <img  src="../../../assets/img/iocn-good2.png" alt="">
                             <span class="active" >{{ item.thumbsNum }}</span>
                           </div>
@@ -86,6 +86,7 @@ export default {
   mixins: [boardfix],
   data() {
     return {
+      flag:false,
       isOnstar: false,
       listenScroll: true,
       state: false,
@@ -196,6 +197,7 @@ export default {
     },
     // 点赞或者取消点赞
     doLike(item, index) {
+      this.flag = true;
       if (this.isOnstar) {
         this.$toast.show("1秒后才能再次点击", 2000);
         return;

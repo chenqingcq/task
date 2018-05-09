@@ -32,7 +32,7 @@
                 <span @click='_link_to_secondary_comments( item )'>{{item.replyNum }}条回复 </span>
                 <div @click="doLike(item)" v-if="item.isThumbs">
                     <!-- 点赞+1 -->
-                     <span class="plus" >+1</span>                  
+                     <span class="plus" v-if="flag" >+1</span>                  
                   <img  src="@/assets/img/iocn-good2.png" alt="">
                   <span class="active" >{{ item.thumbsNum }}</span>
                 </div>
@@ -67,7 +67,7 @@ export default {
   data() {
     return {
       isOnstar: false, // 是否点赞时提交
-
+      flag:false,
       listenScroll: true,
       state: false,
       showUserInput: false,
@@ -199,6 +199,7 @@ export default {
 
     // 点赞或者取消点赞
     doLike(item, index) {
+      this.flag = true;
       if (this.isOnstar) {
         this.$toast.show("1秒后才能再次点击", 2000);
         return;
