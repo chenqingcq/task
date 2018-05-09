@@ -270,7 +270,7 @@ export default {
   width: auto;
   height: auto;
   top:-30px;
-  right: 45px;
+  right: 40px;
   opacity: 0;
   animation: _zoom 0.5s linear;
 }
