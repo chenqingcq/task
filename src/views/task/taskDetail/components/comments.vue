@@ -31,7 +31,7 @@
               <div class="comments-callback">
                 <span @click='_link_to_secondary_comments( item )'>{{item.replyNum }}条回复 </span>
                 <div @click="doLike(item)" v-if="item.isThumbs">
-                  <!--<img @touchstart='add_praise(index)'   :src="imgUrl"/>-->
+                     <span class="plus" v-show="item.isThumbs">+1</span>                  
                   <img  src="@/assets/img/iocn-good2.png" alt="">
                   <span class="active" >{{ item.thumbsNum }}</span>
                 </div>
@@ -65,14 +65,15 @@ export default {
   name: "comments",
   data() {
     return {
-      isOnstar : false , // 是否点赞时提交
+      isOnstar: false, // 是否点赞时提交
 
       listenScroll: true,
       state: false,
       showUserInput: false,
       currentState: {},
       isThumbs: 0,
-      flag: false
+      flag: false,
+      thumbsSuccessful: false //点赞成功
     };
   },
   props: {
@@ -83,8 +84,8 @@ export default {
       }
     },
     status: {
-      type: [String,Number] ,
-      default : ""
+      type: [String, Number],
+      default: ""
     },
     taskId: {
       type: String,
@@ -110,14 +111,20 @@ export default {
   watch: {},
   methods: {
     // 权限转中文字符串
-    role2Str( role ){
-      let str = ''
+    role2Str(role) {
+      let str = "";
       switch (role) {
-        case 0 : str = '访客' ; break ;
-        case 1 : str = '执行者' ; break ;
-        case 2 : str = '发布者' ; break ;
+        case 0:
+          str = "访客";
+          break;
+        case 1:
+          str = "执行者";
+          break;
+        case 2:
+          str = "发布者";
+          break;
       }
-      return str
+      return str;
     },
     defineDate(date) {
       date = parseInt(date);
@@ -140,87 +147,83 @@ export default {
         new Date(date).getSeconds()
       );
     },
-    _link_to_secondary_comments( item ) {
-//      if( item.replyNum == 0 ){
-//        this.$toast.show('暂无评论')
-//        return
-//      }
+    _link_to_secondary_comments(item) {
+      //      if( item.replyNum == 0 ){
+      //        this.$toast.show('暂无评论')
+      //        return
+      //      }
       this.$router.push({
         path: "/allReply",
         query: {
-          taskId: this.taskId ,
+          taskId: this.taskId,
           commentPid: item.commentId,
-          nickName : item.nickname
+          nickName: item.nickname
         }
-      })
+      });
     },
     link_to_allComments() {
-      const status = this.status
-      if( status == 0 ){
-        this.$toast.show('任务未开始')
-        return
+      const status = this.status;
+      if (status == 0) {
+        this.$toast.show("任务未开始");
+        return;
       }
-//      else if( status == 2 ){
-//        this.$toast.show('任务已关闭')
-//        return
-//      }
+      //      else if( status == 2 ){
+      //        this.$toast.show('任务已关闭')
+      //        return
+      //      }
 
-      if( this.members.length == 0 ){
-        this.$toast.show('暂无评论', 1000)
-        return
+      if (this.members.length == 0) {
+        this.$toast.show("暂无评论", 1000);
+        return;
       }
-      this.$router.push("comment?taskId=" + this.taskId );
+      this.$router.push("comment?taskId=" + this.taskId);
     },
     closeUserInput(message) {
       console.log(message);
-      if(message){
-      this.$emit("close");
+      if (message) {
+        this.$emit("close");
       }
       this.showUserInput = false;
     },
     userInput() {
-      const status = this.status
-      if( status == 0 ){
-        this.$toast.show('任务未开始')
-      }
-      else if( status == 2 ){
-        this.$toast.show('任务已关闭')
-      }
-      else{
+      const status = this.status;
+      if (status == 0) {
+        this.$toast.show("任务未开始");
+      } else if (status == 2) {
+        this.$toast.show("任务已关闭");
+      } else {
         this.showUserInput = true;
       }
-
     },
 
     // 点赞或者取消点赞
-    doLike( item, index ){
-      if( this.isOnstar  ){
-        this.$toast.show('1秒后才能再次点击', 2000)
-        return
+    doLike(item, index) {
+      if (this.isOnstar) {
+        this.$toast.show("1秒后才能再次点击", 2000);
+        return;
+      } else {
+        this.isOnstar = true;
       }
-      else{
-        this.isOnstar = true
-      }
-      const isThumbs = !item.isThumbs ? 1 : 0
-      const commentId = item.commentId
+      const isThumbs = !item.isThumbs ? 1 : 0;
+      const commentId = item.commentId;
 
       Convent.thumbs({
-        isThumbs ,commentId
-      }).then(res=>{
-          item.isThumbs = isThumbs
-        setTimeout(()=>{
-          this.isOnstar = false
-        }, 500)
+        isThumbs,
+        commentId
+      }).then(res => {
+        item.isThumbs = isThumbs;
+        setTimeout(() => {
+          this.isOnstar = false;
+        }, 500);
 
-        if( isThumbs == 1 ){
-          this.$toast.show('点赞成功')
-          item.thumbsNum++
+        if (isThumbs == 1) {
+          this.$toast.show("点赞成功");
+          item.thumbsNum++;
+        } else {
+          this.$toast.show("取消点赞");
+          item.thumbsNum--;
         }
-        else{
-          this.$toast.show('取消点赞')
-          item.thumbsNum--
-        }
-      })
+      });
     },
 
     thumb(commentId, isThumbs, mode) {
@@ -261,7 +264,31 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.comment-container{
+.plus {
+  color: #ff0000;
+  position: absolute;
+  width: auto;
+  height: auto;
+  top:-30px;
+  right: 45px;
+  opacity: 0;
+  animation: _zoom 0.5s linear;
+}
+@keyframes _zoom {
+  0% {
+    transform: scale(0.5, 0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1, 1);
+    opacity: 1;    
+  }
+  100% {
+    transform: scale(1, 1);
+    opacity: 0 ;
+  }
+}
+.comment-container {
   width: 100%;
   overflow: hidden;
 }
@@ -320,7 +347,7 @@ export default {
     top: 18px+15px;
     left: 31*2px;
     z-index: 9;
-    opacity: .5;
+    opacity: 0.5;
   }
 }
 .active {
@@ -446,7 +473,7 @@ export default {
         line-height: 17px*2;
         margin-top: 8px;
         margin-bottom: 20px;
-        z-index: -1;
+        position: relative;
         > span {
           width: 150px;
           height: 50px;
