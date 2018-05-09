@@ -603,9 +603,9 @@ img.partyLogo {
           </div>
         </div>
         <!--轮播图-->
-        <slide @changeIndex='changeIndex' ref="scroll" :loop='loop' v-if="items.length"  >
+        <slide :isClick='isClick'  @changeIndex='changeIndex' ref="scroll" :loop='loop' v-if="items.length"  >
           <div class="slider-item" v-for="(item,index) in items" :key="index">
-            <img @click= "doWechatPreview($event,items, index)" :src="'//'+item.imgUrl" :alt="index">
+            <img @touchend= "doWechatPreview($event,items, index)" :src="'//'+item.imgUrl" :alt="index">
           </div>
         </slide>
         <div v-else class="no-historyUpdate">
@@ -715,6 +715,7 @@ import { mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   data() {
     return {
+      isClick: false,
       projectId: 0,
       status: "",
       currentPoint: "",
@@ -756,19 +757,17 @@ export default {
       progressDesc: "",
       items: [
         //轮播图处理时   51 234 51遵守这个有原则
-        //            "http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650",
-        //            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg",
-        //            "http://bpic.588ku.com/element_origin_min_pic/16/06/20/165767ab7a315bd.jpg",
-        //            "http://bpic.588ku.com/element_origin_min_pic/18/03/24/494a50847f3dbef27c31355f35d0393d.jpg" ,
-        //            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg"
       ],
       currentIndex_: 1
     };
   },
   watch: {
-    $route(to, from) {
-      console.log(newVal, oldVal);
-      alert(to);
+    isClick(newVal, oldVal) {
+      if (newVal) {
+        this.$nextTick(() => {
+          this.$wechat.doWechatPreview(this.items, this.currentIndex_);
+        });
+      }
     }
   },
   computed: {
@@ -814,37 +813,19 @@ export default {
     Slide,
     Detail
   },
-  // beforeRouteEnter: (to, from, next) => {
-  //   console.log(to, from);
-  //   if (to.path == "/taskDetail" && from.path == "/conventEntry") {
-  //     next(vm => {
-  //       // vm._getTaskId(); 有bug
-  //       vm.getData();
-  //       vm.getTaskComment();
-  //     });
-  //   } else {
-  //     next(vm => {
-  //       // vm._getTaskId();
-  //       vm.getData();
-  //       vm.getTaskComment();
-  //     });
-  //   }
-  // },
-
   methods: {
     ...mapActions(["setCurrentProject"]),
     updateComments() {
       this.getComments();
     },
-    changeIndex(index) {
-      console.log(index, ">>>>>>>>>");
-      this.currentIndex_ = index;
+    changeIndex(message) {
+      this.currentIndex_ = message.index;
+      console.log(message, this.currentIndex_);
+      this.isClick = false;
     },
-    doWechatPreview(e, items, index) {
-      console.log(e)
-      this.$nextTick(() => {
-        this.$wechat.doWechatPreview(items, this.currentIndex_);
-      });
+    doWechatPreview(e, items) {
+      console.log(e,items);
+      this.isClick = true;
     },
     getComments() {
       const taskId = this.$route.query.taskId;
@@ -952,15 +933,14 @@ export default {
             self.active = "isCompleted";
             self.activeFont = "未开始";
           } else if (res.taskStatus == 1) {
-            const serverTime = Number(res.serverTime)
-            const endTime = Number(res.endTime)
-            if( res.taskStatus == 1 && serverTime > endTime  ){
+            const serverTime = Number(res.serverTime);
+            const endTime = Number(res.endTime);
+            if (res.taskStatus == 1 && serverTime > endTime) {
               self.active = "overDeadLined";
-              self.activeFont = "超时"
-            }
-            else{
+              self.activeFont = "超时";
+            } else {
               self.active = "isInProgress";
-              self.activeFont = "进行中"
+              self.activeFont = "进行中";
             }
           } else if (res.taskStatus == 2) {
             self.active = "isCompleted";

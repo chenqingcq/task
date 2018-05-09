@@ -346,8 +346,10 @@ export default {
 .commenthint {
   display: flex;
   align-items: center;
+  width: auto;
   font-family: PingFangSC-Medium;
   font-size: 10*2px;
+  white-space: nowrap;
   color: #999999;
   .comments-icon {
     display: inline-block;
