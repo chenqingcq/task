@@ -235,11 +235,12 @@
   height: 382px;
   float: left;
   border: none;
+  overflow: hidden;
   img {
     display: block;
-    height: 100%;
-    width: 100%;
-    padding: 2px;
+    // height: 100%;
+    max-width: 608px;
+    min-width: 608px;
   }
 }
 
@@ -603,7 +604,7 @@ img.partyLogo {
           </div>
         </div>
         <!--轮播图-->
-        <slide @changeIndex='changeIndex' ref="scroll" :loop='loop' v-if="items.length"  >
+        <slide   @changeIndex='changeIndex' ref="scroll" :loop='loop' v-if="items.length"  >
           <div class="slider-item" v-for="(item,index) in items" :key="index">
             <img @click= "doWechatPreview($event,items, index)" :src="'//'+item.imgUrl" :alt="index">
           </div>
@@ -634,18 +635,18 @@ img.partyLogo {
       </div>
     </div>
     <!--查看当前节点-->
-    <div class="b-LR-10">
+    <div class="b-LR-10" @click='linkToSection'>
       <div class="panel b-MT-10 c_white-bg">
         <div class="b-LR-10 b-T-5 between">
           <!-- 字体已加粗 -->
           <p class="middle b_FS-14"><span class="dot success"></span><span class="b-L-4 b_FS-14 c_6 ">主题节点</span></p>
-          <div @click='linkToSection' class="more b_FS-10  c_7">
+          <div  class="more b_FS-10  c_7">
             更多项目节点<img src="@/assets/img/icon-right-slide03.png" />
           </div>
         </div>
         <div class="progress-container">
           <div class="current-progress" v-if="currentPoint">
-            <div class="left f-bold-5">
+            <div class="left f-bold-8">
               {{ formatDate(currentPoint.pointTime) }}
             </div>
             <div class="right">
@@ -715,6 +716,7 @@ import { mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   data() {
     return {
+      isClick: false,
       projectId: 0,
       status: "",
       currentPoint: "",
@@ -745,7 +747,7 @@ export default {
       taskStatus: -1,
       taskId: "",
       active: "",
-      taskProgressContent: `任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情任务详情`,
+      taskProgressContent: ``,
       //项目群
       parties: [
         "https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b",
@@ -756,20 +758,9 @@ export default {
       progressDesc: "",
       items: [
         //轮播图处理时   51 234 51遵守这个有原则
-        //            "http://bpic.588ku.com/back_pic/05/18/63/5659c26b243dd10.jpg!ww650",
-        //            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg",
-        //            "http://bpic.588ku.com/element_origin_min_pic/16/06/20/165767ab7a315bd.jpg",
-        //            "http://bpic.588ku.com/element_origin_min_pic/18/03/24/494a50847f3dbef27c31355f35d0393d.jpg" ,
-        //            "http://bpic.588ku.com/element_origin_min_pic/17/10/10/1217e53fd7a1324856f0b8b4891103ed.jpg"
       ],
       currentIndex_: 1
     };
-  },
-  watch: {
-    $route(to, from) {
-      console.log(newVal, oldVal);
-      alert(to);
-    }
   },
   computed: {
     // ...mapGetters(['getTaskHistoryOrUpdate']),//获取上传的轮播图图片
@@ -814,37 +805,25 @@ export default {
     Slide,
     Detail
   },
-  // beforeRouteEnter: (to, from, next) => {
-  //   console.log(to, from);
-  //   if (to.path == "/taskDetail" && from.path == "/conventEntry") {
-  //     next(vm => {
-  //       // vm._getTaskId(); 有bug
-  //       vm.getData();
-  //       vm.getTaskComment();
-  //     });
-  //   } else {
-  //     next(vm => {
-  //       // vm._getTaskId();
-  //       vm.getData();
-  //       vm.getTaskComment();
-  //     });
-  //   }
-  // },
-
   methods: {
     ...mapActions(["setCurrentProject"]),
     updateComments() {
       this.getComments();
     },
     changeIndex(index) {
-      console.log(index, ">>>>>>>>>");
       this.currentIndex_ = index;
+      console.log(index)
     },
-    doWechatPreview(e, items, index) {
-      console.log(e)
-      this.$nextTick(() => {
-        this.$wechat.doWechatPreview(items, this.currentIndex_);
-      });
+    doWechatPreview(e, items) {
+      if (items.length) {
+        items = items.slice(1, items.length - 1);
+        console.log(this.items[this.currentIndex_].imgUrl);
+        if (this.currentIndex_ == 0) {
+          this.currentIndex_ = items.length ;
+          console.log(items[this.currentIndex_ - 1].imgUrl);
+        }
+        this.$wechat.doWechatPreview(items, this.currentIndex_ - 1);
+      }
     },
     getComments() {
       const taskId = this.$route.query.taskId;
@@ -952,15 +931,14 @@ export default {
             self.active = "isCompleted";
             self.activeFont = "未开始";
           } else if (res.taskStatus == 1) {
-            const serverTime = Number(res.serverTime)
-            const endTime = Number(res.endTime)
-            if( res.taskStatus == 1 && serverTime > endTime  ){
+            const serverTime = Number(res.serverTime);
+            const endTime = Number(res.endTime);
+            if (res.taskStatus == 1 && serverTime > endTime) {
               self.active = "overDeadLined";
-              self.activeFont = "超时"
-            }
-            else{
+              self.activeFont = "超时";
+            } else {
               self.active = "isInProgress";
-              self.activeFont = "进行中"
+              self.activeFont = "进行中";
             }
           } else if (res.taskStatus == 2) {
             self.active = "isCompleted";
@@ -1177,7 +1155,7 @@ export default {
         this.$toast.show("任务暂未开始");
         return;
       }
-      if ( this.taskStatus == 2 && this.role == "operator" ) {
+      if (this.taskStatus == 2 && this.role == "operator") {
         this.$toast.show("任务已关闭");
         return;
       }
@@ -1221,16 +1199,7 @@ export default {
     },
     taskHistoryOrUpdate() {
       this.$router.push("taskHistoryOrUpdate");
-    },
-    init() {
-      console.log(this.getTaskHistoryOrUpdate); //获取历史上传图片
-      if (!this.getTaskHistoryOrUpdate) {
-        // this.showSlide = false;
-      }
     }
-  },
-  created() {
-    this.init();
   },
   mounted() {
     const projectId = this.$route.query.projectId;
