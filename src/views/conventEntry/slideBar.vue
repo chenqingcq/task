@@ -1,4 +1,10 @@
+<!--<style>-->
+  <!--body{-->
+    <!--position: fixed;-->
+  <!--}-->
+<!--</style>-->
 <style lang="less" scoped>
+
   @import "animate.less";
   .mask{
     position: fixed;
@@ -82,9 +88,11 @@
       .panel{
         /*height: 780px;*/
         height: 800px;
-        overflow-y: auto;
+        overflow-x: hidden;
+        /*overflow-y: auto;*/
         position:relative;
-
+        background:#fff ;
+        z-index: 11;
         .item{
           &.is-radius{
             border-radius: 0 40px 0 0 ;
@@ -97,7 +105,7 @@
           margin: 0 2px;
           display: flex ;
           align-items: center;
-          background:#fff ;
+          /*background:#fff ;*/
           .left-photo{
             position: relative;
             margin-right: 28px;
@@ -164,7 +172,8 @@
     <!--<transition name="content" >-->
     <!--<div v-show="isShow" >-->
       <v-pop ref="slide" animate ="left" >
-        <div v-show="isShow" class="slide-wrap c_white-bg" >
+        <div v-show="isShow" class="slide-wrap c_white-bg"
+        >
           <img class="banner" @click.prevent src="../../assets/img/image-background01.png" alt="">
           <img @click="skipToHelp" class="help" src="../../assets/img/icon-help.png" alt="">
           <div class="nav-container b_d-flex c_white-bg" >
@@ -193,7 +202,7 @@
                  v-infinite-scroll="getProjectList"
                  infinite-scroll-disabled="hasMore"
                  infinite-scroll-distance="60"
-                 infinite-scroll-throttle-delay="300"
+                 infinite-scroll-throttle-delay="100"
                  @scroll.self
             >
 
@@ -208,7 +217,7 @@
                     </p>
                   </div>
 
-                <div class="c_white-bg text-center" style="position: relative;z-index: 2">
+                <div class="text-center" style="position: relative;z-index: 2">
                   <div class="bar"></div>
                 </div>
               </template>
