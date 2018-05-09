@@ -61,7 +61,7 @@
                  @touchstart.prevent="blurInput">
             </div>
             <div  class="user-input" :class="[ !isFocus || !isIOSPhone  ? 'is-fixed' : 'no-fixed',isFocus && isIOS11phone && 'no-fixed-ios11  ' ]">
-              <input   type="text" :placeholder="placeholder" class="comment_input" v-model="comments"
+              <input   type="text" :placeholder="placeholder" class="comment_input" v-model.trim="comments"
                       ref="text"
                       @focus = 'setPageToBottom'
                       maxlength="200"
@@ -230,6 +230,9 @@ export default {
       console.log(commentPid);
       const taskId = this.$route.query.taskId;
       const message = this.comments;
+      if(!message.length){
+        return
+      }
       Convent.taskComments({
         commentPid,
         taskId,
