@@ -9,7 +9,7 @@
       </div>
       <div class="comments-container_" v-if="members.length<=0">
         <i></i>
-        <span>暂无评论,点击抢沙发</span>
+        <span  @click="userInput">暂无评论,点击抢沙发</span>
         <i></i>
       </div>
       <div class="comments-container" v-if="members.length">
@@ -31,7 +31,7 @@
               <div class="comments-callback">
                 <span @click='_link_to_secondary_comments( item )'>{{item.replyNum }}条回复 </span>
                 <div @click="doLike(item)" v-if="item.isThumbs">
-                     <span class="plus" v-show="item.isThumbs">+1</span>                  
+                     <span class="plus" >+1</span>                  
                   <img  src="@/assets/img/iocn-good2.png" alt="">
                   <span class="active" >{{ item.thumbsNum }}</span>
                 </div>
@@ -272,7 +272,7 @@ export default {
   top:-30px;
   right: 40px;
   opacity: 0;
-  animation: _zoom 0.5s linear;
+  animation: _zoom 0.4s linear;
 }
 @keyframes _zoom {
   0% {
