@@ -56,8 +56,9 @@
       font-size: 14*2px;
       color: #666666;
       text-align: right;
-      width: 112px*2;
+      // width: 112px*2;
       overflow-x: auto;
+      flex: 1;
     }
     .switch-contaiener {
       margin-right: 15*2px;
@@ -74,6 +75,7 @@
       height: 100% !important;
       div {
         flex: 1;
+        height: 100%;
         p {
           text-align: center;
           &:first-of-type {
@@ -215,7 +217,7 @@ li#allowCreateTask {
 }
 
 .confirm {
-  margin:100px  16px 0px 16px;  
+  margin: 100px 16px 0px 16px;
   background: #fff;
   background-image: linear-gradient(-180deg, #86c0f8 0%, #4e8cee 100%);
   box-shadow: 0 2*2px 4px 0 rgba(0, 0, 0, 0.38);
@@ -253,7 +255,7 @@ li#allowCreateTask {
 #appointer {
   position: relative;
   height: 100%;
-  min-width: 224px;
+  flex: 1;
   display: flex;
   align-items: center;
   span.name {
@@ -267,15 +269,14 @@ li#allowCreateTask {
     font-size: 14*2px;
     color: #666666;
     text-align: right;
-    margin-right: 10*2px;
+    // margin-right: 10*2px;
   }
-  span.arrow {
-    margin-top: 50%;
-    transform: translateY(-50px);
+  span.arrow_ {
+    // transform: translateY(-50px);
     display: inline-block;
     margin-right: 10*2px;
-    height: 100%;
     width: 20px;
+    height: 100%;
     img {
       position: absolute;
       top: 50%;
@@ -285,7 +286,6 @@ li#allowCreateTask {
     }
   }
 }
-
 input:disabled {
   background: #fff;
 }
@@ -296,7 +296,7 @@ input:disabled {
 
 .active {
   color: rgba(107, 167, 243, 1) !important;
-  border-bottom: 4*2px solid rgba(107, 167, 243, 1);
+  border-bottom: 2*2px solid rgba(107, 167, 243, 1);
 }
 </style>
 <template>
@@ -394,7 +394,7 @@ input:disabled {
           </label>
           <div id="appointer" @click='appointerManager'>
             <span class="name" ref="executor">{{executor}}</span>
-            <span class="arrow">
+            <span class="arrow_">
             <img src="@/assets/img/icon-right-slide03.png" />
           </span>
           </div>
@@ -845,7 +845,7 @@ export default {
         this.$toast.show("执行人已存在!");
         return;
       }
-      
+
       this.validate();
       //验证必选项
       if (!this.check_pass) {

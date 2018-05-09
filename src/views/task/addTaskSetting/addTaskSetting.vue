@@ -47,12 +47,19 @@
           }
         }
       }
-      .setting{
+      .setting {
         display: flex;
         height: 100%;
         flex-direction: column;
-        p{
-          flex: 1;
+        padding: 10px 0px;
+        p {
+          &:first-of-type {
+            flex: 3;
+          }
+          &:last-of-type {
+            flex: 2;
+            box-sizing: border-box;
+          }
         }
       }
     }
@@ -63,7 +70,7 @@
       display: block;
       height: 100%;
       font-size: 14*2px;
-      color: #666666;
+      color: #444;
       text-align: right;
       min-width: 112px*2;
       max-width: 320*2px;
@@ -84,6 +91,7 @@
       height: 100% !important;
       div {
         flex: 1;
+        height: 100%;
         p {
           text-align: center;
           &:first-of-type {
@@ -224,7 +232,7 @@ li#allowCreateTask {
 }
 
 .confirm {
-  margin:100px  16px 0px 16px;
+  margin: 100px 16px 0px 16px;
   height: 44*2px;
   background: #fff;
   background-image: linear-gradient(-180deg, #86c0f8 0%, #4e8cee 100%);
@@ -263,7 +271,7 @@ li#allowCreateTask {
 #appointer {
   position: relative;
   height: 100%;
-  min-width: 224px;
+  flex:1;
   display: flex;
   align-items: center;
   span.name {
@@ -277,15 +285,14 @@ li#allowCreateTask {
     font-size: 14*2px;
     color: #666666;
     text-align: right;
-    margin-right: 10*2px;
+    // margin-right: 10*2px;
   }
-  span.arrow {
-    margin-top: 50%;
-    transform: translateY(-50px);
+  span.arrow_ {
+    // transform: translateY(-50px);
     display: inline-block;
     margin-right: 10*2px;
-    height: 100%;
     width: 20px;
+    height: 100%;
     img {
       position: absolute;
       top: 50%;
@@ -306,7 +313,16 @@ input:disabled {
 
 .active {
   color: rgba(107, 167, 243, 1) !important;
-  border-bottom: 4*2px solid rgba(107, 167, 243, 1);
+  border-bottom: 2*2px solid rgba(107, 167, 243, 1);
+}
+.selectStartTime  {
+  flex:1;
+}
+.selectEndTime  {
+  flex:1
+}
+.userInput{
+  flex:1
 }
 </style>
 <template>
@@ -397,7 +413,7 @@ input:disabled {
           </label>
           <div id="appointer" @click='appointerManager'>
             <span class="name" ref="executor">{{executor}}</span>
-            <span class="arrow">
+            <span class="arrow_">
             <img src="@/assets/img/icon-right-slide03.png" />
           </span>
           </div>
@@ -486,7 +502,7 @@ export default {
       }
     },
     styleEnd() {
-      if (!!this.endTime ) {
+      if (!!this.endTime) {
         return {
           color: "#666"
         };
@@ -524,7 +540,7 @@ export default {
         this.$refs.endDate.classList.add("active_");
         this.check_time();
       } else {
-        this.endTime = '';
+        this.endTime = "";
         this.$refs.endDate.classList.remove("active_");
       }
     },
@@ -533,7 +549,7 @@ export default {
         this.$refs.startDate.classList.add("active_");
         this.check_time();
       } else {
-        this.startTime = '';
+        this.startTime = "";
         this.$refs.startDate.classList.remove("active_");
       }
     },
@@ -541,7 +557,7 @@ export default {
       if (newVal.length) {
         this.$refs.exe.classList.add("active_");
       } else {
-        this.executor = '';
+        this.executor = "";
         this.$refs.exe.classList.remove("active_");
       }
     }
