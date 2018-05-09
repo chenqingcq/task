@@ -1,13 +1,14 @@
 <template>
       <div>
           <div class="_comments-container"
-               :style="{minHeight: isIOSPhone ? '110vh' : '100vh'  }"
+
                v-infinite-scroll="getCommentsList"
                infinite-scroll-disabled="hasMore"
                infinite-scroll-distance="60"
                infinite-scroll-throttle-delay="200"
                ref="scroll" >
-            <div class="b-LR-10 comment-container">
+            <div class="b-LR-10 comment-container"
+                 :style="{minHeight: isIOSPhone ? '110vh' : '100vh'  }">
               <div class="panel b-P-10 " style="background:#fff;overflow-x: hidden;">
                 <!--scroll-->
                 <div class="comments-container">
@@ -50,6 +51,7 @@
                   <!--scroll-->
                 </div>
               </div>
+
             </div>
             <div v-if="isFocus && isIOSPhone"
                  class="user-input-mask"
@@ -57,14 +59,15 @@
                  @scroll.prevent
                  @touchstart.prevent="blurInput">
             </div>
-            <div class="user-input" :class="[ !isFocus || !isIOSPhone  ? 'is-fixed' : 'no-fixed']">
-              <input  type="text" :placeholder="placeholder" class="comment_input" v-model="comments"
+            <div  class="user-input" :class="[ !isFocus || !isIOSPhone  ? 'is-fixed' : 'no-fixed',isFocus && isIOS11phone && 'no-fixed-ios11  ' ]">
+              <input   type="text" :placeholder="placeholder" class="comment_input" v-model="comments"
                       ref="text"
                       @focus = 'setPageToBottom'
                       maxlength="200"
-                      @blur="clearIpt, blurInput"
+                      @blur="clearIpt, blurInput()"
               >
               <img @click.prevent="addComments" class="send-comment" src="@/assets/img/iocn.png" />
+
             </div>
           </div>
       </div>
@@ -287,6 +290,19 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+
+
+.scroll-wrapper{
+  position: absolute!important;/* 绝对定位，进行内部滚动 */
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  overflow-y: atuo;/* 或者scroll */
+  -webkit-overflow-scrolling: touch;/* 解决ios滑动不流畅问题 */
+}
+
+
 ._all-comments{
   height: 44*2px !important;
   color: #999;
@@ -330,9 +346,14 @@ export default {
        position: fixed;
      }
     &.no-fixed{
-       position: absolute;
-       bottom: 0px;
+      position: relative;
+       //position: absolute;
+       //bottom: 0px;
     }
+    &.no-fixed-ios11{
+       position: relative;
+       margin-bottom: 610px;
+     }
     width: 100%;
     /*height: 54*2px;*/
     padding: 10*2px 20*2px;
@@ -358,6 +379,9 @@ export default {
       background: rgba(244, 244, 244, 1);
       border-radius: 19px*2;
       color: rgba(186, 186, 186, 1);
+
+
+
     }
     .send-comment {
       display: inline-block;

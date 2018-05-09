@@ -15,7 +15,7 @@
   }
 </style>
 <template>
-    <div class="b-TB-10 container" >
+    <div @click="skipToStore" class="b-TB-10 container" >
       <img @click="skipToStore" src="../../../assets/img/image-logo.png" alt="">
       <span @click="skipToStore" class="text c_7 b_FS-10" >会管家-展会应用商店</span>
     </div>
@@ -34,6 +34,7 @@
         methods:{
           skipToStore(){
             console.log('add store url')
+            location = 'http://saasweb.ccnfgame.com/h5/#/index'
           }
         }
     }

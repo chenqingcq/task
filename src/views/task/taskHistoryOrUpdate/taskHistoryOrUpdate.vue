@@ -237,7 +237,8 @@
           for( let i = 0; i< this.imagesFiles.length ;i++ ) {
             let img = this.imagesFiles[i]
             let index= i
-            const name = img.name.replace(/\.png|\.jpg|\.jpeg/,"") + (+new Date())
+            const name = img.name
+//            const name = img.name.replac(/\.png|\.jpg|\.jpeg/,"")
             let newUrl = await this.uploadToCloud(img.blob, name, index)
             image.push(newUrl)
           }

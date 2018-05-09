@@ -26,6 +26,17 @@ class Convent {
   /*
    * 选择项目列表
    * */
+  projectInfo(opt, isShowFullLoading = false) {
+    const url = `/api/project/${opt.projectId}`
+    const params = opt || {}
+    return get(
+      url, {}, isShowFullLoading
+    )
+  }
+
+  /*
+   * 选择项目列表
+   * */
   projectList(opt, isShowFullLoading = false) {
     const url = '/api/project/slidlist'
     const params = opt || {}

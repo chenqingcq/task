@@ -44,7 +44,16 @@ export default {
     }
   },
   mounted(){
-    this.getTasksList()
+    const projectId = this.$route.query.projectId
+    if( projectId ){
+      Convent.projectInfo({
+        projectId
+      }).then(res=>{
+        this.$refs.slide.selectProject(res.data)
+
+      })
+    }
+
     //this.$wechat.weChatShare({
     //  title: '测试标题',
     //  desc: '分享描述'
@@ -112,7 +121,6 @@ export default {
     },
     getTasksList(){
       const { pageNum, pageSize ,hasMore } = this.page
-
       if( !hasMore ){
         return
       }

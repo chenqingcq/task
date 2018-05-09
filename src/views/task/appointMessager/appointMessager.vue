@@ -155,6 +155,7 @@
             display: inline-block;
             position: absolute;
             z-index: 666;
+            left: 0 ;
             width: 15*2px;
             height: 15*2px;
           }
@@ -370,7 +371,7 @@
           <div v-for="(item,index) in taskExecutors" :key="index">
             <li :userId='item[0].userId' :sex='item[0].sex'>
               <div class="user">
-                <div class="select">
+                <div class="select b_FS-0" >
                   <img @click='selectedSub($event,item[0].taskId,item[0].userId, 0 )' src="@/assets/img/sign-selected.png" class='radio' />
                 </div>
                 <div class="icon">
@@ -391,7 +392,7 @@
             <li class="sub-item showOrhidden" v-for="(_item,_index) in item"  v-if="item.length > 1" :key="_index"  >
               <!--点击可见-->
               <div class="user">
-                <div  class="select">
+                <div  class="select b_FS-0">
                   <img @click='selectedSub($event,_item.taskId,_item.userId, 1 )' src="@/assets/img/sign-selected.png" class="radio"/>
                 </div>
                 <div class="name taskname" >{{_item.taskName}}</div>

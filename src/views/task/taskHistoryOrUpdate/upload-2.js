@@ -150,7 +150,7 @@ export default {
       // 存放 files 数组
       //this.imagesFiles.push.apply(this.imagesFiles, Array.prototype.map.call(files,(file)=>file ))
       const filesArray =  Array.prototype.map.call(files,(file)=>file )
-
+      console.log( filesArray )
        this.mapImages(filesArray)
 
     },
@@ -226,7 +226,11 @@ export default {
             return
           }
           const file = files[flag]
-          const name = file.name
+
+
+          const imageType = file.name.split('.')[1]
+          const name = file.lastModified + parseInt(Math.random()*10000) +'.' + imageType
+        console.log(name)
           if (file.type.indexOf("image") == 0) {
             var result = await self.imgReady(file)
             self.imagesFiles.push({

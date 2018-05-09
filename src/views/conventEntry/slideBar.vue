@@ -119,18 +119,18 @@
              height: 68px;
              border-radius: 100%;
              z-index: 3;
-
+             border:3px solid #0094FF;
            }
-           // 外边框渐变
-           &::after{
-              position: absolute;
-              top: -3px; bottom: 2.5px;
-              left: -3px; right: -4px;
-              background: linear-gradient(#14C9FE, #0094FF);
-              content: '';
-              z-index: 2;
-              border-radius: 70px;
-            }
+           /*// 外边框渐变*/
+           /*&::after{*/
+              /*position: absolute;*/
+              /*top: -3px; bottom: 2.5px;*/
+              /*left: -3px; right: -4px;*/
+              /*background: linear-gradient(#14C9FE, #0094FF);*/
+              /*content: '';*/
+              /*z-index: 2;*/
+              /*border-radius: 70px;*/
+            /*}*/
 
           }
 
@@ -431,14 +431,12 @@
             }).then((res)=>{
                 if( this.isFirstAjax ){
                   this.isFirstAjax = false
-                  if( !this.projectId  ){
+                  if( !this.projectId && !this.$route.query.projectId  ){
                     if( res.data.length > 0 ){
                       this.selectProject( res.data[0] )
                     }
                     else{
-
                     }
-
                   }
                 }
                 const oldList = this.projectList
