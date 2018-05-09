@@ -853,6 +853,7 @@ export default {
                         projectId: self.projectId
                       }
                     });
+                    self.$toast.show('指派成功!',1000)
                   })
                   .catch(err => {
                     //请求失败

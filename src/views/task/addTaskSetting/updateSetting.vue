@@ -296,7 +296,7 @@ input:disabled {
 
 .active {
   color: rgba(107, 167, 243, 1) !important;
-  border-bottom: 2*2px solid rgba(107, 167, 243, 1);
+  border-bottom: 4*2px solid rgba(107, 167, 243, 1);
 }
 </style>
 <template>
@@ -325,7 +325,7 @@ input:disabled {
         <li class="task-item">
           <label class="task-desc" for="item0">
             <div class="icon">
-              <img src="@/assets/img/icon-project.png" />
+              <img src="@/assets/img/icon-task.png" />
             </div>
             <div :class="[_tasksetting,{active_:isTaskName}]"> 任务名称</div>
           </label>
@@ -551,8 +551,10 @@ export default {
         vm.projectId = to.query.projectId;
         // vm.executor = vm.getTaskExecutor.executor;
         console.log(vm.taskId, vm.projectId, "------------------------------");
-        vm.getData();
-        vm.setExcutor();
+        try {
+          vm.getData();
+          vm.setExcutor();
+        } catch (err) {}
       });
     }
     if (to.path == "/updateTaskSetting" && from.path == "/taskDetail") {
@@ -560,7 +562,9 @@ export default {
         // console.log(executor);
         vm.projectId = to.query.projectId;
         vm.taskId = to.query.taskId;
-        vm._updateTask(); //重新设置任务
+        try {
+          vm._updateTask(); //重新设置任务
+        } catch (err) {}
       });
     }
     if (to.path == "/updateTaskSetting" && from.path == "/section") {
@@ -568,7 +572,9 @@ export default {
         // console.log(executor);
         vm.projectId = to.query.projectId;
         vm.taskId = to.query.taskId;
-        vm.getData(); //重新获取数据
+        try {
+          vm.getData(); //重新获取数据
+        } catch (err) {}
       });
     }
   },
@@ -626,12 +632,12 @@ export default {
           console.log("---基本任务信息--", res);
           if (res.code == 1 && res.status == 200) {
             // debugger;
-            if (res.data.executorNickName.length) {
+            if (res.data.executorNickName && res.data.executorNickName.length) {
               this.$refs.exe.classList.add("active_");
               this.executor = res.data.executorNickName;
+              self.$refs._taskName.setAttribute("disabled", true);
+              self.$refs.taskTheme.setAttribute("disabled", true);
             }
-            self.$refs._taskName.setAttribute("disabled", true);
-            self.$refs.taskTheme.setAttribute("disabled", true);
           }
         })
         .catch(err => {
