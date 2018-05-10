@@ -1,5 +1,5 @@
 <template>
-  <div class="share-container" v-show="showShare">
+  <div class="share-container" v-if="showShare">
     <slot name="share"></slot>
   </div>
 </template>
@@ -11,10 +11,7 @@ export default {
       default: false,
       type: Boolean
     }
-  },
-  data() {
-    return {};
-  },
+  }
 };
 </script>
 <style lang="less" scoped>

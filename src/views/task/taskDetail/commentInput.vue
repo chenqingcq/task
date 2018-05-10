@@ -66,6 +66,8 @@ export default {
       } else if (this.usreInput.length > 200) {
         // debugger;
         this.$toast.show("评论字数不得超过200字!", 1500);
+      }else {
+        this.$toast.show('评论不能为空',1000)
       }
     }
   },
@@ -85,7 +87,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999999;
+  z-index: 9;
   .comment-panel {
     width: 290px*2;
     height: 247px*2;

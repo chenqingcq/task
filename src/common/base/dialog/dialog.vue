@@ -1,71 +1,69 @@
 <template>
-  <transition v-if="show">
-    <div>
-      <div class="container" style="position:fixed;z-index:1111111" v-if="type !=='message'">
-        <template v-if="type ==='confirm'">
-          <div class="confirm-container">
-            <ul>
-              <li>
-                <div>
-                  <img src="@/assets/img/image-notice.png" />
-                </div>
-                <div class="message">
-                  {{message}}
-                </div>
-              </li>
-              <li v-show="showBottom">
-                <div @click='_concel'>取消</div>
-                <div @click='_confirm'>确定</div>
-              </li>
-            </ul>
-          </div>
-        </template>
-        <template v-if="type==='info'">
-          <div class="panel-info">
-            <img class="close" @click='close' src="../../../assets/img/icon-close.png" />
-            <input id="userIpt" class="b_FS-16" type="text" ref='input' v-model="text" :placeholder="placeholder" :maxlength='length'>
-            <label for="userIpt" v-show="btnName=='add'">
-              <!--<img class="icon-edit" v-show="btnName=='add'" src="@/assets/img/icon-edit01.png" />            -->
-            </label>
-            <div class="bar"></div>
-            <div @click='close'>
-              <div class="btn b_FS-16" @click='operate(text)' ref="btn">
-                <img v-if="btnName=='add'" src="@/assets/img/icon-add01.png" />
-                <img v-if="btnName=='delete'" src="@/assets/img/icon-delete.png" />
-                <div>{{btn}}</div>
+  <div v-if="show">
+    <div class="container" style="position:fixed;z-index:1111111" v-if="type !=='message'">
+      <template v-if="type ==='confirm'">
+        <div class="confirm-container">
+          <ul>
+            <li>
+              <div>
+                <img src="@/assets/img/image-notice.png" />
               </div>
-            </div>
-          </div>
-        </template>
-        <template v-if="type==='notice'" v-show="showNotice">
-          <div class="panel-notice">
-            <!--<img class="close" @click='close' src="../../../assets/img/icon-close.png" />-->
-            <div class="top">
-              <div class="noticeIcon">
-                <img class="noticeImg" :src="imgUrl" />
+              <div class="message">
+                {{message}}
               </div>
-              <p class="title b_FS-18" :style='styleTitle'>{{notice.title}}</p>
-              <p class="task b_FS-14">{{notice.task}}</p>
+            </li>
+            <li v-show="showBottom">
+              <div @click='_concel'>取消</div>
+              <div @click='_confirm'>确定</div>
+            </li>
+          </ul>
+        </div>
+      </template>
+      <template v-if="type==='info'">
+        <div class="panel-info">
+          <img class="close" @click='close' src="../../../assets/img/icon-close.png" />
+          <input id="userIpt" class="b_FS-16" type="text" ref='input' v-model="text" :placeholder="placeholder" :maxlength='length'>
+          <label for="userIpt" v-show="btnName=='add'">
+            <!--<img class="icon-edit" v-show="btnName=='add'" src="@/assets/img/icon-edit01.png" />            -->
+         </label>
+          <div class="bar"></div>
+          <div @click='close'>
+            <div class="btn b_FS-16" @click='operate(text)' ref="btn">
+              <img v-if="btnName=='add'" src="@/assets/img/icon-add01.png" />
+              <img v-if="btnName=='delete'" src="@/assets/img/icon-delete.png" />
+              <div>{{btn}}</div>
             </div>
-            <!--<div class="bottom  b_FS-12">
-              <div class="charge"><span class="role">负责人:</span>{{notice.charge}}</div>
-              <div class="partIn"><span class="role">参与人:</span>{{parts}}</div>
-            </div>-->
-          </div>
-        </template>
-      </div>
-      <template v-show="type === 'message'">
-        <div class="messageBox" @click='closeMessage($event)'>
-          <div class="box">
-            <div class="icon">
-              <img :src='messageIcon' />
-            </div>
-            <div class="message">{{message}}</div>
           </div>
         </div>
       </template>
+      <template v-if="type==='notice'" v-show="showNotice">
+        <div class="panel-notice">
+          <!--<img class="close" @click='close' src="../../../assets/img/icon-close.png" />-->
+          <div class="top">
+            <div class="noticeIcon">
+              <img class="noticeImg" :src="imgUrl" />
+            </div>
+            <p class="title b_FS-18" :style='styleTitle'>{{notice.title}}</p>
+            <p class="task b_FS-14">{{notice.task}}</p>
+          </div>
+          <!--<div class="bottom  b_FS-12">
+            <div class="charge"><span class="role">负责人:</span>{{notice.charge}}</div>
+            <div class="partIn"><span class="role">参与人:</span>{{parts}}</div>
+          </div>-->
+        </div>
+      </template>
     </div>
-  </transition>
+    <template v-show="type === 'message'">
+      <div class="messageBox" @click='closeMessage($event)'>
+        <div class="box">
+          <div class="icon">
+            <img :src='messageIcon' />
+          </div>
+          <div class="message">{{message}}</div>
+        </div>
+      </div>
+    </template>
+  </div>
 </template>
 <script>
   export default {
@@ -75,7 +73,7 @@
         show: false,
         parts: "",
         btn: "",
-        message : '' ,
+        message:''
       };
     },
     computed: {
@@ -358,7 +356,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background: rgba(99, 99, 99, 0.5);
+    background: rgba(0,0,0,.3);
     /*display: flex;*/
     /*flex-wrap: wrap;*/
     /*justify-content: center;*/

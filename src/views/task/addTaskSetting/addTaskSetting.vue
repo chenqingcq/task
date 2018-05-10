@@ -583,9 +583,8 @@ export default {
         }
         try {
           vm.setExcutor();
-          vm.getData();      
-        } catch (err) {
-        }
+          vm.getData();
+        } catch (err) {}
       });
     }
 
@@ -711,6 +710,7 @@ export default {
     },
     _getTaskId() {
       let self = this;
+      this.flag = true;
       return new Promise((resovle, reject) => {
         // console.log(window.location.hash);
         Convent.createTask({
@@ -799,6 +799,9 @@ export default {
       if (!this.check_pass && !this.taskId) {
         this._validate();
       } else if (this.check_pass && !this.taskId) {
+        if (this.flag) {
+          return false;
+        }
         this._getTaskId()
           .then(taskId => {
             self.taskId = taskId;
@@ -816,7 +819,7 @@ export default {
             // debugger;
           });
       } else if (this.taskId) {
-        debugger;
+        this.flag = true;
         Convent.settingUpdateTask(self.taskId, {
           taskId: self.taskId,
           projectId: self.projectId,

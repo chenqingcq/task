@@ -32,6 +32,7 @@
                           <span @click='_look_all_reply(item)'>{{ item.replyNum }}条回复</span>
                           <div @click="doLike(item)" v-if="item.isThumbs">
                             <!--<img @click='add_praise(index)'   :src="imgUrl"/>-->
+                              <span class="plus" v-if="flag" >+1</span>                                              
                             <img  src="../../../assets/img/iocn-good2.png" alt="">
                             <span class="active" >{{ item.thumbsNum }}</span>
                           </div>
@@ -60,7 +61,7 @@
                  @touchstart.prevent="blurInput">
             </div>
             <div  class="user-input" :class="[ !isFocus || !isIOSPhone  ? 'is-fixed' : 'no-fixed',isFocus && isIOS11phone && 'no-fixed-ios11  ' ]">
-              <input   type="text" :placeholder="placeholder" class="comment_input" v-model="comments"
+              <input   type="text" :placeholder="placeholder" class="comment_input" v-model.trim="comments"
                       ref="text"
                       @focus = 'setPageToBottom'
                       maxlength="200"
@@ -75,56 +76,54 @@
 </template>
 <script type="text/babel">
 //import scroll from "@/common/base/scroll/scroll";
-import  boardfix from '@/mixins/keyboardfix'
+import boardfix from "@/mixins/keyboardfix";
 // services
-import { Convent } from '@/services'
+import { Convent } from "@/services";
 
-import { dateFormatInChinese } from '@/utils/transform'
+import { dateFormatInChinese } from "@/utils/transform";
 export default {
   name: "allComments",
-  mixins : [boardfix],
+  mixins: [boardfix],
   data() {
     return {
-
-      isOnstar : false ,
+      flag:false,
+      isOnstar: false,
       listenScroll: true,
       state: false,
       showUserInput: false,
       currentState: {},
       comments: "",
       page: {
-        pageNum : 1 ,
-        pageSize : 10 ,
-        hasMore : true,
+        pageNum: 1,
+        pageSize: 10,
+        hasMore: true
       },
-      placeholder: '赶快评论吧~' ,
-      members: [] ,
-      current_commentId : 0 ,
-      noDataText : '上拉加载更多'
-    }
+      placeholder: "赶快评论吧~",
+      members: [],
+      current_commentId: 0,
+      noDataText: "上拉加载更多"
+    };
   },
   props: {
-    level :{
-      type : String ,
-      default: 'first'
+    level: {
+      type: String,
+      default: "first"
     }
   },
-  components: {
-  },
-  mounted(){
-
-    if( this.level == 'second' ){
-      const current_commentId = this.$route.query.commentPid
-      this.current_commentId = current_commentId
-      const nickName = this.$route.query.nickName
-      this.placeholder = `回复${ nickName }`
+  components: {},
+  mounted() {
+    if (this.level == "second") {
+      const current_commentId = this.$route.query.commentPid;
+      this.current_commentId = current_commentId;
+      const nickName = this.$route.query.nickName;
+      this.placeholder = `回复${nickName}`;
     }
 
-    this.getCommentsList()
+    this.getCommentsList();
   },
   computed: {
-    hasMore(){
-      return !this.page.hasMore
+    hasMore() {
+      return !this.page.hasMore;
     },
     commentImgUrl() {
       return require("@/assets/img/icon-comment.png");
@@ -138,129 +137,138 @@ export default {
     }
   },
   methods: {
-    dateFormatInChinese : dateFormatInChinese ,
+    dateFormatInChinese: dateFormatInChinese,
     // 权限转中文字符串
-    role2Str( role ){
-      let str = ''
+    role2Str(role) {
+      let str = "";
       switch (role) {
-        case 0 : str = '访客' ; break ;
-        case 1 : str = '执行者' ; break ;
-        case 2 : str = '发布者' ; break ;
+        case 0:
+          str = "访客";
+          break;
+        case 1:
+          str = "执行者";
+          break;
+        case 2:
+          str = "发布者";
+          break;
       }
-      return str
+      return str;
     },
     // 评论列表
-    async getCommentsList( ){
-      const { pageNum, pageSize ,hasMore } = this.page
-      if( !hasMore ){
-        return
+    async getCommentsList() {
+      const { pageNum, pageSize, hasMore } = this.page;
+      if (!hasMore) {
+        return;
       }
-      this.page.hasMore = false
+      this.page.hasMore = false;
 
-      this.noDataText = '加载中'
-      const taskId = this.$route.query.taskId
+      this.noDataText = "加载中";
+      const taskId = this.$route.query.taskId;
       let submitData = {
-        taskId ,
-        pageNum ,
+        taskId,
+        pageNum,
         pageSize
-      }
-      if( this.level == 'second' ){
+      };
+      if (this.level == "second") {
         // 二级评论 传commentPid
-        submitData.commentPid = this.current_commentId
+        submitData.commentPid = this.current_commentId;
       }
-      var res = await Convent.getTaskComments(submitData)
-      let oldList = this.members , newList = []
+      var res = await Convent.getTaskComments(submitData);
+      let oldList = this.members,
+        newList = [];
 
-      if(res.data.length){
-        newList = oldList.concat( res.data )
-        this.members = newList
-        this.page.hasMore = true
+      if (res.data.length) {
+        newList = oldList.concat(res.data);
+        this.members = newList;
+        this.page.hasMore = true;
         //this.page.hasMore = res.page.isLoaded
-      }
-      else{
-        this.page.hasMore = false
-        this.noDataText = '已显示全部留言'
-        return
+      } else {
+        this.page.hasMore = false;
+        this.noDataText = "已显示全部留言";
+        return;
       }
 
-      if( this.page.hasMore ){
-        this.page.pageNum++
-        this.noDataText = '上拉加载更多'
-      }
-      else{
-        this.noDataText = '已显示全部留言'
+      if (this.page.hasMore) {
+        this.page.pageNum++;
+        this.noDataText = "上拉加载更多";
+      } else {
+        this.noDataText = "已显示全部留言";
       }
     },
     // 点赞或者取消点赞
-    doLike( item, index ){
-      if( this.isOnstar  ){
-        this.$toast.show('1秒后才能再次点击', 2000)
-        return
+    doLike(item, index) {
+      this.flag = true;
+      if (this.isOnstar) {
+        this.$toast.show("1秒后才能再次点击", 2000);
+        return;
+      } else {
+        this.isOnstar = true;
       }
-      else{
-        this.isOnstar = true
-      }
-      const isThumbs = !item.isThumbs ? 1 : 0
-      const commentId = item.commentId
+      const isThumbs = !item.isThumbs ? 1 : 0;
+      const commentId = item.commentId;
 
       Convent.thumbs({
-        isThumbs ,commentId
-      }).then(res=>{
-        item.isThumbs = isThumbs
-        setTimeout(()=>{
-          this.isOnstar = false
-        }, 500)
+        isThumbs,
+        commentId
+      }).then(res => {
+        item.isThumbs = isThumbs;
+        setTimeout(() => {
+          this.isOnstar = false;
+        }, 500);
 
-        if( isThumbs == 1 ){
-          this.$toast.show('点赞成功')
-          item.thumbsNum++
+        if (isThumbs == 1) {
+          this.$toast.show("点赞成功");
+          item.thumbsNum++;
+        } else {
+          this.$toast.show("取消点赞");
+          item.thumbsNum--;
         }
-        else{
-          this.$toast.show('取消点赞')
-          item.thumbsNum--
-        }
-      })
+      });
     },
     // commentPid 二级评论
-    addComments(  ){
-      let commentPid = null
-      if( this.level == 'second' ) commentPid = this.current_commentId
-      console.log(commentPid)
-      const taskId = this.$route.query.taskId
-      const message	 = this.comments
+    addComments() {
+      let commentPid = null;
+      if (this.level == "second") commentPid = this.current_commentId;
+      console.log(commentPid);
+      const taskId = this.$route.query.taskId;
+      const message = this.comments;
+      if(!message.length){
+        this.$toast.show('评论不能为空',1000);
+        return
+      }
       Convent.taskComments({
-        commentPid ,
-        taskId ,
+        commentPid,
+        taskId,
         message
       })
-      .then(res=>{
-        this.successComment()
-        this.page = {
-          pageNum : 1 ,
-            pageSize : 10 ,
-            hasMore : true,
-
-        }
-        this.noDataText = '上拉加载更多'
-        this.members = []
-        this.getCommentsList()
-        // 重新加载列表
-      }).catch(res=>{
-        this.$toast.show(res.msg, 2000)
-      })
+        .then(res => {
+          this.successComment();
+          this.page = {
+            pageNum: 1,
+            pageSize: 10,
+            hasMore: true
+          };
+          this.noDataText = "上拉加载更多";
+          this.members = [];
+          this.getCommentsList();
+          // 重新加载列表
+        })
+        .catch(res => {
+          this.$toast.show(res.msg, 2000);
+        });
     },
     _look_all_reply(item) {
       this.$router.push({
         path: "/allReply",
-        query:{
-          commentPid : item.commentId ,
-          taskId: this.$route.query.taskId ,//测
-          nickName : item.nickname
+        query: {
+          commentPid: item.commentId,
+          taskId: this.$route.query.taskId, //测
+          nickName: item.nickname
         }
       });
     },
     successComment() {
-      this.comments = '';
+      this.comments = "";
       console.log(this.comments);
       this.$dialog.message({
         message: "评论成功!",
@@ -303,14 +311,38 @@ export default {
 }
 
 
-._all-comments{
+.plus {
+  color: #ff0000;
+  position: absolute;
+  width: auto;
+  height: auto;
+  top: -35px;
+  right: 35px;
+  opacity: 0;
+  animation: _zoom 0.4s linear;
+}
+@keyframes _zoom {
+  0% {
+    transform: scale(0.5, 0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1, 1);
+    opacity: 0;
+  }
+}
+._all-comments {
   height: 44*2px !important;
   color: #999;
   font-size: 24px;
   width: 100%;
-  .comment-content{
+  .comment-content {
     text-indent: 22*2px;
-    width:100%;
+    width: 100%;
     height: 100%;
     line-height: 88px;
   }
@@ -333,12 +365,12 @@ export default {
     background: #07a5ff;
   }
   .user-input-mask {
-    position: fixed ;
-    top: 0 ;
+    position: fixed;
+    top: 0;
     background-color: transparent;
     width: 100vw;
-    height: 100vh ;
-    z-index : 8;
+    height: 100vh;
+    z-index: 8;
   }
   .user-input {
     &.is-fixed{
@@ -362,11 +394,11 @@ export default {
     bottom: 0;
     z-index: 9;
     background: #fff;
-      >input::-webkit-input-placeholder {
-       font-size: 24px;
-       line-height: normal;
-       //padding-top: 8px;
-      }
+    > input::-webkit-input-placeholder {
+      font-size: 24px;
+      line-height: normal;
+      //padding-top: 8px;
+    }
     .comment_input {
       display: inline-block;
       /*height: 34*2px;*/
@@ -518,7 +550,8 @@ export default {
           line-height: 17px*2;
           margin-top: 8px;
           margin-bottom: 20px;
-          z-index: -1;
+          // z-index: -1;
+          position: relative;
           > span {
             width: 150px;
             height: 50px;
