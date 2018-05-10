@@ -131,20 +131,19 @@ export default {
         pageSize
       }).then(res=>{
         let oldList = this.taskList , newList = []
-
         if(res.data.length){
           newList = oldList.concat( this.dealWithTaskList(res.data) )
           this.taskList = newList
           this.todayTime = newList[0].serverTime
+          this.page.hasMore = true
+          this.page.pageNum+=1
+          console.log(this.page.pageNum)
         }
         else{
           this.page.hasMore = false
           return
         }
-        this.page.hasMore = res.page.isLoaded
-        if( this.page.hasMore ){
-          this.page.pageNum++
-        }
+        //this.page.hasMore = res.page.isLoaded
       })
     },
     changeProject(){

@@ -22,7 +22,10 @@
         </div>
       </div><!--头部日历导航栏 end-->
       <!--任务列表-->
-      <div class="task-list-wrapper b-LR-10" v-infinite-scroll="loadMore" infinite-scroll-disabled="hasMore" infinite-scroll-distance="60">
+      <div class="task-list-wrapper b-LR-10" v-infinite-scroll="loadMore" infinite-scroll-disabled="hasMore"
+           infinite-scroll-distance="80"
+           infinite-scroll-immediate-check = 'false'
+      >
         <div v-if="taskList.length == 0" class="text-center b_FS-14 c_7 " style="padding-top: 280px">
           暂无任务
         </div>
