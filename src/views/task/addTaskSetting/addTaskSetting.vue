@@ -5,7 +5,7 @@
   top: 0;
   bottom: 0;
   right: 0;
-  z-index: 9999;
+  z-index: 9;
   height: 100vh;
   width: 100vw;
   // overflow: hidden;
@@ -325,7 +325,8 @@ input:disabled {
 .userInput {
   flex: 1;
 }
-#item4,#item1{
+#item4,
+#item1 {
   margin-left: 50px;
 }
 </style>
@@ -573,7 +574,7 @@ export default {
         // console.log(executor);
         vm.projectId = to.query.projectId;
         vm.taskId = to.query.taskId;
-        vm.$refs.taskTheme.setAttribute('disabled',true)
+        vm.$refs.taskTheme.setAttribute("disabled", true);
         vm.getData(); //重新获取数据
       });
     }
@@ -585,6 +586,9 @@ export default {
         }
         if (window.location.hash.includes("taskId")) {
           vm.taskId = to.query.taskId;
+        }
+        if(window.sessionStorage.getItem('isCreated')){
+          vm.taskId = window.sessionStorage.getItem('isCreated');
         }
         try {
           vm.setExcutor();
@@ -715,7 +719,6 @@ export default {
     },
     _getTaskId() {
       let self = this;
-      this.flag = true;
       return new Promise((resovle, reject) => {
         // console.log(window.location.hash);
         Convent.createTask({
@@ -800,13 +803,13 @@ export default {
     },
     confirm() {
       let self = this;
-      this.validate();
-      if (!this.check_pass && !this.taskId) {
-        this._validate();
-      } else if (this.check_pass && !this.taskId) {
-        this._getTaskId()
+      self.validate();
+      if (!self.check_pass && !self.taskId) {
+        self._validate();
+      } else if (self.check_pass && !self.taskId) {
+        self
+          ._getTaskId()
           .then(taskId => {
-            self.$toast.show('任务创建成功',500);
             self.taskId = taskId;
             self.$router.push({
               path: "/convententry",
@@ -821,11 +824,7 @@ export default {
             console.log(err);
             // debugger;
           });
-        if (this.flag) {
-          return false;
-        }
       } else if (this.taskId) {
-        this.flag = true;
         Convent.settingUpdateTask(self.taskId, {
           taskId: self.taskId,
           projectId: self.projectId,
@@ -868,9 +867,10 @@ export default {
     },
     _createTask() {
       let self = this;
-      this._getTaskId()
+      self
+        ._getTaskId()
         .then(taskId => {
-          this.$router.push({
+          self.$router.push({
             path: "/convententry",
             query: {
               taskId: taskId,
@@ -887,7 +887,11 @@ export default {
     validate() {
       let k;
       for (k in reflect_to_task) {
-        if (this.$data.hasOwnProperty(k) && this.$data[k] && this.$data[k].length) {
+        if (
+          this.$data.hasOwnProperty(k) &&
+          this.$data[k] &&
+          this.$data[k].length
+        ) {
           this.check_pass = true;
           console.log(this.check_pass);
         } else {
@@ -900,7 +904,11 @@ export default {
     _validate() {
       let k;
       for (k in reflect_to_task) {
-        if (this.$data.hasOwnProperty(k) && this.$data[k] && this.$data[k].length) {
+        if (
+          this.$data.hasOwnProperty(k) &&
+          this.$data[k] &&
+          this.$data[k].length
+        ) {
           this.check_pass = true;
           console.log(this.check_pass);
         } else {
@@ -920,6 +928,17 @@ export default {
       }
       this.validate();
       //验证必选项
+      if (self.taskId) {
+        self.setData();
+        self.$router.push({
+          path: "/appointMessager",
+          query: {
+            taskId: self.taskId,
+            projectId: self.projectId
+          }
+        });
+        return 
+      };
       if (!this.check_pass && !this.taskId) {
         this.setData();
         //如果
@@ -929,19 +948,11 @@ export default {
             projectId: self.projectId
           }
         });
-      } else if (self.taskId) {
-        self.setData();
-        self.$router.push({
-          path: "/appointMessager",
-          query: {
-            taskId: self.taskId,
-            projectId: self.projectId
-          }
-        });
       } else if (this.check_pass && !this.taskId) {
         this.setData();
         this._getTaskId()
           .then(taskId => {
+            window.sessionStorage.setItem('isCreated',taskId);
             self.taskId = taskId;
             this.$router.push({
               path: "/appointMessager",
