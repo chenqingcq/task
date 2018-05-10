@@ -155,7 +155,7 @@
             display: inline-block;
             position: absolute;
             z-index: 666;
-            left: 0 ;
+            left: 0;
             width: 15*2px;
             height: 15*2px;
           }
@@ -341,10 +341,17 @@
 .showOrhidden {
   display: none !important;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+  .operate{
+    margin-bottom: 34px;
+    z-index: 99999;
+    background: #fff;
+  }
+}
 </style>
 <template>
 
-  <div class="appointer-container">
+  <div class="appointer-container" @click="hideShare">
     <header ref="banner">
       <img @click.prevent class="bg" src='@/assets/img/appointer.png' />
       <ul class="list-items">
@@ -356,8 +363,8 @@
         </li>
         <li></li>
       </ul>
-      <img @click='inviteOthers' class="invite" src="@/assets/img/icon-menu.png">
-      <share  :showShare='showShare'>
+      <img @click.self='inviteOthers' class="invite" src="@/assets/img/icon-menu.png">
+      <share   :showShare='showShare'>
         <ul slot="share" class="share-items">
           <div id="arrow"></div>
           <li @click="wechatShare" ><img src="@/assets/img/01.png" />微信分发</li>
@@ -408,7 +415,6 @@
         </ul>
       </scroll>
     </div>
-    <div check= 'checked'></div>
     <div class="operate">
       <div class="chat" @click="link_to_groupChat">
         <div class="chat-">
@@ -452,7 +458,8 @@ export default {
   data() {
     return {
       SUBISSHOW: true, //点击显示隐藏列表
-      expires:60,
+      _flag: false,
+      expires: 60,
       addMember: true, //添加人员
       deleteMember: false, //删除人员
       doNothing: true, //默认,
@@ -617,6 +624,13 @@ export default {
     ...mapMutations({
       SET_USER_ID: "SET_USER_ID"
     }),
+    hideShare(e) {
+      let shareDOM = document.querySelector(".share-container");
+      console.log(e, shareDOM);
+      if (!!shareDOM) {
+        this.showShare = false;
+      }
+    },
     link_to_groupChat() {
       console.log(this.projectId);
       let self = this;
@@ -795,7 +809,6 @@ export default {
       console.log("------------------------->>>");
       let self = this;
       this.showShare = !this.showShare;
-
       // this.debounce(200);
     },
     showToast(message) {
@@ -853,7 +866,7 @@ export default {
                         projectId: self.projectId
                       }
                     });
-                    self.$toast.show('指派成功!',1000)
+                    self.$toast.show("指派成功!", 1000);
                   })
                   .catch(err => {
                     //请求失败

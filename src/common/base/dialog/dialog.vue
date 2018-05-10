@@ -1,5 +1,5 @@
 <template>
-  <transition v-if="show">
+  <div v-if="show">
     <div class="container" style="position:fixed;z-index:1111111" v-if="type !=='message'">
       <template v-if="type ==='confirm'">
         <div class="confirm-container">
@@ -63,7 +63,7 @@
         </div>
       </div>
     </template>
-  </transition>
+  </div>
 </template>
 <script>
   export default {
@@ -72,7 +72,8 @@
         text: "",
         show: false,
         parts: "",
-        btn: ""
+        btn: "",
+        message:''
       };
     },
     computed: {
@@ -355,7 +356,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background: rgba(99, 99, 99, 0.5);
+    background: rgba(0,0,0,.3);
     /*display: flex;*/
     /*flex-wrap: wrap;*/
     /*justify-content: center;*/
