@@ -118,7 +118,7 @@
 .rotate {
   animation: _scale 1s linear;
 }
-#inviteImg{
+.inviteImg{
   pointer-events: none;
 }
 </style>
@@ -127,7 +127,7 @@
     <div class="invite-container" v-show="showInvite">
       <div class="invite-panel">
         <div class="invite-img" ref="invite">
-          <img @click='close' ref="close" class="close-img inviteImg" src="@/assets/img/icon-close01.png" />
+          <img @click='close' ref="close" class="close-img " src="@/assets/img/icon-close01.png" />
           <img class="inviteImg" src="@/assets/img/image-popup.png" />
           <div ref="invitemore" class="invite-more">点击邀请更多好友</div>
           <div class="invite-fast">还不是好友赶快邀请</div>

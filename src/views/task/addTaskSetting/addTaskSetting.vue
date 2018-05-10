@@ -1,13 +1,14 @@
 <style lang="less" scoped>
 .task-container {
-  // position: relative;
-  // left: 0;
-  // top: 0;
-  // bottom: 0;
-  // right: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 9999;
   height: 100vh;
   width: 100vw;
-  overflow: hidden;
+  // overflow: hidden;
   .task-panel {
     width: 100%;
     li.task-item {
@@ -324,6 +325,9 @@ input:disabled {
 .userInput {
   flex: 1;
 }
+#item4,#item1{
+  margin-left: 50px;
+}
 </style>
 <template>
   <div>
@@ -569,6 +573,7 @@ export default {
         // console.log(executor);
         vm.projectId = to.query.projectId;
         vm.taskId = to.query.taskId;
+        vm.$refs.taskTheme.setAttribute('disabled',true)
         vm.getData(); //重新获取数据
       });
     }
@@ -799,11 +804,9 @@ export default {
       if (!this.check_pass && !this.taskId) {
         this._validate();
       } else if (this.check_pass && !this.taskId) {
-        if (this.flag) {
-          return false;
-        }
         this._getTaskId()
           .then(taskId => {
+            self.$toast.show('任务创建成功',500);
             self.taskId = taskId;
             self.$router.push({
               path: "/convententry",
@@ -818,6 +821,9 @@ export default {
             console.log(err);
             // debugger;
           });
+        if (this.flag) {
+          return false;
+        }
       } else if (this.taskId) {
         this.flag = true;
         Convent.settingUpdateTask(self.taskId, {
@@ -881,11 +887,7 @@ export default {
     validate() {
       let k;
       for (k in reflect_to_task) {
-        if (
-          this.$data.hasOwnProperty(k) &&
-          this.$data[k] &&
-          this.$data[k].length
-        ) {
+        if (this.$data.hasOwnProperty(k) && this.$data[k] && this.$data[k].length) {
           this.check_pass = true;
           console.log(this.check_pass);
         } else {
@@ -898,11 +900,7 @@ export default {
     _validate() {
       let k;
       for (k in reflect_to_task) {
-        if (
-          this.$data.hasOwnProperty(k) &&
-          this.$data[k] &&
-          this.$data[k].length
-        ) {
+        if (this.$data.hasOwnProperty(k) && this.$data[k] && this.$data[k].length) {
           this.check_pass = true;
           console.log(this.check_pass);
         } else {

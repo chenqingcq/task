@@ -362,14 +362,14 @@
     /*justify-content: center;*/
     /*align-items: center;*/
     .panel-notice {
-      animation: scale 0.5s ease;
       min-width: 212*2px;
       min-height: 201*2px;
       background-color: #fff;
       border-radius: 18px;
-      position: relative;
-      display: flex;
-      justify-content: center;
+      position: absolute;
+      top:50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
       img.close {
         display: block;
         position: absolute;

@@ -344,7 +344,6 @@
 @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
   .operate{
     margin-bottom: 34px;
-    z-index: 99999;
     background: #fff;
   }
 }
