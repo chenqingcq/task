@@ -431,13 +431,20 @@
             }).then((res)=>{
                 if( this.isFirstAjax ){
                   this.isFirstAjax = false
-                  if( !this.projectId && !this.$route.query.projectId  ){
-                    if( res.data.length > 0 ){
-                      this.selectProject( res.data[0] )
+                  if( this.$route.query.projectId  ){
+
+                  }
+                  else{
+                    if( !this.projectId ){
+                      if( res.data.length > 0 ){
+                        this.selectProject( res.data[0] )
+                      }
                     }
                     else{
+                      this.$emit( 'changeProject' )
                     }
                   }
+
                 }
                 const oldList = this.projectList
                 const arr = res.data

@@ -131,20 +131,19 @@ export default {
         pageSize
       }).then(res=>{
         let oldList = this.taskList , newList = []
-
         if(res.data.length){
           newList = oldList.concat( this.dealWithTaskList(res.data) )
           this.taskList = newList
           this.todayTime = newList[0].serverTime
+          this.page.hasMore = true
+          this.page.pageNum+=1
+          console.log(this.page.pageNum)
         }
         else{
           this.page.hasMore = false
           return
         }
-        this.page.hasMore = res.page.isLoaded
-        if( this.page.hasMore ){
-          this.page.pageNum++
-        }
+        //this.page.hasMore = res.page.isLoaded
       })
     },
     changeProject(){
@@ -271,18 +270,18 @@ export default {
         confirm() {
           Convent.closeTask(taskId)
             .then(res => {
+              self.updateTaskList()
               console.log(res);
                 self.$dialog.notice({
                   state: "pass",
                   title: "该任务已关闭",
                   task: self.taskName
                 });
-              this.updateTaskList()
+            }, err=>{
+                self.$toast.show("提交失败!", 1000);
+                //self.$router.push("conventEntry"); //提交失败之后跳转至首页?
             })
-            .catch(err => {
-              self.$toast.show("提交失败!", 1000);
-              self.$router.push("conventEntry"); //提交失败之后跳转至首页?
-            });
+
         }
       })
     }
