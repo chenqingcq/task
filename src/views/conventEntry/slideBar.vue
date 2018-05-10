@@ -515,7 +515,7 @@
             else{
               Convent.createProject({
                   projectName : text
-              })
+              },true)
               .then(res=>{
                 // update state
                 // string
