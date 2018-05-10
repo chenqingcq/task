@@ -270,18 +270,18 @@ export default {
         confirm() {
           Convent.closeTask(taskId)
             .then(res => {
+              self.updateTaskList()
               console.log(res);
                 self.$dialog.notice({
                   state: "pass",
                   title: "该任务已关闭",
                   task: self.taskName
                 });
-              this.updateTaskList()
+            }, err=>{
+                self.$toast.show("提交失败!", 1000);
+                //self.$router.push("conventEntry"); //提交失败之后跳转至首页?
             })
-            .catch(err => {
-              self.$toast.show("提交失败!", 1000);
-              self.$router.push("conventEntry"); //提交失败之后跳转至首页?
-            });
+
         }
       })
     }
