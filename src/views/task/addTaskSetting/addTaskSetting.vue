@@ -325,6 +325,9 @@ input:disabled {
 .userInput {
   flex: 1;
 }
+#item4,#item1{
+  margin-left: 50px;
+}
 </style>
 <template>
   <div>
