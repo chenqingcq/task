@@ -724,6 +724,7 @@ export default {
       }, delay);
     },
     selectedSub(e, taskId, userId, mode) {
+      this.$refs.scroll.refresh()
       console.log(e.target, taskId, userId, mode);
       this.SET_USER_ID(userId); //设置userid
       this.mode = mode;
@@ -832,11 +833,7 @@ export default {
       // this.SET_USER_ID(this.userId);
       let self = this;
       if (!self.taskId) {
-        self.showToast("任务未创建!").then(res => {
-          setTimeout(() => {
-            self.$dialog.close();
-          });
-        });
+        self.$toast.show('任务未创建',1000)
         return;
       }
       this.$dialog.confirm({
