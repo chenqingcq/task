@@ -12,7 +12,7 @@
     </div>
     <div class="slide" ref="slider" >
       <div class="slide-group" ref='slideGroup' >
-        <slot>
+        <slot name="slide">
         </slot>
       </div>
     </div>

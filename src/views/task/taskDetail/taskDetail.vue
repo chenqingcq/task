@@ -608,7 +608,7 @@ img.partyLogo {
         </div>
         <!--轮播图-->
         <slide   @changeIndex='changeIndex' ref="scroll" :loop='loop' v-if="items.length"  >
-          <div class="slider-item" v-for="(item,index) in items" :key="index">
+          <div class="slider-item" v-for="(item,index) in items" :key="index" slot="slide">
             <img @click= "doWechatPreview($event,items, index)" :src="'//'+item.imgUrl" :alt="index">
           </div>
         </slide>
