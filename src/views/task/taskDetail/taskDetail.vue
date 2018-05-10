@@ -571,6 +571,7 @@ img.partyLogo {
 }
 .success {
   line-height: 18px !important;
+  border-radius: 50% !important;
 }
 </style>
 <template>
