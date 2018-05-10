@@ -688,6 +688,7 @@ export default {
       this.showQrcode = false;
     },
     wechatShare() {
+      var self = this
       this.showShare = false;
       this.openPop();
       let shareData = {
@@ -695,9 +696,11 @@ export default {
         type: 0, // id类型 0: 任务ID 1: 项目ID
         title: "任务接受", // 分享标题
         desc: "任务接受描述", // 分享描述
-        imgUrl:
-          location.protocol +
-          "//task-1256472463.cos.ap-guangzhou.myqcloud.com/wxshare-logo.png" // 分享图标
+        imgUrl:location.protocol + "//task-1256472463.cos.ap-guangzhou.myqcloud.com/wxshare-logo.png", // 分享图标
+        success(){
+          self.$toast.show('分享成功')
+          self.closePop();
+        }
       };
       if (this.taskId) {
         shareData.type = 0;
