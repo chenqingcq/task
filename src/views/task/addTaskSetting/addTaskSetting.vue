@@ -587,6 +587,9 @@ export default {
         if (window.location.hash.includes("taskId")) {
           vm.taskId = to.query.taskId;
         }
+        if(window.sessionStorage.getItem('isCreated')){
+          vm.taskId = window.sessionStorage.getItem('isCreated');
+        }
         try {
           vm.setExcutor();
           vm.getData();
@@ -800,11 +803,6 @@ export default {
     },
     confirm() {
       let self = this;
-      let taskId = window.sessionStorage.getItem("isCreated");
-      console.log(taskId);
-      if(taskId == self.taskId){
-        return 
-      }
       self.validate();
       if (!self.check_pass && !self.taskId) {
         self._validate();
@@ -812,8 +810,6 @@ export default {
         self
           ._getTaskId()
           .then(taskId => {
-            window.sessionStorage.setItem("isCreated", taskId);
-            self.$toast.show("任务创建成功", 500);
             self.taskId = taskId;
             self.$router.push({
               path: "/convententry",
@@ -828,9 +824,6 @@ export default {
             console.log(err);
             // debugger;
           });
-        if (this.flag) {
-          return false;
-        }
       } else if (this.taskId) {
         Convent.settingUpdateTask(self.taskId, {
           taskId: self.taskId,
@@ -935,6 +928,17 @@ export default {
       }
       this.validate();
       //验证必选项
+      if (self.taskId) {
+        self.setData();
+        self.$router.push({
+          path: "/appointMessager",
+          query: {
+            taskId: self.taskId,
+            projectId: self.projectId
+          }
+        });
+        return 
+      };
       if (!this.check_pass && !this.taskId) {
         this.setData();
         //如果
@@ -944,19 +948,11 @@ export default {
             projectId: self.projectId
           }
         });
-      } else if (self.taskId) {
-        self.setData();
-        self.$router.push({
-          path: "/appointMessager",
-          query: {
-            taskId: self.taskId,
-            projectId: self.projectId
-          }
-        });
       } else if (this.check_pass && !this.taskId) {
         this.setData();
         this._getTaskId()
           .then(taskId => {
+            window.sessionStorage.setItem('isCreated',taskId);
             self.taskId = taskId;
             this.$router.push({
               path: "/appointMessager",
