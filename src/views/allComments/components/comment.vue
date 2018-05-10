@@ -233,6 +233,7 @@ export default {
       const taskId = this.$route.query.taskId;
       const message = this.comments;
       if(!message.length){
+        this.$toast.show('评论不能为空',1000);
         return
       }
       Convent.taskComments({
