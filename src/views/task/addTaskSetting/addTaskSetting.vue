@@ -8,7 +8,7 @@
   z-index: 9;
   height: 100vh;
   width: 100vw;
-  overflow: hidden;
+  overflow: scroll;
   .task-panel {
     width: 100%;
     li.task-item {

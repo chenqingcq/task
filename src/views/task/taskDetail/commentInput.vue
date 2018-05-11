@@ -44,7 +44,7 @@ export default {
             console.log(res, "----------->>>");
             if (res.code == 1 && res.status == 200) {
               self.$toast.show("评论成功！", 1000);
-              scrollItem.scrollTo(0,0);
+              // scrollItem.scrollTo(0,0);
               self.usreInput = "";
               //重新刷新列表
               self.$emit("close", true);

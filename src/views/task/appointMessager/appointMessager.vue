@@ -566,6 +566,7 @@ export default {
           let reg = /taskId=\d{18}/;
           vm.taskId = to.query.taskId;
         }
+        vm.wechatShare();
         if (
           !(
             window.location.hash.includes("projectId") ||
@@ -1068,12 +1069,6 @@ export default {
       }, 1000);
     }
   },
-  beforeRouteLeave: (to, from, next) => {
-    // ...
-    next(vm => {
-      clearInterval(vm.getters);
-    });
-  },
   components: {
     scroll,
     invites,
@@ -1086,7 +1081,7 @@ export default {
     this.initSelectedShow();
     this.getExcutors();
     // 三点分享
-    this.wechatShare()
+    // this.wechatShare()
 
   }
 };
