@@ -117,6 +117,7 @@ export default {
   },
   data() {
     return {
+      showQrcode_: true,
       _projectId: "",
       _taskId: "",
       isInvalid: true,
@@ -139,17 +140,6 @@ export default {
   methods: {
     face() {
       let self = this;
-
-      /* 封装 WebSocket 实例化的方法  */
-
-      var CreateWebSocket = (function() {
-        return function(urlValue) {
-          if (window.WebSocket) return new WebSocket(urlValue);
-          if (window.MozWebSocket) return new MozWebSocket(urlValue);
-          return false;
-        };
-      })();
-
       Convent.sharefacetoface({
         id: self.taskId ? self.taskId : self.projectId,
         type: self.taskId ? 0 : 1
@@ -161,43 +151,67 @@ export default {
               error,
               url
             ) {
-              if (!error) {
-                /* 实例化 WebSocket 连接对象, 地址为 ws 协议 */
-                self.webSocket = CreateWebSocket(
-                  // `ws://${host}/taskapi/v1/socket/check/${key}`
-                  `ws://dis.ccnfgame.com/taskapi/v1/socket/check${res.data.key}`
-                );
-                /* 关闭时 */
-                self.webSocket.onclose = function() {
-                  console.log("关闭连接");
+              // if (!error) {
+              /* 封装 WebSocket 实例化的方法  */
+              var CreateWebSocket = (function() {
+                return function(urlValue) {
+                  if (window.WebSocket) return new WebSocket(urlValue);
+                  if (window.MozWebSocket) return new MozWebSocket(urlValue);
+                  return false;
                 };
-                /* 接受信息 */
+              })();
+              console.log(res.data.key);
+              /* 实例化 WebSocket 连接对象, 地址为 ws 协议 */
+              var webSocket = CreateWebSocket(
+                `ws://dis.ccnfgame.com/taskapi/v1/socket/check/${res.data.key}`
+                // `ws://${window.location.host}/taskapi/v1/socket/check${res.data.key}`
+              );
+              /* 关闭时 */
+              webSocket.onclose = function() {
+                console.log("关闭连接");
+              };
+              /* 错误时 */
+              webSocket.onerror = function() {
+                console.log("连接错误");
+              };
+              /* 接受信息 */
 
-                self.webSocket.onmessage = function(msg) {
-                  console.log("服务端说:" + msg.data);
-                  if (msg.data === "failure") {
-                    // self.$router.push({
-                    //   path:'addTaskSetting',
-                    //   [self.taskId?'taskId':undefined]:self.taskId,
-                    //   projectId:self.projectIda
-                    // })
-                    self.$emit("closeQrcode");
-                  }
-                };
-                //60s后刷新
-                clearTimeout(self.countDowner);
-                self.countDowner = setTimeout(() => {
-                  // if (self.webSocket.readyState === 1) {
-                  //   console.log(key, "------------key-----------------");
-                  //   self.webSocket.send(key);
-                  //   /* 接收到服务端的消息时 */
-                  // } else {
-                  //   console.log("not ready");
-                  // }
-                  self.face();
-                }, 60000);
-                // self.countDown(window.location.host, self.key);
-              }
+              webSocket.onmessage = function(msg) {
+                console.log("服务端说:" + msg.data);
+                if (msg.data === "failure") {
+                  // self.$router.push({
+                  //   path:'addTaskSetting',
+                  //   [self.taskId?'taskId':undefined]:self.taskId,
+                  //   projectId:self.projectIda
+                  // })
+                  // self.$router.push({
+                  //   path:'/taskDetail',
+                  //   query:{
+                  //     taskId:self.taskId,
+                  //     projectId:self.projectId
+                  //   }
+                  // })
+                  self.$emit('updateMembers');
+                  self.$emit("closeQrcode");
+                  // self.showQrcode_ = false;
+                } else {
+                  console.log("ok");
+                }
+              };
+              //60s后刷新
+              clearTimeout(self.countDowner);
+              self.countDowner = setTimeout(() => {
+                self.face();
+                if (webSocket.readyState === 1) {
+                  console.log("------------key-----------------");
+                  /* 接收到服务端的消息时 */
+                } else {
+                  console.log("not ready");
+                }
+                // self.face();
+              }, 60000);
+              // self.countDown(window.location.host, self.key);
+              // }
             });
           }
         })

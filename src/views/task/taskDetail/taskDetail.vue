@@ -689,7 +689,7 @@ img.partyLogo {
         </div>
       </div>
     </div>
-    <comments v-if="taskStatus!= 0 && taskStatus != 7 " :members='members' :taskId='taskId' @close='updateComments' :status="taskStatus" ></comments>
+    <comments v-if="taskStatus!= 0 && taskStatus != 7 " @scrollEnd='scrollEnd'  @close='updateComments' :loading = 'loading' :members='members' :taskId='taskId' :status="taskStatus" ></comments>
     <!--创建者 关闭 未开始 已拒绝 未开始且拒绝-->
     <div v-if="role == 'creator' && ( taskStatus == 1 || taskStatus == 6 ) " class="btn-warp b-LR-8 clearfix">
       <div @click='closeTask' class="btn-normal-warn b_left b-MT-10">
@@ -720,6 +720,8 @@ import { mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   data() {
     return {
+      loading: false,
+      pageNum: 1,
       isClick: false,
       projectId: 0,
       status: "",
@@ -753,8 +755,7 @@ export default {
       active: "",
       taskProgressContent: ``,
       //项目群
-      parties: [
-      ],
+      parties: [],
       members: [],
       progressDesc: "",
       items: [
@@ -809,7 +810,34 @@ export default {
   methods: {
     ...mapActions(["setCurrentProject"]),
     updateComments() {
+      // this.pageNum ++ ;
       this.getComments();
+    },
+    scrollEnd(pos) {
+      let self = this;
+      self.loading = true;
+      self.pageNum++;
+      Convent.getTaskComments({
+        taskId: self.taskId,
+        pageSize: 3,
+        pageNum: self.pageNum
+      })
+        .then(res => {
+          self.loading = false;
+          console.log(res, "------一级评论------");
+          if (res.code == 1 && res.status == 200) {
+            self.members = self.members.concat(res.data);
+            console.log("end", res.data);
+          }
+          if (res.code == 603) {
+            self.$toast.show("任务暂未开启请勿评论", 1000);
+          }
+          console.log(self.members, "///////////////////////");
+        })
+        .catch(err => {
+          console.log(err);
+          self.loading = false;
+        });
     },
     changeIndex(index) {
       this.currentIndex_ = index;
@@ -831,7 +859,7 @@ export default {
       const self = this;
       Convent.getTaskComments({
         taskId,
-        pageSize: "4"
+        pageSize: 3
       })
         .then(res => {
           console.log(res, "------一级评论------");
@@ -1208,7 +1236,7 @@ export default {
     if (projectId) {
       this.projectId = projectId;
     } else {
-      this.projectId = this.getProjectId;
+      this.projectId = this.getProjectId;  
     }
     this.getData();
     this.getTaskComment();

@@ -426,7 +426,7 @@
       <div ref="deleteBtn" :class="{deleteBtn:true,deleteExcutor:deleteMember,deleteExcutorDisable :doNothing}" @click='deleteExcutor'>{{deleteText}}</div>
     </div>
     <invites :showInvite='showInvite' @closeInvite='closeInvite' ></invites>
-    <qrcode :showQrcode='showQrcode' @closeQrcode='closeQrcode' :projectId='projectId' :expires='expires' :taskId = 'taskId'></qrcode>
+    <qrcode @updateMembers='updateMembers' :showQrcode='showQrcode' @closeQrcode='closeQrcode' :projectId='projectId' :expires='expires' :taskId = 'taskId'></qrcode>
     <!--微信分发&#45;&#45; 三点分享-->
     <!--<div class="wechatShare-b" >-->
       <!--<div class="mask">-->
@@ -566,6 +566,7 @@ export default {
           let reg = /taskId=\d{18}/;
           vm.taskId = to.query.taskId;
         }
+        vm.wechatShare();
         if (
           !(
             window.location.hash.includes("projectId") ||
@@ -623,6 +624,10 @@ export default {
     ...mapMutations({
       SET_USER_ID: "SET_USER_ID"
     }),
+    updateMembers(){
+      this.getExcutorList(this.projectId);
+      console.log('---------------------join')
+    },
     hideShare(e) {
       let shareDOM = document.querySelector(".share-container");
       console.log(e, shareDOM);
@@ -1068,12 +1073,6 @@ export default {
       }, 1000);
     }
   },
-  beforeRouteLeave: (to, from, next) => {
-    // ...
-    next(vm => {
-      clearInterval(vm.getters);
-    });
-  },
   components: {
     scroll,
     invites,
@@ -1086,7 +1085,7 @@ export default {
     this.initSelectedShow();
     this.getExcutors();
     // 三点分享
-    this.wechatShare()
+    // this.wechatShare()
 
   }
 };

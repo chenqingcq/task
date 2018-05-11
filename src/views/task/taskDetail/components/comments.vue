@@ -12,44 +12,45 @@
         <span  @click="userInput">暂无评论,点击抢沙发</span>
         <i></i>
       </div>
-      <div class="comments-container" v-if="members.length">
-        <ul class="comment-panel">
-          <li v-for="(item,index) in members" :key="index" v-if="index<3" class="lisItem" :commentPid ='item.commentPid' :commentId ="item.commentId" ref='item'>
-            <div class="left">
-              <!--测试-->
-              <div class="icon">
-                <img :src="item.headImage" class='iconImg'>
-              </div>
-            </div>
-            <div class="right">
-              <!--测试-->
-              <div class="head">
-                <div class="role b_FS-12 ">{{item.nickname}}({{ role2Str( item.role ) }})</div>
-                <div class="time-panel"><span>{{defineDate(item.createTime)}}</span><span>{{defineTime(item.createTime)}}</span></div>
-              </div>
-              <div class="comments-item">{{item.message}}</div>
-              <div class="comments-callback">
-                <span @click='_link_to_secondary_comments( item )'>{{item.replyNum }}条回复 </span>
-                <div @click="doLike(item)" v-if="item.isThumbs">
-                    <!-- 点赞+1 -->
-                     <span class="plus" v-if="flag" >+1</span>                  
-                  <img  src="@/assets/img/iocn-good2.png" alt="">
-                  <span class="active" >{{ item.thumbsNum }}</span>
-                </div>
-                <div @click="doLike(item)" v-else>
-                  <img src="@/assets/img/iocn-good.png" alt="">
-                  <span>{{ item.thumbsNum }}</span>
+      <scroll ref="scroll" @scrollEnd="scrollEnd" class="comments-container" v-show="members.length">
+          <ul class="comment-panel" ref='scrollItem'>
+            <li v-for="(item,index) in members" :key="index"  class="lisItem" :commentPid ='item.commentPid' :commentId ="item.commentId" ref='item'>
+              <div class="left">
+                <!--测试-->
+                <div class="icon">
+                  <img :src="item.headImage" class='iconImg'>
                 </div>
               </div>
-            </div>
-            <i class="footbar"></i>
-          </li>
-          <li class="all-comment">
-            <div v-if="members.length < 4" class="comment-content">已显示全部留言</div>
-            <div v-else @click="link_to_allComments" class="comment-content">点击查看全部留言</div>
-          </li>
-        </ul>
-      </div>
+              <div class="right">
+                <!--测试-->
+                <div class="head">
+                  <div class="role b_FS-12 ">{{item.nickname}}({{ role2Str( item.role ) }})</div>
+                  <div class="time-panel"><span>{{defineDate(item.createTime)}}</span><span>{{defineTime(item.createTime)}}</span></div>
+                </div>
+                <div class="comments-item">{{item.message}}</div>
+                <div class="comments-callback">
+                  <span @click='_link_to_secondary_comments( item )'>{{item.replyNum }}条回复 </span>
+                  <div @click="doLike(item)" v-if="item.isThumbs">
+                      <!-- 点赞+1 -->
+                      <span class="plus" v-show="flag" >+1</span>                  
+                    <img  src="@/assets/img/iocn-good2.png" alt="">
+                    <span class="active" >{{ item.thumbsNum }}</span>
+                  </div>
+                  <div @click="doLike(item)" v-else>
+                    <img src="@/assets/img/iocn-good.png" alt="">
+                    <span>{{ item.thumbsNum }}</span>
+                  </div>
+                </div>
+              </div>
+              <i class="footbar"></i>
+            </li>
+            <li class="all-comment">
+              <div v-if="members.length < 4" class="comment-content">已显示全部留言</div>
+              <div v-else-if="loading" class="comment-content">拼命加载中...</div>
+              <div v-else @click="link_to_allComments" class="comment-content">点击查看全部留言</div>
+            </li>
+          </ul>
+      </scroll>
       <div class="user-input" @click="userInput">
           <input  type="text" placeholder="赶快评论吧~" class="comment_input" disabled>
           <img class="icon-input" src="@/assets/img/iocn-pen.png" />
@@ -67,13 +68,12 @@ export default {
   data() {
     return {
       isOnstar: false, // 是否点赞时提交
-      flag:false,
+      flag: false,
       listenScroll: true,
       state: false,
       showUserInput: false,
       currentState: {},
       isThumbs: 0,
-      flag: false,
       thumbsSuccessful: false //点赞成功
     };
   },
@@ -91,6 +91,10 @@ export default {
     taskId: {
       type: String,
       default: ""
+    },
+    loading:{
+      default:false,
+      type:Boolean
     }
   },
   components: {
@@ -109,8 +113,16 @@ export default {
       }
     }
   },
-  watch: {},
+  watch: {
+    members(){
+      this.$refs.scroll.refresh()      
+    }
+  },
   methods: {
+    scrollEnd(pos) {
+      this.$refs.banner.classList.remove("banner");
+      this.$emit("scrollEnd", pos);      
+    },
     // 权限转中文字符串
     role2Str(role) {
       let str = "";
@@ -253,11 +265,6 @@ export default {
     scrolling() {
       console.log(" listenScroll");
       this.$refs.banner.classList.add("banner");
-      // this.$refs.scroll.refresh()
-    },
-    scrollEnd() {
-      console.log("scrollEnd");
-      this.$refs.banner.classList.remove("banner");
     }
   },
   mounted() {
@@ -271,7 +278,7 @@ export default {
   position: absolute;
   width: auto;
   height: auto;
-  top:-35px;
+  top: -35px;
   right: 35px;
   opacity: 0;
   animation: _zoom 0.4s linear;
@@ -283,11 +290,11 @@ export default {
   }
   50% {
     transform: scale(1, 1);
-    opacity: 1;    
+    opacity: 1;
   }
   100% {
     transform: scale(1, 1);
-    opacity: 0 ;
+    opacity: 0;
   }
 }
 .comment-container {
@@ -388,9 +395,8 @@ export default {
 
 .comments-container {
   min-height: 280px;
-  /*max-height: 465px;*/
-  /*72*3*2*/
-  /*overflow: hidden;*/
+  max-height: 465px;
+  overflow: hidden;
   .lisItem {
     width: 100%;
     height: auto;

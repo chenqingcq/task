@@ -1,12 +1,13 @@
 <style lang="less" scoped>
 .task-container {
-  position: relative;
+  position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
   right: 0;
-  height: 100vh;
-  overflow: hidden;
+  // height: 100vh;
+  // width: 100vw;
+  overflow: scroll;
   .task-panel {
     width: 100%;
     li.task-item {
