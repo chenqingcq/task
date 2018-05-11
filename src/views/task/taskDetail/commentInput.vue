@@ -4,7 +4,7 @@
           <div class="close" @click='close'>
               <img src="@/assets/img/icon-close.png" />
           </div>
-          <textarea ref="ipt" autofocus=true  @keyup.enter='sendComments' name="userIpt" id="userIpt" placeholder="说点什么吧..." v-model.trim="usreInput" maxlength="200">
+          <textarea ref="ipt" autofocus=true  @keyup.enter='sendComments' name="userIpt" id="userIpt" placeholder="评论不得超过200字..." v-model.trim="usreInput" maxlength="200">
 
           </textarea>
           <div @click='sendComments' class="comment-btn">评论</div>
