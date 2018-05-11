@@ -803,10 +803,14 @@ export default {
     },
     confirm() {
       let self = this;
+      if(this.flag){
+        return;//限制多次提交
+      }
       self.validate();
       if (!self.check_pass && !self.taskId) {
         self._validate();
       } else if (self.check_pass && !self.taskId) {
+        self.flag = true
         self
           ._getTaskId()
           .then(taskId => {

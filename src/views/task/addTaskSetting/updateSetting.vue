@@ -551,6 +551,7 @@ export default {
         vm.projectId = to.query.projectId;
         // vm.executor = vm.getTaskExecutor.executor;
         console.log(vm.taskId, vm.projectId, "------------------------------");
+        vm.$refs.taskTheme.setAttribute("disabled", true);        
         try {
           vm.getData();
           vm.setExcutor();
@@ -562,6 +563,8 @@ export default {
         // console.log(executor);
         vm.projectId = to.query.projectId;
         vm.taskId = to.query.taskId;
+        vm.$refs.taskTheme.setAttribute("disabled", true);
+
         try {
           vm._updateTask(); //重新设置任务
         } catch (err) {}
@@ -572,6 +575,7 @@ export default {
         // console.log(executor);
         vm.projectId = to.query.projectId;
         vm.taskId = to.query.taskId;
+        vm.$refs.taskTheme.setAttribute("disabled", true);        
         try {
           vm.getData(); //重新获取数据
         } catch (err) {}
@@ -955,6 +959,7 @@ export default {
   },
   mounted() {
     console.log("=============update====================");
+    this.$refs.taskTheme.setAttribute("disabled", true);
   }
 };
 </script>
