@@ -1,14 +1,14 @@
 <style lang="less" scoped>
 .task-container {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
+  // position: absolute;
+  // left: 0;
+  // top: 0;
+  // bottom: 0;
+  // right: 0;
   z-index: 9;
   height: 100vh;
   width: 100vw;
-  // overflow: hidden;
+  overflow: hidden;
   .task-panel {
     width: 100%;
     li.task-item {

@@ -32,6 +32,9 @@ export default {
     },
     sendComments() {
       let self = this;
+      let scrollItem = document.querySelector(".comment-panel");
+      console.log(scrollItem.scrollHeight);
+
       if (this.usreInput.length && this.usreInput.length <= 200) {
         Convent.taskComments({
           taskId: self.taskId,
@@ -40,10 +43,11 @@ export default {
           .then(res => {
             console.log(res, "----------->>>");
             if (res.code == 1 && res.status == 200) {
-              self.$toast.show('评论成功！',1000);
-              self.usreInput = '';
+              self.$toast.show("评论成功！", 1000);
+              scrollItem.scrollTo(0,0);
+              self.usreInput = "";
               //重新刷新列表
-              self.$emit("close",true );
+              self.$emit("close", true);
               //self.$router.push("comment?taskId=" + self.taskId );
             } else if (res.code == 603) {
               self.$dialog.message({
@@ -54,26 +58,23 @@ export default {
           })
           .catch(err => {
             console.log(err);
-            if(err.code == 603){
-              self.$toast.show("任务未开启请勿评论!",1000);
-              self.usreInput = ''
-            }
-            else{
-              self.$toast.show(res.msg,2000)
+            if (err.code == 603) {
+              self.$toast.show("任务未开启请勿评论!", 1000);
+              self.usreInput = "";
+            } else {
+              self.$toast.show(err, 1000);
             }
             self.$emit("close");
           });
       } else if (this.usreInput.length > 200) {
         // debugger;
         this.$toast.show("评论字数不得超过200字!", 1500);
-      }else {
-        this.$toast.show('评论不能为空',1000)
+      } else {
+        this.$toast.show("评论不能为空", 1000);
       }
     }
   },
-  mounted(){
-
-  }
+  mounted() {}
 };
 </script>
 <style scoped lang='less'>
