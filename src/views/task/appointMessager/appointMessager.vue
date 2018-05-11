@@ -1085,6 +1085,9 @@ export default {
     this.init();
     this.initSelectedShow();
     this.getExcutors();
+    // 三点分享
+    this.wechatShare()
+
   }
 };
 </script>
