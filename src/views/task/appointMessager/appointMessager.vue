@@ -566,7 +566,7 @@ export default {
           let reg = /taskId=\d{18}/;
           vm.taskId = to.query.taskId;
         }
-        vm.wechatShare();
+        // vm.wechatShare();
         if (
           !(
             window.location.hash.includes("projectId") ||

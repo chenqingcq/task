@@ -539,7 +539,7 @@ img.partyLogo {
   bottom: -6*2px;
   left: 81*2px;
   width: 194*2px;
-  min-height: 64*2px;
+  // min-height: 64*2px;
   z-index: 111111;
   border-radius: 5px;
   box-shadow: 0px 0px 20*2px rgba(177, 177, 177, 0.6);
