@@ -475,7 +475,7 @@ export default {
         line-height: 34px;
       }
       .text {
-        background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(rgba(0, 128, 0, 1)), to(rgba(51, 51, 51, 1)));
+        background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(rgba(255, 0, 127, 1)), to(rgba(171, 0,255, 1)));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
