@@ -1036,6 +1036,8 @@ export default {
   },
   mounted() {
     console.log(this.projectId);
+    this.taskTheme = this.getProjectThemeName;
+    this.$refs.taskTheme.setAttribute('disabled',true)
   }
 };
 </script>
