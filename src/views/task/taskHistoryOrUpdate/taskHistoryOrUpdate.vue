@@ -27,7 +27,7 @@
             </template>
           </div>
           <div class="panel panel-conf edit">
-            <textarea class="input" v-model="newSectionVal" maxlength="35" name="" placeholder="记录一下吧" id="" cols="30" ></textarea>
+            <textarea class="input" v-model="newSectionVal" maxlength="35" name="" placeholder="记录一下吧（限制35个字） " id="" cols="30" ></textarea>
             <!--<img v-if="newSectionVal.length ==0" class="placeholder-icon" src="../../../assets/img/icon-edit02.png" alt="">-->
             <div class="imgs-wrap b_FS-0 edit">
 
@@ -47,7 +47,7 @@
 
             </div>
             <div class="c_7">
-              &nbsp;&nbsp;&nbsp;&nbsp;*只允许上传图片
+              &nbsp;&nbsp;&nbsp;&nbsp;*只允许最多上传4张图片
             </div>
             <div @click="addTaskProcess" class="btn-small-primary b-MT-5" >提交</div>
           </div>
@@ -166,7 +166,7 @@
 
       </div>
 
-      <img src="../../../assets/img/image-background.png" alt="" class="bottom-bg">
+      <img @click.prevent src="../../../assets/img/image-background.png" alt="" class="bottom-bg">
     </div>
   </div>
 

@@ -198,8 +198,9 @@
               <!--<div class="light start"></div>-->
             </div>
             <div class="panel panel-conf edit">
-              <textarea class="input" v-model="newSectionVal" name="" maxlength="30" placeholder="这里填写节点" id="" cols="30" ></textarea>
+              <textarea class="input" v-model="newSectionVal" name="" maxlength="30" placeholder="这里填写节点  （限制30字）" id="" cols="30" ></textarea>
               <img v-if="newSectionVal.length ==0" class="placeholder-icon" src="../../assets/img/icon-edit02.png" alt="">
+
               <div @click="newSection" class="btn-small-primary b-MT-5">添加节点</div>
             </div>
           </div>
