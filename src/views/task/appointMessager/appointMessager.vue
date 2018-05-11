@@ -147,15 +147,22 @@
           height: 16*2px;
           border-radius: 50%;
           border: 1*2px solid #dbdbdb;
-          display: flex;
-          justify-content: center;
-          align-items: center;
+          // display: flex;
+          // justify-content: center;
+          // align-items: center;
+
           float: left;
           img {
+            position: absolute;
             display: inline-block;
             position: absolute;
             z-index: 666;
             left: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            box-sizing: content-box;
+            padding: 20px;
             width: 15*2px;
             height: 15*2px;
           }
@@ -342,7 +349,7 @@
   display: none !important;
 }
 @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
-  .operate{
+  .operate {
     margin-bottom: 34px;
     background: #fff;
   }
@@ -624,9 +631,9 @@ export default {
     ...mapMutations({
       SET_USER_ID: "SET_USER_ID"
     }),
-    updateMembers(){
+    updateMembers() {
       this.getExcutorList(this.projectId);
-      console.log('---------------------join')
+      console.log("---------------------join");
     },
     hideShare(e) {
       let shareDOM = document.querySelector(".share-container");
@@ -693,7 +700,7 @@ export default {
       this.showQrcode = false;
     },
     wechatShare() {
-      var self = this
+      var self = this;
       this.showShare = false;
       this.openPop();
       let shareData = {
@@ -701,9 +708,11 @@ export default {
         type: 0, // id类型 0: 任务ID 1: 项目ID
         title: "任务接受", // 分享标题
         desc: "任务接受描述", // 分享描述
-        imgUrl:location.protocol + "//task-1256472463.cos.ap-guangzhou.myqcloud.com/wxshare-logo.png", // 分享图标
-        success(){
-          self.$toast.show('分享成功')
+        imgUrl:
+          location.protocol +
+          "//task-1256472463.cos.ap-guangzhou.myqcloud.com/wxshare-logo.png", // 分享图标
+        success() {
+          self.$toast.show("分享成功");
           self.closePop();
         }
       };
@@ -731,7 +740,7 @@ export default {
       }, delay);
     },
     selectedSub(e, taskId, userId, mode) {
-      this.$refs.scroll.refresh()
+      this.$refs.scroll.refresh();
       console.log(e.target, taskId, userId, mode);
       this.SET_USER_ID(userId); //设置userid
       this.mode = mode;
@@ -840,7 +849,7 @@ export default {
       // this.SET_USER_ID(this.userId);
       let self = this;
       if (!self.taskId) {
-        self.$toast.show('任务未创建',1000)
+        self.$toast.show("任务未创建", 1000);
         return;
       }
       this.$dialog.confirm({
@@ -1086,7 +1095,6 @@ export default {
     this.getExcutors();
     // 三点分享
     // this.wechatShare()
-
   }
 };
 </script>
