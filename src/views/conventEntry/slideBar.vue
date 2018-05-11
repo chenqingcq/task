@@ -524,6 +524,9 @@
                   projectName : text ,
                   role : 'creator'
                 })
+                var page = document.getElementsByTagName('body')[0]
+                //恢复页面滚动
+                page.classList.remove('noscroll')
                 this.$router.push(`/addTaskSetting?projectId=${res.data}&projectName=${text}`)
               })
             }

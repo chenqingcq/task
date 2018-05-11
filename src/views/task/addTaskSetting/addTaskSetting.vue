@@ -1,11 +1,6 @@
 <style lang="less" scoped>
 .task-container {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 9;
+
   height: 100vh;
   width: 100vw;
   // overflow: hidden;
@@ -941,7 +936,7 @@ export default {
             projectId: self.projectId
           }
         });
-        return 
+        return
       };
       if (!this.check_pass && !this.taskId) {
         this.setData();
