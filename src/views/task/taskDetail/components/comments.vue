@@ -475,9 +475,7 @@ export default {
         line-height: 34px;
       }
       .text {
-        background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(rgba(255, 0, 127, 1)), to(rgba(171, 0,255, 1)));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: rgba(255, 0,171, 1);
       }
       .comments-callback {
         height: 50px;
