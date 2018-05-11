@@ -475,9 +475,9 @@ export default {
         line-height: 34px;
       }
       .text {
-        background: linear-gradient(to right, red 33%, blue 33%);
+        background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(rgba(0, 128, 0, 1)), to(rgba(51, 51, 51, 1)));
         -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent
+        -webkit-text-fill-color: transparent;
       }
       .comments-callback {
         height: 50px;

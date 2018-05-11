@@ -1095,12 +1095,23 @@ export default {
                   title: "该任务已关闭",
                   task: self.taskName
                 });
-                self.$router.push("conventEntry"); //任务通过之后跳转至首页
+                self.$router.push({
+                  path: "/conventEntry",
+                  query: {
+                    taskId: self.taskId,
+                    projectId: self.projectId
+                  }
+                }); //任务通过之后跳转至首页
               }
             })
             .catch(err => {
-              self.$toast.show("提交失败!", 1000);
-              self.$router.push("conventEntry"); //提交失败之后跳转至首页?
+              self.$router.push({
+                path: "/conventEntry",
+                query: {
+                  taskId: self.taskId,
+                  projectId: self.projectId
+                }
+              }); //提交失败之后跳转至首页?
             });
         }
       });
@@ -1120,12 +1131,24 @@ export default {
                   title: "该任务已通过",
                   task: "展台基础工作"
                 });
-                self.$router.push("conventEntry"); //任务通过之后跳转至首页
+                self.$router.push({
+                  path: "/conventEntry",
+                  query: {
+                    taskId: self.taskId,
+                    projectId: self.projectId
+                  }
+                }); //任务通过之后跳转至首页
               }
             })
             .catch(err => {
               self.$toast.show("提交失败!", 1000);
-              self.$router.push("conventEntry"); //提交失败之后跳转至首页?
+              self.$router.push({
+                path: "/conventEntry",
+                query: {
+                  taskId: self.taskId,
+                  projectId: self.projectId
+                }
+              }); //提交失败之后跳转至首页?
             });
         }
       });
@@ -1144,12 +1167,24 @@ export default {
                   title: "已接受该任务",
                   task: self.taskName
                 });
-                self.$router.push("conventEntry"); //任务通过之后跳转至首页
+                self.$router.push({
+                  path: "/conventEntry",
+                  query: {
+                    taskId: self.taskId,
+                    projectId: self.projectId
+                  }
+                }); //任务通过之后跳转至首页
               }
             })
             .catch(err => {
               self.$toast.show("提交失败!", 1000);
-              self.$router.push("conventEntry"); //提交失败之后跳转至首页?
+              self.$router.push({
+                path: "/conventEntry",
+                query: {
+                  taskId: self.taskId,
+                  projectId: self.projectId
+                }
+              }); //提交失败之后跳转至首页?
             });
         }
       });
@@ -1236,7 +1271,7 @@ export default {
     if (projectId) {
       this.projectId = projectId;
     } else {
-      this.projectId = this.getProjectId;  
+      this.projectId = this.getProjectId;
     }
     this.getData();
     this.getTaskComment();
