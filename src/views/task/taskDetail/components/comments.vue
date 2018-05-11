@@ -27,7 +27,8 @@
                   <div class="role b_FS-12 ">{{item.nickname}}({{ role2Str( item.role ) }})</div>
                   <div class="time-panel"><span>{{defineDate(item.createTime)}}</span><span>{{defineTime(item.createTime)}}</span></div>
                 </div>
-                <div class="comments-item">{{item.message}}</div>
+                <div v-if="item.role == 2" class="comments-item text">{{item.message}}</div>                
+                <div  v-else class="comments-item ">{{item.message}}</div>
                 <div class="comments-callback">
                   <span @click='_link_to_secondary_comments( item )'>{{item.replyNum }}条回复 </span>
                   <div @click="doLike(item)" v-if="item.isThumbs">
@@ -92,9 +93,9 @@ export default {
       type: String,
       default: ""
     },
-    loading:{
-      default:false,
-      type:Boolean
+    loading: {
+      default: false,
+      type: Boolean
     }
   },
   components: {
@@ -114,14 +115,14 @@ export default {
     }
   },
   watch: {
-    members(){
-      this.$refs.scroll.refresh()      
+    members() {
+      this.$refs.scroll.refresh();
     }
   },
   methods: {
     scrollEnd(pos) {
       this.$refs.banner.classList.remove("banner");
-      this.$emit("scrollEnd", pos);      
+      this.$emit("scrollEnd", pos);
     },
     // 权限转中文字符串
     role2Str(role) {
@@ -472,6 +473,11 @@ export default {
         height: auto;
         padding: 0 10*2px 10px 0;
         line-height: 34px;
+      }
+      .text {
+        background: linear-gradient(to right, red 33%, blue 33%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent
       }
       .comments-callback {
         height: 50px;
