@@ -475,7 +475,7 @@ export default {
         line-height: 34px;
       }
       .text {
-        color: rgba(255, 0,171, 1);
+        color: #ff0000;
       }
       .comments-callback {
         height: 50px;
