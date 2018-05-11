@@ -46,6 +46,9 @@
               </div>
 
             </div>
+            <div class="c_7">
+              &nbsp;&nbsp;&nbsp;&nbsp;*只允许上传图片
+            </div>
             <div @click="addTaskProcess" class="btn-small-primary b-MT-5" >提交</div>
           </div>
         </div>
