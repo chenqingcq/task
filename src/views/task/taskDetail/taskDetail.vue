@@ -1236,7 +1236,7 @@ export default {
     if (projectId) {
       this.projectId = projectId;
     } else {
-      this.projectId = this.getProjectId;
+      this.projectId = this.getProjectId;  
     }
     this.getData();
     this.getTaskComment();

@@ -184,6 +184,14 @@ export default {
                   //   [self.taskId?'taskId':undefined]:self.taskId,
                   //   projectId:self.projectIda
                   // })
+                  // self.$router.push({
+                  //   path:'/taskDetail',
+                  //   query:{
+                  //     taskId:self.taskId,
+                  //     projectId:self.projectId
+                  //   }
+                  // })
+                  self.$emit('updateMembers');
                   self.$emit("closeQrcode");
                   // self.showQrcode_ = false;
                 } else {
