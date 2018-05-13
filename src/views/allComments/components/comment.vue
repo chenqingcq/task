@@ -17,7 +17,7 @@
                       <div class="left">
                         <!--测试-->
                         <div class="icon">
-                          <img :src="item.headImage" alt="icon" class='iconImg'>
+                          <img :src="item.headImage"  class='iconImg'>
                         </div>
                       </div>
                       <div class="right">
