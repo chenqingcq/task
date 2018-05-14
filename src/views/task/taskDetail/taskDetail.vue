@@ -827,7 +827,7 @@ export default {
           console.log(res, "------一级评论------");
           if (res.code == 1 && res.status == 200) {
             // self.members = self.members.concat(res.data);
-            self.members = res.data.slice(0,3);
+            self.members = res.data.slice(0, 3);
             console.log("end", res.data);
           }
           if (res.code == 603) {
@@ -867,6 +867,12 @@ export default {
           if (res.code == 1 && res.status == 200) {
             // self.members =   self.members.concat(res.data);
             self.members = res.data;
+            if (self.members.length < 3) {
+              self.$toast.show("评论成功", 1000);
+              debugger;
+            } else {
+              self.$toast.show("评论成功！点击查看全部", 1000);
+            }
           }
           if (res.code == 603) {
             self.$toast.show("任务暂未开启请勿评论", 1000);

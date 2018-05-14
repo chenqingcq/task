@@ -43,16 +43,13 @@ export default {
           .then(res => {
             console.log(res, "----------->>>");
             if (res.code == 1 && res.status == 200) {
-              self.$toast.show("评论成功！点击查看全部", 1000);
               // scrollItem.scrollTo(0,0);
               self.usreInput = "";
               //重新刷新列表
               self.$emit("close", true);
               //self.$router.push("comment?taskId=" + self.taskId );
             } else if (res.code == 603) {
-              self.$dialog.message({
-                message: "任务未开启请勿评论!"
-              });
+              self.$toast.show("任务未开启请勿评论!",1000);
               self.$emit("close");
             }
           })
