@@ -570,7 +570,9 @@ img.partyLogo {
   margin-right: 24px;
 }
 .success {
-  line-height: 18px !important;
+  line-height: 12px !important;
+  width: 12px !important;
+  height: 12px !important;
   border-radius: 50% !important;
 }
 </style>
