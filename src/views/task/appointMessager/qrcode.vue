@@ -57,7 +57,7 @@
         margin-top: 10*2px;
         font-size: 14px*2;
         font-family: PingFangSC-Medium;
-        color: #ff0000;
+        color: #999;
         line-height: 2*22px;
       }
     }
@@ -88,8 +88,7 @@
                  <div class="qrcodeImg_container">
                      <canvas ref="canvas" class="img"></canvas>
                  </div>
-                 <!-- <div class="countdown">有效期为60s</div> -->
-                 <div class="countdown">{{expires}}</div>
+                 <div class="countdown">有效期为60s</div>
              </div>
          </div>
         </div>
@@ -112,6 +111,10 @@ export default {
       type: String,
       default: ""
     },
+    expires: {
+      type: Number,
+      default: 60
+    }
   },
   data() {
     return {
@@ -123,7 +126,6 @@ export default {
       startCount: false,
       countDowner: null,
       expire: 60,
-      expires:undefined,
       context: "",
       CreateWebSocket: "",
       webSocket: null
@@ -179,11 +181,7 @@ export default {
 
               self.webSocket.onmessage = function(msg) {
                 console.log("服务端说:" + msg.data);
-                --self.expire;
-                self.expires = self.expire + 's';
                 if (msg.data === "failure") {
-                  console.log(self.expire);
-                  self.expires = '';
                   // self.$router.push({
                   //   path:'addTaskSetting',
                   //   [self.taskId?'taskId':undefined]:self.taskId,
