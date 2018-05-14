@@ -81,7 +81,6 @@ export default{
       switch(status){
         case 'completed': className = 'complete';break;
         case 'aheadCompleted' : className = 'pending';break ;
-        case 'pending' :className = 'complete';break ;
         default : className = status;
       }
       return className
