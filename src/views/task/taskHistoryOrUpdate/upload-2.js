@@ -110,7 +110,7 @@ export default {
             if( percent == 1 ){
               //self.$toast.close()
             }else{
-              self.$toast.show(`正在上传第${chinese[index]}张 ${percent *100 }%`)
+              self.$toast.show(`正在上传第${chinese[index]}张 ${ parseInt(percent *100) }%`)
             }
           },
         }, function (err, data) {
