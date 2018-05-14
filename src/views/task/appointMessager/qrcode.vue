@@ -12,6 +12,7 @@
     bottom: 0;
     width: 100%;
     height: 370*2px;
+    z-index: 99999;
     background: linear-gradient(left top, #68c5fd, #568bfe);
     background: -webkit-linear-gradient(left top, #68c5fd, #568bfe);
     background: -moz-linear-gradient(left top, #68c5fd, #568bfe);
