@@ -627,7 +627,7 @@ img.partyLogo {
             <img  @click='toggleTaskProgress' v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />
           </div>
 
-          <div v-if="taskStatus != 0 &&  taskStatus != 3 && taskStatus != 7 && !(taskStatus == 2 && role == 'operator' )" class="detail-btn" @click='towardsUpdateHistory'>
+          <div v-if="taskStatus != 0 &&  taskStatus != 3 && taskStatus != 7 && !(taskStatus == 2 && role == 'operator' )&& items.length" class="detail-btn" @click='towardsUpdateHistory'>
             {{ role == 'operator' && taskStatus != 4 && taskStatus != 5 &&  taskStatus != 6  ? '更新进度' : '查看历史上传'  }}
           </div>
         </div>
@@ -816,7 +816,7 @@ export default {
     scrollEnd(pos) {
       let self = this;
       self.loading = true;
-      self.pageNum++;
+      // self.pageNum++;//不做分页
       Convent.getTaskComments({
         taskId: self.taskId,
         pageSize: 3,
@@ -826,7 +826,8 @@ export default {
           self.loading = false;
           console.log(res, "------一级评论------");
           if (res.code == 1 && res.status == 200) {
-            self.members = self.members.concat(res.data);
+            // self.members = self.members.concat(res.data);
+            self.members = res.data.slice(0, 3);
             console.log("end", res.data);
           }
           if (res.code == 603) {
@@ -864,15 +865,22 @@ export default {
         .then(res => {
           console.log(res, "------一级评论------");
           if (res.code == 1 && res.status == 200) {
+            // self.members =   self.members.concat(res.data);
             self.members = res.data;
+            if (self.members.length < 3) {
+              self.$toast.show("评论成功", 1000);
+              debugger;
+            } else {
+              self.$toast.show("评论成功！点击查看全部", 1000);
+            }
           }
           if (res.code == 603) {
             self.$toast.show("任务暂未开启请勿评论", 1000);
           }
-          console.log(self.members, "///////////////////////");
         })
         .catch(err => {
           console.log(err);
+          self.$toast.show("评论失败...", 1000);
         });
     },
     ...mapMutations({
@@ -884,7 +892,7 @@ export default {
       let self = this;
       Convent.getTaskComments({
         taskId: this.$route.query.taskId,
-        pageSize: 4
+        pageSize: 3
       })
         .then(res => {
           console.log(res, "------一级评论------");

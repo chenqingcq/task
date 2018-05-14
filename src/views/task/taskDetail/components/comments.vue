@@ -12,7 +12,8 @@
         <span  @click="userInput">暂无评论,点击抢沙发</span>
         <i></i>
       </div>
-      <scroll ref="scroll" @scrollEnd="scrollEnd" class="comments-container" v-show="members.length">
+      <!-- <scroll ref="scroll" @scrollEnd="scrollEnd" class="comments-container" v-show="members.length"> -->
+      <div ref="scroll" @scrollEnd="scrollEnd" class="comments-container" v-show="members.length"> 
           <ul class="comment-panel" ref='scrollItem'>
             <li v-for="(item,index) in members" :key="index"  class="lisItem" :commentPid ='item.commentPid' :commentId ="item.commentId" ref='item'>
               <div class="left">
@@ -27,8 +28,8 @@
                   <div class="role b_FS-12 ">{{item.nickname}}({{ role2Str( item.role ) }})</div>
                   <div class="time-panel"><span>{{defineDate(item.createTime)}}</span><span>{{defineTime(item.createTime)}}</span></div>
                 </div>
-                <div v-if="item.role == 2" class="comments-item text">{{item.message}}</div>                
-                <div  v-else class="comments-item ">{{item.message}}</div>
+                <!-- <div v-if="item.role == 2" class="comments-item text">{{item.message}}</div>                 -->
+                <div  class="comments-item ">{{item.message}}</div>
                 <div class="comments-callback">
                   <span @click='_link_to_secondary_comments( item )'>{{item.replyNum }}条回复 </span>
                   <div @click="doLike(item)" v-if="item.isThumbs">
@@ -51,7 +52,7 @@
               <div v-else @click="link_to_allComments" class="comment-content">点击查看全部留言</div>
             </li>
           </ul>
-      </scroll>
+      </div>
       <div class="user-input" @click="userInput">
           <input  type="text" placeholder="赶快评论吧~" class="comment_input" disabled>
           <img class="icon-input" src="@/assets/img/iocn-pen.png" />
@@ -116,7 +117,7 @@ export default {
   },
   watch: {
     members() {
-      this.$refs.scroll.refresh();
+      // this.$refs.scroll.refresh();
     }
   },
   methods: {
@@ -395,9 +396,10 @@ export default {
 }
 
 .comments-container {
-  min-height: 280px;
-  max-height: 465px;
-  overflow: hidden;
+  // min-height: 280px;
+  // max-height: 465px;
+  // overflow: hidden;
+  height: auto;
   .lisItem {
     width: 100%;
     height: auto;
@@ -475,9 +477,7 @@ export default {
         line-height: 34px;
       }
       .text {
-        background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(rgba(255, 0, 127, 1)), to(rgba(171, 0,255, 1)));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #ff0000;
       }
       .comments-callback {
         height: 50px;

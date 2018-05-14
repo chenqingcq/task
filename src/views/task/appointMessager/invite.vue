@@ -10,7 +10,7 @@
   .invite-panel {
     width: 100%;
     height: 100%;
-    position: relative;
+    position: absolute;
     display: flex;
     justify-content: center;
     .invite-more,
@@ -35,6 +35,7 @@
       position: absolute;
       width: 260*2px;
       top: 40*2px;
+      left: 130px;
       .close-img {
         position: absolute;
         left: -8*2px;

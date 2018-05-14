@@ -4,7 +4,7 @@
           <div class="close" @click='close'>
               <img src="@/assets/img/icon-close.png" />
           </div>
-          <textarea ref="ipt" autofocus=true  @keyup.enter='sendComments' name="userIpt" id="userIpt" placeholder="评论不得超过200字..." v-model.trim="usreInput" maxlength="200">
+          <textarea ref="ipt" autofocus  @keyup.enter='sendComments' name="userIpt" id="userIpt" placeholder="评论不得超过200字..." v-model.trim="usreInput" maxlength="200">
 
           </textarea>
           <div @click='sendComments' class="comment-btn">评论</div>
@@ -43,16 +43,13 @@ export default {
           .then(res => {
             console.log(res, "----------->>>");
             if (res.code == 1 && res.status == 200) {
-              self.$toast.show("评论成功！", 1000);
               // scrollItem.scrollTo(0,0);
               self.usreInput = "";
               //重新刷新列表
               self.$emit("close", true);
               //self.$router.push("comment?taskId=" + self.taskId );
             } else if (res.code == 603) {
-              self.$dialog.message({
-                message: "任务未开启请勿评论!"
-              });
+              self.$toast.show("任务未开启请勿评论!",1000);
               self.$emit("close");
             }
           })
