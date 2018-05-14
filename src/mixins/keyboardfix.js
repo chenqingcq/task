@@ -88,7 +88,7 @@ export default {
       var u = navigator.userAgent
       var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) //ios终端
       var rep = /11\_(0|1|2)/
-      var isIOS11_012 = rep.test(isIOS)
+      var isIOS11_012 = rep.test(u)
       return isIOS && isIOS11_012
     },
     isIOS11_3higher (){
