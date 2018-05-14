@@ -160,7 +160,7 @@
             left: 0;
             top: 50%;
             left: 50%;
-            transform: translate(-50%,-50%);
+            transform: translate(-50%, -50%);
             box-sizing: content-box;
             padding: 20px;
             width: 15*2px;
@@ -539,11 +539,11 @@ export default {
         console.log(newVal, oldVal);
       }
     },
-    taskExecutors(newVal) {
-      if (newVal.length) {
-        this.defineShow(newVal);
-      }
-    },
+    // taskExecutors(newVal) {
+    //   if (newVal.length) {
+    //     this.defineShow(newVal);
+    //   }
+    // },
     showBtntype(newVal, oldVal) {
       console.log(newVal, oldVal);
       if (!newVal) {
@@ -842,6 +842,38 @@ export default {
         }
       });
     },
+    setExcutor() {
+      let self = this;
+      if (!self.taskId) {
+        return;
+      }
+      Convent.getTaskBasicInfo(self.taskId)
+        .then(res => {
+          console.log("---基本任务信息--", res);
+          if (res.code == 1 && res.status == 200) {
+            self.$toast.show("指派成功!", 1000);
+            self.$router.push({
+              path:
+                self.entry == 0
+                  ? "/addTaskSetting"
+                  : self.entry == 1 ? "updateTaskSetting" : "convententry",
+              query: {
+                taskId: self.taskId,
+                projectId: self.projectId,
+                executor: res.data.executorNickName
+              }
+            });
+            // if (res.data.executorNickName.length) {
+            //   this.$refs.exe.classList.add("active_");
+            //   this.executor = res.data.executorNickName;
+            // }
+            // self.$refs.taskTheme.setAttribute("disabled", true);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     commandExcutor() {
       //指定执行人
       console.log(this.mode);
@@ -867,19 +899,7 @@ export default {
                   .refreshExcutor()
                   .then(res => {
                     //再次刷新列表
-                    self.$router.push({
-                      path:
-                        self.entry == 0
-                          ? "/addTaskSetting"
-                          : self.entry == 1
-                            ? "updateTaskSetting"
-                            : "convententry",
-                      query: {
-                        taskId: self.taskId,
-                        projectId: self.projectId
-                      }
-                    });
-                    self.$toast.show("指派成功!", 1000);
+                    self.setExcutor();
                   })
                   .catch(err => {
                     //请求失败

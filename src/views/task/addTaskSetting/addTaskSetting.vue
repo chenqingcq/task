@@ -1,6 +1,5 @@
 <style lang="less" scoped>
 .task-container {
-
   height: 100vh;
   width: 100vw;
   // overflow: hidden;
@@ -560,10 +559,15 @@ export default {
         this.executor = "";
         this.$refs.exe.classList.remove("active_");
       }
+    },
+    $route() {
+      console.log("----->>><<<----");
     }
   },
   beforeRouteEnter: (to, from, next) => {
-    console.log(to, from);
+    next(vm => {
+      vm.executor = "";
+    });
     if (to.path == "/addTaskSetting" && from.path == "/section") {
       next(vm => {
         // console.log(executor);
@@ -582,13 +586,13 @@ export default {
         if (window.location.hash.includes("taskId")) {
           vm.taskId = to.query.taskId;
         }
-        if(window.sessionStorage.getItem('isCreated')){
-          vm.taskId = window.sessionStorage.getItem('isCreated');
+        if (window.sessionStorage.getItem("isCreated")) {
+          vm.taskId = window.sessionStorage.getItem("isCreated");
         }
-        try {
-          vm.setExcutor();
-          vm.getData();
-        } catch (err) {}
+        if (window.location.hash.includes("executor")) {
+          vm.executor = to.query.executor;
+        }
+        vm.getData();
       });
     }
 
@@ -616,6 +620,7 @@ export default {
           vm.startTime = "";
           vm.endTime = "";
           vm.standard = "";
+          vm.executor = ''
         }
       });
     } else {
@@ -637,28 +642,6 @@ export default {
         this.currentIndex = settings.isOpen == 1 ? 0 : 1;
       }
       console.log(settings);
-    },
-    setExcutor() {
-      let self = this;
-      if (!this.taskId) {
-        return;
-      }
-      // debugger;
-      Convent.getTaskBasicInfo(self.taskId)
-        .then(res => {
-          console.log("---基本任务信息--", res);
-          if (res.code == 1 && res.status == 200) {
-            // debugger;
-            if (res.data.executorNickName.length) {
-              this.$refs.exe.classList.add("active_");
-              this.executor = res.data.executorNickName;
-            }
-            self.$refs.taskTheme.setAttribute("disabled", true);
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
     },
     changeIndex(index, item) {
       // console.log(item);
@@ -798,14 +781,14 @@ export default {
     },
     confirm() {
       let self = this;
-      if(this.flag){
-        return;//限制多次提交
+      if (this.flag) {
+        return; //限制多次提交
       }
       self.validate();
       if (!self.check_pass && !self.taskId) {
         self._validate();
       } else if (self.check_pass && !self.taskId) {
-        self.flag = true
+        self.flag = true;
         self
           ._getTaskId()
           .then(taskId => {
@@ -936,8 +919,8 @@ export default {
             projectId: self.projectId
           }
         });
-        return
-      };
+        return;
+      }
       if (!this.check_pass && !this.taskId) {
         this.setData();
         //如果
@@ -951,7 +934,7 @@ export default {
         this.setData();
         this._getTaskId()
           .then(taskId => {
-            window.sessionStorage.setItem('isCreated',taskId);
+            window.sessionStorage.setItem("isCreated", taskId);
             self.taskId = taskId;
             this.$router.push({
               path: "/appointMessager",
@@ -1038,7 +1021,8 @@ export default {
     console.log(this.projectId);
     this.getData();
     this.taskName = this.getTaskTheme;
-    this.$refs.taskTheme.setAttribute('disabled',true)
+    this.executor = "";
+    this.$refs.taskTheme.setAttribute("disabled", true);
   }
 };
 </script>
