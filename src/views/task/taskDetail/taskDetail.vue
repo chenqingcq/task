@@ -877,10 +877,10 @@ export default {
           if (res.code == 603) {
             self.$toast.show("任务暂未开启请勿评论", 1000);
           }
-          console.log(self.members, "///////////////////////");
         })
         .catch(err => {
           console.log(err);
+          self.$toast.show("评论失败...", 1000);
         });
     },
     ...mapMutations({
