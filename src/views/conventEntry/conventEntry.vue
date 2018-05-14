@@ -145,7 +145,6 @@
                       <!-- 1 起点 在任务开始 4种情况 -->
                         <p  v-if = "computedIsSameDay(list.startTime, week.date)" class="on "
                             :class="computedIsWeekBeginClass(list)" >
-
                           <!-- 待确定 第一天就提前完成-->
                           <template v-if="list.status == 'aheadCompleted' && computedIsSameDay(list.completeDate,week.date) ">
                               <label class="status-text b_FS-6 text-center c_white b_font-PFR">{{ list.progress }}</label>
@@ -195,6 +194,12 @@
                           <label key='label' class="status-text b_FS-6 text-center c_white b_font-PFR">{{ list.progress }}</label>
                           <img key="img1" class="status-bg" src="../../assets/img/sign-remind01.png" alt="">
                           <img  v-if="list.status == 'completed'" class="end-sign-logo" src="../../assets/img/image-car02.png"/>
+                        </template>
+
+                        <template v-if="list.status == 'pending' && computedIsSameDay(list.endTime, week.date,'pending')" >
+                          <label class="status-text b_FS-6 text-center c_white b_font-PFR">{{ list.progress }}</label>
+                          <img class="status-bg" src="../../assets/img/sign-remind01.png" alt="">
+                          <img class="end-sign-logo" src="../../assets/img/image-car02.png"/>
                         </template>
                       </p>
                       <!-- 3 结束之后 还没到今天 7种显示 -->

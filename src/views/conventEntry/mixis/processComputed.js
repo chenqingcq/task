@@ -7,13 +7,20 @@
 export default{
   methods: {
     // 用 字符串 判断是否同一天
-    computedIsSameDay(date1, date2){
+    computedIsSameDay(date1, date2 ,status ){
       var d1 = this.computedDate(date1)
       var d2 = this.computedDate(date2)
+      //if(status){ test
+      //  console.log(date2)
+      //  console.log(d1, d2)
+      //}
       return d1 == d2 ? true : false
     },
     computedDate(date){ // date 对象
       if( typeof date  == 'number'){
+        date = new Date(date)
+      }
+      else if( typeof date  == 'string' ){
         date = new Date(date)
       }
       var y = date.getFullYear()
@@ -74,6 +81,7 @@ export default{
       switch(status){
         case 'completed': className = 'complete';break;
         case 'aheadCompleted' : className = 'pending';break ;
+        case 'pending' :className = 'complete';break ;
         default : className = status;
       }
       return className

@@ -168,17 +168,17 @@ export default {
       const data = []
       const target = taskList
       return target.map((val,key)=>{
-        var status = val.taskStatus
+        let status = val.taskStatus
         let resStatus = '',
             text = '' ,
             dateStr = '' // 时间间隔
         const serverTime = Number(val.serverTime)
         const endTime = Number(val.endTime)
 
-        if( status == 1 && serverTime > endTime  ){
+        if( status == 1 && serverTime > endTime && !this.computedIsSameDay(serverTime, endTime)  ){
           status = 8
         }
-
+        console.log(status)
         switch (status){
           case 0: resStatus = 'pending' ;text = '未开始' ;break;
           case 1: resStatus = 'pending' ;text = '正在进行' ;break;
@@ -202,8 +202,10 @@ export default {
           text = `提前${dateStr}天通过`
         }
         else if( resStatus == 'outDate' && status != 7 && status == 8 ){
+          console.log('hhhh')
           // 天数
-          dateStr = numberTransformChinese( parseInt(( (+new Date()) - val.endTime )/86400000 ))
+          dateStr = numberTransformChinese( parseInt(( serverTime - endTime )/86400000 ))
+          console.log( (serverTime - endTime )/86400000  )
           text = `超时${dateStr}天`
         }
         val.text = text
