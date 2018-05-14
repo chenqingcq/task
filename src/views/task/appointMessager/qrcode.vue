@@ -127,13 +127,15 @@ export default {
       expire: 60,
       context: "",
       CreateWebSocket: "",
-      webSocket: ""
+      webSocket: null
     };
   },
   watch: {
     showQrcode(newVal, oldVal) {
       if (newVal) {
         this.face();
+      } else {
+        this.webSocket && this.webSocket.close();
       }
     }
   },
@@ -162,21 +164,21 @@ export default {
               })();
               console.log(res.data.key);
               /* 实例化 WebSocket 连接对象, 地址为 ws 协议 */
-              var webSocket = CreateWebSocket(
+              self.webSocket = CreateWebSocket(
                 `ws://dis.ccnfgame.com/taskapi/v1/socket/check/${res.data.key}`
                 // `ws://${window.location.host}/taskapi/v1/socket/check${res.data.key}`
               );
               /* 关闭时 */
-              webSocket.onclose = function() {
+              self.webSocket.onclose = function() {
                 console.log("关闭连接");
               };
               /* 错误时 */
-              webSocket.onerror = function() {
+              self.webSocket.onerror = function() {
                 console.log("连接错误");
               };
               /* 接受信息 */
 
-              webSocket.onmessage = function(msg) {
+              self.webSocket.onmessage = function(msg) {
                 console.log("服务端说:" + msg.data);
                 if (msg.data === "failure") {
                   // self.$router.push({
@@ -209,7 +211,7 @@ export default {
               clearTimeout(self.countDowner);
               self.countDowner = setTimeout(() => {
                 self.face();
-                if (webSocket.readyState === 1) {
+                if (self.webSocket.readyState === 1) {
                   console.log("------------key-----------------");
                   /* 接收到服务端的消息时 */
                 } else {
