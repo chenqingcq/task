@@ -178,7 +178,6 @@ export default {
         if( status == 1 && serverTime > endTime && !this.computedIsSameDay(serverTime, endTime)  ){
           status = 8
         }
-        console.log(status)
         switch (status){
           case 0: resStatus = 'pending' ;text = '未开始' ;break;
           case 1: resStatus = 'pending' ;text = '正在进行' ;break;
