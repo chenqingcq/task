@@ -570,8 +570,11 @@ img.partyLogo {
   margin-right: 24px;
 }
 .success {
-  line-height: normal;
+  line-height: 32px !important;
+  width: 12px !important;
+  height: 12px !important;
   border-radius: 50% !important;
+  display: inline-block !important;
 }
 </style>
 <template>
