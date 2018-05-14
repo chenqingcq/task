@@ -46,11 +46,11 @@
               </div>
               <i class="footbar"></i>
             </li>
-            <li class="all-comment">
+            <!-- <li class="all-comment">
               <div v-if="members.length < 4" class="comment-content">已显示全部留言</div>
               <div v-else-if="loading" class="comment-content">拼命加载中...</div>
               <div v-else @click="link_to_allComments" class="comment-content">点击查看全部留言</div>
-            </li>
+            </li> -->
           </ul>
       </div>
       <div class="user-input" @click="userInput">
