@@ -630,7 +630,7 @@ img.partyLogo {
             <img  @click='toggleTaskProgress' v-show="progressDesc.length && progressDesc.length > 12 " src="@/assets/img/icon-slide downward.png" />
           </div>
 
-          <div v-if="taskStatus != 0 &&  taskStatus != 3 && taskStatus != 7 && !(taskStatus == 2 && role == 'operator' )&& items.length" class="detail-btn" @click='towardsUpdateHistory'>
+          <div v-if="taskStatus != 0 &&  taskStatus != 3 && taskStatus != 7 && !(taskStatus == 2 && role == 'operator' )" class="detail-btn" @click='towardsUpdateHistory'>
             {{ role == 'operator' && taskStatus != 4 && taskStatus != 5 &&  taskStatus != 6  ? '更新进度' : '查看历史上传'  }}
           </div>
         </div>
