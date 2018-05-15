@@ -20,7 +20,7 @@
       right: 10*2px;
       top: 10*2px;
       height: 15*2px;
-      padding: 10px;
+      padding: 20px;
       box-sizing: content-box;
       z-index: 1;
     }
@@ -507,8 +507,8 @@ export default {
       currentIndex_: -1,
       nowIndex: 0,
       taskExecutors: [],
-      showArr: [],
-      deletSubArr: [],
+      // showArr: [],
+      // deletSubArr: [],
       mode: 2,
       entry: 0 //默认入口为任务添加页面 0 更新页 1  其他 2,
     };
@@ -538,16 +538,6 @@ export default {
     }
   },
   watch: {
-    deletSubArr: {
-      handler: (newVal, oldVal) => {
-        console.log(newVal, oldVal);
-      }
-    },
-    // taskExecutors(newVal) {
-    //   if (newVal.length) {
-    //     this.defineShow(newVal);
-    //   }
-    // },
     showBtntype(newVal, oldVal) {
       console.log(newVal, oldVal);
       if (!newVal) {
@@ -697,10 +687,10 @@ export default {
     closePop() {
       this.$refs.popup.close();
     },
-    defineShow(arr) {
-      console.log(arr);
-      this.showArr = new Array(arr.length).fill(false);
-    },
+    // defineShow(arr) {
+    //   console.log(arr);
+    //   this.showArr = new Array(arr.length).fill(false);
+    // },
     getExcutorList(id) {
       console.log(id);
       // debugger;
@@ -1138,7 +1128,7 @@ export default {
   created() {},
   mounted() {
     this.init();
-    this.initSelectedShow();
+    // this.initSelectedShow();
     this.getExcutors();
     // 三点分享
     // this.wechatShare()
