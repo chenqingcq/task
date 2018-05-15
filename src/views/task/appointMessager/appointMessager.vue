@@ -225,6 +225,10 @@
   width: 32*2px;
   text-align: center;
 }
+.closed{
+  width: 32*2px;
+  font-size: 12*2px;
+}
 
 .active {
   border-bottom: 2*2px solid #fff;
@@ -412,7 +416,7 @@
               </div>
               <div class="update">{{_item.progressNum}}</div>
               <div class="comments">{{_item.commentNum}}</div>
-              <div class="progress">{{_item.progress}}</div>
+              <div :class="{progress:true,closed:_item.taskStatus == 2}">{{_item.taskStatus == 2 ? '已关闭':_item.progress}}</div>
               <div class="arrow" >
 
                 </div>
