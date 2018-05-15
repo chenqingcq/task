@@ -196,8 +196,17 @@ export default {
         val.endTime = Number( val.endTime )
         val.passTime = Number( val.passTime )
         if( resStatus == 'aheadCompleted' ){
+
+
+          var day = ( val.endTime - val.completeDate )/86400000
+          if( day > 0 && day < 1 ){
+            day = 1
+          }
+          else{
+            day = parseInt( day )
+          }
           // 天数
-          dateStr = numberTransformChinese( parseInt(( val.endTime - val.completeDate )/86400000 ))
+          dateStr = numberTransformChinese( day )
           console.log( dateStr , val.completeDate , val.startTime ,'tiqian')
           text = `提前${dateStr}天通过`
         }
