@@ -173,7 +173,7 @@
                             <img class="end-sign-logo" src="../../assets/img/image-car.png"/>
 
                         </template>
-                        <template v-if="list.status == 'pending' && (computedIsSameDay(todayTime, week.date) || computedIsSameDay(todayTime+ 86400000, week.date)) " >
+                        <template v-if="list.status == 'pending' && list.taskStatus != 0  && (computedIsSameDay(todayTime, week.date)) " >
                           <label class="status-text b_FS-6 text-center c_white b_font-PFR">{{ list.progress }}</label>
                           <img class="status-bg" src="../../assets/img/sign-remind01.png" alt="">
                           <img class="end-sign-logo" src="../../assets/img/image-car02.png"/>
@@ -197,7 +197,7 @@
                           <img  v-if="list.status == 'completed'" class="end-sign-logo" src="../../assets/img/image-car02.png"/>
                         </template>
 
-                        <template v-if="list.status == 'pending' && computedIsSameDay(list.endTime, todayTime,'pending')" >
+                        <template v-if="list.status == 'pending' && list.taskStatus != 0 && computedIsSameDay(list.endTime, todayTime,'pending')" >
 
                           <label class="status-text b_FS-6 text-center c_white b_font-PFR">{{ list.progress }}</label>
                           <img class="status-bg" src="../../assets/img/sign-remind01.png" alt="">
