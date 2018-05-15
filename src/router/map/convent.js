@@ -18,9 +18,13 @@ const msgTips = resolve => require(['@/views/msgTips/msgTips'], resolve) // 项�
 
 const section = resolve => require(['@/views/section/section'], resolve) // 项目- 节点查看或者添加
 
+const Comment = resolve => require(['@/views/allComments/allComments'], resolve) // 项目- 全部评论
+
+const allReply = resolve => require(['@/views/allComments/allReply'], resolve) // 项目- 所有回复
+
 export default [{
     path: '/',
-    redirect: '/login'
+    redirect: '/convententry'
   },
   {
     path: '/appointment',
@@ -30,10 +34,24 @@ export default [{
     }
   },
   {
+    path: '/allReply',
+    component:allReply,
+    meta: {
+      title: '所有评论'
+    }
+  },
+  {
     path: '/login',
     component: Login,
     meta: {
       title: '任务约定'
+    }
+  },
+  {
+    path: '/comment',
+    component: Comment,
+    meta: {
+      title: '全部评论'
     }
   },
   {
@@ -58,7 +76,7 @@ export default [{
   },
   {
     path: '/exhibitorSystem',
-    name: 'help',
+    name: 'exhibitorSystem',
     component: ExhibitorSystem,
     meta: {
       title: '展商系统',

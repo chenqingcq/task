@@ -1,4 +1,10 @@
+<!--<style>-->
+  <!--body{-->
+    <!--position: fixed;-->
+  <!--}-->
+<!--</style>-->
 <style lang="less" scoped>
+
   @import "animate.less";
   .mask{
     position: fixed;
@@ -9,8 +15,8 @@
     background: rgba(0,0,0,.6);
     z-index : 99;
   }
-  .m-t-64{
-    margin-top: 64px;
+  .m-t-50{
+    margin-top: 50px;
   }
   .slide-wrap{
     position: absolute;
@@ -22,7 +28,7 @@
     width: 281*2px;
     background: #F4F4F4;
     .banner{
-      width: 562;
+      width: 562px;
       height: 196px;
     }
     .help{
@@ -35,6 +41,7 @@
     .nav-container{
       top: 172px;
       position: absolute;
+      z-index: 1;
       left: 50% ;
       transform: translateX(-50%);
       width: 490px;
@@ -76,17 +83,29 @@
         position: absolute;
         right: 30px ;
         top: 76px ;
-        z-index: 1;
+        z-index: 10;
       }
       .panel{
-        height: 850px;
-        overflow-y: scroll;
+        /*height: 780px;*/
+        height: 800px;
+        overflow-x: hidden;
+        /*overflow-y: auto;*/
         position:relative;
-
+        background:#fff ;
+        z-index: 11;
         .item{
-          padding:20px 22px;
+          &.is-radius{
+            border-radius: 0 40px 0 0 ;
+          }
+          &.is-first{
+            margin-top: 45px;
+          }
+           /*padding: 20px 22px;*/
+          padding:20px 20px;
+          margin: 0 2px;
           display: flex ;
           align-items: center;
+          /*background:#fff ;*/
           .left-photo{
             position: relative;
             margin-right: 28px;
@@ -100,18 +119,18 @@
              height: 68px;
              border-radius: 100%;
              z-index: 3;
-
+             border:3px solid #0094FF;
            }
-           // 外边框渐变
-           &::after{
-              position: absolute;
-              top: -3px; bottom: 2.5px;
-              left: -3px; right: -4px;
-              background: linear-gradient(#14C9FE, #0094FF);
-              content: '';
-              z-index: 2;
-              border-radius: 70px;
-            }
+           /*// 外边框渐变*/
+           /*&::after{*/
+              /*position: absolute;*/
+              /*top: -3px; bottom: 2.5px;*/
+              /*left: -3px; right: -4px;*/
+              /*background: linear-gradient(#14C9FE, #0094FF);*/
+              /*content: '';*/
+              /*z-index: 2;*/
+              /*border-radius: 70px;*/
+            /*}*/
 
           }
 
@@ -125,6 +144,9 @@
 
       }
     }
+  }
+  .new-project-btn{
+    width: 36px;height: 34px;padding-right:4px;
   }
   .content-enter-active, {
     .animate-slideInLeft ;
@@ -148,21 +170,23 @@
       <!--<div v-if="isShow" class="mask" @touchstart="isShow = false" ></div>-->
     <!--</transition>-->
     <!--<transition name="content" >-->
-    <v-pop ref="slide" animate ="left" >
-        <div  v-if="isShow"  class="slide-wrap c_white-bg">
-          <img class="banner" src="../../assets/img/image-background01.png" alt="">
+    <!--<div v-show="isShow" >-->
+      <v-pop ref="slide" animate ="left" >
+        <div v-show="isShow" class="slide-wrap c_white-bg"
+        >
+          <img class="banner" @click.prevent src="../../assets/img/image-background01.png" alt="">
           <img @click="skipToHelp" class="help" src="../../assets/img/icon-help.png" alt="">
           <div class="nav-container b_d-flex c_white-bg" >
-            <div @click="navTab = 0" class="nav" :class="[navTab == 0 ? 'active' : 'default c_7' ]"  >
+            <div @touchstart="changeNav(0), getProjectList()" class="nav" :class="[navTab == 0 ? 'active' : 'default c_7' ]"  >
               <p class="b_FS-12" >全部</p>
               <div class="line" ></div>
             </div>
-            <div @click="navTab = 1" class="nav" :class="[navTab == 1 ? 'active' : 'default c_7' ]" >
-              <p class="b_FS-12" >我发布</p>
+            <div @touchstart="changeNav(1), getProjectList()" class="nav" :class="[navTab == 1 ? 'active' : 'default c_7' ]" >
+              <p  class="b_FS-12" >我发布</p>
               <div class="line" ></div>
             </div>
-            <div @click="navTab = 2" class="nav" :class="[navTab == 2 ? 'active' : 'default c_7' ]"  >
-              <p class="b_FS-12" >我执行</p>
+            <div @touchstart="changeNav(2), getProjectList()" class="nav" :class="[navTab == 2 ? 'active' : 'default c_7' ]"  >
+              <p  class="b_FS-12" >我执行</p>
               <div class="line" ></div>
             </div>
           </div>
@@ -174,67 +198,285 @@
                     <i :class="[ isPositive ? 'c_primary' : '']">↓</i><i :class="[ !isPositive ? 'c_primary' : '']">↑</i>
                   </span>
 
-            <!--<span-->
-            <div class="panel c_white-bg">
+            <div class="panel c_white-bg"
+                 v-infinite-scroll="getProjectList"
+                 infinite-scroll-disabled="hasMore"
+                 infinite-scroll-distance="60"
+                 infinite-scroll-throttle-delay="100"
+                 @scroll.self
+            >
 
-                    <!--class="reverse b_FS-24 positive" style="color:#979FAE;display: none"  >-->
-                    <!--&lt;!&ndash;(10-01,10-02,10-03)&ndash;&gt;-->
+              <template v-for="(project, key) in projectList">
 
-                     <!--<i>↓</i><i class="c_primary" >↑</i>-->
-                  <!--</span>-->
-              <template v-for="(val) in 20">
-                <div class="item"  >
-                  <p class="left-photo"  >
-                    <img src="https://image.artyears.cn/image/2017-06/547749a9-09aa-4ea5-9ec6-804bd9a4f15b" alt="">
-                  </p>
-                  <p class="c_11 b_FS-14">
-                    日常工作进度查看
-                  </p>
+                  <div class="item" :class="[ key == 0 && 'is-first']" @click = "selectProject(project)" >
+                    <p class="left-photo"  >
+                      <img :src="project.headImage" alt="">
+                    </p>
+                    <p class="c_11 b_FS-14">
+                      {{ project.projectName }}
+                    </p>
+                  </div>
+
+                <div class="text-center" style="position: relative;z-index: 2">
+                  <div class="bar"></div>
                 </div>
-                <div class="bar"></div>
               </template>
             </div>
-            <div class="btn-warp m-t-64">
+            <div class="btn-warp m-t-50">
               <div class="btn-small-success b_FS-28  ">
                 <div class="b_d-flex b_flex-center-col b_flex-center-row" @touchstart = 'newAproject' >
-                  <img style="width: 36px;height: 34px;padding-right:4px" src="../../assets/img/icon-add02.png" alt=""> 新增项目
+                  <img class="new-project-btn" src="../../assets/img/icon-add02.png" alt=""> 新增项目
                 </div>
               </div>
             </div>
           </div>
         </div>
-    </v-pop>
+      </v-pop>
+    <!--</div>-->
+
     <!--</transition>-->
 
   </div>
 
 </template>
-<script>
+<script type="text/babel">
+    // ajax
+    import { Convent } from '@/services'
+    // 引入vuex操作
+    import { mapGetters, mapActions } from 'vuex'
     export default{
         props: {
 
         },
         data(){
             return{
-               navTab : 0,// 12
-              isShow : false,
-              isPositive: false , // 顺序
+                navTab : 0,//  全部. 0:全部 1: 我创建 2: 我执行
+                isShow : false,
+                isPositive: true , // 顺序
+                allList: [{
+                  themeName : '我是创建者' ,
+                  id: '1' ,
+                  role : 'creator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是访问者' ,
+                  id: '3' ,
+                  role : 'visitor'
+                }],
+//                myCreateList: [] ,
+//                myActionList: [] ,
+                all : {
+                  list: [],
+                  page: {
+                    pageNum : 1 ,
+                    pageSize : 10 ,
+                    isLoaded : true
+                  }
+                },
+                myCreate : {
+                  list: [],
+                  page: {
+                    pageNum : 1 ,
+                    pageSize : 10 ,
+                    isLoaded : true
+                  }
+                },
+                myAction : {
+                  list: [],
+                  page: {
+                    pageNum : 1 ,
+                    pageSize : 10 ,
+                    isLoaded : true
+                  }
+                },
+                isFirstAjax : true,
+                // scroll 分页
+                listenScroll: false ,
+
             }
         },
-        components:{
-
+        computed:{
+          ...mapGetters({
+            'user': 'user',
+            role : 'getProjectRole',
+            projectName : 'getProjectThemeName',
+            projectId : 'getProjectId'
+          }),
+          hasMore(){
+            return this.projectHasMore || this.listenScroll
+          },
+          projectHasMore(){
+              if(this.navTab == 0 ) return !this.all.page.isLoaded
+              if(this.navTab == 1 ) return !this.myCreate.page.isLoaded
+              if(this.navTab == 2 ) return !this.myAction.page.isLoaded
+          },
+          projectList(){
+            const type = this.navTab
+            if(type == 0 ) return  this.all.list
+            if(type == 1 ) return  this.myCreate.list
+            if(type == 2 ) return  this.myAction.list
+          }
         },
         mounted(){
-
+          this.getProjectList()
         },
         methods:{
+          ...mapActions([
+            'setCurrentProject'
+          ]),
+          changeNav(tab){
+            this.navTab = tab
+            const page =  {
+              pageNum : 1 ,
+              pageSize : 10 ,
+              isLoaded : true
+            }
+            if(this.navTab == 0 ){ this.all.page = page;this.all.list = [] }
+            if(this.navTab == 1 ){ this.myCreate.page = page ;this.myCreate.list = [] }
+            if(this.navTab == 2 ){ this.myAction.page = page ;this.myAction.list = []  }
+          },
+          test_getProjectList(){
+            if(this.navTab == 0 ) var { pageNum ,pageSize } = this.all.page
+            if(this.navTab == 1 ) var { pageNum ,pageSize } = this.myCreate.page
+            if(this.navTab == 2 ) var { pageNum ,pageSize } = this.myAction.page
+            this.listenScroll = true
+            console.log(pageNum ,pageSize)
+            setTimeout(()=>{
+              var data = [{
+                themeName : '我是创建者' ,
+                id: '1' ,
+                role : 'creator'
+              },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是执行者' ,
+                  id: '2' ,
+                  role : 'operator'
+                },
+                {
+                  themeName : '我是访问者' ,
+                  id: '3' ,
+                  role : 'visitor'
+                }]
+
+              const oldList = this.projectList
+              const newList = oldList.concat( data )
+              if( this.navTab == 0 ){ this.all.list = newList  }
+              if( this.navTab == 1 ){ this.myCreate.list = newList  }
+              if( this.navTab == 2 ){ this.myAction.list = newList  }
+              this.all.page.isLoaded = true ;
+              this.myCreate.page.isLoaded = true ;
+              this.listenScroll = false
+
+            },100)
+            return
+          },
+          getProjectList(){
+            if(this.navTab == 0 ) var { pageNum ,pageSize ,isLoaded } = this.all.page
+            if(this.navTab == 1 ) var { pageNum ,pageSize ,isLoaded } = this.myCreate.page
+            if(this.navTab == 2 ) var { pageNum ,pageSize ,isLoaded } = this.myAction.page
+            if( !isLoaded ){
+              return
+            }
+            this.listenScroll = true
+            Convent.projectList({
+              type : this.navTab ,
+              pageNum : pageNum ,
+              pageSize : pageSize ,
+              sort : this.isPositive ? 0 : 1
+            }).then((res)=>{
+                if( this.isFirstAjax ){
+                  this.isFirstAjax = false
+                  if( this.$route.query.projectId  ){
+
+                  }
+                  else{
+                    if( !this.projectId ){
+                      if( res.data.length > 0 ){
+                        this.selectProject( res.data[0] )
+                      }
+                    }
+                    else{
+                      this.$emit( 'changeProject' )
+                    }
+                  }
+
+                }
+                const oldList = this.projectList
+                const arr = res.data
+                const page = res.page
+                var  newList = []
+                if( page.isLoaded ){
+                  // 还有下一页
+                  page.pageNum++
+                }
+                if(res.data.length){
+                  newList = oldList.concat(arr)
+                }
+                else{
+                  //newList = oldList
+                  if( this.navTab == 0 ){ this.all.page.isLoaded = false }
+                  if( this.navTab == 1 ){ this.myCreate.page.isLoaded = false }
+                  if( this.navTab == 2 ){ this.myAction.page.isLoaded = false }
+                  return
+                }
+               if( this.navTab == 0 ){ this.all.list = newList ;this.all.page.pageNum++ ;this.all.page.isLoaded = page.isLoaded }
+               if( this.navTab == 1 ){ this.myCreate.list = newList ;this.myCreate.page.pageNum++ ; this.myCreate.page.isLoaded = page.isLoaded }
+               if( this.navTab == 2 ){ this.myAction.list = newList ;this.myAction.page.pageNum++ ;this.myAction.page.isLoaded = page.isLoaded }
+              this.listenScroll = false
+            })
+          },
           open(){
             this.$refs.slide.open()
             this.isShow = true
           },
           close(){
-            this,$refs.slide.close()
-
+            this.$refs.slide.close()
+            this.isShow = false
             console.log(this)
           },
           closeCb(){
@@ -243,6 +485,14 @@
           // 跳转到帮助页面
           skipToHelp(){
             this.$router.push('/help')
+          },
+          // 选择项目
+          selectProject(project = {}){
+            console.log(project)
+            project.role = project.isCreate ? 'creator': 'visitor'
+            this.setCurrentProject( project )
+            this.close()
+            this.$emit( 'changeProject' )
           },
           // 弹出新建项目弹窗
           newAproject(){
@@ -254,9 +504,50 @@
           },
           doSubmitNewAproject(text){
             console.log(22222, text)
+            if(!text)  this.$dialog.message({
+                message: `项目名称不能为空`
+            })
+            else if( text && text.length  > 10 ) {
+              this.$dialog.message({
+                message: `不能超过10个字符`
+              })
+            }
+            else{
+              Convent.createProject({
+                  projectName : text
+              },true)
+              .then(res=>{
+                // update state
+                // string
+                this.setCurrentProject({
+                  projectId : res.data , // id
+                  projectName : text ,
+                  role : 'creator'
+                })
+                var page = document.getElementsByTagName('body')[0]
+                //恢复页面滚动
+                page.classList.remove('noscroll')
+                this.$router.push(`/addTaskSetting?projectId=${res.data}&projectName=${text}`)
+              })
+            }
+
           },
           reverseList(){
             this.isPositive = !this.isPositive
+            const page =  {
+                pageNum : 1 ,
+                pageSize : 10 ,
+                isLoaded : true
+            }
+            this.all.page = page
+            this.all.list = []
+            this.myCreate.page = page
+            this.myCreate.list = []
+            this.myAction.page = page
+            this.myAction.list = []
+            this.getProjectList()
+
+
           }
         }
     }

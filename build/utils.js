@@ -16,9 +16,9 @@ exports.cssLoaders = function (options) {
   options = options || {}
 
   const cssLoader = {
-    loader: 'css-loader',
+    loader: 'css-loader!px2rem-loader?remUnit=75&remPrecision=8', //css-loader?importLoaders=1
     options: {
-      importLoaders: 1,
+      minimize: process.env.NODE_ENV === 'production',
       sourceMap: options.sourceMap
     }
   }

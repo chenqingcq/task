@@ -53,7 +53,27 @@
     visibility: hidden;
   }
 }
-
+/*
+ * #### 字体粗细
+ */
+ .f-bold-4{
+  font-weight: 400;
+}
+.f-bold-5{
+  font-weight: 500;
+}
+.f-bold-6{
+  font-weight: 600;
+}
+.f-bold-7{
+  font-weight: 700;
+}
+.f-bold-8{
+  font-weight: 800;
+}
+.f-bold-9{
+  font-weight: 900;
+}
 /*
  * #### 字体大小
  */
@@ -78,6 +98,12 @@
 }
 .b_FS-6{
   font-size: 12px;
+}
+.b_FS-5{
+  font-size: 10px;
+}
+.b_FS-4{
+  font-size: 8px;
 }
 .b_FS-0 {
   font-size: 0;
@@ -402,7 +428,7 @@
 @primary : linear-gradient(0deg, #0093FF 0%, #1DE0FD 100%);
 
 .btn-warp {
-  line-height: 1.5;
+  line-height: 44px;
   text-align: center;
   .b-LR-10 ;
   &.b-LR-8{
@@ -542,10 +568,6 @@
     background-image: @dotSuccess;
   }
   &.warn{
-
-
-
-
     animation: flash 1s ease;
     background-image: @dotWarn;
     box-shadow: inset 2px 2px 10px 0 rgba(170,170,170,0.50);

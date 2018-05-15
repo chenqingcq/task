@@ -26,6 +26,9 @@
       border-radius: 100%;
       box-shadow: 0 4px 8px 0 rgba(111,111,111,0.44);
     }
+    .menu-box{
+      height: 32px;
+    }
     .menu{
       width: 20*2px;
       padding-left: 6px;
@@ -61,6 +64,10 @@
     height: 70*2px ;
     position: relative;
     transform: translateZ(0);
+    transition: all .3s;
+    &.on-open-Swipe{
+      border-radius: 0!important;
+    }
     /*是否已关注*/
     &.isLike-bg{
       background-color: #E5E5E5;
@@ -151,7 +158,7 @@
             margin: 0;
             left: -1px;
             text-align: center;
-            top:19px;
+            top:20px;
             position: absolute;
             width:8*2px;
             background-color: transparent ;
@@ -216,7 +223,7 @@
           }
           .status-bg{
             z-index : 1;
-            width: 24.1*2px;
+            width: 25.1*2px;
             position:absolute ;
             top: -23px ;
             right: -9*2px;
@@ -276,11 +283,11 @@
             z-index : 2;
             position:absolute ;
             top: -17px ;
-            left: 41.5px;
+            left: 43.5px;
           }
           .status-bg{
             z-index : 1;
-            width: 20.1*2px;
+            width: 21.1*2px;
             position:absolute ;
             top: -27px ;
             right: -9*2px;
@@ -309,9 +316,6 @@
   }
 }
 
-
-
-
 .fadeInLeft-enter-active{
   .animated;
   //.fadeInLeft;
@@ -319,4 +323,11 @@
 .fadeInLeft-leave-active{
   .animated;
   .bounceOutRight;
+}
+.swiper-img{
+  display: inline-block;
+  height: 40px;
+  &.close{
+    margin: 6px auto; height: 28px;
+  }
 }

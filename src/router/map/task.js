@@ -7,6 +7,8 @@
  * */
 const addTaskSetting = resolve => require(['@/views/task/addTaskSetting/addTaskSetting'], resolve) // 任务- 新建时的设置
 
+const updateTaskSetting = resolve => require(['@/views/task/addTaskSetting/updateSetting'], resolve) // 任务- 更新时的设置
+
 const appointMessager = resolve => require(['@/views/task/appointMessager/appointMessager'], resolve) // 任务- 指定管理员列表
 
 const taskDetail = resolve => require(['@/views/task/taskDetail/taskDetail'], resolve) // 任务- 详情或者任务提交
@@ -25,6 +27,16 @@ export default [
     }
   },
   {
+    path: '/updateTaskSetting',
+    name: 'updateTaskSetting',
+    component:updateTaskSetting,
+    meta: {
+      title : '更新任务' ,
+      // 是否显示 底部栏 会展 logo
+      isShowBottomSign : false
+    }
+  },
+  {
     path: '/appointMessager',
     name: 'appointMessager',
     component: appointMessager,
@@ -35,14 +47,14 @@ export default [
     }
   },
   {
-    path: '/taskDetail',
-    name: 'taskDetail',
-    component: taskDetail,
-    meta: {
-      title : '任务详情' ,
-      // 是否显示 底部栏 会展 logo
-      isShowBottomSign : true
-    }
+   path: '/taskDetail',
+   name: 'taskDetail',
+   component: taskDetail,
+   meta: {
+     title : '任务详情' ,
+     // 是否显示 底部栏 会展 logo
+     isShowBottomSign : true
+   }
   },
   {
     path: '/taskHistoryOrUpdate',

@@ -9,7 +9,7 @@
  */
 
 body {
-  -webkit-backface-visibility: hidden;
+  //-webkit-backface-visibility: hidden;
 }
 
 .animated(@animationDurationTime: 1s; @animationDelayTime: 0s; @animationFillMode: both) {
@@ -77,7 +77,6 @@ body {
     -webkit-transform: translate3d(-100%, 0, 0);
     transform: translate3d(-100%, 0, 0);
     visibility: visible;
-
   }
 
   to {
@@ -181,7 +180,76 @@ body {
     transform: translate3d(0, 0, 0);
   }
 }
+@keyframes bounceOut {
+  20% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9);
+    transform: scale3d(0.9, 0.9, 0.9);
+  }
 
+  50%,
+  55% {
+    opacity: 1;
+    -webkit-transform: scale3d(1.1, 1.1, 1.1);
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+
+  to {
+    opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+}
+@keyframes bounceIn {
+  from,
+  20%,
+  40%,
+  60%,
+  80%,
+  to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  0% {
+    opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform:  scale3d(0.3, 0.3, 0.3);
+  }
+
+  20% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1);
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+
+  40% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9);
+    transform: scale3d(0.9, 0.9, 0.9);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: scale3d(1.03, 1.03, 1.03);
+    transform: scale3d(1.03, 1.03, 1.03);
+  }
+
+  80% {
+    -webkit-transform: scale3d(0.97, 0.97, 0.97);
+    transform: scale3d(0.97, 0.97, 0.97);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.bounceIn {
+  -webkit-animation-duration: 0.75s;
+  animation-duration: 0.75s;
+  -webkit-animation-name: bounceIn;
+  animation-name: bounceIn;
+}
 @keyframes slideInDown {
   from {
     -webkit-transform: translate3d(0, -100%, 0);
@@ -199,7 +267,6 @@ body {
   -webkit-animation-name: slideInDown;
   animation-name: slideInDown;
 }
-
 
 @-webkit-keyframes slideOutDown {
   from {
@@ -232,7 +299,6 @@ body {
   animation-name: slideOutDown;
 }
 
-
 // fadeIn fadeOut
 
 @-webkit-keyframes fadeIn {
@@ -260,6 +326,31 @@ body {
   animation-name: fadeIn;
 }
 
+@-webkit-keyframes fadeIn-2 {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn-2 {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.fadeIn-2 {
+  -webkit-animation-name: fadeIn-2;
+  animation-name: fadeIn-2;
+}
+
 @-webkit-keyframes fadeOut {
   from {
     opacity: 0.6;
@@ -284,8 +375,6 @@ body {
   -webkit-animation-name: fadeOut;
   animation-name: fadeOut;
 }
-
-
 
 // slideOutLeft right up down
 
@@ -319,7 +408,6 @@ body {
   -webkit-animation-name: slideOutLeft;
   animation-name: slideOutLeft;
 }
-
 
 @-webkit-keyframes slideOutRight {
   from {
@@ -414,51 +502,48 @@ body {
   animation-name: slideOutUp;
 }
 
-
-.animate-slideInLeft{
-  .animated(.4s) ;
-  .slideInLeft ;
+.animate-slideInLeft {
+  .animated(0.4s);
+  .slideInLeft;
 }
-.animate-slideOutLeft{
-  .animated(.2s) ;
-  .slideOutLeft ;
-}
-
-.animate-slideInRight{
-  .animated(.4s) ;
-  .slideInRight ;
-}
-.animate-slideOutRight{
-  .animated(.2s) ;
-  .slideOutRight ;
+.animate-slideOutLeft {
+  .animated(0.2s);
+  .slideOutLeft;
 }
 
-.animate-slideInTop{
-  .animated(.4s) ;
-  .slideInUp ;
+.animate-slideInRight {
+  .animated(0.4s);
+  .slideInRight;
 }
-.animate-slideOutTop{
-  .animated(.2s) ;
-  .slideOutUp ;
-}
-
-.animate-slideInDown{
-  .animated(.4s) ;
-  .slideInDown ;
-}
-.animate-slideOutDown{
-  .animated(.2s) ;
-  .slideOutDown ;
+.animate-slideOutRight {
+  .animated(0.2s);
+  .slideOutRight;
 }
 
-
-
-.animate-fadeOut{
-  .animated(.3s) ;
-  .fadeOut ;
+.animate-slideInTop {
+  .animated(0.4s);
+  .slideInUp;
+}
+.animate-slideOutTop {
+  .animated(0.2s);
+  .slideOutUp;
 }
 
-.animate-fadeIn{
-  .animated(.4s) ;
-  .fadeIn ;
+.animate-slideInDown {
+  .animated(0.4s);
+  .slideInDown;
+}
+.animate-slideOutDown {
+  .animated(0.2s);
+  .slideOutDown;
+}
+
+.animate-fadeOut {
+  .animated(0.3s);
+  .fadeOut;
+}
+
+.animate-fadeIn {
+  .animated(0.4s);
+  .fadeIn;
 }

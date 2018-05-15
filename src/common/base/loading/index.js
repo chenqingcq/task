@@ -11,11 +11,22 @@ Loading.install = function (Vue) {
     instance.$mount(document.createElement("div"));
     document.body.appendChild(instance.$el);
     instance.show = true;
-    instance.title = options.title || "正在加载";
+    instance.visible = true;
+    instance.title = options.title || ""
+    const timer = options.duration || 0
+    if(timer > 0)
+    setTimeout(()=>{
+      Vue.prototype.$loadingClose()
+    }, timer)
   };
   Vue.prototype.$loadingClose = () => {
     if (instance) {
-      document.body.removeChild(instance.$el);
+      try{
+        document.body.removeChild(instance.$el);
+      }
+      catch (err){
+
+      }
     }
   };
 };

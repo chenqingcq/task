@@ -1,0 +1,60 @@
+
+/**
+* swipeout
+*/
+
+@button-warn-bg-color: #E64340;
+@button-primary-bg-color: #1AAD19;
+
+@swipeout-button-primary-bg-color: @button-primary-bg-color;
+@swipeout-button-warn-bg-color: @button-warn-bg-color;
+@swipeout-button-default-bg-color: #c8c7cd;
+
+@swipeout-content-bg-color: #FFF;
+@swipeout-button-font-color: #FFF;
+
+.v-swipeout {
+  width: 100%;
+  overflow: hidden;
+}
+.v-swipeout-item {
+  position: relative;
+}
+.v-swipeout-button-box {
+  position: absolute;
+  top: 1px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  font-size: 0;
+  text-align: right;
+}
+.v-swipeout-button-box-left {
+  text-align: left;
+}
+.v-swipeout-button-box > div {
+  height: 100%;
+}
+.v-swipeout-button {
+  height: 100%;
+  text-align: center;
+  font-size: 28px;
+  color: @swipeout-button-font-color;
+  border: none;
+}
+.v-swipeout-content {
+  position: relative;
+  background: @swipeout-content-bg-color;
+}
+.v-swipeout-content.v-swipeout-content-animated {
+  transition: transform 0.2s;
+}
+.v-swipeout-button-primary {
+  background-color: @swipeout-button-primary-bg-color;
+}
+.v-swipeout-button-warn {
+  background-color: @swipeout-button-warn-bg-color;
+}
+.v-swipeout-button-default {
+  background-color: @swipeout-button-default-bg-color;
+}

@@ -37,6 +37,7 @@ export default function getInstance(options) {
           type: options.type,
           placeholder: options.placeholder || '请输入内容',
           show: true,
+          length:options.length || 10,
           operate: options.operate || function (text) { //回调函数
             console.log(text)
           }
@@ -44,25 +45,39 @@ export default function getInstance(options) {
       }
     })
   };
-  if (dialog && options.type === 'message') {
-    vue.set(dialog, 'type', options.type);
-    vue.set(dialog, 'message', options.message);
-    vue.set(dialog, 'icon', options.icon);
-    vue.set(dialog, 'show', true);
-  }
   if (options.type === 'message') {
     dialog = new DialogConstructor({
       data() {
         return {
           type: options.type,
           message: options.message || "", //定义信息
-          icon: options.icon, //确认图标类型
+          icon: options.icon || 'pass', //确认图标类型
           show: true,
         }
       }
     })
   };
+  if (options.type === 'confirm') {
+    dialog = new DialogConstructor({
+      data() {
+        return {
+          type: options.type,
+          message: options.message || '',
+          showBottom: options.showBottom || true,
+          show: true,
+          confirm: options.confirm || function () {
 
+          },
+          concel: options.concel || function () {
+
+          }
+        }
+      }
+    })
+  }
   const instance = dialog.$mount();
-  document.body.appendChild(instance.$el);
+  if (document.body.innerHTML.indexOf('confirm-container') < 0) {
+    document.body.appendChild(instance.$el);
+  }
+  console.log( instance.$el)
 }
