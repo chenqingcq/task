@@ -38,11 +38,7 @@
       </template>
       <template v-if="type==='notice'" v-show="showNotice">
         <div class="panel-notice">
-<<<<<<< HEAD
-          <!--<img class="close" @touchstart='close' src="../../../assets/img/icon-close.png" />-->
-=======
           <!--<img class="close" @click='close' src="../../../assets/img/icon-close.png" />-->
->>>>>>> master
           <div class="top">
             <div class="noticeIcon">
               <img class="noticeImg" :src="imgUrl" />
@@ -384,30 +380,9 @@ img.icon-edit {
       top: 8px*2;
     }
 
-<<<<<<< HEAD
-  .container {
-    position: fixed;
-    z-index: 9999;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: rgba(99, 99, 99, 0.8);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    .panel-notice {
-      min-width: 252*2px;
-      min-height: 252*2px;
-      background-color: #fff;
-      border-radius: 18px;
-      position: relative;
-=======
     .top {
       width: 100%;
       height: 190*2px;
->>>>>>> master
       display: flex;
       justify-content: center;
       align-items: center;

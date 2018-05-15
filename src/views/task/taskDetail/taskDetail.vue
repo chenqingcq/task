@@ -914,27 +914,6 @@ export default {
     formatDate(dateStr) {
       return dateStr.substring(5, 15).replace("-", "/");
     },
-<<<<<<< HEAD
-    methods: {
-      link_to_taskSetting() {
-        this.$router.push('addTaskSetting')
-      },
-      closeTask() {
-        this.$dialog.notice({
-          state: 'pass',
-          title: '任务已关闭',
-          task: '展台基础工作'
-        })
-        this.timer = setTimeout(() => {
-          this.$router.push('conventEntry')
-        }, 1500);
-      },
-      passTask() {
-        this.$dialog.notice({
-          state: 'pass',
-          title: '任务已通过',
-          task: '展台基础工作'
-=======
     fomatTime() {
       console.log(new Date().getMonth());
       let startTime_y = new Date(parseInt(this.startTime)).getFullYear();
@@ -966,7 +945,6 @@ export default {
             self.groupUrl = res.data;
             self.jumpToGroup();
           }
->>>>>>> master
         })
         .catch(err => {
           console.log(err);

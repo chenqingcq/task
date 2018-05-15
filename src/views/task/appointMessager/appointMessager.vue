@@ -755,9 +755,6 @@ export default {
         if (e.target.classList.contains("radio")) {
           e.target.classList.remove("radio");
         } else {
-<<<<<<< HEAD
-          this.$refs.deleteBtn.addEventListener('touchstart', this.deleteExcutor)                
-=======
           e.target.classList.add("radio");
           this.mode = 2;
         }
@@ -821,7 +818,6 @@ export default {
           } else {
             neededShowItems[i].classList.add("showOrhidden");
           }
->>>>>>> master
         }
       }
     },
@@ -844,41 +840,6 @@ export default {
         } else {
           reject();
         }
-<<<<<<< HEAD
-      },
-      deleteExcutor() {
-        if (this.showBtntype) {
-          //已经选中成员
-          console.log(this.nowIndex);
-          let self = this;
-          this.$dialog.info({
-            btnName: 'delete',
-            placeholder: "确定删除成员",
-            operate() {
-              self.DELETE_TASK_EXECUTOR(self.nowIndex); //删除选中成员      
-              self.sort(self.type); //重新排序  
-              self.showBtntype = false;
-            }
-          });
-        } else {
-          let self = this;
-          this.$dialog.info({
-            btnName: "delete",
-            placeholder: "选择要删除的成员",
-            operate(member) {
-              //先确定该成员是否在成员列表 否则提示该成员不存在
-              if (member) {
-                let selected = self.taskExecutor.findIndex((item, index) => {
-                  return item.nickname == member;
-                });
-                console.log(selected)
-                if (selected > -1) {
-                  //该成员存在
-                  self.DELETE_TASK_EXECUTOR(selected); //删除输入的成员
-                  self.sort(self.type) //重新排序                         
-                } 
-              } 
-=======
       });
     },
     setExcutor() {
@@ -988,7 +949,6 @@ export default {
               resolve();
             } else {
               reject();
->>>>>>> master
             }
           })
           .catch(err => {
