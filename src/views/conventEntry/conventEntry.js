@@ -50,7 +50,8 @@ export default {
         projectId
       }).then(res=>{
         this.$refs.slide.selectProject(res.data)
-
+        // 去掉记录
+        this.$router.push('/conventEntry')
       })
     }
 
