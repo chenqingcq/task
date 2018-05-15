@@ -127,7 +127,7 @@
   <transition name="rotate">
     <div class="invite-container" v-show="showInvite">
       <div class="invite-panel">
-        <div class="invite-img" ref="invite">
+        <div class="invite-img" ref="invite" @click='close'>
           <img @click='close' ref="close" class="close-img " src="@/assets/img/icon-close01.png" />
           <img class="inviteImg" src="@/assets/img/image-popup.png" />
           <div ref="invitemore" class="invite-more">点击邀请更多好友</div>
