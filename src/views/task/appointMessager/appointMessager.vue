@@ -225,6 +225,10 @@
   width: 32*2px;
   text-align: center;
 }
+.closed {
+  width: 32*2px;
+  font-size: 12*2px;
+}
 
 .active {
   border-bottom: 2*2px solid #fff;
@@ -397,7 +401,7 @@
               </div>
               <div class="update">{{item[0].progressNum}}</div>
               <div class="comments">{{item[0].commentNum}}</div>
-              <div class="progress">{{item[0].progress}}</div>
+              <div :class="{progress:true,closed:item[0].taskStatus == 2 && item.length == 1}">{{item[0].taskStatus== 2 && item.length == 1 ? "已关闭":item[0].progress}}</div>
               <div class="arrow" >
                 <img @click='showSub($event,index)' :src="imgUrl" v-if="item.length>1" />
               </div>
@@ -412,7 +416,7 @@
               </div>
               <div class="update">{{_item.progressNum}}</div>
               <div class="comments">{{_item.commentNum}}</div>
-              <div class="progress">{{_item.progress}}</div>
+              <div :class="{progress:true,closed:_item.taskStatus == 2}">{{_item.taskStatus== 2? "已关闭":_item.progress}}</div>
               <div class="arrow" >
 
                 </div>
@@ -506,7 +510,7 @@ export default {
       showArr: [],
       deletSubArr: [],
       mode: 2,
-      entry: 0 //默认入口为任务添加页面 0 更新页 1  其他 2
+      entry: 0 //默认入口为任务添加页面 0 更新页 1  其他 2,
     };
   },
   computed: {
@@ -628,6 +632,29 @@ export default {
     }
   },
   methods: {
+    status(_item) {
+      if (_item.taskStatus == 0) {
+        return "未开始";
+      } else if (_item.taskStatus == 1) {
+        if (_item.taskStatus == 1 && _item.endTime > _item.startTime) {
+          return "超时";
+        } else {
+          return "进行中";
+        }
+      } else if (_item.taskStatus == 2) {
+        return "关闭";
+      } else if (_item.taskStatus == 3) {
+        return "拒绝";
+      } else if (_item.taskStatus == 4) {
+        return "已完成";
+      } else if (_item.taskStatus == 5) {
+        return "提前完成";
+      } else if (_item.taskStatus == 6) {
+        return "超时完成";
+      } else if (_item.taskStatus == 7) {
+        return "超时未接受";
+      }
+    },
     ...mapMutations({
       SET_USER_ID: "SET_USER_ID"
     }),
