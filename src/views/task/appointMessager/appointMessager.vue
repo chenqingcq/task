@@ -545,7 +545,7 @@ export default {
       } else {
         this.$refs.deleteBtn.addEventListener("click", this.deleteExcutor);
       }
-    },
+    }
   },
   beforeRouteEnter: (to, from, next) => {
     // ...
@@ -1093,13 +1093,8 @@ export default {
       document
         .querySelector(".deleteBtn")
         .addEventListener("click", this.deleteExcutor);
-      this.isSubShow = new Array(this.taskExecutors.length).fill(false);
+      // this.isSubShow = new Array(this.taskExecutors.length).fill(false);
       console.log(this.taskExecutors);
-    },
-    getExcutors() {
-      this.getters = setInterval(() => {
-        this.getExcutors(this.projectId);
-      }, 1000);
     }
   },
   components: {
@@ -1111,10 +1106,7 @@ export default {
   created() {},
   mounted() {
     this.init();
-    // this.initSelectedShow();
-    this.getExcutors();
-    // 三点分享
-    // this.wechatShare()
+    this.getExcutors(this.projectId);
   }
 };
 </script>
