@@ -1095,6 +1095,11 @@ export default {
         .addEventListener("click", this.deleteExcutor);
       // this.isSubShow = new Array(this.taskExecutors.length).fill(false);
       console.log(this.taskExecutors);
+    },
+    getExcutors() {
+      this.getters = setInterval(() => {
+        this.getExcutors(this.projectId);
+      }, 1000);
     }
   },
   components: {
@@ -1106,7 +1111,7 @@ export default {
   created() {},
   mounted() {
     this.init();
-    this.getExcutors(this.projectId);
+    // this.getExcutors(this.projectId);
   }
 };
 </script>
