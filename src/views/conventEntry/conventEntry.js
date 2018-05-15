@@ -60,8 +60,8 @@ export default {
     //  desc: '分享描述'
     //})
     WxShareApi({
-      title: '测试标题',
-      desc: '分享描述',
+      title: '快来管理属于你自己的项目～',
+      desc: '叫上小伙伴一起做任务把',
       imgUrl: location.protocol + '//task-1256472463.cos.ap-guangzhou.myqcloud.com/wxshare-logo.png' // 分享图标
     })
     //this.taskList = this.dealWithTaskList()
