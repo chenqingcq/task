@@ -940,7 +940,8 @@ export default {
               path: "/appointMessager",
               query: {
                 taskId: taskId,
-                projectId: self.projectId
+                projectId: self.projectId,
+                [self.taskName.length ? 'taskName':undefined ]:self.taskName ? self.taskName:''
               }
             }); //项目创建完毕
             // debugger;

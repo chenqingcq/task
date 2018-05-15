@@ -119,7 +119,7 @@
 .rotate {
   animation: _scale 1s linear;
 }
-.inviteImg{
+.inviteImg {
   pointer-events: none;
 }
 </style>
@@ -150,16 +150,9 @@ export default {
       default: false
     }
   },
-  watch: {
-    showInvite(newVal) {
-      if (newVal) {
-        this.init();
-      }
-    }
-  },
   methods: {
     close() {
-      this.$emit('closeInvite');
+      this.$emit("closeInvite");
       this.$refs.invite.classList.add("active_");
     },
     init() {
@@ -168,7 +161,11 @@ export default {
     }
   },
   created() {},
-  mounted() {},
+  mounted() {
+    if (this.showInvite) {
+      this.init();
+    }
+  },
   beforeDestroy() {
     this.timer = null;
   }

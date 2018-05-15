@@ -546,12 +546,6 @@ export default {
         this.$refs.deleteBtn.addEventListener("click", this.deleteExcutor);
       }
     },
-    currentIndex_: {
-      handler(newValue, oldValue) {
-        console.log(newValue, oldValue, "------currendtIndex------");
-      },
-      deep: true
-    }
   },
   beforeRouteEnter: (to, from, next) => {
     // ...
@@ -1094,17 +1088,6 @@ export default {
     sort(type) {
       this.SORT_TASK_EXECUTOR(type);
       console.log(type, this.taskExecutor);
-    },
-    initSelectedShow() {
-      let arr = new Array(this.taskExecutors.length).fill([]),
-        i = 0,
-        data = this.taskExecutors;
-      for (i; i < data.length; i++) {
-        arr[i] = data[i].map((val, index) => {
-          return false;
-        });
-      }
-      this.isSelectedShow = arr;
     },
     init() {
       document
