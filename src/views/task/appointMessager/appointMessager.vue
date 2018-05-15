@@ -401,7 +401,7 @@
               </div>
               <div class="update">{{item[0].progressNum}}</div>
               <div class="comments">{{item[0].commentNum}}</div>
-              <div class="progress">{{item[0].progress}}</div>
+              <div :class="{progress:true,closed:item[0].taskStatus == 2 && item.length == 1}">{{item[0].taskStatus== 2 && item.length == 1 ? "已关闭":item[0].progress}}</div>
               <div class="arrow" >
                 <img @click='showSub($event,index)' :src="imgUrl" v-if="item.length>1" />
               </div>
