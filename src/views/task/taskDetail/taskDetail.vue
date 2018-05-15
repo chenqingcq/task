@@ -872,7 +872,7 @@ export default {
             self.members = res.data;
             if (self.members.length < 3) {
               self.$toast.show("评论成功", 1000);
-              debugger;
+              // debugger;
             } else {
               self.$toast.show("评论成功！点击查看全部", 1000);
             }
