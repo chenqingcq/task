@@ -404,8 +404,8 @@
             </li>
             <li class="sub-item showOrhidden" v-for="(_item,_index) in item"  v-if="item.length > 1" :key="_index"  >
               <!--点击可见-->
-              <div class="user">
-                <div  class="select b_FS-0">
+              <div class="user" >
+                <div  class="select b_FS-0" v-show="_item.taskStatus != 2">
                   <img @click='selectedSub($event,_item.taskId,_item.userId, 1 )' src="@/assets/img/sign-selected.png" class="radio"/>
                 </div>
                 <div class="name taskname" >{{_item.taskName}}</div>

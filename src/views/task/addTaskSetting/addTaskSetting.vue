@@ -335,7 +335,7 @@ input:disabled {
             </div>
             <div :class="[_tasksetting,{active_:isTaskTheme}]">项目主题</div>
           </label>
-          <input class="userInput" ref="taskTheme" type="text" id="taskTheme"  v-model.trim="taskTheme" maxlength="10" placeholder="添加项目主题"
+          <input class="userInput" ref="taskTheme" type="text" id="taskTheme"  v-model.trim="taskTheme" maxlength="20" placeholder="添加项目主题"
           />
         </li>
         <ul class="editDeadTime">
@@ -535,7 +535,7 @@ export default {
   },
   watch: {
     endTime(newVal) {
-      if (newVal.length) {
+      if (newVal) {
         this.$refs.endDate.classList.add("active_");
         this.check_time();
       } else {
@@ -544,7 +544,7 @@ export default {
       }
     },
     startTime(newVal) {
-      if (newVal.length) {
+      if (newVal) {
         this.$refs.startDate.classList.add("active_");
         this.check_time();
       } else {
@@ -553,7 +553,7 @@ export default {
       }
     },
     executor(newVal) {
-      if (newVal.length) {
+      if (newVal) {
         this.$refs.exe.classList.add("active_");
       } else {
         this.executor = "";
@@ -630,7 +630,7 @@ export default {
   methods: {
     getData() {
       let settings = window.sessionStorage.getItem("taskSettings");
-      if (settings.length) {
+      if (settings) {
         settings = JSON.parse(settings);
         this.projectId = settings.projectId;
         this.taskTheme = settings.taskTheme;
@@ -904,7 +904,7 @@ export default {
     appointerManager() {
       let self = this;
       this.setData();
-      if (this.executor.trim().length) {
+      if (this.executor.trim()) {
         this.$toast.show("该任务已有执行人!", 1000);
         return;
       }
