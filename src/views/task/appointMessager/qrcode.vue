@@ -196,13 +196,13 @@ export default {
                   //   }
                   // })
                   self.$emit("updateMembers");
-                  self.$router.push({
-                    path: "/conventEntry",
-                    query: {
-                      [self.taskId ? "taskId" : undefined]: self.taskId,
-                      projectId: self.projectId
-                    }
-                  });
+                  // self.$router.push({
+                  //   path: "/conventEntry",
+                  //   query: {
+                  //     [self.taskId ? "taskId" : undefined]: self.taskId,
+                  //     projectId: self.projectId
+                  //   }
+                  // });
                   self.$emit("closeQrcode");
                   // self.showQrcode_ = false;
                 } else {
